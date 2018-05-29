@@ -135,7 +135,11 @@ if [[ $PM2STARTUP =~ (sudo .*$) ]] ; then
     eval $PM2STARTUPCOMMAND
     sudo chown -R ubuntu:ubuntu ~/.pm2
 else
-    echo ""; echo "Failed to get PM2 startup command."; echo ""
+    echo ""
+    echo "Failed to get PM2 startup command."
+    echo "You will need to manually configure PM2 to run at system startup."
+    echo "See http://pm2.keymetrics.io/docs/usage/startup/ for more information."
+    echo ""
 fi
 
 
@@ -184,7 +188,11 @@ RESPONSE="$( curl -X POST -H "Content-Type: application/json" -H "Accept: applic
 if [[ $RESPONSE =~ success ]] ; then
     echo ""; echo "Successfully emailed node information."; echo ""
 else
-    echo ""; echo "Failed to email node information: $RESPONSE"; echo ""
+    echo ""
+    echo "Failed to email node information."
+    echo "Node setup notification response: $RESPONSE"
+    echo "Please email dev@rocketpool.net to manually notify us of your node setup."
+    echo ""
 fi
 
 
