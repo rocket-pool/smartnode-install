@@ -162,6 +162,32 @@ ln -s $HOME/rocketpool/build/contracts contracts
 cd -
 
 
+##
+# Notify
+##
+
+# Notification post data
+read -r -d '' POSTDATA << EOM
+{
+    "nodeSoftware": "$NODESOFTWARE",
+    "provider": "$PROVIDER",
+    "regionId": "$REGIONID",
+    "subnetId": "$SUBNETID",
+    "instanceId": "$INSTANCEID",
+    "companyName": "$COMPANYNAME",
+    "accountAddress": "$ACCOUNTADDRESS"
+}
+EOM
+
+# Send node setup notification
+RESPONSE="$( curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d "$POSTDATA" http://dev.rocketpoolsite/api/node/notify )"
+if [[ $RESPONSE =~ success ]] ; then
+    echo "Successfully emailed node information."
+else
+    echo "Failed to email node information: $RESPONSE"
+fi
+
+
 ################
 ## DEVELOPMENT #
 ################
