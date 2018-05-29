@@ -180,7 +180,7 @@ read -r -d '' POSTDATA << EOM
 EOM
 
 # Send node setup notification
-RESPONSE="$( curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d "$POSTDATA" http://dev.rocketpoolsite/api/node/notify )"
+RESPONSE="$( curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d "$POSTDATA" https://www.rocketpool.net/api/node/notify )"
 if [[ $RESPONSE =~ success ]] ; then
     echo "Successfully emailed node information."
 else
