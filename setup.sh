@@ -94,7 +94,7 @@ case $NODESOFTWARE in
         if [[ $ACCOUNT =~ ([a-fA-F0-9]{40}) ]] ; then
             ACCOUNTADDRESS="0x${BASH_REMATCH[1]}"
         else
-            echo "Failed to get account address, exiting."; exit
+            echo "Failed to get account address, exiting."; echo ""; exit
         fi
 
     ;;
@@ -110,7 +110,7 @@ case $NODESOFTWARE in
         if [[ $ACCOUNT =~ ([a-fA-F0-9]{40}) ]] ; then
             ACCOUNTADDRESS="0x${BASH_REMATCH[1]}"
         else
-            echo "Failed to get account address, exiting."; exit
+            echo "Failed to get account address, exiting."; echo ""; exit
         fi
 
     ;;
@@ -132,11 +132,11 @@ sudo pm2 install pm2-server-monit
 PM2STARTUP="$( pm2 startup )"
 if [[ $PM2STARTUP =~ (sudo .*$) ]] ; then
     PM2STARTUPCOMMAND="${BASH_REMATCH[1]}"
+    eval $PM2STARTUPCOMMAND
+    sudo chown -R ubuntu:ubuntu ~/.pm2
 else
-    echo "Failed to get PM2 startup command, exiting."; exit
+    echo ""; echo "Failed to get PM2 startup command."; echo ""
 fi
-eval $PM2STARTUPCOMMAND
-sudo chown -R ubuntu:ubuntu ~/.pm2
 
 
 ##
@@ -182,9 +182,9 @@ EOM
 # Send node setup notification
 RESPONSE="$( curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d "$POSTDATA" https://www.rocketpool.net/api/node/notify )"
 if [[ $RESPONSE =~ success ]] ; then
-    echo "Successfully emailed node information."
+    echo ""; echo "Successfully emailed node information."; echo ""
 else
-    echo "Failed to email node information: $RESPONSE"
+    echo ""; echo "Failed to email node information: $RESPONSE"; echo ""
 fi
 
 
