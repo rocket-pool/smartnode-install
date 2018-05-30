@@ -42,6 +42,7 @@ MESSAGES=""
 ##
 
 echo ""
+echo "**************************************************"
 echo "Welcome to the RocketPool Smart Node setup wizard!"
 echo "This wizard is valid only for Ubuntu 16.04 and up. If you are using a different operating system, please cancel now."
 echo "This script will install the following software on this computer:"
@@ -420,6 +421,7 @@ fi
 ##
 
 progress 6 6 4 "Complete!"
+echo ""
 
 echo ""
 echo "The RocketPool Smart Node setup wizard is now complete!"
