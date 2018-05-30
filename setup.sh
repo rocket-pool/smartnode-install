@@ -4,6 +4,7 @@
 
 echo ""
 echo "Welcome to the RocketPool Smart Node setup wizard!"
+echo "This wizard is valid only for Ubuntu 16.04 and up. If you are using a different operating system, please cancel now."
 echo "This script will install the following software on this computer:"
 echo ""
 echo "OS Packages:"
@@ -55,8 +56,8 @@ if [ -f ~/.smartnode/password ]; then
     echo "Account password file already exists."
     echo "using existing password '$NODEPASSWORD'."; echo ""
 else
-    read -p "Please enter your account password: " NODEPASSWORD
-    echo "Account password '$NODEPASSWORD' entered."
+    read -p "Please enter your node account password: " NODEPASSWORD
+    echo "Node account password '$NODEPASSWORD' entered."
     echo "Please record this password somewhere safe."; echo ""
 fi
 
