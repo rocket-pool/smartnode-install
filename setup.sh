@@ -53,12 +53,18 @@ done
 # Node software account password
 if [ -f ~/.smartnode/password ]; then
     NODEPASSWORD="$( cat ~/.smartnode/password )"
-    echo "Account password file already exists."
+    echo "Node account password file already exists."
     echo "using existing password '$NODEPASSWORD'."; echo ""
 else
-    read -p "Please enter your node account password: " NODEPASSWORD
-    echo "Node account password '$NODEPASSWORD' entered."
-    echo "Please record this password somewhere safe."; echo ""
+    while true; do
+        read -p "Please enter your node account password (min 8 characters): " NODEPASSWORD
+        if [[ $NODEPASSWORD =~ ^.{8,}$ ]] ; then
+            echo "Node account password '$NODEPASSWORD' entered."
+            echo "Please record this password somewhere safe."; echo ""; break
+        else
+            echo "Invalid node account password. Please enter at least 8 characters."
+        fi
+    done
 fi
 
 # Provider
@@ -73,13 +79,35 @@ select REGIONID in "aus-east" "america-north"; do
     echo "$REGIONID hosting region selected."; echo ""; break
 done
 
-# Subnet
-read -p "Please enter your server's subnet ID (eg 'NViginia', 'Ohio'): " SUBNETID
-echo "Subnet ID '$SUBNETID' entered."; echo ""
+# Subnet ID
+while true; do
+    read -p "Please enter your server's subnet ID (eg 'NViginia', 'Ohio'): " SUBNETID
+    if [[ "$SUBNETID" != "" ]] ; then
+        echo "Subnet ID '$SUBNETID' entered."; echo ""; break
+    else
+        echo "Invalid subnet ID."
+    fi
+done
 
 # Instance ID
-read -p "Please enter your server's instance ID (eg 'FA3422'): " INSTANCEID
-echo "Instance ID '$INSTANCEID' entered."; echo ""
+while true; do
+    read -p "Please enter your server's instance ID (eg 'FA3422'): " INSTANCEID
+    if [[ "$INSTANCEID" != "" ]] ; then
+        echo "Instance ID '$INSTANCEID' entered."; echo ""; break
+    else
+        echo "Invalid instance ID."
+    fi
+done
+
+# Email address
+while true; do
+    read -p "Please enter a contact email address (for RocketPool staff to contact you): " EMAILADDRESS
+    if [[ $EMAILADDRESS =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$ ]] ; then
+        echo "Email address '$EMAILADDRESS' entered."; echo ""; break
+    else
+        echo "Invalid email address."
+    fi
+done
 
 # Company name
 read -p "Please enter your company name (optional; press Enter for none): " COMPANYNAME
@@ -297,6 +325,7 @@ read -r -d '' POSTDATA << EOM
     "regionId": "$REGIONID",
     "subnetId": "$SUBNETID",
     "instanceId": "$INSTANCEID",
+    "emailAddress": "$EMAILADDRESS",
     "companyName": "$COMPANYNAME",
     "accountAddress": "$ACCOUNTADDRESS"
 }
