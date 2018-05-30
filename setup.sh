@@ -33,6 +33,11 @@ progress() {
 
 }
 
+# Clear progress bar
+clearprogress() {
+    echo -e "\033[K"
+}
+
 # Messages to display at completion
 MESSAGES=""
 
@@ -43,6 +48,7 @@ MESSAGES=""
 
 echo ""
 echo "**************************************************"
+echo ""
 echo "Welcome to the RocketPool Smart Node setup wizard!"
 echo "This wizard is valid only for Ubuntu 16.04 and up. If you are using a different operating system, please cancel now."
 echo "This script will install the following software on this computer:"
@@ -73,6 +79,8 @@ echo "We will contact you once your node has been registered with the network wi
 echo ""
 echo "This script will take several minutes to complete, please be patient."
 echo "Press Control-C at any time to quit."
+echo ""
+echo "**************************************************"
 echo ""
 
 
@@ -221,8 +229,6 @@ case $NODESOFTWARE in
         ACCOUNT="$( geth account new --password ~/.smartnode/password )"
         if [[ $ACCOUNT =~ ([a-fA-F0-9]{40}) ]] ; then
             ACCOUNTADDRESS="0x${BASH_REMATCH[1]}"
-        else
-            echo "Failed to get new Geth account address, exiting."; echo ""; exit
         fi
 
     ;;
@@ -237,8 +243,6 @@ case $NODESOFTWARE in
         ACCOUNT="$( parity account new --password ~/.smartnode/password )"
         if [[ $ACCOUNT =~ ([a-fA-F0-9]{40}) ]] ; then
             ACCOUNTADDRESS="0x${BASH_REMATCH[1]}"
-        else
-            echo "Failed to get new Parity account address, exiting."; echo ""; exit
         fi
 
     ;;
@@ -246,6 +250,12 @@ case $NODESOFTWARE in
 esac
 
 } &> /dev/null
+
+# Exit if no account address
+if [ -z "$ACCOUNTADDRESS" ] ; then
+    clearprogress
+    echo "Failed to get new node account address, exiting."; echo ""; exit
+fi
 
 
 ##
