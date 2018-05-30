@@ -1,4 +1,38 @@
 ##
+# Utils
+##
+
+# Render progress bar
+progress() {
+
+    # Get args
+    COMPLETESTEPS=$1
+    TOTALSTEPS=$2
+    STEPSIZE=$3
+    LABEL=$4
+
+    # Clear line
+    echo -ne "\033[K  "
+
+    # Render bar
+    for (( S=0; S < $TOTALSTEPS; ++S )); do
+        for (( C=0; C < $STEPSIZE; ++C )); do
+            if [[ $S -lt $COMPLETESTEPS ]]; then echo -n "#"; else echo -n "-"; fi
+        done
+    done
+
+    # Render percentage
+    COMPLETEPERCENT=$(($COMPLETESTEPS * 100 / $TOTALSTEPS))
+    echo -n "  ($COMPLETEPERCENT%)"
+
+    # Render label and return
+    echo -n "  [$LABEL]"
+    echo -ne "\r"
+
+}
+
+
+##
 # Intro
 ##
 
@@ -25,7 +59,7 @@ echo "- rocketpool smart node daemon repository (https://github.com/rocket-pool/
 echo ""
 echo "* pm2 will also be configured to run smart node processes at system startup."
 echo "* RocketPool software repositores will be stored in your home path."
-echo "* Your ethereum client account password will be stored at ~/.smartnode/password with permissions of 'rw-------' (600)."
+echo "* Your node account password will be stored at ~/.smartnode/password with permissions of 'rw-------' (600)."
 echo "  This will be used by the smart node daemon but will never be shared with RocketPool directly."
 echo ""
 echo "A notification email will be sent to RocketPool on completion."
@@ -122,6 +156,9 @@ fi
 # OS Dependencies
 ##
 
+progress 0 6 4 "Installing OS Dependencies"
+
+{
 echo ""
 echo "##########################"
 echo "Installing OS Dependencies"
@@ -138,11 +175,16 @@ sudo apt-get -y install software-properties-common build-essential curl git
 # Install NodeJS
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - && sudo apt-get -y install nodejs
 
+} &> /dev/null
+
 
 ##
 # Node Software
 ##
 
+progress 1 6 4 "Setting Up Ethereum Client"
+
+{
 echo ""
 echo "##########################"
 echo "Setting Up Ethereum Client"
@@ -197,11 +239,16 @@ case $NODESOFTWARE in
 
 esac
 
+} &> /dev/null
+
 
 ##
 # Javascript Dependencies
 ##
 
+progress 2 6 4 "Installing NodeJS Dependencies"
+
+{
 echo ""
 echo "##############################"
 echo "Installing NodeJS Dependencies"
@@ -230,11 +277,16 @@ else
     echo ""
 fi
 
+} &> /dev/null
+
 
 ##
 # Clone Repositories
 ##
 
+progress 3 6 4 "Installing RocketPool Software"
+
+{
 echo ""
 echo "##############################"
 echo "Installing RocketPool Software"
@@ -259,11 +311,16 @@ npm install
 ln -s $HOME/rocketpool/build/contracts contracts
 cd -
 
+} &> /dev/null
+
 
 #################
 ## DEVELOPMENT ##
 #################
 
+progress 4 6 4 "Smart Node Setup (Development)"
+
+{
 echo ""
 echo "##############################"
 echo "Smart Node Setup (Development)"
@@ -306,15 +363,20 @@ cd -
 # Save running processes
 pm2 save
 
+} &> /dev/null
+
 
 ##
 # Notify
 ##
 
+progress 5 6 4 "Sending Node Setup Notification"
+
+{
 echo ""
-echo "####################"
-echo "Sending Notification"
-echo "####################"
+echo "###############################"
+echo "Sending Node Setup Notification"
+echo "###############################"
 echo ""
 
 # Notification post data
@@ -345,14 +407,18 @@ else
     echo ""
 fi
 
+} &> /dev/null
+
 
 ##
 # Cleanup
 ##
 
+progress 6 6 4 "Complete!"
+
 echo ""
 echo "The RocketPool Smart Node setup wizard is now complete!"
-echo "Your ethereum client account address is: $ACCOUNTADDRESS"
+echo "Your node account address is: $ACCOUNTADDRESS"
 echo "Please record this somewhere safe. You will need to send funds to this address to cover node operation gas costs."
 echo ""
 
