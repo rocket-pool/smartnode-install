@@ -103,25 +103,26 @@ echo ""
 
 echo ""
 echo "Please answer the following questions about your Smart Node setup:"
-echo ""
+echo ""; echo ""
+
 
 # Node software
 echo "Which node software would you like to run?"
 select NODESOFTWARE in "Geth" "Parity"; do
-    echo "$NODESOFTWARE node software selected."; echo ""; break
+    echo "$NODESOFTWARE node software selected."; echo ""; echo ""; break
 done
 
 # Node software account password
 if [ -f ~/.smartnode/password ]; then
     NODEPASSWORD="$( cat ~/.smartnode/password )"
     echo "Node account password file already exists."
-    echo "using existing password '$NODEPASSWORD'."; echo ""
+    echo "using existing password '$NODEPASSWORD'."; echo ""; echo ""
 else
     while true; do
         read -p "Please enter your node account password (min 8 characters): " NODEPASSWORD
         if [[ $NODEPASSWORD =~ ^.{8,}$ ]] ; then
             echo "Node account password '$NODEPASSWORD' entered."
-            echo "Please record this password somewhere safe."; echo ""; break
+            echo "Please record this password somewhere safe."; echo ""; echo ""; break
         else
             echo "Invalid node account password. Please enter at least 8 characters."
         fi
@@ -131,20 +132,20 @@ fi
 # Provider
 echo "Please select your hosting provider:"
 select PROVIDER in "AWS" "Rackspace"; do
-    echo "$PROVIDER hosting provider selected."; echo ""; break
+    echo "$PROVIDER hosting provider selected."; echo ""; echo ""; break
 done
 
 # Region
 echo "Please select your hosting region:"
 select REGIONID in "aus-east" "america-north"; do
-    echo "$REGIONID hosting region selected."; echo ""; break
+    echo "$REGIONID hosting region selected."; echo ""; echo ""; break
 done
 
 # Subnet ID
 while true; do
     read -p "Please enter your server's subnet ID (eg 'NViginia', 'Ohio'): " SUBNETID
     if [[ "$SUBNETID" != "" ]] ; then
-        echo "Subnet ID '$SUBNETID' entered."; echo ""; break
+        echo "Subnet ID '$SUBNETID' entered."; echo ""; echo ""; break
     else
         echo "Invalid subnet ID."
     fi
@@ -154,7 +155,7 @@ done
 while true; do
     read -p "Please enter your server's instance ID (eg 'FA3422'): " INSTANCEID
     if [[ "$INSTANCEID" != "" ]] ; then
-        echo "Instance ID '$INSTANCEID' entered."; echo ""; break
+        echo "Instance ID '$INSTANCEID' entered."; echo ""; echo ""; break
     else
         echo "Invalid instance ID."
     fi
@@ -164,7 +165,7 @@ done
 while true; do
     read -p "Please enter a contact email address (for RocketPool staff to contact you): " EMAILADDRESS
     if [[ $EMAILADDRESS =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$ ]] ; then
-        echo "Email address '$EMAILADDRESS' entered."; echo ""; break
+        echo "Email address '$EMAILADDRESS' entered."; echo ""; echo ""; break
     else
         echo "Invalid email address."
     fi
@@ -173,9 +174,9 @@ done
 # Company name
 read -p "Please enter your company name (optional; press Enter for none): " COMPANYNAME
 if [ "$COMPANYNAME" != "" ]; then
-    echo "Company name '$COMPANYNAME' entered."; echo ""
+    echo "Company name '$COMPANYNAME' entered."; echo ""; echo ""
 else
-    echo "No company name entered."; echo ""
+    echo "No company name entered."; echo ""; echo ""
 fi
 
 
