@@ -2,8 +2,18 @@
 # Utils
 ##
 
+# Get output streams (verbosity mode)
+if [[ "$1" == "-v" ]] ; then
+    OUTPUTTO="/dev/stdout"
+    PROGRESSTO="/dev/null"
+else
+    OUTPUTTO="/dev/null"
+    PROGRESSTO="/dev/stdout"
+fi
+
 # Render progress bar
 progress() {
+    {
 
     # Get args
     COMPLETESTEPS=$1
@@ -31,11 +41,14 @@ progress() {
     echo -n "  [$LABEL]"
     echo -ne "\r"
 
+    } &> $PROGRESSTO
 }
 
 # Clear progress bar
 clearprogress() {
+    {
     echo -e "\033[K"
+    } &> $PROGRESSTO
 }
 
 # Messages to display at completion
@@ -189,7 +202,7 @@ sudo apt-get -y install software-properties-common build-essential curl git
 # Install NodeJS
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - && sudo apt-get -y install nodejs
 
-} &> /dev/null
+} &> $OUTPUTTO
 
 
 ##
@@ -249,7 +262,7 @@ case $NODESOFTWARE in
 
 esac
 
-} &> /dev/null
+} &> $OUTPUTTO
 
 # Exit if no account address
 if [ -z "$ACCOUNTADDRESS" ] ; then
@@ -293,7 +306,7 @@ See http://pm2.keymetrics.io/docs/usage/startup/ for more information.
 "
 fi
 
-} &> /dev/null
+} &> $OUTPUTTO
 
 
 ##
@@ -327,7 +340,7 @@ npm install
 ln -s $HOME/rocketpool/build/contracts contracts
 cd -
 
-} &> /dev/null
+} &> $OUTPUTTO
 
 
 #################
@@ -379,7 +392,7 @@ cd -
 # Save running processes
 pm2 save
 
-} &> /dev/null
+} &> $OUTPUTTO
 
 
 ##
@@ -423,7 +436,7 @@ Please email dev@rocketpool.net to manually notify us of your node setup.
 "
 fi
 
-} &> /dev/null
+} &> $OUTPUTTO
 
 
 ##
