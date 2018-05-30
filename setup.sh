@@ -194,11 +194,11 @@ if [[ $PM2STARTUP =~ (sudo .*$) ]] ; then
     sudo chown -R ubuntu:ubuntu ~/.pm2
 else
     echo ""
-    echo "!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo "Failed to run PM2 startup command."
     echo "You will need to manually configure PM2 to run at system startup."
     echo "See http://pm2.keymetrics.io/docs/usage/startup/ for more information."
-    echo "!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo ""
 fi
 
@@ -308,11 +308,11 @@ if [[ $RESPONSE =~ success ]] ; then
     echo ""; echo "Successfully emailed node information."; echo ""
 else
     echo ""
-    echo "!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo "Failed to email node information."
     echo "Node setup notification response: $RESPONSE"
     echo "Please email dev@rocketpool.net to manually notify us of your node setup."
-    echo "!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo ""
 fi
 
