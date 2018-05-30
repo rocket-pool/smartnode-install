@@ -12,14 +12,16 @@ progress() {
     LABEL=$4
 
     # Clear line
-    echo -ne "\033[K  "
+    echo -ne "\033[K"
 
     # Render bar
+    echo -n "  ["
     for (( S=0; S < $TOTALSTEPS; ++S )); do
         for (( C=0; C < $STEPSIZE; ++C )); do
             if [[ $S -lt $COMPLETESTEPS ]]; then echo -n "#"; else echo -n "-"; fi
         done
     done
+    echo -n "]"
 
     # Render percentage
     COMPLETEPERCENT=$(($COMPLETESTEPS * 100 / $TOTALSTEPS))
@@ -30,6 +32,9 @@ progress() {
     echo -ne "\r"
 
 }
+
+# Messages to display at completion
+MESSAGES=""
 
 
 ##
@@ -268,13 +273,13 @@ if [[ $PM2STARTUP =~ (sudo .*$) ]] ; then
     eval $PM2STARTUPCOMMAND
     sudo chown -R ubuntu:ubuntu ~/.pm2
 else
-    echo ""
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "Failed to run PM2 startup command."
-    echo "You will need to manually configure PM2 to run at system startup."
-    echo "See http://pm2.keymetrics.io/docs/usage/startup/ for more information."
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo ""
+MESSAGES+="
+************ WARNING ************
+Failed to run PM2 startup command.
+You will need to manually configure PM2 to run at system startup
+See http://pm2.keymetrics.io/docs/usage/startup/ for more information.
+*********************************
+"
 fi
 
 } &> /dev/null
@@ -398,13 +403,13 @@ RESPONSE="$( curl -X POST -H "Content-Type: application/json" -H "Accept: applic
 if [[ $RESPONSE =~ success ]] ; then
     echo ""; echo "Successfully emailed node information."; echo ""
 else
-    echo ""
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "Failed to email node information."
-    echo "Node setup notification response: $RESPONSE"
-    echo "Please email dev@rocketpool.net to manually notify us of your node setup."
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo ""
+MESSAGES+="
+************ WARNING ************
+Failed to email node information.
+Node setup notification response: $RESPONSE
+Please email dev@rocketpool.net to manually notify us of your node setup.
+*********************************
+"
 fi
 
 } &> /dev/null
@@ -421,4 +426,8 @@ echo "The RocketPool Smart Node setup wizard is now complete!"
 echo "Your node account address is: $ACCOUNTADDRESS"
 echo "Please record this somewhere safe. You will need to send funds to this address to cover node operation gas costs."
 echo ""
+
+if [[ "$MESSAGES" != "" ]] ; then
+    echo "$MESSAGES"
+fi
 
