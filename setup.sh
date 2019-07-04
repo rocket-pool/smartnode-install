@@ -186,13 +186,25 @@ echo "Configuring Rocket Pool Services"
 echo "################################"
 echo ""
 
-# Get Rocket Pool path and add to profile
+# Get and create Rocket Pool path
 RP_PATH="$HOME/.rocketpool"
-if ! grep -Fq "export RP_PATH" $HOME/.bash_profile; then
-    echo "" >> $HOME/.bash_profile
-    echo "# Rocket Pool data" >> $HOME/.bash_profile
-    echo "export RP_PATH=\"$RP_PATH\"" >> $HOME/.bash_profile
+mkdir "$RP_PATH"
+mkdir "$RP_PATH/docker"
+mkdir "$RP_PATH/docker/setup"
+mkdir "$RP_PATH/docker/setup/pow"
+
+# Add Rocket Pool path to bash profile
+if ! grep -Fq "export RP_PATH" "$HOME/.bash_profile"; then
+    echo "" >> "$HOME/.bash_profile"
+    echo "# Rocket Pool data" >> "$HOME/.bash_profile"
+    echo "export RP_PATH=\"$RP_PATH\"" >> "$HOME/.bash_profile"
 fi
+
+# Download docker files
+curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/docker-compose.yml -o "$RP_PATH/docker/docker-compose.yml"
+curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/.env -o "$RP_PATH/docker/.env"
+curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/start.sh -o "$RP_PATH/docker/setup/pow/start.sh"
+curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/genesis77.json -o "$RP_PATH/docker/setup/pow/genesis77.json"
 
 } &> $OUTPUTTO
 
