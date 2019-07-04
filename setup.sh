@@ -158,6 +158,9 @@ echo "Installing Rocket Pool Software"
 echo "###############################"
 echo ""
 
+# Download smartnode docker images
+# TODO: implement
+
 # Download CLI utility
 sudo curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/scripts/rocketpool -o /usr/local/bin/rocketpool
 sudo chmod 755 /usr/local/bin/rocketpool
