@@ -158,14 +158,6 @@ echo "Installing Rocket Pool Software"
 echo "###############################"
 echo ""
 
-# Download docker images
-docker pull rocketpool/smartnode-cli:latest
-docker pull rocketpool/smartnode-node:latest
-docker pull rocketpool/smartnode-minipools:latest
-docker pull rocketpool/smartnode-minipool:latest
-docker pull rocketpool/smartnode-watchtower:latest
-docker pull rocketpool/beacon-chain-simulator:latest
-
 # Download CLI utility
 sudo curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/scripts/rocketpool -o /usr/local/bin/rocketpool
 sudo chmod 755 /usr/local/bin/rocketpool
