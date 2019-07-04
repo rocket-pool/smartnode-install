@@ -118,7 +118,7 @@ done
 # OS Dependencies
 ##
 
-progress 0 2 4 "Installing OS Dependencies"
+progress 0 3 6 "Installing OS Dependencies"
 
 {
 echo ""
@@ -149,7 +149,7 @@ sudo usermod -aG docker $USER
 # Rocket Pool software
 ##
 
-progress 1 2 4 "Installing Rocket Pool Software"
+progress 1 3 6 "Installing Rocket Pool Software"
 
 {
 echo ""
@@ -174,10 +174,34 @@ sudo chmod 755 /usr/local/bin/rocketpool
 
 
 ##
+# Setup
+##
+
+progress 2 3 6 "Configuring Rocket Pool Services"
+
+{
+echo ""
+echo "################################"
+echo "Configuring Rocket Pool Services"
+echo "################################"
+echo ""
+
+# Get Rocket Pool path and add to profile
+RP_PATH="$HOME/.rocketpool"
+if ! grep -Fq "export RP_PATH" $HOME/.bash_profile; then
+    echo "" >> $HOME/.bash_profile
+    echo "# Rocket Pool data" >> $HOME/.bash_profile
+    echo "export RP_PATH=\"$RP_PATH\"" >> $HOME/.bash_profile
+fi
+
+} &> $OUTPUTTO
+
+
+##
 # Cleanup
 ##
 
-progress 2 2 4 "Complete!"
+progress 3 3 6 "Complete!"
 echo ""
 
 echo ""
