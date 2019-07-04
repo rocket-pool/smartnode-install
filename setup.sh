@@ -210,6 +210,6 @@ echo ""
 
 echo ""
 echo "The Rocket Pool Smart Node setup wizard is now complete!"
-echo "Please run 'rocketpool start' to begin!"
+echo "Please restart your shell session and run 'rocketpool start' to begin!"
 echo ""
 

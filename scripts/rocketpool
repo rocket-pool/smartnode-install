@@ -3,6 +3,12 @@
 # Rocket Pool CLI utility
 # Performs operations which interact with the Rocket Pool service stack
 
+# Check RP_PATH is set
+if [ -z "$RP_PATH" ]; then
+    echo "RP_PATH environment variable is not set. Please restart your shell session and try again!"
+    exit 1
+fi
+
 # Get and shift command name
 COMMAND=$1
 shift
