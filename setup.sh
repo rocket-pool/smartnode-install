@@ -203,6 +203,7 @@ curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/dock
 curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/.env -o "$RP_PATH/docker/.env"
 curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/start.sh -o "$RP_PATH/docker/setup/pow/start.sh"
 curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/genesis77.json -o "$RP_PATH/docker/setup/pow/genesis77.json"
+chmod +x "$RP_PATH/docker/setup/pow/start.sh"
 
 } &> $OUTPUTTO
 
