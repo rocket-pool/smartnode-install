@@ -205,6 +205,9 @@ curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/dock
 curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/genesis77.json -o "$RP_PATH/docker/setup/pow/genesis77.json"
 chmod +x "$RP_PATH/docker/setup/pow/start.sh"
 
+# Download node config
+curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/node/config.yml -o "$RP_PATH/config.yml"
+
 } &> $OUTPUTTO
 
 
