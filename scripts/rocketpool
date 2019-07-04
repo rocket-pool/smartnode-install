@@ -13,7 +13,7 @@ case $COMMAND in
     # Start Rocket Pool service stack
     start )
         echo "Starting Rocket Pool services..."
-        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker up -d
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" up -d
         echo "The Rocket Pool services were successfully started."
     ;;
 
@@ -28,7 +28,7 @@ case $COMMAND in
 
         # Pause
         echo "Pausing Rocket Pool services..."
-        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker stop
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" stop
         echo "The Rocket Pool services were paused. Run 'rocketpool start' to resume."
 
     ;;
@@ -44,7 +44,7 @@ case $COMMAND in
 
         # Stop
         echo "Removing Rocket Pool services..."
-        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker down -v --remove-orphans
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" down -v --remove-orphans
         echo "The Rocket Pool services were stopped and removed. Run 'rocketpool start' to restart."
         echo "Your node data at $RP_PATH (including your node account and validator keychains) was not removed."
 
@@ -52,12 +52,12 @@ case $COMMAND in
 
     # View Rocket Pool service stack logs
     logs )
-        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker logs -f
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" logs -f
     ;;
 
     # Run Rocket Pool CLI command
     run )
-        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker exec cli /go/bin/rocketpool-cli "$@"
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"
     ;;
 
     # No command given - print info
