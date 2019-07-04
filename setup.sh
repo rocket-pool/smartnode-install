@@ -64,7 +64,7 @@ echo "**************************************************"
 echo ""
 echo "Welcome to the Rocket Pool Smart Node setup wizard!"
 echo "This wizard is valid only for Ubuntu 16.04 and up. If you are using a different operating system, please cancel now."
-echo "This script must be run as a user with root access. It will install the following software on this computer:"
+echo "This script must be run as a non-root user with root access. It will install the following software on this computer:"
 echo ""
 echo "OS Packages:"
 echo "- apt-transport-https"
@@ -165,6 +165,10 @@ docker pull rocketpool/smartnode-minipools:latest
 docker pull rocketpool/smartnode-minipool:latest
 docker pull rocketpool/smartnode-watchtower:latest
 docker pull rocketpool/beacon-chain-simulator:latest
+
+# Download CLI utility
+sudo curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/scripts/rocketpool -o /usr/local/bin/rocketpool
+sudo chmod 755 /usr/local/bin/rocketpool
 
 } &> $OUTPUTTO
 
