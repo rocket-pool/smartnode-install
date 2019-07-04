@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Rocket Pool CLI utility
+# Performs operations which interact with the Rocket Pool service stack
+
+# Get and shift command name
+COMMAND=$1
+shift
+
+# Run command
+case $COMMAND in
+
+    # Start Rocket Pool service stack
+    start )
+        echo "Starting Rocket Pool services..."
+        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker up -d
+        echo "The Rocket Pool services were successfully started."
+    ;;
+
+    # Pause Rocket Pool service stack
+    pause )
+
+        # Confirm
+        read -p "Are you sure you want to pause the Rocket Pool services? Any staking minipools will be penalized! (y/n) " -n 1 CONFIRM; echo
+        if [[ ! $CONFIRM =~ ^[Yy]$ ]]; then
+            echo "Cancelling..."; exit 0
+        fi
+
+        # Pause
+        echo "Pausing Rocket Pool services..."
+        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker stop
+        echo "The Rocket Pool services were paused. Run 'rocketpool start' to resume."
+
+    ;;
+
+    # Stop Rocket Pool service stack
+    stop )
+
+        # Confirm
+        read -p "Are you sure you want to stop the Rocket Pool services? Any staking minipools will be penalized, and ethereum nodes will lose sync progress! (y/n) " -n 1 CONFIRM; echo
+        if [[ ! $CONFIRM =~ ^[Yy]$ ]]; then
+            echo "Cancelling..."; exit 0
+        fi
+
+        # Stop
+        echo "Removing Rocket Pool services..."
+        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker down -v --remove-orphans
+        echo "The Rocket Pool services were stopped and removed. Run 'rocketpool start' to restart."
+        echo "Your node data at $RP_PATH (including your node account and validator keychains) was not removed."
+
+    ;;
+
+    # View Rocket Pool service stack logs
+    logs )
+        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker logs -f
+    ;;
+
+    # Run Rocket Pool CLI command
+    run )
+        docker-compose -f $RP_PATH/docker/docker-compose.yml --project-directory $RP_PATH/docker exec cli /go/bin/rocketpool-cli "$@"
+    ;;
+
+    # No command given - print info
+    '' )
+        echo "Usage:"
+        echo "  rocketpool start                       Initialise and start the Rocket Pool services"
+        echo "  rocketpool pause                       Stop the Rocket Pool services without removing them"
+        echo "  rocketpool stop                        Stop and remove the Rocket Pool services"
+        echo "  rocketpool logs                        View the current Rocket Pool service logs"
+        echo "  rocketpool run [COMMAND] [ARGS...]     Run a specific Rocket Pool CLI command"
+    ;;
+
+    # Unrecognized command
+    * )
+        echo "The command '$COMMAND' is not recognized."
+    ;;
+
+esac
