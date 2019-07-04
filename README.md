@@ -1,4 +1,4 @@
-# smartnode-setup
+# smartnode-install
 The install script for a Rocket Pool smart node.
 
 # Usage
