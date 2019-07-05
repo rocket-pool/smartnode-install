@@ -2,6 +2,14 @@
 
 
 ##
+# Config
+##
+
+# Smartnode installer github release version
+GITHUB_RELEASE="0.0.1"
+
+
+##
 # Utils
 ##
 
@@ -144,7 +152,7 @@ echo ""
 # TODO: implement
 
 # Download CLI utility
-sudo curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/scripts/rocketpool -o /usr/local/bin/rocketpool
+sudo curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/rocketpool.sh" -o /usr/local/bin/rocketpool
 sudo chmod +x /usr/local/bin/rocketpool
 
 } &> $OUTPUTTO
@@ -178,15 +186,15 @@ if ! grep -Fq "export RP_PATH" "$HOME/.bash_profile"; then
 fi
 
 # Download docker files
-curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/docker-compose.yml -o "$RP_PATH/docker/docker-compose.yml"
-curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/config.sh -o "$RP_PATH/docker/config.sh"
-curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/start.sh -o "$RP_PATH/docker/setup/pow/start.sh"
-curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/genesis77.json -o "$RP_PATH/docker/setup/pow/genesis77.json"
+curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-compose.yml"        -o "$RP_PATH/docker/docker-compose.yml"
+curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-config.sh"          -o "$RP_PATH/docker/config.sh"
+curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-pow-start.sh"       -o "$RP_PATH/docker/setup/pow/start.sh"
+curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-pow-genesis77.json" -o "$RP_PATH/docker/setup/pow/genesis77.json"
 chmod +x "$RP_PATH/docker/config.sh"
 chmod +x "$RP_PATH/docker/setup/pow/start.sh"
 
 # Download node config
-curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/node/config.yml -o "$RP_PATH/config.yml"
+curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/node-config.yml" -o "$RP_PATH/config.yml"
 
 } &> $OUTPUTTO
 
