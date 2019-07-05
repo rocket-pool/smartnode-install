@@ -94,27 +94,6 @@ echo ""
 
 
 ##
-# Parameters
-##
-
-echo ""
-echo "Please answer the following questions about your Smart Node setup:"
-echo ""; echo ""
-
-# Ethereum client
-echo "Which ethereum client would you like to run?"
-select ETHCLIENT in "Geth" "Parity"; do
-    echo "$ETHCLIENT ethereum client selected."; echo ""; echo ""; break
-done
-
-# Beacon chain client
-echo "Which beacon chain client would you like to run?"
-select BEACONCLIENT in "Prysm"; do
-    echo "$BEACONCLIENT beacon chain client selected."; echo ""; echo ""; break
-done
-
-
-##
 # OS Dependencies
 ##
 
@@ -200,9 +179,10 @@ fi
 
 # Download docker files
 curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/docker-compose.yml -o "$RP_PATH/docker/docker-compose.yml"
-curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/.env -o "$RP_PATH/docker/.env"
+curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/config.sh -o "$RP_PATH/docker/config.sh"
 curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/start.sh -o "$RP_PATH/docker/setup/pow/start.sh"
 curl https://raw.githubusercontent.com/rocket-pool/smartnode-install/master/docker/setup/pow/genesis77.json -o "$RP_PATH/docker/setup/pow/genesis77.json"
+chmod +x "$RP_PATH/docker/config.sh"
 chmod +x "$RP_PATH/docker/setup/pow/start.sh"
 
 # Download node config
