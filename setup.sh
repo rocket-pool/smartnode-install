@@ -172,7 +172,7 @@ echo "################################"
 echo ""
 
 # Get and create Rocket Pool path
-RP_PATH="$HOME/.rocketpool"
+export RP_PATH="$HOME/.rocketpool"
 mkdir "$RP_PATH"
 mkdir "$RP_PATH/docker"
 mkdir "$RP_PATH/docker/setup"
