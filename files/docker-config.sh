@@ -5,7 +5,7 @@
 
 # Check RP_PATH is set
 if [ -z "$RP_PATH" ]; then
-    echo "The RP_PATH environment variable is not set. Please check your .bash_profile, restart your shell session and try again!"
+    echo "The RP_PATH environment variable is not set. If you've just installed Rocket Pool, please start a new terminal session and try again."
     exit 1
 fi
 
