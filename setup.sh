@@ -100,6 +100,9 @@ echo ""
 echo "**************************************************"
 echo ""
 
+# Prompt for root access password before rendering progress meter
+sudo echo ""
+
 
 ##
 # OS Dependencies
@@ -198,16 +201,20 @@ curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GIT
 
 } &> $OUTPUTTO
 
+# Complete progress bar
+progress 3 3 6 "Complete!"
+echo ""
+
 # Run docker config
+echo ""
+echo "Configuring Rocket Pool service options..."
+echo ""
 source "$RP_PATH/docker/config.sh"
 
 
 ##
 # Cleanup
 ##
-
-progress 3 3 6 "Complete!"
-echo ""
 
 echo ""
 echo "The Rocket Pool Smart Node setup wizard is now complete!"
