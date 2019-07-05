@@ -19,7 +19,7 @@ services:
           - "eth1.rpc.smartnode.localhost"
           - "beacon.ws.smartnode.localhost"
   pow:
-    image: ethereum/client-go
+    image: ${POW_IMAGE}
     restart: on-failure
     volumes:
       - eth1clientdata:/ethclient
