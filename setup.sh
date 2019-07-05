@@ -196,10 +196,10 @@ chmod +x "$RP_PATH/docker/setup/pow/start.sh"
 # Download node config
 curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/node-config.yml" -o "$RP_PATH/config.yml"
 
+} &> $OUTPUTTO
+
 # Run docker config
 source "$RP_PATH/docker/config.sh"
-
-} &> $OUTPUTTO
 
 
 ##
