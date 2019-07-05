@@ -87,7 +87,7 @@ echo "Rocket Pool Software:"
 echo "- The Rocket Pool Smart Node service docker images"
 echo "- The Rocket Pool CLI utility (at /usr/local/bin/rocketpool)"
 echo ""
-echo "* The RP_PATH environment variable will be added to your bash profile and set to $HOME/.rocketpool."
+echo "* The RP_PATH environment variable will be added to your bash profile and set to $RP_PATH."
 echo "* Rocket Pool Smart Node data will be stored at RP_PATH."
 echo "  This includes your node account and validator keystores. Do NOT modify or remove this data unless:"
 echo "  - you have no ETH or RPL balance in your node account or node contract;"
@@ -174,8 +174,7 @@ echo "Configuring Rocket Pool Services"
 echo "################################"
 echo ""
 
-# Get and create Rocket Pool path
-RP_PATH="$HOME/.rocketpool"
+# Create Rocket Pool data paths
 mkdir "$RP_PATH"
 mkdir "$RP_PATH/docker"
 mkdir "$RP_PATH/docker/setup"
@@ -218,6 +217,6 @@ source "$RP_PATH/docker/config.sh"
 
 echo ""
 echo "The Rocket Pool Smart Node setup wizard is now complete!"
-echo "Please restart your shell session and run 'rocketpool start' to begin!"
+echo "Please run 'rocketpool start' to begin!"
 echo ""
 
