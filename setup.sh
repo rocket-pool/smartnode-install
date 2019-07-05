@@ -172,7 +172,7 @@ echo "################################"
 echo ""
 
 # Get and create Rocket Pool path
-export RP_PATH="$HOME/.rocketpool"
+RP_PATH="$HOME/.rocketpool"
 mkdir "$RP_PATH"
 mkdir "$RP_PATH/docker"
 mkdir "$RP_PATH/docker/setup"
@@ -197,7 +197,7 @@ chmod +x "$RP_PATH/docker/setup/pow/start.sh"
 curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/node-config.yml" -o "$RP_PATH/config.yml"
 
 # Run docker config
-"$RP_PATH/docker/config.sh"
+source "$RP_PATH/docker/config.sh"
 
 } &> $OUTPUTTO
 
