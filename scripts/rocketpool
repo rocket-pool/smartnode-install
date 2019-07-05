@@ -56,6 +56,21 @@ case $COMMAND in
 
     ;;
 
+    # Configure Rocket Pool service stack
+    config )
+
+        # Confirm
+        read -p "Are you sure you want to reconfigure the Rocket Pool services? They must be restarted for changes to take effect, and ethereum nodes may lose sync progress! (y/n) " -n 1 CONFIRM; echo
+        if [[ ! $CONFIRM =~ ^[Yy]$ ]]; then
+            echo "Cancelling..."; exit 0
+        fi
+
+        # Configure
+        source "$RP_PATH/docker/config.sh"
+        echo "Done! Run 'rocketpool start' to restart with new settings in effect."
+        
+    ;;
+
     # View Rocket Pool service stack logs
     logs )
         docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" logs -f
