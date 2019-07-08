@@ -78,7 +78,7 @@ echo "OS Packages:"
 echo "- apt-transport-https"
 echo "- ca-certificates"
 echo "- curl"
-echo "- docker-ce"
+echo "- docker"
 echo "- docker-compose"
 echo "- gnupg-agent"
 echo "- software-properties-common"
@@ -126,6 +126,7 @@ sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent sof
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt-get -y update
+sudo apt-get -y install docker-ce
 
 # Install docker-compose
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
