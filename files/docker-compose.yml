@@ -21,6 +21,7 @@ services:
   pow:
     image: ${POW_IMAGE}
     restart: on-failure
+    user: root
     volumes:
       - eth1clientdata:/ethclient
       - ./setup/pow:/setup:ro

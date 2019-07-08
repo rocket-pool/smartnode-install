@@ -8,25 +8,39 @@ CONTAINERID="${HOSTNAME}"
 DATADIR="/ethclient/$CONTAINERID"
 mkdir -p "$DATADIR"
 
-# Geth startup
-if [ $CLIENT == "Geth" ]; then
+# Client startup
+case "$CLIENT" in
 
-    # Initialise
-    CMD="/usr/local/bin/geth --datadir $DATADIR init /setup/genesis77.json"
+    # Geth
+    Geth )
 
-    # Run
-    CMD="$CMD && /usr/local/bin/geth --datadir $DATADIR --networkid $NETWORKID --bootnodes $BOOTNODE"
-    CMD="$CMD --rpc --rpcaddr 0.0.0.0 --rpcport 8545 --rpcapi db,eth,net,web3,personal --rpcvhosts 'eth1.rpc.smartnode.localhost'"
+        # Initialise
+        CMD="/usr/local/bin/geth --datadir $DATADIR init /setup/genesis77.json"
 
-    # Add Ethstats to run
-    if [ ! -z "$ETHSTATSLABEL" ] && [ ! -z "$ETHSTATSLOGIN" ]; then
-        CMD="$CMD --ethstats $ETHSTATSLABEL-$CONTAINERID:$ETHSTATSLOGIN"
-    fi
+        # Run
+        CMD="$CMD && /usr/local/bin/geth --datadir $DATADIR --networkid $NETWORKID --bootnodes $BOOTNODE"
+        CMD="$CMD --rpc --rpcaddr 0.0.0.0 --rpcport 8545 --rpcapi db,eth,net,web3,personal --rpcvhosts 'eth1.rpc.smartnode.localhost'"
 
-    # Run command
-    eval "$CMD"
+        # Add Ethstats to run
+        if [ ! -z "$ETHSTATSLABEL" ] && [ ! -z "$ETHSTATSLOGIN" ]; then
+            CMD="$CMD --ethstats $ETHSTATSLABEL-$CONTAINERID:$ETHSTATSLOGIN"
+        fi
 
-fi
+        # Run command
+        eval "$CMD"
 
-# Parity startup
-# TODO: implement
+    ;;
+
+    # Parity
+    Parity )
+
+        # Run
+        CMD="/bin/parity --base-path=$DATADIR --chain=/setup/genesis77.json --network-id=$NETWORKID --bootnodes=$BOOTNODE"
+        CMD="$CMD --jsonrpc-interface=0.0.0.0 --jsonrpc-port=8545 --jsonrpc-hosts=eth1.rpc.smartnode.localhost"
+
+        # Run command
+        eval "$CMD"
+
+    ;;
+
+esac
