@@ -75,7 +75,7 @@ case $COMMAND in
 
     # View Rocket Pool service stack logs
     logs )
-        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" logs -f
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" logs -f "$@"
     ;;
 
     # Run Rocket Pool CLI command
