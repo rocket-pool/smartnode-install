@@ -34,6 +34,7 @@ case $COMMAND in
 
         # Pause
         echo "Pausing Rocket Pool services..."
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli minipool stop
         docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" stop
         echo "Done! Run 'rocketpool start' to resume."
 
@@ -50,6 +51,7 @@ case $COMMAND in
 
         # Stop
         echo "Removing Rocket Pool services..."
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli minipool stop
         docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" down -v --remove-orphans
         echo "Done! Run 'rocketpool start' to restart."
         echo "Your node data at $RP_PATH (including your node account and validator keychains) was not removed."
