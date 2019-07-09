@@ -61,6 +61,11 @@ case $COMMAND in
 
     ;;
 
+    # Scale Rocket Pool services
+    scale )
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" scale "$@"
+    ;;
+
     # Configure Rocket Pool service stack
     config )
 
@@ -92,8 +97,9 @@ case $COMMAND in
         echo "  rocketpool start                       Initialise and start the Rocket Pool services"
         echo "  rocketpool pause                       Stop the Rocket Pool services without removing them"
         echo "  rocketpool stop                        Stop and remove the Rocket Pool services"
+        echo "  rocketpool scale [SERVICE=NUM...]      Scale Rocket Pool service containers"
         echo "  rocketpool config                      Reconfigure the Rocket Pool services (requires restart)"
-        echo "  rocketpool logs                        View the current Rocket Pool service logs"
+        echo "  rocketpool logs [SERVICES...]          View the current Rocket Pool service logs"
         echo "  rocketpool run [COMMAND] [ARGS...]     Run a specific Rocket Pool CLI command"
     ;;
 
