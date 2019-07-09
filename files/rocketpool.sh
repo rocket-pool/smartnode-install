@@ -86,6 +86,11 @@ case $COMMAND in
         docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" logs -f "$@"
     ;;
 
+    # Display Rocket Pool service resource stats
+    stats )
+        docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" ps -q | xargs docker stats
+    ;;
+
     # Run Rocket Pool CLI command
     run )
         docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"
@@ -100,6 +105,7 @@ case $COMMAND in
         echo "  rocketpool scale [SERVICE=NUM...]      Scale Rocket Pool service containers"
         echo "  rocketpool config                      Reconfigure the Rocket Pool services (requires restart)"
         echo "  rocketpool logs [SERVICES...]          View the current Rocket Pool service logs"
+        echo "  rocketpool stats                       Display resource stats for running Rocket Pool services"
         echo "  rocketpool run [COMMAND] [ARGS...]     Run a specific Rocket Pool CLI command"
     ;;
 
