@@ -98,6 +98,13 @@ case $COMMAND in
 
     # No command given - print info
     '' )
+        echo "______           _        _    ______           _ "
+        echo "| ___ \         | |      | |   | ___ \         | |"
+        echo "| |_/ /___   ___| | _____| |_  | |_/ /__   ___ | |"
+        echo "|    // _ \ / __| |/ / _ \ __| |  __/ _ \ / _ \| |"
+        echo "| |\ \ (_) | (__|   <  __/ |_  | | | (_) | (_) | |"
+        echo "\_| \_\___/ \___|_|\_\___|\__| \_|  \___/ \___/|_|"
+        echo ""
         echo "Usage:"
         echo "  rocketpool start                       Initialise and start the Rocket Pool services"
         echo "  rocketpool pause                       Stop the Rocket Pool services without removing them"
@@ -107,6 +114,7 @@ case $COMMAND in
         echo "  rocketpool logs [SERVICES...]          View the current Rocket Pool service logs"
         echo "  rocketpool stats                       Display resource stats for running Rocket Pool services"
         echo "  rocketpool run [COMMAND] [ARGS...]     Run a specific Rocket Pool CLI command"
+        echo ""
     ;;
 
     # Unrecognized command
