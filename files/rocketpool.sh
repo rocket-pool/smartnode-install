@@ -41,7 +41,7 @@ if [[ "$1" == "service" ]]; then
             echo "Pausing Rocket Pool services..."
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli minipool stop "$MINIPOOL_IMAGE"
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" stop
-            echo "Done! Run 'rocketpool start' to resume."
+            echo "Done! Run 'rocketpool service start' to resume."
 
         ;;
 
@@ -58,7 +58,7 @@ if [[ "$1" == "service" ]]; then
             echo "Removing Rocket Pool services..."
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli minipool stop "$MINIPOOL_IMAGE"
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" down -v --remove-orphans
-            echo "Done! Run 'rocketpool start' to restart."
+            echo "Done! Run 'rocketpool service start' to restart."
             echo "Your node data at $RP_PATH (including your node account and validator keychains) was not removed."
 
         ;;
@@ -96,7 +96,7 @@ if [[ "$1" == "service" ]]; then
             echo "POW_ETHSTATS_LOGIN=rp2testbeta@3.216.221.20" >> "$DOCKERENV"
 
             # Log
-            echo "Done! Run 'rocketpool start' to start with new settings in effect."
+            echo "Done! Run 'rocketpool service start' to start with new settings in effect."
             
         ;;
 

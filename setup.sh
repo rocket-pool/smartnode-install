@@ -207,7 +207,7 @@ echo ""
 # Run Rocket Pool config
 echo ""
 echo "Configuring Rocket Pool service options..."
-source /usr/local/bin/rocketpool config
+source /usr/local/bin/rocketpool service config
 
 
 ##
@@ -216,6 +216,6 @@ source /usr/local/bin/rocketpool config
 
 echo ""
 echo "The Rocket Pool Smart Node setup wizard is now complete!"
-echo "Please start a new terminal session and run 'rocketpool start' to begin!"
+echo "Please start a new terminal session and run 'rocketpool service start' to begin!"
 echo ""
 
