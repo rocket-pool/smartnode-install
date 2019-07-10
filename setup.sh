@@ -207,7 +207,6 @@ echo ""
 # Run Rocket Pool config
 echo ""
 echo "Configuring Rocket Pool service options..."
-echo ""
 source /usr/local/bin/rocketpool config
 
 
