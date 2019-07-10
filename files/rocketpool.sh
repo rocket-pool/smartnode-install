@@ -4,7 +4,7 @@
 # Performs operations which interact with the Rocket Pool service stack
 
 # Check RP_PATH is set
-if [ -z "$RP_PATH" ]; then
+if [[ -z "$RP_PATH" ]]; then
     echo "The RP_PATH environment variable is not set. If you've just installed Rocket Pool, please start a new terminal session and try again."
     exit 1
 fi
@@ -73,7 +73,7 @@ case $COMMAND in
         DOCKERENV="$RP_PATH/docker/.env"
 
         # Confirm if docker .env file exists
-        if [ -f "$DOCKERENV" ]; then
+        if [[ -f "$DOCKERENV" ]]; then
             read -p "Are you sure you want to reconfigure the Rocket Pool services? They must be restarted for changes to take effect, and ethereum nodes may lose sync progress! (y/n) " -n 1 CONFIRM; echo
             if [[ ! $CONFIRM =~ ^[Yy]$ ]]; then
                 echo "Cancelling..."; exit 0
@@ -115,6 +115,7 @@ case $COMMAND in
 
     # No command given - print info
     '' )
+        echo ""
         echo "______           _        _    ______           _ "
         echo "| ___ \         | |      | |   | ___ \         | |"
         echo "| |_/ /___   ___| | _____| |_  | |_/ /__   ___ | |"

@@ -14,7 +14,7 @@ GITHUB_RELEASE="0.0.1"
 ##
 
 # Get output streams (verbosity mode)
-if [[ "$1" == "-v" ]] ; then
+if [[ "$1" == "-v" ]]; then
     OUTPUTTO="/dev/stdout"
     PROGRESSTO="/dev/null"
 else
