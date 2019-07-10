@@ -69,15 +69,32 @@ case $COMMAND in
     # Configure Rocket Pool service stack
     config )
 
-        # Confirm
-        read -p "Are you sure you want to reconfigure the Rocket Pool services? They must be restarted for changes to take effect, and ethereum nodes may lose sync progress! (y/n) " -n 1 CONFIRM; echo
-        if [[ ! $CONFIRM =~ ^[Yy]$ ]]; then
-            echo "Cancelling..."; exit 0
+        # Get docker .env file path
+        DOCKERENV="$RP_PATH/docker/.env"
+
+        # Confirm if docker .env file exists
+        if [ -f "$DOCKERENV" ]; then
+            read -p "Are you sure you want to reconfigure the Rocket Pool services? They must be restarted for changes to take effect, and ethereum nodes may lose sync progress! (y/n) " -n 1 CONFIRM; echo
+            if [[ ! $CONFIRM =~ ^[Yy]$ ]]; then
+                echo "Cancelling..."; exit 0
+            fi
         fi
 
-        # Configure
-        source "$RP_PATH/docker/config.sh"
-        echo "Done! Run 'rocketpool start' to restart with new settings in effect."
+        # Write docker config
+        POW_BOOTNODES=(
+            "enode://6114b79e7928bfb19ff8600bad6e09a49cfc53f7d9513bb0e854566102ee04bac8f494472bcc812211c2cc50684f8a04320d23c17410b52c6175e8246b5a3307@3.216.221.20:30305"
+            "enode://80b8fe6fe4fe82761b2b40d57da58296d82f34f035b182cca411b9e55370f8c4f2734648523261b2be212352f3a218fa61f89517cf6abd005fb9acc27d289ff4@100.27.8.240:30303"
+        )
+        echo "COMPOSE_PROJECT_NAME=rocketpool" > "$DOCKERENV"
+        echo "POW_CLIENT=geth" >> "$DOCKERENV"
+        echo "POW_IMAGE=ethereum/client-go:latest" >> "$DOCKERENV"
+        echo "POW_NETWORK_ID=77" >> "$DOCKERENV"
+        echo "POW_BOOTNODE=${POW_BOOTNODES[0]},${POW_BOOTNODES[1]}" >> "$DOCKERENV"
+        echo "POW_ETHSTATS_LABEL=RP2Beta-Node" >> "$DOCKERENV"
+        echo "POW_ETHSTATS_LOGIN=rp2testbeta@3.216.221.20" >> "$DOCKERENV"
+
+        # Log
+        echo "Done! Run 'rocketpool start' to start with new settings in effect."
         
     ;;
 

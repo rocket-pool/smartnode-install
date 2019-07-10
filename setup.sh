@@ -191,10 +191,8 @@ fi
 
 # Download docker files
 curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-compose.yml"        -o "$RP_PATH/docker/docker-compose.yml"
-curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-config.sh"          -o "$RP_PATH/docker/config.sh"
 curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-pow-start.sh"       -o "$RP_PATH/docker/setup/pow/start.sh"
 curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-pow-genesis77.json" -o "$RP_PATH/docker/setup/pow/genesis77.json"
-chmod +x "$RP_PATH/docker/config.sh"
 chmod +x "$RP_PATH/docker/setup/pow/start.sh"
 
 # Download node config
@@ -206,11 +204,11 @@ curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GIT
 progress 3 3 6 "Complete!"
 echo ""
 
-# Run docker config
+# Run Rocket Pool config
 echo ""
 echo "Configuring Rocket Pool service options..."
 echo ""
-source "$RP_PATH/docker/config.sh"
+source /usr/local/bin/rocketpool config
 
 
 ##
