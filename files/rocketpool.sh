@@ -39,7 +39,7 @@ if [[ "$1" == "service" ]]; then
 
             # Pause
             echo "Pausing Rocket Pool services..."
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli minipool stop "$MINIPOOL_IMAGE"
+            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" stop
             echo "Done! Run 'rocketpool service start' to resume."
 
@@ -56,7 +56,8 @@ if [[ "$1" == "service" ]]; then
 
             # Stop
             echo "Removing Rocket Pool services..."
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli minipool stop "$MINIPOOL_IMAGE"
+            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop
+            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker rm
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" down -v --remove-orphans
             echo "Done! Run 'rocketpool service start' to restart."
             echo "Your node data at $RP_PATH (including your node account and validator keychains) was not removed."
