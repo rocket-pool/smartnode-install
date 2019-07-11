@@ -147,7 +147,7 @@ else
         echo "The Rocket Pool service is not running. Please run 'rocketpool service start'."; exit 0
     fi
 
-    # Run command
-    docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"
+    # Run command with colored output
+    printf "\e[31m"; docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"; printf "\e[0m"
 
 fi
