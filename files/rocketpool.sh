@@ -141,5 +141,13 @@ if [[ "$1" == "service" ]]; then
 
 # Run CLI commands
 else
+
+    # Check CLI service is available
+    if [[ ! $(docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" ps -q cli) ]]; then
+        echo "The Rocket Pool service is not running. Please run 'rocketpool service start'."; exit 0
+    fi
+
+    # Run command
     docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"
+
 fi
