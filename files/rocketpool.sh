@@ -144,7 +144,7 @@ else
 
     # Check CLI service is available
     if [[ ! $(docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" ps -q cli) ]]; then
-        echo "The Rocket Pool service is not running. Please run 'rocketpool service start'."; exit 0
+        echo "The Rocket Pool service is not running. Please run 'rocketpool service start'."; exit 1
     fi
 
     # Run command with colored output
