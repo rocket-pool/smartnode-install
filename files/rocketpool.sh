@@ -54,7 +54,7 @@ if [[ "$1" == "service" ]]; then
             echo "Pausing Rocket Pool services..."
 
             # Stop service stack
-            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop
+            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop 2>/dev/null
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" stop
 
             # Log
@@ -75,8 +75,8 @@ if [[ "$1" == "service" ]]; then
             echo "Removing Rocket Pool services..."
 
             # Tear down service stack
-            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop
-            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker rm
+            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop 2>/dev/null
+            docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker rm 2>/dev/null
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" down -v --remove-orphans
 
             # Log
