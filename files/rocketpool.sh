@@ -33,7 +33,7 @@ if [[ "$1" == "service" ]]; then
             # Copy OS timezone to CLI container
             TIMEZONE=$(cat /etc/timezone)
             if [ ! -z "$TIMEZONE" ]; then
-                docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /bin/sh -c "echo $TIMEZONE > /etc/timezone"
+                docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /bin/sh -c "echo '$TIMEZONE' > /etc/timezone"
             fi
 
             # Log
