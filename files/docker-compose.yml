@@ -77,7 +77,6 @@ services:
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
-      - /etc/timezone:/etc/timezone:ro
     networks:
       - internal_net
     depends_on:
