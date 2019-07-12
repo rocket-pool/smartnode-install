@@ -23,9 +23,22 @@ if [[ "$1" == "service" ]]; then
 
         # Start Rocket Pool service stack
         start )
+
+            # Log
             echo "Starting Rocket Pool services..."
+
+            # Build up service stack
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" up -d
+
+            # Copy OS timezone to CLI container
+            TIMEZONE=$(cat /etc/timezone)
+            if [ ! -z "$TIMEZONE" ]; then
+                docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /bin/sh -c "echo $TIMEZONE > /etc/timezone"
+            fi
+
+            # Log
             echo "Done!"
+
         ;;
 
         # Pause Rocket Pool service stack
@@ -37,10 +50,14 @@ if [[ "$1" == "service" ]]; then
                 echo "Cancelling..."; exit 0
             fi
 
-            # Pause
+            # Log
             echo "Pausing Rocket Pool services..."
+
+            # Stop service stack
             docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" stop
+
+            # Log
             echo "Done! Run 'rocketpool service start' to resume."
 
         ;;
@@ -54,11 +71,15 @@ if [[ "$1" == "service" ]]; then
                 echo "Cancelling..."; exit 0
             fi
 
-            # Stop
+            # Log
             echo "Removing Rocket Pool services..."
+
+            # Tear down service stack
             docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop
             docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker rm
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" down -v --remove-orphans
+
+            # Log
             echo "Done! Run 'rocketpool service start' to restart."
             echo "Your node data at $RP_PATH (including your node account and validator keychains) was not removed."
 
@@ -66,7 +87,16 @@ if [[ "$1" == "service" ]]; then
 
         # Scale Rocket Pool services
         scale )
+
+            # Log
+            echo "Scaling Rocket Pool services..."
+
+            # Scale services
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" scale "$@"
+
+            # Log
+            echo "Done!"
+
         ;;
 
         # Configure Rocket Pool service stack
