@@ -113,14 +113,39 @@ if [[ "$1" == "service" ]]; then
                 fi
             fi
 
+            # Choose ethereum 1.0 client
+            echo "Which ethereum 1.0 client would you like to run?"
+            select ETH1CLIENT in "Geth"; do
+                if [ -z "$ETH1CLIENT" ]; then
+                    echo "Please select an option with the indicated number."
+                else
+                    echo "$ETH1CLIENT ethereum 1.0 client selected."; echo ""; break
+                fi
+            done
+
+            # Choose ethereum 2.0 client
+            echo "Which ethereum 2.0 client would you like to run?"
+            select ETH2CLIENT in "Prysm"; do
+                if [ -z "$ETH2CLIENT" ]; then
+                    echo "Please select an option with the indicated number."
+                else
+                    echo "$ETH2CLIENT ethereum 2.0 client selected."; echo ""; break
+                fi
+            done
+
+            # Get ethereum client images
+            case "$ETH1CLIENT" in
+                Geth ) ETH1CLIENTIMAGE="ethereum/client-go:latest" ;;
+            esac
+
             # Write docker config
             POW_BOOTNODES=(
                 "enode://6114b79e7928bfb19ff8600bad6e09a49cfc53f7d9513bb0e854566102ee04bac8f494472bcc812211c2cc50684f8a04320d23c17410b52c6175e8246b5a3307@3.216.221.20:30305"
                 "enode://80b8fe6fe4fe82761b2b40d57da58296d82f34f035b182cca411b9e55370f8c4f2734648523261b2be212352f3a218fa61f89517cf6abd005fb9acc27d289ff4@100.27.8.240:30303"
             )
             echo "COMPOSE_PROJECT_NAME=rocketpool" > "$DOCKERENV"
-            echo "POW_CLIENT=geth" >> "$DOCKERENV"
-            echo "POW_IMAGE=ethereum/client-go:latest" >> "$DOCKERENV"
+            echo "POW_CLIENT=$ETH1CLIENT" >> "$DOCKERENV"
+            echo "POW_IMAGE=$ETH1CLIENTIMAGE" >> "$DOCKERENV"
             echo "POW_NETWORK_ID=77" >> "$DOCKERENV"
             echo "POW_BOOTNODE=${POW_BOOTNODES[0]},${POW_BOOTNODES[1]}" >> "$DOCKERENV"
             echo "POW_ETHSTATS_LABEL=RP2Beta-Node" >> "$DOCKERENV"

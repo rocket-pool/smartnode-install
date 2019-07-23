@@ -9,7 +9,7 @@ DATADIR="/ethclient/$CONTAINERID"
 mkdir -p "$DATADIR"
 
 # Geth startup
-if [[ $CLIENT == "geth" ]]; then
+if [[ $CLIENT == "Geth" ]]; then
 
     # Initialise
     CMD="/usr/local/bin/geth --datadir $DATADIR init /setup/genesis77.json"
