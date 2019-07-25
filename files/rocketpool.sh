@@ -140,8 +140,8 @@ if [[ "$1" == "service" ]]; then
 
             # Write docker config
             POW_BOOTNODES=(
-                "enode://6114b79e7928bfb19ff8600bad6e09a49cfc53f7d9513bb0e854566102ee04bac8f494472bcc812211c2cc50684f8a04320d23c17410b52c6175e8246b5a3307@3.216.221.20:30305"
-                "enode://80b8fe6fe4fe82761b2b40d57da58296d82f34f035b182cca411b9e55370f8c4f2734648523261b2be212352f3a218fa61f89517cf6abd005fb9acc27d289ff4@100.27.8.240:30303"
+                "enode://eeaed9e2a7babf75302e46eb8d21f4fbc18606ac49b709f1f9b8ca3d9d8c487632b299e562bfc4eb47182b0b3557b7e5d3c9ef46de043753031a8970ffbe17a3@3.216.221.20:30303"
+                "enode://ffc742e4e88bf793e8a7977339c3bebe47338ef7e18f72c6389a32a27ab25336a5db41d83039d284c2afdd2f1478cb3b94c233f956e3ac4604fb3b22d3c45593@100.27.8.240:30303"
             )
             echo "COMPOSE_PROJECT_NAME=rocketpool" > "$DOCKERENV"
             echo "POW_CLIENT=$ETH1CLIENT" >> "$DOCKERENV"
