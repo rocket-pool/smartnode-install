@@ -203,6 +203,6 @@ else
     fi
 
     # Run command with colored output
-    printf "\e[33m"; docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"; printf "\e[0m"
+    printf "\e[1;33m"; docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"; printf "\e[0m"
 
 fi
