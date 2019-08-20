@@ -203,10 +203,6 @@ else
     fi
 
     # Run command with colored output
-    case $OSTYPE in
-        darwin18 ) TERMCOLOUR="[1;33m" ;;
-        * )        TERMCOLOUR="[38;5;229m" ;;
-    esac
-    printf "\e$TERMCOLOUR"; docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"; printf "\e[0m"
+    docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"
 
 fi
