@@ -55,8 +55,8 @@ services:
       - internal_net
     command: [
       "--powHost", "http://eth1.rpc.smartnode.localhost",
-      "--depositContract", "0xdD0DaF6b2ee873e06913909D1F8625A9077E7E7b",
-      "--withdrawalContract", "0xa04348cCf8C202716Ac39C03B2bA1caBbfCad201",
+      "--depositContract", "0x81d6550DDf3aB1e4a1DC92c67b12E916C0fc75f4",
+      "--withdrawalContract", "0xF23F62Ff1315FA629dAeCD550A6b45B772CA16BA",
       "--from", "0x2f6812e7005c61835b12544eeb45958099ef45f4",
       "--database", "/ethclient/beacon.json",
     ]
