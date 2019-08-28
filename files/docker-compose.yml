@@ -14,7 +14,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      internal_net:
+      net:
         aliases:
           - "eth1.rpc.smartnode.localhost"
   pow:
@@ -24,8 +24,7 @@ services:
       - eth1clientdata:/ethclient
       - ./setup/pow:/setup:ro
     networks:
-      - public_net
-      - internal_net
+      - net
     environment:
       - CLIENT=${POW_CLIENT}
       - NETWORKID=${POW_NETWORK_ID}
@@ -36,7 +35,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.port=8545
-      - traefik.docker.network=${COMPOSE_PROJECT_NAME}_internal_net
+      - traefik.docker.network=${COMPOSE_PROJECT_NAME}_net
       - traefik.frontend.priority=10
       - traefik.frontend.rule=Host:eth1.rpc.smartnode.localhost
       - traefik.backend.loadbalancer.stickiness=true
@@ -51,7 +50,7 @@ services:
     volumes:
       - ${RP_PATH}:/.rocketpool
     networks:
-      - internal_net
+      - net
     depends_on:
       - pow
     entrypoint: /bin/sh
@@ -63,12 +62,12 @@ services:
       - ${RP_PATH}:/.rocketpool
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - internal_net
+      - net
     command: [
       "${RP_PATH}",
       "rocketpool/smartnode-minipool:v0.0.1",
       "${COMPOSE_PROJECT_NAME}_minipool_",
-      "${COMPOSE_PROJECT_NAME}_internal_net",
+      "${COMPOSE_PROJECT_NAME}_net",
     ]
     depends_on:
       - pow
@@ -78,7 +77,7 @@ services:
     volumes:
       - ${RP_PATH}:/.rocketpool
     networks:
-      - internal_net
+      - net
     depends_on:
       - pow
   watchtower:
@@ -87,13 +86,10 @@ services:
     volumes:
       - ${RP_PATH}:/.rocketpool
     networks:
-      - internal_net
+      - net
     depends_on:
       - pow
 networks:
-  public_net:
-  internal_net:
-    internal: true
+  net:
 volumes:
   eth1clientdata:
-  eth2clientdata:
