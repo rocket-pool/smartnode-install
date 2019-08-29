@@ -125,7 +125,7 @@ if [[ "$1" == "service" ]]; then
 
             # Choose ethereum 2.0 client
             echo "Which ethereum 2.0 client would you like to run?"
-            select ETH2CLIENT in "Prysm"; do
+            select ETH2CLIENT in "Beacon Chain Simulator"; do
                 if [ -z "$ETH2CLIENT" ]; then
                     echo "Please select an option with the indicated number."
                 else
