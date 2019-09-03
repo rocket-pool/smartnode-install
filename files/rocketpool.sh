@@ -135,7 +135,7 @@ if [[ "$1" == "service" ]]; then
 
             # Get ethereum client images
             case "$ETH1CLIENT" in
-                Geth ) ETH1CLIENTIMAGE="ethereum/client-go:latest" ;;
+                Geth ) ETH1CLIENTIMAGE="ethereum/client-go:stable" ;;
             esac
 
             # Write docker config
