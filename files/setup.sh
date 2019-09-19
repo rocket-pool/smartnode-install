@@ -153,7 +153,11 @@ echo "###############################"
 echo ""
 
 # Download smartnode docker images
-# TODO: implement
+docker pull rocketpool/smartnode-cli:v0.0.1
+docker pull rocketpool/smartnode-minipool:v0.0.1
+docker pull rocketpool/smartnode-minipools:v0.0.1
+docker pull rocketpool/smartnode-node:v0.0.1
+docker pull rocketpool/smartnode-watchtower:v0.0.1
 
 # Download CLI utility
 sudo curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/rocketpool.sh" -o /usr/local/bin/rocketpool
