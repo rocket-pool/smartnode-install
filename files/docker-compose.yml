@@ -10,7 +10,7 @@ services:
     ]
     restart: always
     ports:
-      - "9080:8080" # Web UI (enabled by --api)
+      #- "9080:8080" # Web UI (enabled by --api)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
