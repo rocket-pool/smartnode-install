@@ -186,11 +186,11 @@ mkdir "$RP_PATH/docker"
 mkdir "$RP_PATH/docker/setup"
 mkdir "$RP_PATH/docker/setup/pow"
 
-# Add Rocket Pool path to bash profile
-if ! grep -Fq "export RP_PATH" "$HOME/.bash_profile"; then
-    echo "" >> "$HOME/.bash_profile"
-    echo "# Rocket Pool data" >> "$HOME/.bash_profile"
-    echo "export RP_PATH=\"$RP_PATH\"" >> "$HOME/.bash_profile"
+# Add Rocket Pool path to .bashrc
+if ! grep -Fq "export RP_PATH" "$HOME/.bashrc"; then
+    echo "" >> "$HOME/.bashrc"
+    echo "# Rocket Pool data" >> "$HOME/.bashrc"
+    echo "export RP_PATH=\"$RP_PATH\"" >> "$HOME/.bashrc"
 fi
 
 # Download docker files
