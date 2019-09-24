@@ -100,8 +100,11 @@ echo ""
 echo "**************************************************"
 echo ""
 
-# Prompt for root access password before rendering progress meter
-sudo echo ""
+# Prompt for root access
+if ! sudo true; then
+    echo "Please enter your password to proceed!"
+    exit 1
+fi
 
 
 ##
