@@ -77,6 +77,7 @@ if [[ "$1" == "service" ]]; then
             # Tear down service stack
             docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop 2>/dev/null
             docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker rm 2>/dev/null
+            sleep 5
             docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" down -v --remove-orphans
 
             # Log
