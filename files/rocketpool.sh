@@ -3,6 +3,12 @@
 # Rocket Pool CLI utility
 # Performs operations which interact with the Rocket Pool service stack
 
+# Check user
+if [ $(id -u) -eq 0 ]; then
+    echo "rocketpool should not be run as root, please try again without sudo."
+    exit 1
+fi
+
 # Check RP_PATH is set
 if [ -z "$RP_PATH" ]; then
     echo "The RP_PATH environment variable is not set. If you've just installed Rocket Pool, please start a new terminal session and try again."
