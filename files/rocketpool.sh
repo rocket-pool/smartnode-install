@@ -15,6 +15,16 @@ if [ -z "$RP_PATH" ]; then
     exit 1
 fi
 
+# Check docker files are found
+if [[ ! -f "$RP_PATH/docker/docker-compose.yml" ]]; then
+    echo "docker-compose file not found! Please check your installation and try again."
+    exit 1
+fi
+if [[ ! -f "$RP_PATH/docker/.env" ]] && [[ "$1 $2" != "service config" ]]; then
+    echo "docker .env file not found! Please run 'rocketpool service config' and try again."
+    exit 1
+fi
+
 # Config
 MINIPOOL_IMAGE="rocketpool/smartnode-minipool:v0.0.1"
 
