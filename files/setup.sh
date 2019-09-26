@@ -87,7 +87,7 @@ echo "Rocket Pool Software:"
 echo "- The Rocket Pool Smart Node service docker images"
 echo "- The Rocket Pool CLI utility (at /usr/local/bin/rocketpool)"
 echo ""
-echo "* The RP_PATH environment variable will be added to your .bashrc and set to $HOME/.rocketpool."
+echo "* The RP_PATH environment variable will be added to your .profile and .bashrc files, and set to $HOME/.rocketpool."
 echo "* Rocket Pool Smart Node data will be stored at RP_PATH."
 echo "  This includes your node account and validator keystores. Do NOT modify or remove this data unless:"
 echo "  - you have no ETH, rETH or RPL balance in your node account or node contract;"
@@ -133,7 +133,7 @@ sudo apt-get -y install docker-ce
 
 # Install docker-compose
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+sudo chmod a+rx /usr/local/bin/docker-compose
 
 # Add user to docker group
 sudo groupadd docker
@@ -188,6 +188,13 @@ mkdir "$RP_PATH"
 mkdir "$RP_PATH/docker"
 mkdir "$RP_PATH/docker/setup"
 mkdir "$RP_PATH/docker/setup/pow"
+
+# Add Rocket Pool path to .profile
+if ! grep -Fq "export RP_PATH" "$HOME/.profile"; then
+    echo "" >> "$HOME/.profile"
+    echo "# Rocket Pool data" >> "$HOME/.profile"
+    echo "export RP_PATH=\"$RP_PATH\"" >> "$HOME/.profile"
+fi
 
 # Add Rocket Pool path to .bashrc
 if ! grep -Fq "export RP_PATH" "$HOME/.bashrc"; then
