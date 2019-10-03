@@ -175,7 +175,7 @@ if [[ "$1" == "service" ]]; then
 
         # View Rocket Pool service stack logs
         logs )
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" logs -f "$@"
+            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" logs --tail 100 -f "$@"
         ;;
 
         # Display Rocket Pool service resource stats
