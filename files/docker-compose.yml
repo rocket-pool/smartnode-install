@@ -20,6 +20,9 @@ services:
   pow:
     image: ${POW_IMAGE}
     restart: on-failure
+    ports:
+      - "30303-30305:30303-30305/udp"
+      - "30303:30303/tcp"
     volumes:
       - eth1clientdata:/ethclient
       - ./setup/pow:/setup:ro
