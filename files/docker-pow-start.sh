@@ -8,6 +8,14 @@ CONTAINERID="${HOSTNAME}"
 DATADIR="/ethclient/$CONTAINERID"
 mkdir -p "$DATADIR"
 
+# Infura startup
+if [[ $CLIENT == "Infura" ]]; then
+
+    # Run proxy server
+    /go/bin/rocketpool-pow-proxy --projectId "$PROJECTID"
+
+fi
+
 # Geth startup
 if [[ $CLIENT == "Geth" ]]; then
 

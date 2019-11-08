@@ -132,13 +132,20 @@ if [[ "$1" == "service" ]]; then
 
             # Choose ethereum 1.0 client
             echo "Which ethereum 1.0 client would you like to run?"
-            select ETH1CLIENT in "Geth"; do
+            select ETH1CLIENT in "Infura" "Geth"; do
                 if [ -z "$ETH1CLIENT" ]; then
                     echo "Please select an option with the indicated number."
                 else
                     echo "$ETH1CLIENT ethereum 1.0 client selected."; echo ""; break
                 fi
             done
+
+            # Prompt for Infura project ID
+            if [[ $ETH1CLIENT == "Infura" ]]; then
+                echo "Please enter your Infura project ID:"
+                read PROJECTID
+                echo "Infura project ID $PROJECTID entered."; echo ""
+            fi
 
             # Choose ethereum 2.0 client
             echo "Which ethereum 2.0 client would you like to run?"
@@ -152,7 +159,8 @@ if [[ "$1" == "service" ]]; then
 
             # Get ethereum client images
             case "$ETH1CLIENT" in
-                Geth ) ETH1CLIENTIMAGE="ethereum/client-go:stable" ;;
+                Infura ) ETH1CLIENTIMAGE="rocketpool/smartnode-pow-proxy:v0.0.1" ;;
+                Geth )   ETH1CLIENTIMAGE="ethereum/client-go:stable" ;;
             esac
 
             # Write docker config
@@ -167,6 +175,7 @@ if [[ "$1" == "service" ]]; then
             echo "POW_BOOTNODE=${POW_BOOTNODES[0]},${POW_BOOTNODES[1]}" >> "$DOCKERENV"
             echo "POW_ETHSTATS_LABEL=RP2Beta-Node" >> "$DOCKERENV"
             echo "POW_ETHSTATS_LOGIN=rp2betav1ethstats@3.216.221.20" >> "$DOCKERENV"
+            echo "POW_INFURA_PROJECT_ID=$PROJECTID" >> "$DOCKERENV"
 
             # Log
             echo "Done! Run 'rocketpool service start' to start with new settings in effect."
