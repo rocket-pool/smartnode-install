@@ -20,7 +20,7 @@ fi
 if [[ $CLIENT == "Geth" ]]; then
 
     # Initialise
-    CMD="/usr/local/bin/geth --datadir $DATADIR init /setup/genesis77.json"
+    CMD="/usr/local/bin/geth --datadir $DATADIR init /setup/genesis88.json"
 
     # Run
     CMD="$CMD && /usr/local/bin/geth --datadir $DATADIR --networkid $NETWORKID --bootnodes $BOOTNODE"

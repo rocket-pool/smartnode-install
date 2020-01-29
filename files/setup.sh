@@ -206,7 +206,7 @@ fi
 # Download docker files
 curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-compose.yml"        -o "$RP_PATH/docker/docker-compose.yml"
 curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-pow-start.sh"       -o "$RP_PATH/docker/setup/pow/start.sh"
-curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-pow-genesis77.json" -o "$RP_PATH/docker/setup/pow/genesis77.json"
+curl -L "https://github.com/rocket-pool/smartnode-install/releases/download/$GITHUB_RELEASE/docker-pow-genesis88.json" -o "$RP_PATH/docker/setup/pow/genesis88.json"
 chmod +x "$RP_PATH/docker/setup/pow/start.sh"
 
 # Download node config

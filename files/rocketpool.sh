@@ -165,16 +165,16 @@ if [[ "$1" == "service" ]]; then
 
             # Write docker config
             POW_BOOTNODES=(
-                "enode://d5dcc1a6efd344e4f5b4d0a532773fad9497d4d9a9b5b7211eda551402cb8a541a707be4632990c4026ffb8975fcd599a3d36b7624ca1f709a434882f5cb7bca@3.216.221.20:30305"
-                "enode://c2eae4a3c431bb5d6a404dd506f9442cb81ad38c9bd277bdd6511991fd713f321ddec1a92ee968cdf2f8c5628f985596088911d346265b0a279d87e3833cd989@3.216.221.20:30303"
+                "enode://18710e76933eec5afa778744332cbf63b682fdca61d9c0c309b17c3c31ecaa21219dc952a347c76afef7fd201b55dfbcd7648cfdc4d23d34fc9840bdd0b00b71@3.93.71.84:30305"
+                "enode://9c4b41bd2d3d7d790cbd661725e3797685ac67e6db71f8ae4324851a11784714f6f730e5125f09d71d9f3d65b759c17557da8a048611166fec82ec782dea72b6@3.93.71.84:30303"
             )
             echo "COMPOSE_PROJECT_NAME=rocketpool" > "$DOCKERENV"
             echo "POW_CLIENT=$ETH1CLIENT" >> "$DOCKERENV"
             echo "POW_IMAGE=$ETH1CLIENTIMAGE" >> "$DOCKERENV"
-            echo "POW_NETWORK_ID=77" >> "$DOCKERENV"
+            echo "POW_NETWORK_ID=88" >> "$DOCKERENV"
             echo "POW_BOOTNODE=${POW_BOOTNODES[0]},${POW_BOOTNODES[1]}" >> "$DOCKERENV"
-            echo "POW_ETHSTATS_LABEL=RP2Beta-Node" >> "$DOCKERENV"
-            echo "POW_ETHSTATS_LOGIN=rp2betav1ethstats@3.216.221.20" >> "$DOCKERENV"
+            echo "POW_ETHSTATS_LABEL=Workshop-Node" >> "$DOCKERENV"
+            echo "POW_ETHSTATS_LOGIN=rp2betav1ethstats@3.93.71.84" >> "$DOCKERENV"
             echo "POW_INFURA_PROJECT_ID=$PROJECTID" >> "$DOCKERENV"
 
             # Log
