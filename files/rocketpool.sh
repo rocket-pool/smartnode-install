@@ -132,7 +132,7 @@ if [[ "$1" == "service" ]]; then
 
             # Choose ethereum 1.0 client
             echo "Which ethereum 1.0 client would you like to run?"
-            select ETH1CLIENT in "Infura" "Geth"; do
+            select ETH1CLIENT in "Geth"; do
                 if [ -z "$ETH1CLIENT" ]; then
                     echo "Please select an option with the indicated number."
                 else
