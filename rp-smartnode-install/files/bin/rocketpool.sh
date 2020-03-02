@@ -16,11 +16,11 @@ if [ -z "$RP_PATH" ]; then
 fi
 
 # Check docker files are found
-if [[ ! -f "$RP_PATH/docker/docker-compose.yml" ]]; then
+if [[ ! -f "$RP_PATH/docker-compose.yml" ]]; then
     echo "docker-compose file not found! Please check your installation and try again."
     exit 1
 fi
-if [[ ! -f "$RP_PATH/docker/.env" ]] && [[ "$1 $2" != "service config" ]]; then
+if [[ ! -f "$RP_PATH/.env" ]] && [[ "$1 $2" != "service config" ]]; then
     echo "docker .env file not found! Please run 'rocketpool service config' and try again."
     exit 1
 fi
@@ -44,12 +44,12 @@ if [[ "$1" == "service" ]]; then
             echo "Starting Rocket Pool services..."
 
             # Build up service stack
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" up -d
+            docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" up -d
 
             # Copy OS timezone to CLI container
             TIMEZONE=$(cat /etc/timezone)
             if [ ! -z "$TIMEZONE" ]; then
-                docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /bin/sh -c "echo '$TIMEZONE' > /etc/timezone"
+                docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" exec cli /bin/sh -c "echo '$TIMEZONE' > /etc/timezone"
             fi
 
             # Log
@@ -71,7 +71,7 @@ if [[ "$1" == "service" ]]; then
 
             # Stop service stack
             docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop 2>/dev/null
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" stop
+            docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" stop
 
             # Log
             echo "Done! Run 'rocketpool service start' to resume."
@@ -94,7 +94,7 @@ if [[ "$1" == "service" ]]; then
             docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker stop 2>/dev/null
             docker ps -aq --filter "ancestor=$MINIPOOL_IMAGE" | xargs docker rm 2>/dev/null
             sleep 5
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" down -v --remove-orphans
+            docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" down -v --remove-orphans
 
             # Log
             echo "Done! Run 'rocketpool service start' to restart."
@@ -109,7 +109,7 @@ if [[ "$1" == "service" ]]; then
             echo "Scaling Rocket Pool services..."
 
             # Scale services
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" scale "$@"
+            docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" scale "$@"
 
             # Log
             echo "Done!"
@@ -120,7 +120,7 @@ if [[ "$1" == "service" ]]; then
         config )
 
             # Get docker .env file path
-            DOCKERENV="$RP_PATH/docker/.env"
+            DOCKERENV="$RP_PATH/.env"
 
             # Confirm if docker .env file exists
             if [[ -f "$DOCKERENV" ]]; then
@@ -132,20 +132,13 @@ if [[ "$1" == "service" ]]; then
 
             # Choose ethereum 1.0 client
             echo "Which ethereum 1.0 client would you like to run?"
-            select ETH1CLIENT in "Infura" "Geth"; do
+            select ETH1CLIENT in "Geth"; do
                 if [ -z "$ETH1CLIENT" ]; then
                     echo "Please select an option with the indicated number."
                 else
                     echo "$ETH1CLIENT ethereum 1.0 client selected."; echo ""; break
                 fi
             done
-
-            # Prompt for Infura project ID
-            if [[ $ETH1CLIENT == "Infura" ]]; then
-                echo "Please enter your Infura project ID:"
-                read PROJECTID
-                echo "Infura project ID $PROJECTID entered."; echo ""
-            fi
 
             # Choose ethereum 2.0 client
             echo "Which ethereum 2.0 client would you like to run?"
@@ -159,8 +152,7 @@ if [[ "$1" == "service" ]]; then
 
             # Get ethereum client images
             case "$ETH1CLIENT" in
-                Infura ) ETH1CLIENTIMAGE="rocketpool/smartnode-pow-proxy:v0.0.1" ;;
-                Geth )   ETH1CLIENTIMAGE="ethereum/client-go:stable" ;;
+                Geth ) ETH1CLIENTIMAGE="ethereum/client-go:stable" ;;
             esac
 
             # Write docker config
@@ -175,7 +167,6 @@ if [[ "$1" == "service" ]]; then
             echo "POW_BOOTNODE=${POW_BOOTNODES[0]},${POW_BOOTNODES[1]}" >> "$DOCKERENV"
             echo "POW_ETHSTATS_LABEL=RP2Beta-Node" >> "$DOCKERENV"
             echo "POW_ETHSTATS_LOGIN=rp2betav1ethstats@3.216.221.20" >> "$DOCKERENV"
-            echo "POW_INFURA_PROJECT_ID=$PROJECTID" >> "$DOCKERENV"
 
             # Log
             echo "Done! Run 'rocketpool service start' to start with new settings in effect."
@@ -184,12 +175,12 @@ if [[ "$1" == "service" ]]; then
 
         # View Rocket Pool service stack logs
         logs )
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" logs --tail 100 -f "$@"
+            docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" logs -f "$@"
         ;;
 
         # Display Rocket Pool service resource stats
         stats )
-            docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" ps -q | xargs docker stats
+            docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" ps -q | xargs docker stats
         ;;
 
         # No command given - print info
@@ -224,11 +215,11 @@ if [[ "$1" == "service" ]]; then
 else
 
     # Check CLI service is available
-    if [[ ! $(docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" ps -q cli) ]]; then
+    if [[ ! $(docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" ps -q cli) ]]; then
         echo "The Rocket Pool service is not running. Please run 'rocketpool service start'."; exit 1
     fi
 
     # Run command with space around output
-    echo ""; docker-compose -f "$RP_PATH/docker/docker-compose.yml" --project-directory "$RP_PATH/docker" exec cli /go/bin/rocketpool-cli "$@"; echo ""
+    echo ""; docker-compose -f "$RP_PATH/docker-compose.yml" --project-directory "$RP_PATH" exec cli /go/bin/rocketpool-cli "$@"; echo ""
 
 fi
