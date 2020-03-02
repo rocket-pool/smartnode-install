@@ -5,8 +5,8 @@ The install script for a Rocket Pool smart node. This script must be run with ad
 
 Regular use:
 
-`TODO: Add new commands with parameters eg chainId etc`
+`TODO: Add new commands with parameters eg chainId, homeDir, tempDir etc`
 
 Verbose mode:
 
-`TODO: Add new commands with parameters eg chainId etc`
+`TODO: Add new commands with parameters eg chainId, homeDir, tempDir etc`
