@@ -91,6 +91,9 @@ fi
 # Check temp dir exists
 test -d "$TEMPDIR" || fail "Temporary directory does not exist @ $TEMPDIR"
 
+# Set the location of the files in the temp dir
+TEMPFILESDIR="$TEMPDIR/rp-smartnode-install"
+
 
 ## Create the URL to download the package from TODO: Chnage to live github
 INSTALL_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install.tar.xz"
@@ -114,7 +117,7 @@ function progress() {
     echo -ne "\033[K"
 
     # Render bar
-    echo -n "  ["
+    echo -n "["
     for (( S=0; S < $TOTALSTEPS; ++S )); do
         for (( C=0; C < $STEPSIZE; ++C )); do
             if [[ $S -lt $COMPLETESTEPS ]]; then echo -n "#"; else echo -n "-"; fi
@@ -176,20 +179,20 @@ CORECMDS+=("Downloading Smartnode Package: $GITPACKAGEVER@wget -qO- '$INSTALL_UR
 CORECMDS+=("Updating file ownership@chmod -R u+rwX,go+rX,go-w $TEMPDIR && chown -R $USERNAME: $TEMPDIR || fail 'Could not update temp file owner to $USERNAME'")
 
 ## Check this network ID is supported
-CORECMDS+=("Verifying Support for Network ID: $NETWORK_ID@$USEREXEC test -d '$TEMPDIR/files/rocketpool/network/$NETWORK_ID' || fail 'Network ID $NETWORK_ID not currently supported. $TEMPDIR'")
+CORECMDS+=("Verifying Support for Network ID: $NETWORK_ID@$USEREXEC test -d '$TEMPFILESDIR/files/rocketpool/network/$NETWORK_ID' || fail 'Network ID $NETWORK_ID not currently supported. $TEMPFILESDIR'")
 
 ## Check this platform is supported
-CORECMDS+=("Verifying Support for Platform: $PLATFORM_ID@$USEREXEC test -d '$TEMPDIR/install/platform/$PLATFORM_ID' || fail 'Platform $TEMPDIR $PLATFORM_ID not currently supported, sorry :('")
+CORECMDS+=("Verifying Support for Platform: $PLATFORM_ID@$USEREXEC test -d '$TEMPFILESDIR/install/platform/$PLATFORM_ID' || fail 'Platform $PLATFORM_ID not currently supported, sorry :('")
 
 ## Install any dependencies just for this platform if they exist
-if [ -f "$TEMPDIR/install/platform/$PLATFORM_ID/dep.sh" ]; then
-    CORECMDS+=("Installing $PLATFORM_ID OS Specific Dependencies@source '$TEMPDIR/install/platform/$PLATFORM_ID/dep.sh' || fail 'Could not install specific platform dependencies'")
+if [ -f "$TEMPDIR/install/platform/$PLATFORM_ID/dep.sh" ]; then 
+    CORECMDS+=("Installing $PLATFORM_ID OS Specific Dependencies@source '$TEMPFILESDIR/install/platform/$PLATFORM_ID/dep.sh' || fail 'Could not install specific platform dependencies'")
 fi
 
 ## Check this platform OS is supported if it'splatform is and install specific dependencies if they do
 if [ ! -z "$PLATFORM_OS_VER" ]; then
-    CORECMDS+=("Verifying Support for $PLATFORM_ID OS $PLATFORM_OS_VER@$USEREXEC test -d '$TEMPDIR/install/platform/$PLATFORM_ID/$PLATFORM_OS_VER' || fail '$PLATFORM_ID OS $PLATFORM_OS_VER not currently supported, sorry :('")
-    CORECMDS+=("Installing $PLATFORM_ID OS $PLATFORM_OS_VER Specific Dependencies@source '$TEMPDIR/install/platform/$PLATFORM_ID/$PLATFORM_OS_VER/dep.sh' &> $OUTPUTTO || fail 'Could not install specific platform dependencies'")
+    CORECMDS+=("Verifying Support for $PLATFORM_ID OS $PLATFORM_OS_VER@$USEREXEC test -d '$TEMPFILESDIR/install/platform/$PLATFORM_ID/$PLATFORM_OS_VER' || fail '$PLATFORM_ID OS $PLATFORM_OS_VER not currently supported, sorry :('")
+    CORECMDS+=("Installing $PLATFORM_ID OS $PLATFORM_OS_VER Specific Dependencies@source '$TEMPFILESDIR/install/platform/$PLATFORM_ID/$PLATFORM_OS_VER/dep.sh' &> $OUTPUTTO || fail 'Could not install specific platform dependencies'")
 fi
 
 # Create a users settings.yml file if it doesn't exist. This file overwrites parameters in the master config.yml
@@ -199,7 +202,7 @@ CORECMDS+=("Creating Rocket Pool User Directory@mkdir -p $RP_PATH || fail 'Could
 CORECMDS+=("Creating User Settings File@touch -a $RP_PATH/settings.yml || fail 'Could create user settings file at $RP_PATH/settings.yml'")
 
 # Copy RP docker files for the desired network
-CORECMDS+=("Copying ETH Network Config@$USEREXEC cp -R '$TEMPDIR/files/rocketpool/network/$NETWORK_ID/.' $RP_PATH || fail 'Could not add ETH Network files to Rocket Pool path'")
+CORECMDS+=("Copying ETH Network Config@$USEREXEC cp -R '$TEMPFILESDIR/files/rocketpool/network/$NETWORK_ID/.' $RP_PATH || fail 'Could not add ETH Network files to Rocket Pool path'")
 
 # Add Rocket Pool path to .profile
 if ! grep -Fq "export RP_PATH" "$USERHOMEDIR/.profile"; then
@@ -223,11 +226,11 @@ CORECMDS+=("Installing Rocket Pool - Node@docker pull rocketpool/smartnode-node:
 
 # Check the users ~/bin dir exists, if not create it
 if [ ! -d "$USERHOMEDIR/bin" ]; then
-    CORECMDS+=("Creating Local Bin Directory@mkdir -p '$USERHOMEDIR/bin' || fail 'Could not create local user bin directory'")
+    CORECMDS+=("Creating Local Bin Directory@mkdir -p '$USERHOMEDIR/bin' && chown -R $USERNAME: '$USERHOMEDIR/bin' || fail 'Could not create local user bin directory'")
 fi
 
 # Copy CLI utility (this is done last as the GUI checks for its existance when seeing if RP was installed fully)
-CORECMDS+=("Copying Rocket Pool Bin@cp '$TEMPDIR/files/bin/rocketpool.sh' '$USERHOMEDIR/bin/rocketpool' && sudo chmod +x '$USERHOMEDIR/bin/rocketpool' || fail 'Could not copy Rocket Pool bin too $USERHOMEDIR/bin'")
+CORECMDS+=("Copying Rocket Pool Bin@cp '$TEMPFILESDIR/files/bin/rocketpool.sh' '$USERHOMEDIR/bin/rocketpool' && sudo chmod +x '$USERHOMEDIR/bin/rocketpool' || fail 'Could not copy Rocket Pool bin too $USERHOMEDIR/bin'")
 
 
 ## 
@@ -255,7 +258,7 @@ if [[ "$INSTALLER_TYPE" == "cli" ]]; then
     echo ""
     echo "Rocket Pool Software:"
     echo "- The Rocket Pool Smart Node service docker images"
-    echo "- The Rocket Pool CLI utility (at /usr/local/bin/rocketpool)"
+    echo "- The Rocket Pool CLI utility (at ~/bin/rocketpool)"
     echo ""
     echo "* The RP_PATH environment variable will be added to your .profile and .bashrc files, and set to $USERHOMEDIR/.rocketpool."
     echo "* Rocket Pool Smart Node data will be stored at $RP_PATH."
@@ -296,7 +299,7 @@ do
         ## Small delay between each so the any watcher doesn't miss really super quick commands (eg GUI)
         sleep 0.25s
     else
-        progress $CORESTEPCURRENT $CORESTEPTOTAL 6 $CORESTEPDESC
+        progress $CORESTEPCURRENT $CORESTEPTOTAL 2 $CORESTEPDESC
         {
             echo ""
             echo "#####################################"
@@ -318,7 +321,9 @@ if [[ "$INSTALLER_TYPE" == "cli" ]]; then
 
     # Running 'rocketpool' for the first time should run the config generator (client select etc)
     echo ""
+    echo ""
     echo "The Rocket Pool Smart Node install wizard is now complete!"
+    echo ""
     echo "Please start a new terminal session and run 'rocketpool' to begin!"
     echo ""
 fi
