@@ -5,8 +5,12 @@ The install script for a Rocket Pool smart node. This script must be run with ad
 
 Regular use:
 
-`TODO: Add new commands with parameters eg chainId, homeDir, tempDir etc`
+`wget -Nnv https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh && chmod +x ./install.sh && ./install.sh; rm -f install.sh`
 
 Verbose mode:
 
-`TODO: Add new commands with parameters eg chainId, homeDir, tempDir etc`
+`wget -Nnv https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh && chmod +x ./install.sh && ./install.sh -v; rm -f install.sh`
+
+Specific chain mode: (-n $chainId)
+
+`wget -Nnv https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh && chmod +x ./install.sh && ./install.sh -n 77; rm -f install.sh`

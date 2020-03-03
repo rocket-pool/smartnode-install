@@ -93,8 +93,8 @@ test -d "$TEMPDIR" || fail "Temporary directory does not exist @ $TEMPDIR"
 
 
 ## Create the URL to download the package from TODO: Chnage to live github
-#INSTALL_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$GITPACKAGEVER/rp-smartnode-install.tar.xz"
-INSTALL_URL="http://192.168.0.100:8080/share.cgi?ssid=02f6eTL&fid=02f6eTL&path=%2F&filename=rp-smartnode-install.tar.xz&openfolder=forcedownload&ep="
+INSTALL_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install.tar.xz"
+#INSTALL_URL="http://192.168.0.100:8080/share.cgi?ssid=02f6eTL&fid=02f6eTL&path=%2F&filename=rp-smartnode-install.tar.xz&openfolder=forcedownload&ep="
 
 
 ## 
