@@ -1,4 +1,0 @@
-providerPow: http://eth1.rpc.smartnode.localhost
-providerBeacon: ws://beacon.rocketpool.net:9545
-storageAddress: 0xbAB4E89E74f5dcdc90e36B32e7D780DC328E34cd
-uniswapAddress: 0x72a966b41A1845b0fBBd36C729506C9719D7E9fd

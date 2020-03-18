@@ -8,19 +8,11 @@ CONTAINERID="${HOSTNAME}"
 DATADIR="/ethclient/$CONTAINERID"
 mkdir -p "$DATADIR"
 
-# Infura startup
-if [[ $CLIENT == "Infura" ]]; then
-
-    # Run proxy server
-    /go/bin/rocketpool-pow-proxy --projectId "$PROJECTID"
-
-fi
-
 # Geth startup
 if [[ $CLIENT == "Geth" ]]; then
 
     # Initialise
-    CMD="/usr/local/bin/geth --datadir $DATADIR init /setup/genesis88.json"
+    CMD="/usr/local/bin/geth --datadir $DATADIR init /setup/genesis.json"
 
     # Run
     CMD="$CMD && /usr/local/bin/geth --datadir $DATADIR --networkid $NETWORKID --bootnodes $BOOTNODE"

@@ -1,0 +1,263 @@
+# docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d 
+version: "3.7"
+services:
+  traefik:
+    image: traefik:v1.7.21
+    container_name: rocketpool_traefik
+    command: [
+      "--api",
+      "--docker",
+      "--docker.watch",
+      "--docker.domain=smartnode.localhost",
+      "--metrics",
+      "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0",
+      #"--logLevel=DEBUG"
+    ]
+    restart: always
+    ports:
+      - "90:80"
+      - "9080:8080" # Web UI (enabled by --api)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      public_net:
+        aliases:
+          - "smartnode.localhost"
+          - "grafana.smartnode.localhost"
+          - "prometheus.smartnode.localhost"
+      internal_net:
+        aliases:
+          - "eth1.rpc.smartnode.localhost"
+          - "eth2.ws.smartnode.localhost"
+    labels:
+      - traefik.smartnode.frontend.rule=Host:smartnode.localhost
+      - traefik.smartnode.port=8080
+  # ETH1 Client
+  eth1:
+    image: $(ETH1_IMAGE}
+    container_name: rocketpool_eth1
+    restart: on-failure
+    volumes:
+      - eth1clientdata:/ethclient
+      - ./chains/eth1:/setup:ro
+    networks:
+      - net
+    environment:
+      - CLIENT=$(ETH1_CLIENT}
+      - NETWORKID=$(ETH1_NETWORK_ID}
+      - BOOTNODE=$(ETH1_BOOTNODE}
+      - ETHSTATSLABEL=$(ETH1_ETHSTATS_LABEL}
+      - ETHSTATSLOGIN=$(ETH1_ETHSTATS_LOGIN}
+    entrypoint: /setup/start-exec.sh
+    labels:
+      - traefik.enable=true
+      - traefik.port=8545
+      - traefik.docker.network=${COMPOSE_PROJECT_NAME}_net
+      - traefik.frontend.priority=10
+      - traefik.frontend.rule=Host:eth1.rpc.smartnode.localhost
+      - traefik.backend.loadbalancer.stickiness=true
+      - traefik.backend.loadbalancer.stickiness.cookieName=smartnodeEth1
+      - traefik.backend.loadbalancer.method=drr
+      - traefik.backend=eth1.rpc.smartnode
+    depends_on:
+      - traefik
+  # ETH2 Client
+  eth2:
+    image: rocketpool/beacon-chain-simulator:v0.0.1
+    container_name: rocketpool_eth2
+    restart: on-failure
+    volumes:
+      - eth2clientdata:/ethclient
+    networks:
+      - internal_net
+    command: [
+      "--powHost", "http://eth1.rpc.smartnode.localhost",
+      "--depositContract", "0xb8c763648c1f251006dd275662f6e7c8e2eb135a",
+      "--withdrawalContract", "0x23104b8a290316a1708dde6dda1803d30b9cb833",
+      "--from", "0x2f6812e7005c61835b12544eeb45958099ef45f4",
+      "--database", "/ethclient/beacon.json",
+    ]
+    labels:
+      - traefik.enable=true
+      - traefik.port=9545
+      - traefik.docker.network=internal_net
+      - traefik.frontend.priority=10
+      - traefik.frontend.rule=Host:eth2.ws.smartnode.localhost
+      - traefik.backend.loadbalancer.stickiness=true
+      - traefik.backend.loadbalancer.stickiness.cookieName=smartnodeETH2
+      - traefik.backend.loadbalancer.method=drr
+      - traefik.backend=eth2.ws.smartnode
+    depends_on:
+      - traefik
+      - eth1
+  # RP API
+  api:
+    image: rocketpool/smartnode-api:v0.0.1
+    container_name: rocketpool_api
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - internal_net
+    depends_on:
+      - eth1
+    entrypoint: /bin/sh
+    tty: true
+  # RP CLI
+  cli:
+    image: rocketpool/smartnode-cli:v0.0.1
+    container_name: rocketpool_cli
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - internal_net
+    depends_on:
+      - eth1
+    entrypoint: /bin/sh
+    tty: true
+  # RP Minipools
+  minipools:
+    image: rocketpool/smartnode-minipools:v0.0.1
+    container_name: rocketpool_minipools
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - internal_net
+    command: [
+      "${RP_PATH}",
+      "rocketpool/smartnode-minipool:v0.0.1",
+      "rocketpool_minipool_",
+      "rocketpool_internal_net",
+    ]
+    depends_on:
+      - eth1
+      - eth2
+  # RP Node
+  node:
+    image: rocketpool/smartnode-node:v0.0.1
+    container_name: rocketpool_node
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - internal_net
+    depends_on:
+      - eth1
+      - eth2
+  # RP Watchtower
+  watchtower:
+    image: rocketpool/smartnode-watchtower:v0.0.1
+    container_name: rocketpool_watchtower
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - internal_net
+    depends_on:
+      - eth1
+      - eth2
+
+# RP Metrics
+#  metrics:
+#    image: rocketpool/smartnode-metrics:v0.0.1
+#    container_name: rocketpool_metrics
+#    hostname: metrics
+#    restart: on-failure
+#    volumes:
+#      - ${RP_PATH}:/.rocketpool
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    labels:
+#      - traefik.enable=true
+#      - traefik.port=2115
+#      - traefik.docker.network=public_net
+#      - traefik.frontend.priority=5
+#      - traefik.frontend.rule=Host:metrics.smartnode.localhost
+#      - traefik.backend=metrics.smartnode
+#    networks:
+#      - public_net
+#      - internal_net
+#    depends_on:
+#      - eth1
+#      - eth2
+
+  # Metrics / Dashboard
+  prometheus:
+    image: prom/prometheus:v2.16.0
+    container_name: rocketpool_metrics_prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus/:/etc/prometheus/
+      - prometheusdata:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - public_net
+      - internal_net
+    labels:
+      - traefik.frontend.rule=Host:prometheus.smartnode.localhost
+      - traefik.backend=prometheus
+      - traefik.port=9090
+      - traefik.docker.network=public_net
+  # Metrics Graphs
+  #grafana:
+  #  image: grafana/grafana:6.6.2
+  #  container_name: rocketpool_metrics_grafana
+  #  restart: unless-stopped
+  #  volumes:
+  #    - grafanadata:/var/lib/grafana
+  #    - ./monitoring/grafana/provisioning/:/etc/grafana/provisioning
+  #  networks:
+  #    - public_net
+  #  environment:
+  #    - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-piechart-panel
+      #- GF_SERVER_ROOT_URL=grafana.smartnode.localhost:90
+  #    - GF_USERS_ALLOW_SIGN_UP=false
+  #    - GF_SECURITY_ADMIN_PASSWORD=testtest
+  #  labels:
+  #    - traefik.enable=true
+  #    - traefik.port=3000
+  #    - traefik.frontend.rule=Host:grafana.smartnode.localhost
+  #    - traefik.backend=grafana
+  #    - traefik.docker.network=public_net
+  #  user: "104"
+  #  depends_on:
+  #    - prometheus
+  # Monitoring - Local System
+  nodeexporter:
+    image: prom/node-exporter:v0.18.1
+    container_name: rocketpool_metrics_nodexporter
+    restart: unless-stopped
+    volumes:
+        - /proc:/host/proc:ro
+        - /sys:/host/sys:ro
+        - /:/rootfs:ro
+    command:
+        - '--path.procfs=/host/proc'
+        - '--path.rootfs=/rootfs'
+        - '--path.sysfs=/host/sys'
+        - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    labels:
+        - traefik.enable=true
+        - traefik.port=9100
+        - traefik.frontend.rule=Host:nodexporter.smartnode.localhost
+        - traefik.backend=nodeexporter
+        - traefik.docker.network=public_net
+    networks:
+        - public_net
+    depends_on:
+        - prometheus
+networks:
+  public_net:
+  internal_net:
+    internal: true
+volumes:
+  eth1clientdata:
+  eth2clientdata:
+  grafanadata:
+  prometheusdata:
