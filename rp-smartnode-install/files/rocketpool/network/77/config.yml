@@ -1,4 +1,9 @@
-# Config: Testnet
+# Old Config: TODO: Remove when new one is completely implemented, this is just here to get it to work with the current config in the images
+#########################
+# Rocket Pool Settings
+providerPow: 'http://eth1.rpc.smartnode.localhost'
+
+# New Config: Testnet
 #########################
 # Rocket Pool Settings
 rocketpool:
