@@ -202,6 +202,7 @@ CORECMDS+=("Creating Rocket Pool User Directory@mkdir -p $RP_PATH || fail 'Could
 CORECMDS+=("Creating User Settings File@touch -a $RP_PATH/settings.yml || fail 'Could create user settings file at $RP_PATH/settings.yml'")
 
 # Copy RP docker files for the desired network
+CORECMDS+=("Copying Shared Rocket Pool Assets@$USEREXEC cp -R '$TEMPFILESDIR/files/rocketpool/shared/.' $RP_PATH || fail 'Could not add shared Rocket Pool files to Rocket Pool path'")
 CORECMDS+=("Copying ETH Network Config@$USEREXEC cp -R '$TEMPFILESDIR/files/rocketpool/network/$NETWORK_ID/.' $RP_PATH || fail 'Could not add ETH Network files to Rocket Pool path'")
 
 # Add Rocket Pool path to .profile
