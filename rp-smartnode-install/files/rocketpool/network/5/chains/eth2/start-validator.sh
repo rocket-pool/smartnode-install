@@ -5,7 +5,7 @@
 if [ "$CLIENT" = "Lighthouse" ]; then
 
     # Run
-    CMD="lighthouse validator --datadir /.rocketpool/data/ --server http://eth2.api.smartnode.localhost"
+    CMD="lighthouse validator --datadir /.rocketpool/data/validators --server http://eth2.api.smartnode.localhost"
 
     # Run command
     eval "$CMD"

@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   traefik:
-    image: traefik:v1.7.16
+    image: traefik:v1.7.21
     command: [
       "--api",
       "--docker",
@@ -9,8 +9,6 @@ services:
       "--docker.domain=smartnode.localhost",
     ]
     restart: always
-    ports:
-      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
@@ -68,7 +66,7 @@ services:
       - traefik.backend.loadbalancer.method=drr
       - traefik.backend=eth2.api.smartnode
     depends_on:
-      - traefik
+      - pow
   validator:
     image: ${VALIDATOR_IMAGE}
     restart: on-failure
@@ -82,62 +80,62 @@ services:
     entrypoint: /setup/start-validator.sh
     depends_on:
       - beacon
-  #api:
-  #  image: rocketpool/smartnode-api:v0.0.1
-  #  restart: on-failure
-  #  volumes:
-  #    - ${RP_PATH}:/.rocketpool
-  #  networks:
-  #    - net
-  #  depends_on:
-  #    - pow
-  #  entrypoint: /bin/sh
-  #  tty: true
-  #cli:
-  #  image: rocketpool/smartnode-cli:v0.0.1
-  #  restart: on-failure
-  #  volumes:
-  #    - ${RP_PATH}:/.rocketpool
-  #  networks:
-  #    - net
-  #  depends_on:
-  #    - pow
-  #  entrypoint: /bin/sh
-  #  tty: true
-  #minipools:
-  #  image: rocketpool/smartnode-minipools:v0.0.1
-  #  restart: on-failure
-  #  volumes:
-  #    - ${RP_PATH}:/.rocketpool
-  #    - /var/run/docker.sock:/var/run/docker.sock
-  #  networks:
-  #    - net
-  #  command: [
-  #    "${RP_PATH}",
-  #    "rocketpool/smartnode-minipool:v0.0.1",
-  #    "${COMPOSE_PROJECT_NAME}_minipool_",
-  #    "${COMPOSE_PROJECT_NAME}_net",
-  #  ]
-  #  depends_on:
-  #    - pow
-  #node:
-  #  image: rocketpool/smartnode-node:v0.0.1
-  #  restart: on-failure
-  #  volumes:
-  #    - ${RP_PATH}:/.rocketpool
-  #  networks:
-  #    - net
-  #  depends_on:
-  #    - pow
-  #watchtower:
-  #  image: rocketpool/smartnode-watchtower:v0.0.1
-  #  restart: on-failure
-  #  volumes:
-  #    - ${RP_PATH}:/.rocketpool
-  #  networks:
-  #    - net
-  #  depends_on:
-  #    - pow
+  api:
+    image: rocketpool/smartnode-api:v0.0.1
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - net
+    depends_on:
+      - pow
+    entrypoint: /bin/sh
+    tty: true
+  cli:
+    image: rocketpool/smartnode-cli:v0.0.1
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - net
+    depends_on:
+      - pow
+    entrypoint: /bin/sh
+    tty: true
+  minipools:
+    image: rocketpool/smartnode-minipools:v0.0.1
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - net
+    command: [
+      "${RP_PATH}",
+      "rocketpool/smartnode-minipool:v0.0.1",
+      "${COMPOSE_PROJECT_NAME}_minipool_",
+      "${COMPOSE_PROJECT_NAME}_net",
+    ]
+    depends_on:
+      - pow
+  node:
+    image: rocketpool/smartnode-node:v0.0.1
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - net
+    depends_on:
+      - pow
+  watchtower:
+    image: rocketpool/smartnode-watchtower:v0.0.1
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - net
+    depends_on:
+      - pow
 networks:
   net:
 volumes:
