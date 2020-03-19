@@ -1,0 +1,4 @@
+providerPow: http://eth1.rpc.smartnode.localhost
+providerBeacon: http://eth2.api.smartnode.localhost
+storageAddress: 0x5709b6E58A390534c81dD8EE0E9E1423b843FF5a
+uniswapAddress: 0x6A603658DD351C65379A6fc9f7DD30742ae8bf3c
