@@ -47,6 +47,8 @@ services:
   beacon:
     image: ${BEACON_IMAGE}
     restart: on-failure
+    ports:
+      - "9001:9001"
     volumes:
       - eth2clientdata:/ethclient
       - ./chains/eth2:/setup:ro
