@@ -26,3 +26,14 @@ fi
 
 # Parity startup
 # TODO: implement
+
+# Infura startup
+if [ "$CLIENT" = "Infura" ]; then
+
+	# Run
+	CMD="/go/bin/rocketpool-pow-proxy --port 8545 --network $INFURA_NETWORK --projectId $INFURA_PROJECT_ID"
+
+	# Run command
+    eval "$CMD"
+
+fi

@@ -29,8 +29,8 @@ services:
       - net
     environment:
       - CLIENT=${POW_CLIENT}
-      - ETHSTATSLABEL=${POW_ETHSTATS_LABEL}
-      - ETHSTATSLOGIN=${POW_ETHSTATS_LOGIN}
+      - INFURA_NETWORK=${POW_INFURA_NETWORK}
+      - INFURA_PROJECT_ID=${POW_INFURA_PROJECT_ID}
     entrypoint: /setup/start-node.sh
     labels:
       - traefik.enable=true
@@ -82,19 +82,8 @@ services:
     entrypoint: /setup/start-validator.sh
     depends_on:
       - beacon
-  api:
-    image: rocketpool/smartnode-api:v0.0.1
-    restart: on-failure
-    volumes:
-      - ${RP_PATH}:/.rocketpool
-    networks:
-      - net
-    depends_on:
-      - pow
-    entrypoint: /bin/sh
-    tty: true
   cli:
-    image: rocketpool/smartnode-cli:v0.0.1
+    image: rocketpool/smartnode:v0.0.1
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
@@ -104,8 +93,18 @@ services:
       - pow
     entrypoint: /bin/sh
     tty: true
+  node:
+    image: rocketpool/smartnode:v0.0.1
+    restart: on-failure
+    volumes:
+      - ${RP_PATH}:/.rocketpool
+    networks:
+      - net
+    command: "node"
+    depends_on:
+      - pow
   minipools:
-    image: rocketpool/smartnode-minipools:v0.0.1
+    image: rocketpool/smartnode:v0.0.1
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
@@ -113,31 +112,26 @@ services:
     networks:
       - net
     command: [
+      "minipools",
       "${RP_PATH}",
-      "rocketpool/smartnode-minipool:v0.0.1",
+      "rocketpool/smartnode:v0.0.1",
       "${COMPOSE_PROJECT_NAME}_minipool_",
       "${COMPOSE_PROJECT_NAME}_net",
     ]
     depends_on:
       - pow
-  node:
-    image: rocketpool/smartnode-node:v0.0.1
-    restart: on-failure
-    volumes:
-      - ${RP_PATH}:/.rocketpool
-    networks:
-      - net
-    depends_on:
-      - pow
+      - beacon
   watchtower:
-    image: rocketpool/smartnode-watchtower:v0.0.1
+    image: rocketpool/smartnode:v0.0.1
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
     networks:
       - net
+    command: "watchtower"
     depends_on:
       - pow
+      - beacon
 networks:
   net:
 volumes:
