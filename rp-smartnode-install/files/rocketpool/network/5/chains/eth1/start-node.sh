@@ -30,10 +30,10 @@ fi
 # Infura startup
 if [ "$CLIENT" = "Infura" ]; then
 
-	# Run
-	CMD="/go/bin/rocketpool-pow-proxy --port 8545 --network $INFURA_NETWORK --projectId $INFURA_PROJECT_ID"
+    # Run
+    CMD="/go/bin/rocketpool-pow-proxy --port 8545 --network $INFURA_NETWORK --projectId $INFURA_PROJECT_ID"
 
-	# Run command
+    # Run command
     eval "$CMD"
 
 fi
