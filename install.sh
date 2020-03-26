@@ -189,17 +189,18 @@ if [ -f "$TEMPDIR/install/platform/$PLATFORM_ID/dep.sh" ]; then
     CORECMDS+=("Installing $PLATFORM_ID OS Specific Dependencies@source '$TEMPFILESDIR/install/platform/$PLATFORM_ID/dep.sh' || fail 'Could not install specific platform dependencies'")
 fi
 
-## Check this platform OS is supported if it'splatform is and install specific dependencies if they do
+## Check this platform OS is supported if its platform is and install specific dependencies if they do
 if [ ! -z "$PLATFORM_OS_VER" ]; then
     CORECMDS+=("Verifying Support for $PLATFORM_ID OS $PLATFORM_OS_VER@$USEREXEC test -d '$TEMPFILESDIR/install/platform/$PLATFORM_ID/$PLATFORM_OS_VER' || fail '$PLATFORM_ID OS $PLATFORM_OS_VER not currently supported, sorry :('")
     CORECMDS+=("Installing $PLATFORM_ID OS $PLATFORM_OS_VER Specific Dependencies@source '$TEMPFILESDIR/install/platform/$PLATFORM_ID/$PLATFORM_OS_VER/dep.sh' &> $OUTPUTTO || fail 'Could not install specific platform dependencies'")
 fi
 
-# Create a users settings.yml file if it doesn't exist. This file overwrites parameters in the master config.yml
-CORECMDS+=("Creating Rocket Pool User Directory@mkdir -p $RP_PATH || fail 'Could create Rocket Pool user directory'")
+# Create rocket pool paths
+CORECMDS+=("Creating Rocket Pool User Directory@mkdir -p $RP_PATH || fail 'Could not create Rocket Pool user directory'")
+CORECMDS+=("Creating Rocket Pool User Data Directory@mkdir -p $RP_PATH/data || fail 'Could not create Rocket Pool user data directory'")
 
 # Create a users settings.yml file if it doesn't exist. This file overwrites parameters in the master config.yml
-CORECMDS+=("Creating User Settings File@touch -a $RP_PATH/settings.yml || fail 'Could create user settings file at $RP_PATH/settings.yml'")
+CORECMDS+=("Creating User Settings File@touch -a $RP_PATH/settings.yml || fail 'Could not create user settings file at $RP_PATH/settings.yml'")
 
 # Copy RP docker files for the desired network
 CORECMDS+=("Copying Shared Rocket Pool Assets@$USEREXEC cp -R '$TEMPFILESDIR/files/rocketpool/shared/.' $RP_PATH || fail 'Could not add shared Rocket Pool files to Rocket Pool path'")
