@@ -31,7 +31,7 @@ fi
 if [ "$CLIENT" = "Infura" ]; then
 
     # Run
-    CMD="/go/bin/rocketpool-pow-proxy --port 8545 --network $INFURA_NETWORK --projectId $INFURA_PROJECT_ID"
+    CMD="/go/bin/rocketpool-pow-proxy --port 8545 --network goerli --projectId $INFURA_PROJECT_ID"
 
     # Run command
     eval "$CMD"

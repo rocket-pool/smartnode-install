@@ -29,7 +29,6 @@ services:
       - net
     environment:
       - CLIENT=${POW_CLIENT}
-      - INFURA_NETWORK=${POW_INFURA_NETWORK}
       - INFURA_PROJECT_ID=${POW_INFURA_PROJECT_ID}
     entrypoint: /setup/start-node.sh
     labels:
@@ -91,8 +90,8 @@ services:
       - net
     depends_on:
       - pow
-    entrypoint: /bin/sh
-    tty: true
+    entrypoint: /bin/sleep
+    command: "infinity"
   node:
     image: rocketpool/smartnode:v0.0.1
     restart: on-failure
@@ -111,13 +110,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
-    command: [
-      "minipools",
-      "${RP_PATH}",
-      "rocketpool/smartnode:v0.0.1",
-      "${COMPOSE_PROJECT_NAME}_minipool_",
-      "${COMPOSE_PROJECT_NAME}_net",
-    ]
+    command: "minipools"
     depends_on:
       - pow
       - beacon

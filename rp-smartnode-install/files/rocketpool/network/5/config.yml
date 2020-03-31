@@ -8,6 +8,16 @@ smartnode:
   validatorKeychainPath: /.rocketpool/data/validators
 chains:
   eth1:
-    provider: "http://eth1.rpc.smartnode.localhost"
+    provider: http://eth1.rpc.smartnode.localhost
+    client:
+      options:
+      - name: Infura
+        image: rocketpool/smartnode-pow-proxy:v0.0.1
+      - name: Geth
+        image: ethereum/client-go:stable
   eth2:
-    provider: "http://eth2.api.smartnode.localhost"
+    provider: http://eth2.api.smartnode.localhost
+    client:
+      options:
+      - name: Lighthouse
+        image: sigp/lighthouse:latest
