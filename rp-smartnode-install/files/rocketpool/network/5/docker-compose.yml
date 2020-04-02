@@ -2,6 +2,7 @@ version: "3.7"
 services:
   traefik:
     image: traefik:v1.7.21
+    container_name: rocketpool_traefik
     command: [
       "--api",
       "--docker",
@@ -16,8 +17,9 @@ services:
         aliases:
           - "eth1.rpc.smartnode.localhost"
           - "eth2.api.smartnode.localhost"
-  pow:
-    image: ${POW_IMAGE}
+  eth1:
+    image: ${ETH1_IMAGE}
+    container_name: rocketpool_eth1
     restart: on-failure
     ports:
       - "30303-30305:30303-30305/udp"
@@ -28,7 +30,7 @@ services:
     networks:
       - net
     environment:
-      - CLIENT=${POW_CLIENT}
+      - CLIENT=${ETH1_CLIENT}
       - ETHSTATS_LABEL=${ETHSTATS_LABEL}
       - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
       - INFURA_PROJECT_ID=${INFURA_PROJECT_ID}
@@ -45,8 +47,9 @@ services:
       - traefik.backend=eth1.rpc.smartnode
     depends_on:
       - traefik
-  beacon:
-    image: ${BEACON_IMAGE}
+  eth2:
+    image: ${ETH2_IMAGE}
+    container_name: rocketpool_eth2
     restart: on-failure
     ports:
       - "9001:9001"
@@ -56,7 +59,7 @@ services:
     networks:
       - net
     environment:
-      - CLIENT=${BEACON_CLIENT}
+      - CLIENT=${ETH2_CLIENT}
     entrypoint: /setup/start-beacon.sh
     labels:
       - traefik.enable=true
@@ -69,9 +72,10 @@ services:
       - traefik.backend.loadbalancer.method=drr
       - traefik.backend=eth2.api.smartnode
     depends_on:
-      - pow
+      - eth1
   validator:
     image: ${VALIDATOR_IMAGE}
+    container_name: rocketpool_validator
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
@@ -82,20 +86,22 @@ services:
       - CLIENT=${VALIDATOR_CLIENT}
     entrypoint: /setup/start-validator.sh
     depends_on:
-      - beacon
+      - eth2
   cli:
     image: rocketpool/smartnode:v0.0.1
+    container_name: rocketpool_cli
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
     networks:
       - net
     depends_on:
-      - pow
+      - eth1
     entrypoint: /bin/sleep
     command: "infinity"
   node:
     image: rocketpool/smartnode:v0.0.1
+    container_name: rocketpool_node
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
@@ -103,9 +109,10 @@ services:
       - net
     command: "node"
     depends_on:
-      - pow
+      - eth1
   minipools:
     image: rocketpool/smartnode:v0.0.1
+    container_name: rocketpool_minipools
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
@@ -114,10 +121,11 @@ services:
       - net
     command: "minipools"
     depends_on:
-      - pow
-      - beacon
+      - eth1
+      - eth2
   watchtower:
     image: rocketpool/smartnode:v0.0.1
+    container_name: rocketpool_watchtower
     restart: on-failure
     volumes:
       - ${RP_PATH}:/.rocketpool
@@ -125,8 +133,8 @@ services:
       - net
     command: "watchtower"
     depends_on:
-      - pow
-      - beacon
+      - eth1
+      - eth2
 networks:
   net:
 volumes:
