@@ -19,7 +19,6 @@ services:
           - "eth2.api.smartnode.localhost"
   eth1:
     image: ${ETH1_IMAGE}
-    container_name: rocketpool_eth1
     restart: on-failure
     ports:
       - "30303-30305:30303-30305/udp"
@@ -49,7 +48,6 @@ services:
       - traefik
   eth2:
     image: ${ETH2_IMAGE}
-    container_name: rocketpool_eth2
     restart: on-failure
     ports:
       - "9001:9001"
