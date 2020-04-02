@@ -15,8 +15,8 @@ if [ "$CLIENT" = "Geth" ]; then
     CMD="/usr/local/bin/geth --goerli --datadir $DATADIR --rpc --rpcaddr 0.0.0.0 --rpcport 8545 --rpcapi db,eth,net,web3,personal --rpcvhosts '*'"
 
     # Add Ethstats to run
-    if [ ! -z "$ETHSTATSLABEL" ] && [ ! -z "$ETHSTATSLOGIN" ]; then
-        CMD="$CMD --ethstats $ETHSTATSLABEL-$CONTAINERID:$ETHSTATSLOGIN"
+    if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
+        CMD="$CMD --ethstats $ETHSTATS_LABEL-$CONTAINERID:$ETHSTATS_LOGIN"
     fi
 
     # Run command

@@ -29,7 +29,9 @@ services:
       - net
     environment:
       - CLIENT=${POW_CLIENT}
-      - INFURA_PROJECT_ID=${POW_INFURA_PROJECT_ID}
+      - ETHSTATS_LABEL=${ETHSTATS_LABEL}
+      - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
+      - INFURA_PROJECT_ID=${INFURA_PROJECT_ID}
     entrypoint: /setup/start-node.sh
     labels:
       - traefik.enable=true
