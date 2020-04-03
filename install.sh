@@ -196,13 +196,14 @@ if [ ! -z "$PLATFORM_OS_VER" ]; then
 fi
 
 # Create rocket pool paths
-CORECMDS+=("Creating Rocket Pool User Directory@mkdir -p $RP_PATH || fail 'Could not create Rocket Pool user directory'")
-CORECMDS+=("Creating Rocket Pool User Data Directory@mkdir -p $RP_PATH/data || fail 'Could not create Rocket Pool user data directory'")
+CORECMDS+=("Creating Rocket Pool User Directory@$USEREXEC mkdir -p $RP_PATH || fail 'Could create Rocket Pool user directory'")
+CORECMDS+=("Creating Rocket Pool User Data Directory@USEREXEC mkdir -p $RP_PATH/data || fail 'Could not create Rocket Pool user data directory'")
 
 # Create a users settings.yml file if it doesn't exist. This file overwrites parameters in the master config.yml
 CORECMDS+=("Creating User Settings File@touch -a $RP_PATH/settings.yml || fail 'Could not create user settings file at $RP_PATH/settings.yml'")
 
 # Copy RP docker files for the desired network
+echo "$USEREXEC cp -R '$TEMPFILESDIR/files/rocketpool/shared/.' $RP_PATH"
 CORECMDS+=("Copying Shared Rocket Pool Assets@$USEREXEC cp -R '$TEMPFILESDIR/files/rocketpool/shared/.' $RP_PATH || fail 'Could not add shared Rocket Pool files to Rocket Pool path'")
 CORECMDS+=("Copying ETH Network Config@$USEREXEC cp -R '$TEMPFILESDIR/files/rocketpool/network/$NETWORK_ID/.' $RP_PATH || fail 'Could not add ETH Network files to Rocket Pool path'")
 
