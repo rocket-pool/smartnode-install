@@ -200,7 +200,7 @@ CORECMDS+=("Creating Rocket Pool User Directory@$USEREXEC mkdir -p $RP_PATH || f
 CORECMDS+=("Creating Rocket Pool User Data Directory@USEREXEC mkdir -p $RP_PATH/data || fail 'Could not create Rocket Pool user data directory'")
 
 # Create a users settings.yml file if it doesn't exist. This file overwrites parameters in the master config.yml
-CORECMDS+=("Creating User Settings File@touch -a $RP_PATH/settings.yml || fail 'Could not create user settings file at $RP_PATH/settings.yml'")
+CORECMDS+=("Creating User Settings File@$USEREXEC touch -a $RP_PATH/settings.yml || fail 'Could not create user settings file at $RP_PATH/settings.yml'")
 
 # Copy RP docker files for the desired network
 echo "$USEREXEC cp -R '$TEMPFILESDIR/files/rocketpool/shared/.' $RP_PATH"
@@ -229,11 +229,11 @@ CORECMDS+=("Installing Rocket Pool - Node@docker pull rocketpool/smartnode-node:
 
 # Check the users ~/bin dir exists, if not create it
 if [ ! -d "$USERHOMEDIR/bin" ]; then
-    CORECMDS+=("Creating Local Bin Directory@mkdir -p '$USERHOMEDIR/bin' && chown -R $USERNAME: '$USERHOMEDIR/bin' || fail 'Could not create local user bin directory'")
+    CORECMDS+=("Creating Local Bin Directory@$USEREXEC mkdir -p '$USERHOMEDIR/bin' && chown -R $USERNAME: '$USERHOMEDIR/bin' || fail 'Could not create local user bin directory'")
 fi
 
 # Copy CLI utility (this is done last as the GUI checks for its existance when seeing if RP was installed fully)
-CORECMDS+=("Copying Rocket Pool Bin@cp '$TEMPFILESDIR/files/bin/rocketpool.sh' '$USERHOMEDIR/bin/rocketpool' && sudo chmod +x '$USERHOMEDIR/bin/rocketpool' || fail 'Could not copy Rocket Pool bin too $USERHOMEDIR/bin'")
+CORECMDS+=("Copying Rocket Pool Bin@$USEREXEC cp '$TEMPFILESDIR/files/bin/rocketpool.sh' '$USERHOMEDIR/bin/rocketpool' && sudo chmod +x '$USERHOMEDIR/bin/rocketpool' || fail 'Could not copy Rocket Pool bin too $USERHOMEDIR/bin'")
 
 
 ## 
