@@ -30,4 +30,4 @@ chains:
     client:
       options:
       - name: Lighthouse
-        image: sigp/lighthouse:latest
+        image: sigp/lighthouse:testnet5
