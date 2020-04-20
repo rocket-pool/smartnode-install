@@ -23,7 +23,7 @@ fi
 # Default installer type
 INSTALLER_TYPE='cli'
 # Default network ID
-NETWORK_ID='77'
+NETWORK_ID='5'
 # Progress output streams
 OUTPUTTO="/dev/null"
 PROGRESSTO="/dev/stdout"
