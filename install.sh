@@ -197,7 +197,7 @@ fi
 
 # Create rocket pool paths
 CORECMDS+=("Creating Rocket Pool User Directory@$USEREXEC mkdir -p $RP_PATH || fail 'Could create Rocket Pool user directory'")
-CORECMDS+=("Creating Rocket Pool User Data Directory@USEREXEC mkdir -p $RP_PATH/data || fail 'Could not create Rocket Pool user data directory'")
+CORECMDS+=("Creating Rocket Pool User Data Directory@$USEREXEC mkdir -p $RP_PATH/data || fail 'Could not create Rocket Pool user data directory'")
 
 # Create a users settings.yml file if it doesn't exist. This file overwrites parameters in the master config.yml
 CORECMDS+=("Creating User Settings File@$USEREXEC touch -a $RP_PATH/settings.yml || fail 'Could not create user settings file at $RP_PATH/settings.yml'")
@@ -221,11 +221,7 @@ fi
 CORECMDS+=("Setting file permissions@sudo find '$RP_PATH' -maxdepth 8 -name '*-exec.sh' -exec chmod +x {} + || fail 'Could not set permissions on executable shell scripts'")
 
 ## Install any dependencies just for this platform OS if they exist
-CORECMDS+=("Installing Rocket Pool - CLI@docker pull rocketpool/smartnode-cli:v0.0.1 &> $OUTPUTTO || fail 'Could not install Rocket Pool docker component - CLI'")
-CORECMDS+=("Installing Rocket Pool - Minipool@docker pull rocketpool/smartnode-minipool:v0.0.1 &> $OUTPUTTO || fail 'Could not install Rocket Pool docker component - Minipool'")
-CORECMDS+=("Installing Rocket Pool - Minipool Manager@docker pull rocketpool/smartnode-minipools:v0.0.1 &> $OUTPUTTO || fail 'Could not install Rocket Pool docker component - Minipools'")
-CORECMDS+=("Installing Rocket Pool - Watchtower@docker pull rocketpool/smartnode-watchtower:v0.0.1 &> $OUTPUTTO || fail 'Could not install Rocket Pool docker component - Watchtower'")
-CORECMDS+=("Installing Rocket Pool - Node@docker pull rocketpool/smartnode-node:v0.0.1 &> $OUTPUTTO || fail 'Could not install Rocket Pool docker component - Node'")
+CORECMDS+=("Installing Rocket Pool docker image@docker pull rocketpool/smartnode:v0.0.1 &> $OUTPUTTO || fail 'Could not install Rocket Pool docker image'")
 
 # Check the users ~/bin dir exists, if not create it
 if [ ! -d "$USERHOMEDIR/bin" ]; then
