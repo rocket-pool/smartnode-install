@@ -74,7 +74,7 @@ do
         # Get the version
         NETWORK_ID=${PARAMS[$((PARAMCOUNT+1))]}
     fi
-    # Temp dir to unpack the files too (optional, one will be created if not passed). Should be passed '-t $TEMPDIRlocation'
+    # Temp dir to unpack the files to (optional, one will be created if not passed). Should be passed '-t $TEMPDIRlocation'
     if [[ "$i" == "-t" ]]; then
         # Get the path
         TEMPDIR=${PARAMS[$((PARAMCOUNT+1))]}
@@ -232,8 +232,8 @@ if [ ! -d "$USERHOMEDIR/bin" ]; then
     CORECMDS+=("Creating Local Bin Directory@$USEREXEC mkdir -p '$USERHOMEDIR/bin' && chown -R $USERNAME: '$USERHOMEDIR/bin' || fail 'Could not create local user bin directory'")
 fi
 
-# Copy CLI utility (this is done last as the GUI checks for its existance when seeing if RP was installed fully)
-CORECMDS+=("Copying Rocket Pool Bin@$USEREXEC cp '$TEMPFILESDIR/files/bin/rocketpool.sh' '$USERHOMEDIR/bin/rocketpool' && sudo chmod +x '$USERHOMEDIR/bin/rocketpool' || fail 'Could not copy Rocket Pool bin too $USERHOMEDIR/bin'")
+# Download CLI utility
+CORECMDS+=("Downloading Rocket Pool Bin@wget -qO- 'https://github.com/rocket-pool/smartnode-install/releases/download/0.0.2/rocketpool-$(uname -s)-$(uname -m).tar.xz' | tar -xJ -C '$USERHOMEDIR/bin' && sudo chmod +x '$USERHOMEDIR/bin/rocketpool' || fail 'Could not download Rocket Pool bin to $USERHOMEDIR/bin'")
 
 
 ## 
