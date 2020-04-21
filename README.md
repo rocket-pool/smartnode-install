@@ -1,5 +1,5 @@
 # smartnode-install
-The install script for a [Rocket Pool smart node](https://github.com/rocket-pool/smartnode). This script must be run with admin access, use `sudo` or the equivalent command if required.
+The install script & configuration assets for a [Rocket Pool smart node](https://github.com/rocket-pool/smartnode). This script must be run with admin access, use `sudo` or the equivalent command if required.
 
 # Usage
 
