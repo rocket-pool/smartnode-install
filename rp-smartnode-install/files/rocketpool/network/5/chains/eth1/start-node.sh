@@ -9,7 +9,7 @@ DATADIR="/ethclient/$CONTAINERID"
 mkdir -p "$DATADIR"
 
 # Geth startup
-if [ "$CLIENT" = "Geth" ]; then
+if [ "$CLIENT" = "geth" ]; then
 
     # Run
     CMD="/usr/local/bin/geth --goerli --datadir $DATADIR --rpc --rpcaddr 0.0.0.0 --rpcport 8545 --rpcapi db,eth,net,web3,personal --rpcvhosts '*'"
@@ -28,7 +28,7 @@ fi
 # TODO: implement
 
 # Infura startup
-if [ "$CLIENT" = "Infura" ]; then
+if [ "$CLIENT" = "infura" ]; then
 
     # Run
     CMD="/go/bin/rocketpool-pow-proxy --port 8545 --network goerli --projectId $INFURA_PROJECT_ID"

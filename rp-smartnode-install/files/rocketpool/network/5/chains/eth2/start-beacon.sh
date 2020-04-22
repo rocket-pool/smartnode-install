@@ -9,7 +9,7 @@ DATADIR="/ethclient/$CONTAINERID"
 mkdir -p "$DATADIR"
 
 # Lighthouse startup
-if [ "$CLIENT" = "Lighthouse" ]; then
+if [ "$CLIENT" = "lighthouse" ]; then
 
     # Run
     CMD="lighthouse beacon --datadir $DATADIR --port 9001 --disc-port 9001 --http --http-address 0.0.0.0 --http-port 5052 --eth1 --eth1-endpoint http://eth1.rpc.smartnode.localhost"

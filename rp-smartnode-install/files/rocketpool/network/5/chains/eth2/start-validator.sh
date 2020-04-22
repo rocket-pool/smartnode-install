@@ -2,7 +2,7 @@
 # This script configures ETH2 validator clients for Rocket Pool's scalable docker stack; only edit if you know what you're doing ;)
 
 # Lighthouse startup
-if [ "$CLIENT" = "Lighthouse" ]; then
+if [ "$CLIENT" = "lighthouse" ]; then
 
     # Run
     CMD="lighthouse validator --datadir /.rocketpool/data/validators --server http://eth2.api.smartnode.localhost"
