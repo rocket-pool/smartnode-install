@@ -1,0 +1,46 @@
+rocketpool:
+  storageAddress: 0xbbCbc87447fE120E1Bc73dBd11bc4Dc1086FFa25
+smartnode:
+  passwordPath: /.rocketpool/data/password
+  walletPath: /.rocketpool/data/wallet
+  validatorKeychainPath: /.rocketpool/data/validators
+chains:
+  eth1:
+    provider: http://eth1:8545
+    client:
+      options:
+      - id: geth
+        name: Geth
+        image: ethereum/client-go:stable
+        desc: made by the Ethereum Foundation
+        link: https://geth.ethereum.org/
+        params:
+        - name: Ethstats Label
+          env: ETHSTATS_LABEL
+        - name: Ethstats Login
+          env: ETHSTATS_LOGIN
+      - id: infura
+        name: Infura
+        image: rocketpool/smartnode-pow-proxy:v0.0.1
+        desc: uses Infura as a light client for ETH1
+        link: https://infura.io/
+        params:
+        - name: Infura Project ID
+          env: INFURA_PROJECT_ID
+          regex: ^[0-9a-fA-F]{32}$
+          required: true
+  eth2:
+    provider: eth2:5052
+    client:
+      options:
+      - id: lighthouse
+        name: Lighthouse
+        image: sigp/lighthouse:latest
+        desc: made by Sigma Prime
+        link: https://sigmaprime.io/
+      - id: prysm
+        name: Prysm
+        beaconImage: gcr.io/prysmaticlabs/prysm/beacon-chain:latest-debug
+        validatorImage: gcr.io/prysmaticlabs/prysm/validator:latest-debug
+        desc: made by Prysmatic Labs
+        link: https://prysmaticlabs.com/

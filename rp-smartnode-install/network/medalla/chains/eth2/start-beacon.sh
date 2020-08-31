@@ -1,0 +1,19 @@
+#!/bin/sh
+# This script launches ETH2 beacon clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
+
+
+# Lighthouse startup
+if [ "$CLIENT" = "lighthouse" ]; then
+
+    /usr/local/bin/lighthouse beacon --testnet medalla --datadir /ethclient/lighthouse --port 9001 --discovery-port 9001 --eth1 --eth1-endpoint http://eth1:8545 --http --http-address 0.0.0.0 --http-port 5052
+
+fi
+
+
+# Prysm startup
+if [ "$CLIENT" = "prysm" ]; then
+
+    /app/beacon-chain/image.binary --datadir /ethclient/prysm --p2p-tcp-port 9001 --p2p-udp-port 9001 --http-web3provider http://eth1:8545 --rpc-host 0.0.0.0 --rpc-port 5052
+
+fi
+
