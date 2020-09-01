@@ -28,7 +28,7 @@ NETWORK="medalla"
 
 
 # Print a failure message to stderr and exit
-function fail() {
+fail() {
     MESSAGE=$1
     >&2 echo "$MESSAGE"
     exit 1
@@ -36,7 +36,7 @@ function fail() {
 
 
 # Print progress
-function progress() {
+progress() {
     STEP_NUMBER=$1
     MESSAGE=$2
     echo "$STEP_NUMBER/$TOTAL_STEPS $MESSAGE"
@@ -75,7 +75,7 @@ fi
 
 
 # Create temporary data folder; clean up on exit
-TEMPDIR=$(mktemp -d -t "rocketpool" 2>/dev/null) || fail "Could not create temporary data directory."
+TEMPDIR=$(mktemp -d 2>/dev/null) || fail "Could not create temporary data directory."
 trap 'rm -rf "$TEMPDIR"' EXIT
 
 
@@ -117,9 +117,8 @@ progress X "Creating Rocket Pool user data directory..."
 
 # Download and extract package files
 progress X "Downloading Rocket Pool package files..."
-curl -L "$PACKAGE_URL" | xz -d | tar -x -C "$TEMPDIR" - || fail "Could not download and extract the Rocket Pool package files."
+curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."
 >&2 test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool package files."
-
 
 # Copy package files
 progress X "Copying package files to Rocket Pool user data directory..."
