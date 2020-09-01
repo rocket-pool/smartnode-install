@@ -13,7 +13,7 @@
 
 
 # The total number of steps in the installation process
-TOTAL_STEPS=99
+TOTAL_STEPS="99"
 # The Rocket Pool user data path
 RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
@@ -112,7 +112,7 @@ fi
 
 # Create ~/.rocketpool dir
 progress X "Creating Rocket Pool user data directory..."
->&2 mkdir -p "$RP_PATH/data" || fail "Could not create the Rocket Pool user data directory."
+>&2 mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."
 
 
 # Download and extract package files
