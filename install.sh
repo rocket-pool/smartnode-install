@@ -120,6 +120,7 @@ progress X "Downloading Rocket Pool package files..."
 curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."
 >&2 test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool package files."
 
+
 # Copy package files
 progress X "Copying package files to Rocket Pool user data directory..."
 >&2 test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."
