@@ -115,7 +115,6 @@ case "$PLATFORM" in
 
         # Add user to docker group
         progress 4 "Adding user to docker group..."
-        >&2 sudo groupadd docker || fail "Could not create docker group."
         >&2 sudo usermod -aG docker $USER || fail "Could not add user to docker group."
 
     ;;
