@@ -98,25 +98,25 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        >&2 sudo apt-get -y update
-        >&2 sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+        >&2 sudo apt-get -y update || fail "Could not update apt-get."
+        >&2 sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common || fail "Could not install OS packages."
 
         # Install docker
         progress 2 "Installing docker..."
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-        >&2 sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-        >&2 sudo apt-get -y update
-        >&2 sudo apt-get -y install docker-ce docker-ce-cli containerd.io
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - || fail "Could not add docker repository key."
+        >&2 sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" || fail "Could not add docker repository."
+        >&2 sudo apt-get -y update || fail "Could not update apt-get."
+        >&2 sudo apt-get -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."
 
         # Install docker-compose
         progress 3 "Installing docker-compose..."
-        >&2 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        >&2 sudo chmod a+rx /usr/local/bin/docker-compose
+        >&2 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
+        >&2 sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
 
         # Add user to docker group
         progress 4 "Adding user to docker group..."
-        >&2 sudo groupadd docker
-        >&2 sudo usermod -aG docker $USER
+        >&2 sudo groupadd docker || fail "Could not create docker group."
+        >&2 sudo usermod -aG docker $USER || fail "Could not add user to docker group."
 
     ;;
 
