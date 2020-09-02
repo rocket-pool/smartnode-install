@@ -113,6 +113,7 @@ fi
 # Create ~/.rocketpool dir
 progress X "Creating Rocket Pool user data directory..."
 >&2 mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."
+>&2 touch -a "$RP_PATH/settings.yml" || fail "Could not create the Rocket Pool user settings file."
 
 
 # Download and extract package files
@@ -126,9 +127,4 @@ progress X "Copying package files to Rocket Pool user data directory..."
 >&2 test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."
 >&2 cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."
 >&2 find "$RP_PATH" -name "*.sh" -exec chmod +r {} \; || fail "Could not set executable permissions on package files."
-
-
-# Create user settings file
-progress X "Creating Rocket Pool user settings file..."
->&2 touch -a "$RP_PATH/settings.yml" || fail "Could not create the Rocket Pool user settings file."
 
