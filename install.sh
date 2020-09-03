@@ -27,10 +27,10 @@ NETWORK="medalla"
 ##
 
 
-# Print a failure message to stderr and exit
+# Print a failure message and exit
 fail() {
     MESSAGE=$1
-    >&2 echo "$MESSAGE"
+    echo "$MESSAGE"
     exit 1
 }
 
@@ -102,24 +102,24 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        >&2 sudo apt-get -y update || fail "Could not update apt-get."
-        >&2 sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common || fail "Could not install OS packages."
+        { sudo apt-get -y update || fail "Could not update apt-get."; } >&2
+        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common || fail "Could not install OS packages."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - || fail "Could not add docker repository key."
-        >&2 sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" || fail "Could not add docker repository."
-        >&2 sudo apt-get -y update || fail "Could not update apt-get."
-        >&2 sudo apt-get -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."
+        { curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - || fail "Could not add docker repository key."; } >&2
+        { sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" || fail "Could not add docker repository."; } >&2
+        { sudo apt-get -y update || fail "Could not update apt-get."; } >&2
+        { sudo apt-get -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
 
         # Install docker-compose
         progress 3 "Installing docker-compose..."
-        >&2 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
-        >&2 sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
+        { sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."; } >&2
+        { sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."; } >&2
 
         # Add user to docker group
         progress 4 "Adding user to docker group..."
-        >&2 sudo usermod -aG docker $USER || fail "Could not add user to docker group."
+        { sudo usermod -aG docker $USER || fail "Could not add user to docker group."; } >&2
 
     ;;
 
@@ -140,21 +140,21 @@ fi
 
 # Create ~/.rocketpool dir & files
 progress 5 "Creating Rocket Pool user data directory..."
->&2 mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."
->&2 touch -a "$RP_PATH/settings.yml" || fail "Could not create the Rocket Pool user settings file."
+{ mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
+{ touch -a "$RP_PATH/settings.yml" || fail "Could not create the Rocket Pool user settings file."; } >&2
 
 
 # Download and extract package files
 progress 6 "Downloading Rocket Pool package files..."
-curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."
->&2 test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool package files."
+{ curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."; } >&2
+{ test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool package files."; } >&2
 
 
 # Copy package files
 progress 7 "Copying package files to Rocket Pool user data directory..."
->&2 test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."
->&2 cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."
->&2 find "$RP_PATH" -name "*.sh" -exec chmod +x {} \; || fail "Could not set executable permissions on package files."
+{ test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."; } >&2
+{ cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
+{ find "$RP_PATH" -name "*.sh" -exec chmod +x {} \; || fail "Could not set executable permissions on package files."; } >&2
 
 
 }
