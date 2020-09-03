@@ -65,7 +65,7 @@ install() {
 
 
 # Parse arguments
-while getopts "in:v:" FLAG; do
+while getopts "dn:v:" FLAG; do
     case "$FLAG" in
         d) NO_DEPS=true ;;
         n) NETWORK="$OPTARG" ;;
