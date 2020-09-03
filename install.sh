@@ -39,8 +39,12 @@ fail() {
 progress() {
     STEP_NUMBER=$1
     MESSAGE=$2
-    echo "$STEP_NUMBER/$TOTAL_STEPS $MESSAGE"
+    echo "Step $STEP_NUMBER of $TOTAL_STEPS: $MESSAGE"
 }
+
+
+# Install
+install() {
 
 
 ##
@@ -129,6 +133,8 @@ case "$PLATFORM" in
     ;;
 
 esac
+else
+    echo "Skipping steps 1 - 4 (OS dependencies & docker)"
 fi
 
 
@@ -149,4 +155,8 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 >&2 test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."
 >&2 cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."
 >&2 find "$RP_PATH" -name "*.sh" -exec chmod +x {} \; || fail "Could not set executable permissions on package files."
+
+
+}
+install "$@"
 
