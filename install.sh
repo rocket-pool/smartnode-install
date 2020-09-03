@@ -20,6 +20,8 @@ RP_PATH="$HOME/.rocketpool"
 PACKAGE_VERSION="latest"
 # The default network to run Rocket Pool on
 NETWORK="medalla"
+# The version of docker-compose to install
+DOCKER_COMPOSE_VERSION="1.26.2"
 
 
 ##
@@ -40,6 +42,16 @@ progress() {
     STEP_NUMBER=$1
     MESSAGE=$2
     echo "Step $STEP_NUMBER of $TOTAL_STEPS: $MESSAGE"
+}
+
+
+# Docker installation steps
+install_docker_compose() {
+    sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
+    sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
+}
+add_user_docker() {
+    sudo usermod -aG docker $USER || fail "Could not add user to docker group."
 }
 
 
@@ -97,8 +109,11 @@ NETWORK_FILES_PATH="$PACKAGE_FILES_PATH/network/$NETWORK"
 if [ -z "$IGNORE_DEPS" ]; then
 case "$PLATFORM" in
 
-    # Ubuntu
-    Ubuntu)
+    # Ubuntu / Debian / Raspbian
+    Ubuntu|Debian|Raspbian)
+
+        # Get platform name
+        PLATFORM_NAME=$(echo "$PLATFORM" | tr '[:upper:]' '[:lower:]')
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
@@ -107,29 +122,72 @@ case "$PLATFORM" in
 
         # Install docker
         progress 2 "Installing docker..."
-        { curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - || fail "Could not add docker repository key."; } >&2
-        { sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" || fail "Could not add docker repository."; } >&2
+        { curl -fsSL "https://download.docker.com/linux/$PLATFORM_NAME/gpg" | sudo apt-key add - || fail "Could not add docker repository key."; } >&2
+        { sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable" || fail "Could not add docker repository."; } >&2
         { sudo apt-get -y update || fail "Could not update apt-get."; } >&2
         { sudo apt-get -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
 
         # Install docker-compose
         progress 3 "Installing docker-compose..."
-        { sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."; } >&2
-        { sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."; } >&2
+        >&2 install_docker_compose
 
         # Add user to docker group
         progress 4 "Adding user to docker group..."
-        { sudo usermod -aG docker $USER || fail "Could not add user to docker group."; } >&2
+        >&2 add_user_docker
 
     ;;
 
-    # MacOS
-    Darwin)
+    # Centos
+    CentOS)
+
+        # Install OS dependencies
+        progress 1 "Installing OS dependencies..."
+        { sudo yum install -y yum-utils || fail "Could not install OS packages."; } >&2
+
+        # Install docker
+        progress 2 "Installing docker..."
+        { sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || fail "Could not add docker repository."; } >&2
+        { sudo yum install -y docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
+        { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
+
+        # Install docker-compose
+        progress 3 "Installing docker-compose..."
+        >&2 install_docker_compose
+
+        # Add user to docker group
+        progress 4 "Adding user to docker group..."
+        >&2 add_user_docker
+
+    ;;
+
+    # Fedora
+    Fedora)
+
+        # Install OS dependencies
+        progress 1 "Installing OS dependencies..."
+        { sudo dnf -y install dnf-plugins-core || fail "Could not install OS packages."; } >&2
+
+        # Install docker
+        progress 2 "Installing docker..."
+        { sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo || fail "Could not add docker repository."; } >&2
+        { sudo dnf -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
+        { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
+
+        # Install docker-compose
+        progress 3 "Installing docker-compose..."
+        >&2 install_docker_compose
+
+        # Add user to docker group
+        progress 4 "Adding user to docker group..."
+        >&2 add_user_docker
+
     ;;
 
     # Unsupported OS
     *)
-        fail "Sorry, the '$PLATFORM' operating system is not supported."
+        echo "Automatic dependency installation for the $PLATFORM operating system is not supported."
+        echo "Please install docker and docker-compose manually, then try again with the '-i' flag to skip OS dependency installation."
+        fail "Could not install OS dependencies."
     ;;
 
 esac
