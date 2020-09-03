@@ -67,7 +67,7 @@ install() {
 # Parse arguments
 while getopts "in:v:" FLAG; do
     case "$FLAG" in
-        i) IGNORE_DEPS=true ;;
+        d) NO_DEPS=true ;;
         n) NETWORK="$OPTARG" ;;
         v) PACKAGE_VERSION="$OPTARG" ;;
         *) fail "Incorrect usage." ;;
@@ -106,7 +106,7 @@ NETWORK_FILES_PATH="$PACKAGE_FILES_PATH/network/$NETWORK"
 
 
 # OS dependencies
-if [ -z "$IGNORE_DEPS" ]; then
+if [ -z "$NO_DEPS" ]; then
 case "$PLATFORM" in
 
     # Ubuntu / Debian / Raspbian
@@ -186,7 +186,7 @@ case "$PLATFORM" in
     # Unsupported OS
     *)
         echo "Automatic dependency installation for the $PLATFORM operating system is not supported."
-        echo "Please install docker and docker-compose manually, then try again with the '-i' flag to skip OS dependency installation."
+        echo "Please install docker and docker-compose manually, then try again with the '-d' flag to skip OS dependency installation."
         fail "Could not install OS dependencies."
     ;;
 
