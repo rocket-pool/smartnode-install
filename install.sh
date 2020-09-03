@@ -27,10 +27,10 @@ NETWORK="medalla"
 ##
 
 
-# Print a failure message and exit
+# Print a failure message to stderr and exit
 fail() {
     MESSAGE=$1
-    echo "$MESSAGE"
+    >&2 echo "$MESSAGE"
     exit 1
 }
 
