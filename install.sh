@@ -153,7 +153,7 @@ case "$PLATFORM" in
         # Install docker
         progress 2 "Installing docker..."
         { sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || fail "Could not add docker repository."; } >&2
-        { sudo yum install -y docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
+        { sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
         { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
 
         # Install docker-compose
