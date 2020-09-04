@@ -78,7 +78,13 @@ done
 # Get the platform type
 PLATFORM=$(uname -s)
 if [ "$PLATFORM" = "Linux" ]; then
-    PLATFORM=$(lsb_release -si)
+    if command -v lsb_release &>/dev/null ; then
+        PLATFORM=$(lsb_release -si)
+    elif [ -f "/etc/centos-release" ]; then
+        PLATFORM="CentOS"
+    elif [ -f "/etc/fedora-release" ]; then
+        PLATFORM="Fedora"
+    fi
 fi
 
 
