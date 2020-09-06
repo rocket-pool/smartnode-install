@@ -52,7 +52,7 @@ services:
     depends_on:
       - eth2
   api:
-    image: rocketpool/smartnode:v0.0.1
+    image: rocketpool/smartnode:v0.0.3
     container_name: rocketpool_api
     restart: unless-stopped
     volumes:
@@ -64,7 +64,7 @@ services:
     entrypoint: /bin/sleep
     command: "infinity"
   node:
-    image: rocketpool/smartnode:v0.0.1
+    image: rocketpool/smartnode:v0.0.3
     container_name: rocketpool_node
     restart: unless-stopped
     volumes:
@@ -77,7 +77,7 @@ services:
       - eth1
       - eth2
   watchtower:
-    image: rocketpool/smartnode:v0.0.1
+    image: rocketpool/smartnode:v0.0.3
     container_name: rocketpool_watchtower
     restart: unless-stopped
     volumes:

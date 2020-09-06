@@ -21,7 +21,7 @@ chains:
           env: ETHSTATS_LOGIN
       - id: infura
         name: Infura
-        image: rocketpool/smartnode-pow-proxy:v0.0.1
+        image: rocketpool/smartnode-pow-proxy:v0.0.3
         desc: uses Infura as a light client for ETH1
         link: https://infura.io/
         params:
