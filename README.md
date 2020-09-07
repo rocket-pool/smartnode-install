@@ -81,6 +81,9 @@ chmod u+x ./install.sh
 rm install.sh
 ```
 
+The installation script prints progress messages to stdout and full command output to stderr.
+Use `1>/dev/null` to silence progress messages, or `2>/dev/null` to silence command output.
+
 ### Available Options
 
 The following options apply to both automatic and manual installation unless specified otherwise:
