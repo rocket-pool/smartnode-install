@@ -6,7 +6,7 @@ The smart node client is supported on Linux, MacOS and Windows.
 Note that a smart node cannot be run locally on Windows at this stage; the Windows client can only be used to manage a remote server.
 
 The smart node service is supported on all Unix platforms, with automatic dependency installation for Ubuntu, Debian, CentOS and Fedora.
-A smart node can be run on other Unix platforms, but manual installation of dependencies (docker and docker-compose) is required.
+A smart node can be run on other Unix platforms, but manual installation of dependencies ([docker engine](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/)) is required.
 
 
 ## Smart Node Client Installation
@@ -56,7 +56,7 @@ To install to a remote server, use:
 rocketpool --host example.com --user username --key /path/to/identity.pem service install
 ```
 
-If your platform does not support automatic dependency installation, use the `-d` option to skip this step (e.g. `rocketpool service install -d`).
+If automatic dependency installation is not supported on your platform, use the `-d` option to skip this step (e.g. `rocketpool service install -d`).
 Then, manually install [docker engine](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
 
 ### Manual
