@@ -11,7 +11,7 @@ A smart node can be run on other Unix platforms, but manual installation of depe
 
 ## Smart Node Client Installation
 
-### Linux
+### Linux (64 bit)
 
 With cURL:
 ```
@@ -25,7 +25,7 @@ wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/r
 chmod u+x /usr/local/bin/rocketpool
 ```
 
-### MacOS
+### MacOS (64 bit)
 
 With cURL:
 ```
@@ -39,7 +39,7 @@ wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/r
 chmod u+x /usr/local/bin/rocketpool
 ```
 
-### Windows
+### Windows (64 bit)
 
 1. Download the [smart node client](https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-windows-amd64.exe).
 2. Move it to the desired location on your system.
