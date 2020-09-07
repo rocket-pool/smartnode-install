@@ -1,4 +1,4 @@
-# smartnode-install
+# Rocket Pool - Smart Node Installation
 
 This repository contains compiled binaries for the [Rocket Pool smart node](https://github.com/rocket-pool/smartnode) client, as well as the installation script & configuration assets for the smart node service.
 
