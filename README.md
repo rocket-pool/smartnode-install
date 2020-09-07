@@ -65,8 +65,8 @@ If you would prefer to check the installation script before running it, you may 
 
 With cURL:
 ```
-curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh -o ./install.sh
-chmod u+x ./install.sh
+curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh -o install.sh
+chmod u+x install.sh
 
 ./install.sh
 rm install.sh
@@ -74,8 +74,8 @@ rm install.sh
 
 With wget:
 ```
-wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh -O ./install.sh
-chmod u+x ./install.sh
+wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh -O install.sh
+chmod u+x install.sh
 
 ./install.sh
 rm install.sh
