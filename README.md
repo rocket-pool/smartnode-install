@@ -41,8 +41,8 @@ chmod u+x /usr/local/bin/rocketpool
 
 ### Windows
 
-1. Download from `https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-windows-amd64.exe`
-2. Move to desired location
+1. Download the [smart node client](https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-windows-amd64.exe).
+2. Move it to the desired location on your system.
 
 
 ## Smart Node Service Installation
@@ -51,10 +51,13 @@ chmod u+x /usr/local/bin/rocketpool
 
 Once you have installed the Rocket Pool smart node client, simply run the `rocketpool service install` command to install the smart node service locally.
 
-To install to a remote server, use `rocketpool --host example.com --user username --key /path/to/identity.pem service install`.
+To install to a remote server, use:
+```
+rocketpool --host example.com --user username --key /path/to/identity.pem service install
+```
 
 If your platform does not support automatic dependency installation, use the `-d` option to skip this step (e.g. `rocketpool service install -d`).
-Then, manually install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
+Then, manually install [docker engine](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
 
 ### Manual
 
@@ -64,7 +67,7 @@ With cURL:
 ```
 curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh ./install.sh
 chmod u+x ./install.sh
-...
+
 ./install.sh
 rm install.sh
 ```
@@ -73,7 +76,7 @@ With wget:
 ```
 wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh -O ./install.sh
 chmod u+x ./install.sh
-...
+
 ./install.sh
 rm install.sh
 ```
@@ -84,6 +87,6 @@ The following options apply to both automatic and manual installation unless spe
 
 * `-r`: Verbose mode (print all output from the installation process) - automatic installation only
 * `-d`: Skip automatic installation of OS dependencies
-* `-n`: Specify a network to run the smart node stack on (default: medalla)
+* `-n`: Specify a network to run the smart node on (default: medalla)
 * `-v`: Specify a version of the smart node service package files to use (default: latest)
 
