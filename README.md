@@ -3,7 +3,7 @@
 This repository contains compiled binaries for the [Rocket Pool smart node](https://github.com/rocket-pool/smartnode) client, as well as the installation script & configuration assets for the smart node service.
 
 The smart node client is supported on Linux, MacOS and Windows.
-Note that a smart node cannot be run locally on Windows at this stage; the Windows client can only be used to manage a remote server.
+**Note that a smart node cannot be run locally on Windows at this stage; the Windows client can only be used to manage a remote server.**
 
 The smart node service is supported on all Unix platforms, with automatic dependency installation for Ubuntu, Debian, CentOS and Fedora.
 A smart node can be run on other Unix platforms, but manual installation of dependencies ([docker engine](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/)) is required.
@@ -15,28 +15,26 @@ A smart node can be run on other Unix platforms, but manual installation of depe
 
 With cURL:
 ```
-curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-linux-amd64 -o /usr/local/bin/rocketpool
-chmod u+x /usr/local/bin/rocketpool
+curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-linux-amd64 --create-dirs -o ~/bin/rocketpool && chmod +x ~/bin/rocketpool
 ```
 
 With wget:
 ```
-wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-linux-amd64 -O /usr/local/bin/rocketpool
-chmod u+x /usr/local/bin/rocketpool
+mkdir -p ~/bin && wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-linux-amd64 -O ~/bin/rocketpool && chmod +x ~/bin/rocketpool
 ```
+
+**Note: you may need to start a new shell session before you can run the `rocketpool` command.**
 
 ### MacOS (64 bit)
 
 With cURL:
 ```
-curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-amd64 -o /usr/local/bin/rocketpool
-chmod u+x /usr/local/bin/rocketpool
+curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-amd64 -o /usr/local/bin/rocketpool && chmod +x /usr/local/bin/rocketpool
 ```
 
 With wget:
 ```
-wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-amd64 -O /usr/local/bin/rocketpool
-chmod u+x /usr/local/bin/rocketpool
+wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-amd64 -O /usr/local/bin/rocketpool && chmod +x /usr/local/bin/rocketpool
 ```
 
 ### Windows (64 bit)
@@ -66,7 +64,7 @@ If you would prefer to check the installation script before running it, you may 
 With cURL:
 ```
 curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh -o install.sh
-chmod u+x install.sh
+chmod +x install.sh
 
 ./install.sh
 rm install.sh
@@ -75,7 +73,7 @@ rm install.sh
 With wget:
 ```
 wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/install.sh -O install.sh
-chmod u+x install.sh
+chmod +x install.sh
 
 ./install.sh
 rm install.sh
