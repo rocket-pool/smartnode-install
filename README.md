@@ -9,7 +9,9 @@ The smart node service is supported on all Unix platforms, with automatic depend
 A smart node can be run on other Unix platforms, but manual installation of dependencies ([docker engine](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/)) is required.
 
 
+
 ## Smart Node Client Installation
+
 
 ### Linux (64 bit)
 
@@ -25,6 +27,7 @@ mkdir -p ~/bin && wget https://github.com/rocket-pool/smartnode-install/releases
 
 **Note: you may need to start a new shell session before you can run the `rocketpool` command.**
 
+
 ### MacOS (64 bit)
 
 With cURL:
@@ -37,6 +40,7 @@ With wget:
 wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-amd64 -O /usr/local/bin/rocketpool && chmod +x /usr/local/bin/rocketpool
 ```
 
+
 ### Windows (64 bit)
 
 1. Download the [smart node client](https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-windows-amd64.exe).
@@ -44,7 +48,9 @@ wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/r
 3. Open the command prompt and run it via its full path (e.g. `C:\bin\rocketpool.exe`).
 
 
+
 ## Smart Node Service Installation
+
 
 ### Automatic
 
@@ -57,6 +63,7 @@ rocketpool --host example.com --user username --key /path/to/identity.pem servic
 
 If automatic dependency installation is not supported on your platform, use the `-d` option to skip this step (e.g. `rocketpool service install -d`).
 Then, manually install [docker engine](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
+
 
 ### Manual
 
@@ -82,6 +89,7 @@ rm install.sh
 
 The installation script prints progress messages to stdout and full command output to stderr.
 Use `1>/dev/null` to silence progress messages, or `2>/dev/null` to silence command output.
+
 
 ### Available Options
 
