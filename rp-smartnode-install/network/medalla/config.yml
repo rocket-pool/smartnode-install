@@ -11,7 +11,7 @@ chains:
       options:
       - id: geth
         name: Geth
-        image: ethereum/client-go:stable
+        image: ethereum/client-go:v1.9.20
         desc: made by the Ethereum Foundation
         link: https://geth.ethereum.org/
         params:
