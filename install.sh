@@ -123,14 +123,14 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        { sudo apt-get -y update || fail "Could not update apt-get."; } >&2
+        { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
         { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common || fail "Could not install OS packages."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
         { curl -fsSL "https://download.docker.com/linux/$PLATFORM_NAME/gpg" | sudo apt-key add - || fail "Could not add docker repository key."; } >&2
         { sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable" || fail "Could not add docker repository."; } >&2
-        { sudo apt-get -y update || fail "Could not update apt-get."; } >&2
+        { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
         { sudo apt-get -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
 
         # Install docker-compose
