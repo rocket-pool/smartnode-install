@@ -40,7 +40,8 @@ wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/r
 ### Windows (64 bit)
 
 1. Download the [smart node client](https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-windows-amd64.exe).
-2. Move it to the desired location on your system.
+2. Move it to the desired location on your system (e.g. `C:\bin\rocketpool.exe`).
+3. Open the command prompt and run it via its full path (e.g. `C:\bin\rocketpool.exe`).
 
 
 ## Smart Node Service Installation
