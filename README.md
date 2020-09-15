@@ -100,3 +100,9 @@ The following options apply to both automatic and manual installation unless spe
 * `-n`: Specify a network to run the smart node on (default: medalla)
 * `-v`: Specify a version of the smart node service package files to use (default: latest)
 
+
+### Post-Install
+
+Once the smart node service has been installed, you may need to start a new shell session if working locally.
+This is required for updated user permissions to take effect (for interacting with docker engine).
+
