@@ -218,7 +218,7 @@ progress 6 "Downloading Rocket Pool package files..."
 progress 7 "Copying package files to Rocket Pool user data directory..."
 { test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."; } >&2
 { cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
-{ find "$RP_PATH" -name "*.sh" -exec chmod +x {} \; || fail "Could not set executable permissions on package files."; } >&2
+{ find "$RP_PATH" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 
 
 }
