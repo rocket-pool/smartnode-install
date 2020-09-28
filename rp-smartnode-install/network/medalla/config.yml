@@ -35,12 +35,12 @@ chains:
       options:
       - id: lighthouse
         name: Lighthouse
-        image: sigp/lighthouse:latest
+        image: sigp/lighthouse:v0.2.12
         desc: made by Sigma Prime
         link: https://sigmaprime.io/
       - id: prysm
         name: Prysm
-        beaconImage: gcr.io/prysmaticlabs/prysm/beacon-chain:latest-debug
-        validatorImage: gcr.io/prysmaticlabs/prysm/validator:latest-debug
+        beaconImage: gcr.io/prysmaticlabs/prysm/beacon-chain:HEAD-303edb-debug
+        validatorImage: gcr.io/prysmaticlabs/prysm/validator:HEAD-303edb-debug
         desc: made by Prysmatic Labs
         link: https://prysmaticlabs.com/
