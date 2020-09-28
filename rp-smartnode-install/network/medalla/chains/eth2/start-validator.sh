@@ -5,7 +5,7 @@
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
-    /usr/local/bin/lighthouse validator --testnet medalla --datadir /data/validators/lighthouse --secrets-dir /data/validators/lighthouse/secrets --server http://eth2:5052
+    /usr/local/bin/lighthouse validator --testnet medalla --datadir /data/validators/lighthouse --secrets-dir /data/validators/lighthouse/secrets --server "http://$ETH2_PROVIDER"
 
 fi
 
@@ -13,7 +13,7 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
-    /app/validator/image.binary -wallet-dir /data/validators/prysm --wallet-password-file /data/password --beacon-rpc-provider eth2:5052
+    /app/validator/image.binary -wallet-dir /data/validators/prysm --wallet-password-file /data/password --beacon-rpc-provider "$ETH2_PROVIDER"
 
 fi
 

@@ -33,6 +33,7 @@ services:
       - net
     environment:
       - CLIENT=${ETH2_CLIENT}
+      - ETH1_PROVIDER=${ETH1_PROVIDER}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
@@ -48,6 +49,7 @@ services:
       - net
     environment:
       - CLIENT=${VALIDATOR_CLIENT}
+      - ETH2_PROVIDER=${ETH2_PROVIDER}
     entrypoint: sh
     command: "/setup/start-validator.sh"
     depends_on:
