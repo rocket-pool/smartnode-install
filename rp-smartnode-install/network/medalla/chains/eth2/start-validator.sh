@@ -13,7 +13,7 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
-    /app/validator/image.binary -wallet-dir /data/validators/prysm --wallet-password-file /data/password --beacon-rpc-provider "$ETH2_PROVIDER"
+    /app/validator/image.binary --wallet-dir /data/validators/prysm --wallet-password-file /data/password --beacon-rpc-provider "$ETH2_PROVIDER"
 
 fi
 
