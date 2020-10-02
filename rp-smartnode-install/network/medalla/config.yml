@@ -11,7 +11,7 @@ chains:
       options:
       - id: geth
         name: Geth
-        image: ethereum/client-go:v1.9.20
+        image: ethereum/client-go:v1.9.22
         desc: made by the Ethereum Foundation
         link: https://geth.ethereum.org/
         params:
@@ -35,12 +35,12 @@ chains:
       options:
       - id: lighthouse
         name: Lighthouse
-        image: sigp/lighthouse:v0.2.12
+        image: sigp/lighthouse:v0.2.13
         desc: made by Sigma Prime
         link: https://sigmaprime.io/
       - id: prysm
         name: Prysm
-        beaconImage: gcr.io/prysmaticlabs/prysm/beacon-chain:HEAD-303edb-debug
-        validatorImage: gcr.io/prysmaticlabs/prysm/validator:HEAD-303edb-debug
+        beaconImage: gcr.io/prysmaticlabs/prysm/beacon-chain:HEAD-eb3e49-debug #v1.0.0-alpha.27
+        validatorImage: gcr.io/prysmaticlabs/prysm/validator:HEAD-eb3e49-debug #v1.0.0-alpha.27
         desc: made by Prysmatic Labs
         link: https://prysmaticlabs.com/
