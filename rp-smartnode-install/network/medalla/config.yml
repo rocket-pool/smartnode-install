@@ -48,8 +48,8 @@ chains:
       - id: prysm
         name: Prysm
         desc: made by Prysmatic Labs
-        beaconImage: gcr.io/prysmaticlabs/prysm/beacon-chain:HEAD-eb3e49-debug #v1.0.0-alpha.27
-        validatorImage: gcr.io/prysmaticlabs/prysm/validator:HEAD-eb3e49-debug #v1.0.0-alpha.27
+        beaconImage: gcr.io/prysmaticlabs/prysm/beacon-chain:HEAD-551b03-debug #v1.0.0-alpha.29
+        validatorImage: gcr.io/prysmaticlabs/prysm/validator:HEAD-551b03-debug #v1.0.0-alpha.29
         link: https://prysmaticlabs.com/
         params:
         - name: Custom Graffiti
