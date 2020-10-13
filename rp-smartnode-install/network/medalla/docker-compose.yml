@@ -50,6 +50,7 @@ services:
     environment:
       - CLIENT=${VALIDATOR_CLIENT}
       - ETH2_PROVIDER=${ETH2_PROVIDER}
+      - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
     entrypoint: sh
     command: "/setup/start-validator.sh"
     depends_on:
