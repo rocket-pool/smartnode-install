@@ -43,8 +43,9 @@ chains:
         link: https://sigmaprime.io/
         params:
         - name: Custom Graffiti
-          desc: optional - for adding custom text to signed Eth 2.0 blocks
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 32 chars max
           env: CUSTOM_GRAFFITI
+          regex: ^.{0,32}$
       - id: prysm
         name: Prysm
         desc: made by Prysmatic Labs
@@ -53,5 +54,6 @@ chains:
         link: https://prysmaticlabs.com/
         params:
         - name: Custom Graffiti
-          desc: optional - for adding custom text to signed Eth 2.0 blocks
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 32 chars max
           env: CUSTOM_GRAFFITI
+          regex: ^.{0,32}$
