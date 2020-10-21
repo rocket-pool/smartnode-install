@@ -3,7 +3,7 @@
 
 
 # RP version number for graffiti
-ROCKET_POOL_VERSION="v0.0.5"
+ROCKET_POOL_VERSION="v0.0.6"
 
 
 # Get graffiti text
@@ -16,7 +16,7 @@ fi
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
-    /usr/local/bin/lighthouse validator --testnet medalla --datadir /data/validators/lighthouse --secrets-dir /data/validators/lighthouse/secrets --server "http://$ETH2_PROVIDER" --graffiti "$GRAFFITI"
+    /usr/local/bin/lighthouse validator --testnet medalla --datadir /data/validators/lighthouse --init-slashing-protection --beacon-node "http://$ETH2_PROVIDER" --graffiti "$GRAFFITI"
 
 fi
 

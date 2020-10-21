@@ -39,7 +39,7 @@ chains:
       - id: lighthouse
         name: Lighthouse
         desc: made by Sigma Prime
-        image: sigp/lighthouse:v0.2.13
+        image: sigp/lighthouse:v0.3.0
         link: https://sigmaprime.io/
         params:
         - name: Custom Graffiti
