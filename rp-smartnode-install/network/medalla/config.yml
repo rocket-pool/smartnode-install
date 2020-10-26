@@ -12,7 +12,7 @@ chains:
       - id: geth
         name: Geth
         desc: made by the Ethereum Foundation
-        image: ethereum/client-go:v1.9.22
+        image: ethereum/client-go:v1.9.23
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -39,7 +39,7 @@ chains:
       - id: lighthouse
         name: Lighthouse
         desc: made by Sigma Prime
-        image: sigp/lighthouse:v0.3.0
+        image: sigp/lighthouse:v0.3.1
         link: https://sigmaprime.io/
         params:
         - name: Custom Graffiti
