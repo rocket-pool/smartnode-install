@@ -3,7 +3,7 @@
 
 
 # RP version number for graffiti
-ROCKET_POOL_VERSION="v0.0.6"
+ROCKET_POOL_VERSION="v0.0.7"
 
 
 # Get graffiti text
