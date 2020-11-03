@@ -23,3 +23,11 @@ if [ "$CLIENT" = "infura" ]; then
 
 fi
 
+
+# Custom provider startup
+if [ "$CLIENT" = "custom" ]; then
+
+    /go/bin/rocketpool-pow-proxy --port 8545 --providerUrl $PROVIDER_URL
+
+fi
+

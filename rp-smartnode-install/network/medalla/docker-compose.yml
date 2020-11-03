@@ -17,6 +17,7 @@ services:
       - ETHSTATS_LABEL=${ETHSTATS_LABEL}
       - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
       - INFURA_PROJECT_ID=${INFURA_PROJECT_ID}
+      - PROVIDER_URL=${PROVIDER_URL}
     entrypoint: sh
     command: "/setup/start-node.sh"
   eth2:
