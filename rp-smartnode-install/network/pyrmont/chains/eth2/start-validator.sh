@@ -16,7 +16,7 @@ fi
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
-    /usr/local/bin/lighthouse validator --testnet medalla --datadir /data/validators/lighthouse --init-slashing-protection --delete-lockfiles --beacon-node "http://$ETH2_PROVIDER" --graffiti "$GRAFFITI"
+    /usr/local/bin/lighthouse validator --testnet pyrmont --datadir /data/validators/lighthouse --init-slashing-protection --delete-lockfiles --beacon-node "http://$ETH2_PROVIDER" --graffiti "$GRAFFITI"
 
 fi
 
@@ -24,7 +24,7 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
-    /app/validator/image.binary --accept-terms-of-use --medalla --wallet-dir /data/validators/prysm-non-hd --wallet-password-file /data/password --beacon-rpc-provider "$ETH2_PROVIDER" --graffiti "$GRAFFITI"
+    /app/validator/image.binary --accept-terms-of-use --pyrmont --wallet-dir /data/validators/prysm-non-hd --wallet-password-file /data/password --beacon-rpc-provider "$ETH2_PROVIDER" --graffiti "$GRAFFITI"
 
 fi
 

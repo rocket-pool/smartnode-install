@@ -19,7 +19,7 @@ RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
 PACKAGE_VERSION="latest"
 # The default network to run Rocket Pool on
-NETWORK="medalla"
+NETWORK="pyrmont"
 # The version of docker-compose to install
 DOCKER_COMPOSE_VERSION="1.26.2"
 

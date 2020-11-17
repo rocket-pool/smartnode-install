@@ -97,7 +97,7 @@ The following options apply to both automatic and manual installation unless spe
 
 * `-r`: Verbose mode (print all output from the installation process) - automatic installation only
 * `-d`: Skip automatic installation of OS dependencies
-* `-n`: Specify a network to run the smart node on (default: medalla)
+* `-n`: Specify a network to run the smart node on (default: pyrmont)
 * `-v`: Specify a version of the smart node service package files to use (default: latest)
 
 
