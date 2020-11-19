@@ -1,5 +1,5 @@
 rocketpool:
-  storageAddress: 0xbbCbc87447fE120E1Bc73dBd11bc4Dc1086FFa25
+  storageAddress: 0xA85A8022E8F28E49B8BBfb792f93ee914B342C3b
 smartnode:
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
