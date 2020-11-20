@@ -13,7 +13,7 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
-    /app/beacon-chain/image.binary --accept-terms-of-use --pyrmont --datadir /ethclient/prysm --p2p-tcp-port 9001 --p2p-udp-port 9001 --http-web3provider "$ETH1_PROVIDER" --rpc-host 0.0.0.0 --rpc-port 5052
+    /app/beacon-chain/beacon-chain --accept-terms-of-use --pyrmont --datadir /ethclient/prysm --p2p-tcp-port 9001 --p2p-udp-port 9001 --http-web3provider "$ETH1_PROVIDER" --rpc-host 0.0.0.0 --rpc-port 5052
 
 fi
 
