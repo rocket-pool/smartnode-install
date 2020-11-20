@@ -12,7 +12,7 @@ chains:
       - id: geth
         name: Geth
         desc: made by the Ethereum Foundation
-        image: ethereum/client-go:v1.9.23
+        image: ethereum/client-go:v1.9.24
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -48,7 +48,7 @@ chains:
       - id: lighthouse
         name: Lighthouse
         desc: made by Sigma Prime
-        image: sigp/lighthouse:v0.3.3
+        image: sigp/lighthouse:v0.3.5
         link: https://sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -58,8 +58,8 @@ chains:
       - id: prysm
         name: Prysm
         desc: made by Prysmatic Labs
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-4bc7cb-debug #v1.0.0-beta.1
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-4bc7cb-debug #v1.0.0-beta.1
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-f36145-debug #v1.0.0-beta.3
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-f36145-debug #v1.0.0-beta.3
         link: https://prysmaticlabs.com/
         params:
         - name: Custom Graffiti
