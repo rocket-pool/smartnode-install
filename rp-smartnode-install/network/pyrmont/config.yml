@@ -1,12 +1,16 @@
 rocketpool:
   storageAddress: 0xA85A8022E8F28E49B8BBfb792f93ee914B342C3b
 smartnode:
+  projectName: rocketpool
+  networkName: rocketpool_net
+  image: rocketpool/smartnode:v0.0.8
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
 chains:
   eth1:
     provider: http://eth1:8545
+    volumeName: rocketpool_eth1clientdata
     client:
       options:
       - id: geth
@@ -43,6 +47,7 @@ chains:
           required: true
   eth2:
     provider: eth2:5052
+    volumeName: rocketpool_eth2clientdata
     client:
       options:
       - id: lighthouse
