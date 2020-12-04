@@ -50,7 +50,7 @@ chains:
       - id: lighthouse
         name: Lighthouse
         desc: made by Sigma Prime
-        image: sigp/lighthouse:v0.3.5
+        image: sigp/lighthouse:v1.0.3
         link: https://sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -60,8 +60,8 @@ chains:
       - id: prysm
         name: Prysm
         desc: made by Prysmatic Labs
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-f36145-debug #v1.0.0-beta.3
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-f36145-debug #v1.0.0-beta.3
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-fc7c67-debug #v1.0.3
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-fc7c67-debug #v1.0.3
         link: https://prysmaticlabs.com/
         params:
         - name: Custom Graffiti
