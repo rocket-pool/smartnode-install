@@ -95,9 +95,6 @@ services:
       - eth2
 networks:
   net:
-    name: ${NETWORK_NAME}
 volumes:
   eth1clientdata:
-    name: ${ETH1_VOLUME_NAME}
   eth2clientdata:
-    name: ${ETH2_VOLUME_NAME}
