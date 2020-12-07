@@ -5,7 +5,7 @@
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
-    /usr/local/bin/lighthouse beacon --testnet pyrmont --datadir /ethclient/lighthouse --port 9001 --discovery-port 9001 --eth1 --eth1-endpoint "$ETH1_PROVIDER" --http --http-address 0.0.0.0 --http-port 5052
+    /usr/local/bin/lighthouse beacon --network pyrmont --datadir /ethclient/lighthouse --port 9001 --discovery-port 9001 --eth1 --eth1-endpoint "$ETH1_PROVIDER" --http --http-address 0.0.0.0 --http-port 5052
 
 fi
 
