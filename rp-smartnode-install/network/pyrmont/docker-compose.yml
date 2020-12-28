@@ -4,6 +4,7 @@ services:
     image: ${ETH1_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_eth1
     restart: unless-stopped
+    stop_grace_period: 1m
     ports:
       - "30303:30303/udp"
       - "30303:30303/tcp"
@@ -18,8 +19,7 @@ services:
       - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
       - INFURA_PROJECT_ID=${INFURA_PROJECT_ID}
       - PROVIDER_URL=${PROVIDER_URL}
-    entrypoint: sh
-    command: "/setup/start-node.sh"
+    entrypoint: "/setup/start-node.sh"
   eth2:
     image: ${ETH2_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_eth2
@@ -35,8 +35,7 @@ services:
     environment:
       - CLIENT=${ETH2_CLIENT}
       - ETH1_PROVIDER=${ETH1_PROVIDER}
-    entrypoint: sh
-    command: "/setup/start-beacon.sh"
+    entrypoint: "/setup/start-beacon.sh"
     depends_on:
       - eth1
   validator:
@@ -52,14 +51,15 @@ services:
       - CLIENT=${VALIDATOR_CLIENT}
       - ETH2_PROVIDER=${ETH2_PROVIDER}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
-    entrypoint: sh
-    command: "/setup/start-validator.sh"
+    entrypoint: "/setup/start-validator.sh"
     depends_on:
       - eth2
   api:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_api
     restart: unless-stopped
+    stop_signal: SIGKILL
+    stop_grace_period: 1s
     volumes:
       - .:/.rocketpool
     networks:
