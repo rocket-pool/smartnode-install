@@ -68,3 +68,13 @@ chains:
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
           env: CUSTOM_GRAFFITI
           regex: ^.{0,16}$
+      - id: teku
+        name: Teku
+        desc: made by ConsenSys
+        image: consensys/teku:latest
+        link: https://docs.teku.consensys.net/en/latest/
+        params:
+        - name: Custom Graffiti
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
+          env: CUSTOM_GRAFFITI
+          regex: ^.{0,16}$
