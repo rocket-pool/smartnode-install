@@ -22,6 +22,7 @@ services:
     command: "/setup/start-node.sh"
   eth2:
     image: ${ETH2_IMAGE}
+    user: root
     container_name: ${COMPOSE_PROJECT_NAME}_eth2
     restart: unless-stopped
     ports:
@@ -41,6 +42,7 @@ services:
       - eth1
   validator:
     image: ${VALIDATOR_IMAGE}
+    user: root
     container_name: ${COMPOSE_PROJECT_NAME}_validator
     restart: unless-stopped
     volumes:
