@@ -30,8 +30,8 @@ fi
 
 
 # Teku startip
-if ["$CLIENT" = "teku" ]; then
+if [ "$CLIENT" = "teku" ]; then
 
-    /opt/teku/bin/teku validator-client --network=pyrmont --beacon-node-api-endpoint="http://$ETH2_PROVIDER" --validator-keys=/data/validators/teku/keys:/data/validators/teku/passwords --validators-graffiti="$GRAFFITI"
+    exec /opt/teku/bin/teku validator-client --network=pyrmont --beacon-node-api-endpoint="http://$ETH2_PROVIDER" --validator-keys=/data/validators/teku/keys:/data/validators/teku/passwords --validators-graffiti="$GRAFFITI"
 
 fi

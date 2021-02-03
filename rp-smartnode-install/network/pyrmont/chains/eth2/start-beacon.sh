@@ -21,6 +21,6 @@ fi
 # Teku startup
 if [ "$CLIENT" = "teku" ]; then
 
-    /opt/teku/bin/teku --network=pyrmont --data-path=/ethclient/teku --p2p-port=9001 --eth1-endpoint="$ETH1_PROVIDER" --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=5052
+    exec /opt/teku/bin/teku --network=pyrmont --data-path=/ethclient/teku --p2p-port=9001 --eth1-endpoint="$ETH1_PROVIDER" --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=5052 --rest-api-host-allowlist='*'
 
 fi
