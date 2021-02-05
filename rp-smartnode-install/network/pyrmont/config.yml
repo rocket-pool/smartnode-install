@@ -78,3 +78,13 @@ chains:
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
           env: CUSTOM_GRAFFITI
           regex: ^.{0,16}$
+      - id: nimbus
+        name: Nimbus
+        desc: made by Status.im
+        image: statusim/nimbus-eth2:amd64-latest
+        link: https://nimbus.guide/intro.html
+        params:
+        - name: Custom Graffiti
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
+          env: CUSTOM_GRAFFITI
+          regex: ^.{0,16}$
