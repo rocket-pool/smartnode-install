@@ -29,6 +29,10 @@ fi
 # Nimbus startup
 if [ "$CLIENT" = "nimbus" ]; then
 
+    # Nimbus won't start unless the validator directories already exist
+    mkdir -p /data/validators/nimbus/validators
+    mkdir -p /data/validators/nimbus/secrets
+
     exec /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --network=pyrmont --data-dir=/ethclient/nimbus --log-file="/ethclient/nimbus/nbc_bn_$(date +"%Y%m%d%H%M%S").log" --web3-url="$ETH1_PROVIDER" --tcp-port=9001 --udp-port=9001 --rpc --rpc-port=5052 --rpc-address=0.0.0.0 --insecure-netkey-password=true --validators-dir=/data/validators/nimbus/validators --secrets-dir=/data/validators/nimbus/secrets --graffiti="$GRAFFITI"
 
 fi

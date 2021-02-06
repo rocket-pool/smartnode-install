@@ -41,5 +41,6 @@ fi
 if [ "$CLIENT" = "nimbus" ]; then
 
     # Do nothing since the validator is built into the beacon client
+    sleep infinity
 
 fi
