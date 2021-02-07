@@ -29,6 +29,7 @@ services:
       - "9001:9001/tcp"
       - "9001:9001/udp"
     volumes:
+      - ./data:/data
       - eth2clientdata:/ethclient
       - ./chains/eth2:/setup:ro
     networks:
