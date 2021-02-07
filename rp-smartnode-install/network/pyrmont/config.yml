@@ -9,6 +9,7 @@ smartnode:
 chains:
   eth1:
     provider: http://eth1:8545
+    ws_provider: ws://eth1:8546
     client:
       options:
       - id: geth

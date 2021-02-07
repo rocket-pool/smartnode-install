@@ -36,6 +36,7 @@ services:
     environment:
       - CLIENT=${ETH2_CLIENT}
       - ETH1_PROVIDER=${ETH1_PROVIDER}
+      - ETH1_WS_PROVIDER=${ETH1_WS_PROVIDER}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
