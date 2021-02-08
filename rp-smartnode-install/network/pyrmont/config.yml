@@ -72,7 +72,7 @@ chains:
       - id: teku
         name: Teku
         desc: made by ConsenSys
-        image: consensys/teku:latest
+        image: consensys/teku:21.1.1-jdk14
         link: https://docs.teku.consensys.net/en/latest/
         params:
         - name: Custom Graffiti
@@ -82,7 +82,7 @@ chains:
       - id: nimbus
         name: Nimbus
         desc: made by Status.im
-        image: statusim/nimbus-eth2:amd64-latest
+        image: statusim/nimbus-eth2:amd64-v1.0.7
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
