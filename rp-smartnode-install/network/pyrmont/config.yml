@@ -91,7 +91,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\t licensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:latest
+        image: consensys/teku:21.1.1-jdk14
         link: https://docs.teku.consensys.net/en/latest/
         params:
         - name: Custom Graffiti
@@ -107,7 +107,7 @@ chains:
           \t\tthe company best known for their messaging app/wallet/Web3\n
           \t\tbrowser by the same name. Nimbus (Apache 2) is written in Nim,\n
           \t\ta language with Python-like syntax that compiles to C."
-        image: statusim/nimbus-eth2:amd64-latest
+        image: statusim/nimbus-eth2:amd64-v1.0.7
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
