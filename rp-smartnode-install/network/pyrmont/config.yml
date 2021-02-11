@@ -14,7 +14,9 @@ chains:
       options:
       - id: geth
         name: Geth
-        desc: made by the Ethereum Foundation
+        desc: "\tGeth is one of the three original implementations of the\n
+          \t\tEthereum protocol. It is written in Go, fully open source and\n
+          \t\tlicensed under the GNU LGPL v3."
         image: ethereum/client-go:v1.9.24
         link: https://geth.ethereum.org/
         params:
@@ -26,7 +28,8 @@ chains:
           env: ETHSTATS_LOGIN
       - id: infura
         name: Infura
-        desc: use infura.io as a light client for Eth 1.0 - not recommended for use in production
+        desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
+          \t\tfor use in production."
         image: rocketpool/smartnode-pow-proxy:v0.0.3
         link: https://infura.io/
         params:
@@ -37,7 +40,8 @@ chains:
           required: true
       - id: custom
         name: Custom
-        desc: use a custom Eth 1.0 client at a specified address (does not work on localhost)
+        desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
+          \t\twork on localhost)."
         image: rocketpool/smartnode-pow-proxy:v0.0.3
         params:
         - name: Provider URL
@@ -50,9 +54,14 @@ chains:
       options:
       - id: lighthouse
         name: Lighthouse
-        desc: made by Sigma Prime
+        desc: "\tLighthouse is an Eth2.0 client with a heavy focus on speed and\n
+          \t\tsecurity. The team behind it, Sigma Prime, is an information\n
+          \t\tsecurity and software engineering firm who have funded Lighthouse\n
+          \t\talong with the Ethereum Foundation, Consensys, and private\n
+          \t\tindividuals. Lighthouse is built in Rust and offered under an\n
+          \t\tApache 2.0 License."
         image: sigp/lighthouse:v1.0.3
-        link: https://sigmaprime.io/
+        link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
@@ -60,10 +69,14 @@ chains:
           regex: ^.{0,16}$
       - id: prysm
         name: Prysm
-        desc: made by Prysmatic Labs
+        desc: "\tPrysm is a Go implementation of Ethereum 2.0 protocol with a\n
+          \t\tfocus on usability, security, and reliability. Prysm is developed\n
+          \t\tby Prysmatic Labs, a company with the sole focus on the\n
+          \t\tdevelopment of their client. Prysm is written in Go and released\n
+          \t\tunder a GPL-3.0 license."
         beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-fc7c67-debug #v1.0.3
         validatorImage: prysmaticlabs/prysm-validator:HEAD-fc7c67-debug #v1.0.3
-        link: https://prysmaticlabs.com/
+        link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
@@ -71,7 +84,13 @@ chains:
           regex: ^.{0,16}$
       - id: teku
         name: Teku
-        desc: made by ConsenSys
+        desc: "\tPegaSys Teku (formerly known as Artemis) is a Java-based\n 
+          \t\tEthereum 2.0 client designed & built to meet institutional needs\n
+          \t\tand security requirements. PegaSys is an arm of ConsenSys\n
+          \t\tdedicated to building enterprise-ready clients and tools for\n
+          \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
+          \t\t licensed and written in Java, a language notable for its\n
+          \t\tmaturity & ubiquity."
         image: consensys/teku:latest
         link: https://docs.teku.consensys.net/en/latest/
         params:
@@ -81,7 +100,13 @@ chains:
           regex: ^.{0,16}$
       - id: nimbus
         name: Nimbus
-        desc: made by Status.im
+        desc: "\tNimbus is a research project and a client implementation for\n
+          \t\tEthereum 2.0 designed to perform well on embedded systems and\n
+          \t\tpersonal mobile devices, including older smartphones with\n
+          \t\tresource-restricted hardware. The Nimbus team are from Status,\n
+          \t\tthe company best known for their messaging app/wallet/Web3\n
+          \t\tbrowser by the same name. Nimbus (Apache 2) is written in Nim,\n
+          \t\ta language with Python-like syntax that compiles to C."
         image: statusim/nimbus-eth2:amd64-latest
         link: https://nimbus.guide/intro.html
         params:
