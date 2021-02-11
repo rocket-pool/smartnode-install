@@ -89,7 +89,7 @@ chains:
           \t\tand security requirements. PegaSys is an arm of ConsenSys\n
           \t\tdedicated to building enterprise-ready clients and tools for\n
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
-          \t\t licensed and written in Java, a language notable for its\n
+          \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
         image: consensys/teku:21.1.1-jdk14
         link: https://docs.teku.consensys.net/en/latest/
