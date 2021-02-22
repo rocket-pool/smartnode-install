@@ -6,6 +6,7 @@ smartnode:
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
+  validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
 chains:
   eth1:
     provider: http://eth1:8545
