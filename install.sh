@@ -124,7 +124,7 @@ case "$PLATFORM" in
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
         { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
-        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common || fail "Could not install OS packages."; } >&2
+        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common ntp || fail "Could not install OS packages."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
@@ -148,7 +148,7 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        { sudo yum install -y yum-utils || fail "Could not install OS packages."; } >&2
+        { sudo yum install -y yum-utils chrony || fail "Could not install OS packages."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
@@ -171,7 +171,7 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        { sudo dnf -y install dnf-plugins-core || fail "Could not install OS packages."; } >&2
+        { sudo dnf -y install dnf-plugins-core chrony || fail "Could not install OS packages."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
