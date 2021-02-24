@@ -149,6 +149,7 @@ case "$PLATFORM" in
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
         { sudo yum install -y yum-utils chrony || fail "Could not install OS packages."; } >&2
+        { sudo systemctl start chronyd || fail "Could not start chrony daemon."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
@@ -172,6 +173,7 @@ case "$PLATFORM" in
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
         { sudo dnf -y install dnf-plugins-core chrony || fail "Could not install OS packages."; } >&2
+        { sudo systemctl start chronyd || fail "Could not start chrony daemon."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
