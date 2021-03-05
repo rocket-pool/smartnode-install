@@ -15,7 +15,7 @@ chains:
       - id: geth
         name: Geth
         desc: made by the Ethereum Foundation
-        image: ethereum/client-go:v1.9.24
+        image: ethereum/client-go:v1.10.0
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
