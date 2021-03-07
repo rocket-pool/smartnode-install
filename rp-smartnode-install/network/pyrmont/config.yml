@@ -10,6 +10,7 @@ smartnode:
 chains:
   eth1:
     provider: http://eth1:8545
+    chainID: 5 # goerli chain
     client:
       options:
       - id: geth
