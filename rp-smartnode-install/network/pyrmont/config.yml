@@ -6,6 +6,7 @@ smartnode:
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
+  validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
 chains:
   eth1:
     provider: http://eth1:8545
@@ -17,7 +18,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.9.24
+        image: ethereum/client-go:v1.10.0
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
