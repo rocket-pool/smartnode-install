@@ -63,6 +63,8 @@ services:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_api
     restart: unless-stopped
+    stop_signal: SIGKILL
+    stop_grace_period: 1s
     volumes:
       - .:/.rocketpool
     networks:
