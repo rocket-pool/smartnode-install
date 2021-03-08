@@ -11,7 +11,7 @@ if [ "$CLIENT" = "geth" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
     fi
 
-    eval "$CMD"
+    exec ${CMD}
 
 fi
 
@@ -19,7 +19,7 @@ fi
 # Infura startup
 if [ "$CLIENT" = "infura" ]; then
 
-    /go/bin/rocketpool-pow-proxy --port 8545 --network goerli --projectId $INFURA_PROJECT_ID
+    exec /go/bin/rocketpool-pow-proxy --port 8545 --network goerli --projectId $INFURA_PROJECT_ID
 
 fi
 
@@ -27,7 +27,7 @@ fi
 # Custom provider startup
 if [ "$CLIENT" = "custom" ]; then
 
-    /go/bin/rocketpool-pow-proxy --port 8545 --providerUrl $PROVIDER_URL
+    exec /go/bin/rocketpool-pow-proxy --port 8545 --providerUrl $PROVIDER_URL
 
 fi
 
