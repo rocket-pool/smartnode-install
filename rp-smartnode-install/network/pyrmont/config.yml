@@ -108,7 +108,7 @@ chains:
           \t\tthe company best known for their messaging app/wallet/Web3\n
           \t\tbrowser by the same name. Nimbus (Apache 2) is written in Nim,\n
           \t\ta language with Python-like syntax that compiles to C."
-        image: statusim/nimbus-eth2:amd64-v1.0.8
+        image: statusim/nimbus-eth2:amd64-v1.0.9
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
