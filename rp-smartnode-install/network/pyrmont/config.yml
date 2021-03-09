@@ -7,8 +7,7 @@ smartnode:
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
   validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
-  gasPrice: 0 # desired gas price in wei, zero for recommended price
-  gasLimit: 0 # desired gas limit in wei, zero for recommended limit
+  gasPrice: 0 # desired gas price in gwei, zero for recommended price
 chains:
   eth1:
     provider: http://eth1:8545
