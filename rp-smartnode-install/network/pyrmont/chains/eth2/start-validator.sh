@@ -21,6 +21,15 @@ if [ "$CLIENT" = "lighthouse" ]; then
 fi
 
 
+# Nimbus startup
+if [ "$CLIENT" = "nimbus" ]; then
+
+    # Do nothing since the validator is built into the beacon client
+    sleep infinity
+
+fi
+
+
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
@@ -33,15 +42,6 @@ fi
 if [ "$CLIENT" = "teku" ]; then
 
     exec /opt/teku/bin/teku validator-client --network=pyrmont --validator-keys=/data/validators/teku/keys:/data/validators/teku/passwords --beacon-node-api-endpoint="http://$ETH2_PROVIDER" --validators-graffiti="$GRAFFITI"
-
-fi
-
-
-# Nimbus startup
-if [ "$CLIENT" = "nimbus" ]; then
-
-    # Do nothing since the validator is built into the beacon client
-    sleep infinity
 
 fi
 

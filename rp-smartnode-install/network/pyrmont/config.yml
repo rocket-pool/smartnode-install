@@ -70,6 +70,22 @@ chains:
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
           env: CUSTOM_GRAFFITI
           regex: ^.{0,16}$
+      - id: nimbus
+        name: Nimbus
+        desc: "\tNimbus is a research project and a client implementation for\n
+          \t\tEthereum 2.0 designed to perform well on embedded systems and\n
+          \t\tpersonal mobile devices, including older smartphones with\n
+          \t\tresource-restricted hardware. The Nimbus team are from Status,\n
+          \t\tthe company best known for their messaging app/wallet/Web3\n
+          \t\tbrowser by the same name. Nimbus (Apache 2) is written in Nim,\n
+          \t\ta language with Python-like syntax that compiles to C."
+        image: statusim/nimbus-eth2:amd64-v1.0.9
+        link: https://nimbus.guide/intro.html
+        params:
+        - name: Custom Graffiti
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
+          env: CUSTOM_GRAFFITI
+          regex: ^.{0,16}$
       - id: prysm
         name: Prysm
         desc: "\tPrysm is a Go implementation of Ethereum 2.0 protocol with a\n
@@ -96,22 +112,6 @@ chains:
           \t\tmaturity & ubiquity."
         image: consensys/teku:21.2.0-jdk14 # JDK15 incompatible with ARM
         link: https://docs.teku.consensys.net/en/stable/
-        params:
-        - name: Custom Graffiti
-          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
-          env: CUSTOM_GRAFFITI
-          regex: ^.{0,16}$
-      - id: nimbus
-        name: Nimbus
-        desc: "\tNimbus is a research project and a client implementation for\n
-          \t\tEthereum 2.0 designed to perform well on embedded systems and\n
-          \t\tpersonal mobile devices, including older smartphones with\n
-          \t\tresource-restricted hardware. The Nimbus team are from Status,\n
-          \t\tthe company best known for their messaging app/wallet/Web3\n
-          \t\tbrowser by the same name. Nimbus (Apache 2) is written in Nim,\n
-          \t\ta language with Python-like syntax that compiles to C."
-        image: statusim/nimbus-eth2:amd64-v1.0.9
-        link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
