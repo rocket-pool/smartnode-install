@@ -20,7 +20,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.10.0
+        image: ethereum/client-go:v1.10.1
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -63,7 +63,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v1.0.3
+        image: sigp/lighthouse:v1.2.0
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -77,8 +77,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-fc7c67-debug #v1.0.3
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-fc7c67-debug #v1.0.3
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-0f1d14-debug #v1.3.3
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-0f1d14-debug #v1.3.3
         link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti
@@ -94,7 +94,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.2
+        image: consensys/teku:21.2.0-jdk14 # JDK15 incompatible with ARM
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
