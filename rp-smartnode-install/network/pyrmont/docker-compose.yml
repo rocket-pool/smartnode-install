@@ -4,6 +4,7 @@ services:
     image: ${ETH1_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_eth1
     restart: unless-stopped
+    stop_grace_period: 3m
     ports:
       - "30303:30303/udp"
       - "30303:30303/tcp"
@@ -25,6 +26,7 @@ services:
     user: root
     container_name: ${COMPOSE_PROJECT_NAME}_eth2
     restart: unless-stopped
+    stop_grace_period: 3m
     ports:
       - "9001:9001/tcp"
       - "9001:9001/udp"
@@ -47,6 +49,7 @@ services:
     user: root
     container_name: ${COMPOSE_PROJECT_NAME}_validator
     restart: unless-stopped
+    stop_grace_period: 3m
     volumes:
       - ./data:/data
       - ./chains/eth2:/setup:ro
@@ -64,6 +67,8 @@ services:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_api
     restart: unless-stopped
+    stop_signal: SIGKILL
+    stop_grace_period: 1s
     volumes:
       - .:/.rocketpool
     networks:

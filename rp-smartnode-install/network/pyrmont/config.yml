@@ -7,10 +7,12 @@ smartnode:
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
   validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
+  gasPrice: 0 # desired gas price in gwei, zero for recommended price
 chains:
   eth1:
     provider: http://eth1:8545
     ws_provider: ws://eth1:8546
+    chainID: 5 # goerli chain
     client:
       options:
       - id: geth
@@ -110,6 +112,16 @@ chains:
           \t\ta language with Python-like syntax that compiles to C."
         image: statusim/nimbus-eth2:amd64-v1.0.9
         link: https://nimbus.guide/intro.html
+        params:
+        - name: Custom Graffiti
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
+          env: CUSTOM_GRAFFITI
+          regex: ^.{0,16}$
+      - id: teku
+        name: Teku
+        desc: made by ConsenSys
+        image: consensys/teku:21.2
+        link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
