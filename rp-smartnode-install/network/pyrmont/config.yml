@@ -94,7 +94,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.1.1-jdk14
+        image: consensys/teku:21.2
         link: https://docs.teku.consensys.net/en/latest/
         params:
         - name: Custom Graffiti
@@ -112,16 +112,6 @@ chains:
           \t\ta language with Python-like syntax that compiles to C."
         image: statusim/nimbus-eth2:amd64-v1.0.9
         link: https://nimbus.guide/intro.html
-        params:
-        - name: Custom Graffiti
-          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
-          env: CUSTOM_GRAFFITI
-          regex: ^.{0,16}$
-      - id: teku
-        name: Teku
-        desc: made by ConsenSys
-        image: consensys/teku:21.2
-        link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
