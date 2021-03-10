@@ -11,7 +11,7 @@ smartnode:
 chains:
   eth1:
     provider: http://eth1:8545
-    ws_provider: ws://eth1:8546
+    wsProvider: ws://eth1:8546
     chainID: 5 # goerli chain
     client:
       options:
