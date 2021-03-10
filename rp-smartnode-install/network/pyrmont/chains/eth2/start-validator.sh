@@ -28,3 +28,10 @@ if [ "$CLIENT" = "prysm" ]; then
 
 fi
 
+
+# Teku startip
+if [ "$CLIENT" = "teku" ]; then
+
+    exec /opt/teku/bin/teku validator-client --network=pyrmont --beacon-node-api-endpoint="http://$ETH2_PROVIDER" --validator-keys=/data/validators/teku/keys:/data/validators/teku/passwords --validators-graffiti="$GRAFFITI"
+
+fi
