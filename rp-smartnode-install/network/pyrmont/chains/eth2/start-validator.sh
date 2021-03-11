@@ -25,8 +25,10 @@ fi
 if [ "$CLIENT" = "nimbus" ]; then
 
     # Do nothing since the validator is built into the beacon client
-    trap 'kill $(jobs -p)' INT TERM
-    sleep infinity & wait
+    trap 'kill -9 $sleep_pid' INT TERM
+    sleep infinity &
+    sleep_pid=$!
+    wait
 
 fi
 
