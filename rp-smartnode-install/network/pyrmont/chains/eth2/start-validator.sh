@@ -33,7 +33,7 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
-    exec /app/validator/validator --accept-terms-of-use --pyrmont --wallet-dir /data/validators/prysm-non-hd --wallet-password-file /data/password --beacon-rpc-provider "$ETH2_PROVIDER" --graffiti "$GRAFFITI"
+    exec /app/cmd/validator/validator --accept-terms-of-use --pyrmont --wallet-dir /data/validators/prysm-non-hd --wallet-password-file /data/password --beacon-rpc-provider "$ETH2_PROVIDER" --graffiti "$GRAFFITI"
 
 fi
 
