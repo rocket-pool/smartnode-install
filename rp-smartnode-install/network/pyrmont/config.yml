@@ -2,7 +2,7 @@ rocketpool:
   storageAddress: 0xA85A8022E8F28E49B8BBfb792f93ee914B342C3b
 smartnode:
   projectName: rocketpool
-  image: rocketpool/smartnode:v0.0.9
+  image: rocketpool/smartnode:v0.0.10
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
