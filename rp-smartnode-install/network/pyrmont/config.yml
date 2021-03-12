@@ -72,13 +72,11 @@ chains:
           regex: ^.{0,16}$
       - id: nimbus
         name: Nimbus
-        desc: "\tNimbus is a research project and a client implementation for\n
-          \t\tEthereum 2.0 designed to perform well on embedded systems and\n
-          \t\tpersonal mobile devices, including older smartphones with\n
-          \t\tresource-restricted hardware. The Nimbus team are from Status,\n
-          \t\tthe company best known for their messaging app/wallet/Web3\n
-          \t\tbrowser by the same name. Nimbus (Apache 2) is written in Nim,\n
-          \t\ta language with Python-like syntax that compiles to C."
+        desc: "\tNimbus is a client implementation for both Ethereum 2.0 and\n
+          \t\tEthereum 1.0 that strives to be as lightweight as possible in\n
+          \t\tterms of resources used. This allows it to perform well on\n
+          \t\tembedded systems, resource-restricted devices -- including\n
+          \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
         image: statusim/nimbus-eth2:amd64-v1.0.10
         link: https://nimbus.guide/intro.html
         params:
