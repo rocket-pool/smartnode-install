@@ -1,0 +1,117 @@
+rocketpool:
+  storageAddress: 0xA85A8022E8F28E49B8BBfb792f93ee914B342C3b
+smartnode:
+  projectName: rocketpool
+  image: rocketpool/smartnode:v0.0.10
+  passwordPath: /.rocketpool/data/password
+  walletPath: /.rocketpool/data/wallet
+  validatorKeychainPath: /.rocketpool/data/validators
+  validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
+  gasPrice: 0 # desired gas price in gwei, zero for recommended price
+chains:
+  eth1:
+    provider: http://eth1:8545
+    wsProvider: ws://eth1:8546
+    chainID: 5 # goerli chain
+    client:
+      options:
+      - id: geth
+        name: Geth
+        desc: "\tGeth is one of the three original implementations of the\n
+          \t\tEthereum protocol. It is written in Go, fully open source and\n
+          \t\tlicensed under the GNU LGPL v3."
+        image: rocketpool/client-go:v1.10.1
+        link: https://geth.ethereum.org/
+        params:
+        - name: Ethstats Label
+          desc: optional - for reporting Eth 1.0 node status to ethstats.net
+          env: ETHSTATS_LABEL
+        - name: Ethstats Login
+          desc: optional - for reporting Eth 1.0 node status to ethstats.net
+          env: ETHSTATS_LOGIN
+      - id: infura
+        name: Infura
+        desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
+          \t\tfor use in production."
+        image: rocketpool/smartnode-pow-proxy:v0.0.3
+        link: https://infura.io/
+        params:
+        - name: Infura Project ID
+          desc: the ID of your project created in Infura
+          env: INFURA_PROJECT_ID
+          regex: ^[0-9a-fA-F]{32}$
+          required: true
+      - id: custom
+        name: Custom
+        desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
+          \t\twork on localhost)."
+        image: rocketpool/smartnode-pow-proxy:v0.0.3
+        params:
+        - name: Provider URL
+          desc: the Eth 1.0 client HTTP server address
+          env: PROVIDER_URL
+          required: true
+  eth2:
+    provider: eth2:5052
+    client:
+      options:
+      - id: lighthouse
+        name: Lighthouse
+        desc: "\tLighthouse is an Eth2.0 client with a heavy focus on speed and\n
+          \t\tsecurity. The team behind it, Sigma Prime, is an information\n
+          \t\tsecurity and software engineering firm who have funded Lighthouse\n
+          \t\talong with the Ethereum Foundation, Consensys, and private\n
+          \t\tindividuals. Lighthouse is built in Rust and offered under an\n
+          \t\tApache 2.0 License."
+        image: rocketpool/lighthouse:v1.2.0
+        link: https://lighthouse-book.sigmaprime.io/
+        params:
+        - name: Custom Graffiti
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
+          env: CUSTOM_GRAFFITI
+          regex: ^.{0,16}$
+      - id: nimbus
+        name: Nimbus
+        desc: "\tNimbus is a client implementation for both Ethereum 2.0 and\n
+          \t\tEthereum 1.0 that strives to be as lightweight as possible in\n
+          \t\tterms of resources used. This allows it to perform well on\n
+          \t\tembedded systems, resource-restricted devices -- including\n
+          \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
+        image: statusim/nimbus-eth2:arm64-v1.0.11
+        link: https://nimbus.guide/intro.html
+        params:
+        - name: Custom Graffiti
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
+          env: CUSTOM_GRAFFITI
+          regex: ^.{0,16}$
+      - id: prysm
+        name: Prysm
+        desc: "\tPrysm is a Go implementation of Ethereum 2.0 protocol with a\n
+          \t\tfocus on usability, security, and reliability. Prysm is developed\n
+          \t\tby Prysmatic Labs, a company with the sole focus on the\n
+          \t\tdevelopment of their client. Prysm is written in Go and released\n
+          \t\tunder a GPL-3.0 license."
+        beaconImage: rocketpool/prysm-beacon-chain:HEAD-0f1d14-debug #v1.3.3
+        validatorImage: rocketpool/prysm-validator:HEAD-0f1d14-debug #v1.3.3
+        link: https://docs.prylabs.network/docs/getting-started
+        params:
+        - name: Custom Graffiti
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
+          env: CUSTOM_GRAFFITI
+          regex: ^.{0,16}$
+      - id: teku
+        name: Teku
+        desc: "\tPegaSys Teku (formerly known as Artemis) is a Java-based\n 
+          \t\tEthereum 2.0 client designed & built to meet institutional needs\n
+          \t\tand security requirements. PegaSys is an arm of ConsenSys\n
+          \t\tdedicated to building enterprise-ready clients and tools for\n
+          \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
+          \t\tlicensed and written in Java, a language notable for its\n
+          \t\tmaturity & ubiquity."
+        image: rocketpool/teku:21.2.0-jdk14 # JDK15 incompatible with ARM
+        link: https://docs.teku.consensys.net/en/stable/
+        params:
+        - name: Custom Graffiti
+          desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
+          env: CUSTOM_GRAFFITI
+          regex: ^.{0,16}$

@@ -7,6 +7,28 @@
 ##
 
 
+# Print a failure message to stderr and exit
+fail() {
+    MESSAGE=$1
+    >&2 echo "$MESSAGE"
+    exit 1
+}
+
+
+##
+# Get CPU architecture
+##
+
+
+UNAME_VAL=$(uname -m)
+ARCH=""
+case $UNAME_VAL in
+    x86_64)  ARCH="amd64" ;;
+    aarch64) ARCH="arm64" ;;
+    *)       fail "CPU architecture not supported: $UNAME_VAL" ;;
+esac
+
+
 ##
 # Config
 ##
@@ -29,14 +51,6 @@ DOCKER_COMPOSE_VERSION="1.26.2"
 ##
 
 
-# Print a failure message to stderr and exit
-fail() {
-    MESSAGE=$1
-    >&2 echo "$MESSAGE"
-    exit 1
-}
-
-
 # Print progress
 progress() {
     STEP_NUMBER=$1
@@ -47,8 +61,15 @@ progress() {
 
 # Docker installation steps
 install_docker_compose() {
-    sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
-    sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
+    if [ $ARCH = "amd64" ]; then
+        sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
+        sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
+    elif [ $ARCH = "arm64" ]; then
+        sudo apt-get install -y libffi-dev libssl-dev
+        sudo apt-get install -y python3 python3-pip
+        sudo apt-get remove -y python-configparser
+        sudo pip3 install docker-compose
+    fi
 }
 add_user_docker() {
     sudo usermod -aG docker $USER || fail "Could not add user to docker group."
@@ -90,9 +111,9 @@ fi
 
 # Get package files URL
 if [ "$PACKAGE_VERSION" = "latest" ]; then
-    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install.tar.xz"
+    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install-$ARCH.tar.xz"
 else
-    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install.tar.xz"
+    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
 fi
 
 
@@ -221,7 +242,6 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 { test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."; } >&2
 { cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
-
 
 }
 install "$@"
