@@ -1,5 +1,6 @@
 rocketpool:
-  storageAddress: 0xA85A8022E8F28E49B8BBfb792f93ee914B342C3b
+  storageAddress: 0xDeE7ec57E6b9f7F9A27e68821F3763e9d2537096
+  rplFaucetAddress: 0x6aC372F4bd37b9588D7eAb93A67E304421E26E48
 smartnode:
   projectName: rocketpool
   image: rocketpool/smartnode:v0.0.10
