@@ -1,8 +1,9 @@
 rocketpool:
-  storageAddress: 0xA85A8022E8F28E49B8BBfb792f93ee914B342C3b
+  storageAddress: 0xDeE7ec57E6b9f7F9A27e68821F3763e9d2537096
+  rplFaucetAddress: 0x6aC372F4bd37b9588D7eAb93A67E304421E26E48
 smartnode:
   projectName: rocketpool
-  image: rocketpool/smartnode:v0.0.10
+  image: jclapis/smartnode:v1.0.0-beta.0
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -20,7 +21,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: rocketpool/client-go:v1.10.1
+        image: jclapis/go-ethereum:v1.10.1
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -33,7 +34,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v0.0.3
+        image: jclapis/rocketpool-pow-proxy:v0.0.3
         link: https://infura.io/
         params:
         - name: Infura Project ID
@@ -45,7 +46,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v0.0.3
+        image: jclapis/rocketpool-pow-proxy:v0.0.3
         params:
         - name: Provider URL
           desc: the Eth 1.0 client HTTP server address
@@ -63,7 +64,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: rocketpool/lighthouse:v1.2.0
+        image: jclapis/lighthouse:v1.1.1
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -77,7 +78,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:arm64-v1.0.11
+        image: jclapis/nimbus:v1.0.10
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -91,8 +92,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: rocketpool/prysm-beacon-chain:HEAD-0f1d14-debug #v1.3.3
-        validatorImage: rocketpool/prysm-validator:HEAD-0f1d14-debug #v1.3.3
+        beaconImage: jclapis/prysm:v1.2.2
+        validatorImage: jclapis/prysm:v1.2.2
         link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti
@@ -108,7 +109,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: rocketpool/teku:21.2.0-jdk14 # JDK15 incompatible with ARM
+        image: jclapis/teku:v21.1.1
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
