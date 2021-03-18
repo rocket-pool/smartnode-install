@@ -64,7 +64,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v1.2.0
+        image: sigp/lighthouse:v1.2.1
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
