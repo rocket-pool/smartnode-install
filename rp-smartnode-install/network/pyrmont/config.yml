@@ -3,7 +3,7 @@ rocketpool:
   rplFaucetAddress: 0x6aC372F4bd37b9588D7eAb93A67E304421E26E48
 smartnode:
   projectName: rocketpool
-  image: rocketpool/smartnode:v1.0.0-beta.0
+  image: rocketpool/smartnode:v1.0.0-beta.1
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -34,7 +34,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v0.0.3
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-beta.0
         link: https://infura.io/
         params:
         - name: Infura Project ID
@@ -46,7 +46,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v0.0.3
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-beta.0
         params:
         - name: Provider URL
           desc: the Eth 1.0 client HTTP server address
@@ -78,7 +78,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:amd64-v1.0.10
+        image: statusim/nimbus-eth2:amd64-v1.0.11
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -92,8 +92,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-0f1d14-debug #v1.3.3
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-0f1d14-debug #v1.3.3
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-d2b111-debug #v1.3.4
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-d2b111-debug #v1.3.4
         link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti
