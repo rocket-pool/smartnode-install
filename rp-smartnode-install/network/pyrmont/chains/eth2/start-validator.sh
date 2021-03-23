@@ -2,8 +2,8 @@
 # This script launches ETH2 validator clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
 
-# RP version number for graffiti
-ROCKET_POOL_VERSION="v1.0.0-b.2"
+# RP version number for graffiti; MAX 10 chars
+ROCKET_POOL_VERSION="v1.0.0-b.1"
 
 
 # Get graffiti text
