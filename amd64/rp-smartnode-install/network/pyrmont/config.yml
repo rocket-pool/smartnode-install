@@ -3,6 +3,7 @@ rocketpool:
   rplFaucetAddress: 0x6aC372F4bd37b9588D7eAb93A67E304421E26E48
 smartnode:
   projectName: rocketpool
+  graffitiVersion: v1.0.0-b.1
   image: rocketpool/smartnode:v1.0.0-beta.1
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
