@@ -40,6 +40,8 @@ services:
       - CLIENT=${ETH2_CLIENT}
       - ETH1_PROVIDER=${ETH1_PROVIDER}
       - ETH1_WS_PROVIDER=${ETH1_WS_PROVIDER}
+      - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
+      - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
@@ -59,6 +61,7 @@ services:
       - CLIENT=${VALIDATOR_CLIENT}
       - ETH2_PROVIDER=${ETH2_PROVIDER}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
+      - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
     entrypoint: sh
     command: "/setup/start-validator.sh"
     depends_on:
