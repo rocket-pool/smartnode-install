@@ -195,6 +195,7 @@ case "$PLATFORM" in
     *)
         echo "Automatic dependency installation for the $PLATFORM operating system is not supported."
         echo "Please install docker and docker-compose manually, then try again with the '-d' flag to skip OS dependency installation."
+        echo "Be sure to add yourself to the docker group with 'sudo usermod -aG docker $USER' after installing docker."
         fail "Could not install OS dependencies."
     ;;
 
