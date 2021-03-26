@@ -2,6 +2,13 @@
 # This script launches ETH2 beacon clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
 
+# Get graffiti text
+GRAFFITI="RP $ROCKET_POOL_VERSION"
+if [ ! -z "$CUSTOM_GRAFFITI" ]; then
+    GRAFFITI="$GRAFFITI ($CUSTOM_GRAFFITI)"
+fi
+
+
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
