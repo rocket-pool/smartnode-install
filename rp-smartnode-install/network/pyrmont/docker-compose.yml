@@ -19,6 +19,9 @@ services:
       - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
       - INFURA_PROJECT_ID=${INFURA_PROJECT_ID}
       - PROVIDER_URL=${PROVIDER_URL}
+      - GETH_CACHE_SIZE=${GETH_CACHE_SIZE}
+      - GETH_MAX_PEERS=${GETH_MAX_PEERS}
+      - ETH1_P2P_PORT=${ETH1_P2P_PORT}
     entrypoint: sh
     command: "/setup/start-node.sh"
   eth2:
@@ -42,6 +45,8 @@ services:
       - ETH1_WS_PROVIDER=${ETH1_WS_PROVIDER}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
+      - ETH2_P2P_PORT=${ETH2_P2P_PORT}
+      - ETH2_MAX_PEERS=${ETH2_MAX_PEERS}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
