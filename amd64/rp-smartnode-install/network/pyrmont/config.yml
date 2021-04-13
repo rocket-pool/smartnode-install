@@ -3,7 +3,8 @@ rocketpool:
   rplFaucetAddress: 0x6aC372F4bd37b9588D7eAb93A67E304421E26E48
 smartnode:
   projectName: rocketpool
-  image: rocketpool/smartnode:v1.0.0-beta.1
+  graffitiVersion: v1.0.0-b.2
+  image: rocketpool/smartnode:v1.0.0-beta.2
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -13,6 +14,7 @@ chains:
   eth1:
     provider: http://eth1:8545
     wsProvider: ws://eth1:8546
+    mainnetProvider: http://eth1:8545
     chainID: 5 # goerli chain
     client:
       options:
@@ -21,7 +23,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.10.1
+        image: ethereum/client-go:v1.10.2
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -30,6 +32,24 @@ chains:
         - name: Ethstats Login
           desc: optional - for reporting Eth 1.0 node status to ethstats.net
           env: ETHSTATS_LOGIN
+        - name: Cache Size
+          desc: "Geth's cache size, in MB - set this to 256 if you have 4 GB\n
+            of RAM, or 512 if you have 8 GB"
+          env: GETH_CACHE_SIZE
+          type: uint
+          blankText: the default of 1024
+        - name: Max Peers
+          desc: "The maximum number of peers that Geth should connect to -\n
+            this can be lowered down to 12 to improve performance on low-power\n
+            systems or constrained networks"
+          env: GETH_MAX_PEERS
+          type: uint
+          blankText: the default of 50
+        - name: P2P Port
+          desc: The port for Geth to use for P2P (blockchain) traffic
+          env: ETH1_P2P_PORT
+          blankText: the default of 30303
+          type: uint16
       - id: infura
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
@@ -64,13 +84,26 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v1.2.1
+        image: sigp/lighthouse:v1.2.2
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
           env: CUSTOM_GRAFFITI
           regex: ^.{0,16}$
+        - name: Target Peers
+          desc: "The number of peer connections to maintain - you can try\n
+            lowering this if you have a low-resource system or a constrained\n
+            network"
+          env: ETH2_MAX_PEERS
+          type: uint
+          blankText: the default of 50
+        - name: P2P Port
+          desc: The port to use for P2P (blockchain) traffic
+          env: ETH2_P2P_PORT
+          type: uint16
+          default: 9001
+          blankText: the default of 9001
       - id: nimbus
         name: Nimbus
         desc: "\tNimbus is a client implementation for both Ethereum 2.0 and\n
@@ -78,13 +111,26 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:amd64-v1.0.11
+        image: statusim/nimbus-eth2:amd64-v1.1.0
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
           env: CUSTOM_GRAFFITI
           regex: ^.{0,16}$
+        - name: Max Peers
+          desc: "The maximum number of peers to try to connect to - you\n
+            can try lowering this if you have a low-resource system or\n
+            a constrained network"
+          env: ETH2_MAX_PEERS
+          type: uint
+          blankText: the default of 160
+        - name: P2P Port
+          desc: The port to use for P2P (blockchain) traffic
+          env: ETH2_P2P_PORT
+          type: uint16
+          default: 9001
+          blankText: the default of 9001
       - id: prysm
         name: Prysm
         desc: "\tPrysm is a Go implementation of Ethereum 2.0 protocol with a\n
@@ -92,14 +138,27 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-d2b111-debug #v1.3.4
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-d2b111-debug #v1.3.4
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-80ab92-debug #v1.3.6
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-80ab92-debug #v1.3.6
         link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
           env: CUSTOM_GRAFFITI
           regex: ^.{0,16}$
+        - name: Max Peers
+          desc: "The maximum number of peers to try to connect to - you\n
+            can try lowering this if you have a low-resource system or\n
+            a constrained network"
+          env: ETH2_MAX_PEERS
+          type: uint
+          blankText: the default of 45
+        - name: P2P Port
+          desc: The port to use for P2P (blockchain) traffic
+          env: ETH2_P2P_PORT
+          type: uint16
+          default: 9001
+          blankText: the default of 9001
       - id: teku
         name: Teku
         desc: "\tPegaSys Teku (formerly known as Artemis) is a Java-based\n 
@@ -109,10 +168,23 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.3.0
+        image: consensys/teku:21.3.2
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
           env: CUSTOM_GRAFFITI
           regex: ^.{0,16}$
+        - name: Max Peers
+          desc: "The maximum number of peers to try to connect to - you\n
+            can try lowering this if you have a low-resource system or\n
+            a constrained network"
+          env: ETH2_MAX_PEERS
+          type: uint
+          blankText: the default of 74
+        - name: P2P Port
+          desc: The port to use for P2P (blockchain) traffic
+          env: ETH2_P2P_PORT
+          type: uint16
+          default: 9001
+          blankText: the default of 9001

@@ -11,6 +11,18 @@ if [ "$CLIENT" = "geth" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
     fi
 
+    if [ ! -z "$GETH_CACHE_SIZE" ]; then
+        CMD="$CMD --cache $GETH_CACHE_SIZE"
+    fi
+
+    if [ ! -z "$GETH_MAX_PEERS" ]; then
+        CMD="$CMD --maxpeers $GETH_MAX_PEERS"
+    fi
+
+    if [ ! -z "$ETH1_P2P_PORT" ]; then
+        CMD="$CMD --port $ETH1_P2P_PORT"
+    fi
+
     exec ${CMD} --http.vhosts '*'
 
 fi
