@@ -1,5 +1,7 @@
 rocketpool:
   storageAddress: 0xDeE7ec57E6b9f7F9A27e68821F3763e9d2537096
+  oneInchOracleAddress: 0x080ab73787a8b13ec7f40bd7d00d6cc07f9b24d0
+  rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
   rplFaucetAddress: 0x6aC372F4bd37b9588D7eAb93A67E304421E26E48
 smartnode:
   projectName: rocketpool
