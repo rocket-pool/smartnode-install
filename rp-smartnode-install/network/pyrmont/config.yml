@@ -64,6 +64,18 @@ chains:
           env: INFURA_PROJECT_ID
           regex: ^[0-9a-fA-F]{32}$
           required: true
+      - id: pocket
+        name: Pocket
+        desc: "\tUse Pocket Network as a light client for Eth 1.0. Suitable\n
+          \t\tfor use in production."
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-beta.0
+        link: https://dashboard.pokt.network/
+        params:
+        - name: Pocket App or Load Balancer ID
+          desc: the ID of your Pocket App; if you use a Load Balancer, prefix it with lb/
+          env: POCKET_PROJECT_ID
+          regex: ^[\/0-9a-zA-Z]{24+}$
+          required: true
       - id: custom
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n

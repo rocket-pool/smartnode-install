@@ -31,7 +31,14 @@ fi
 # Infura startup
 if [ "$CLIENT" = "infura" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --port 8545 --network goerli --projectId $INFURA_PROJECT_ID
+    exec /go/bin/rocketpool-pow-proxy --port 8545 --providerType infura --network goerli --projectId $INFURA_PROJECT_ID
+
+fi
+
+# Pocket startup
+if [ "$CLIENT" = "pocket" ]; then
+
+    exec /go/bin/rocketpool-pow-proxy --port 8545 --providerType pocket --network eth-goerli --projectId $POCKET_PROJECT_ID
 
 fi
 
