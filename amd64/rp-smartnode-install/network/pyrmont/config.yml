@@ -1,10 +1,12 @@
 rocketpool:
   storageAddress: 0xDeE7ec57E6b9f7F9A27e68821F3763e9d2537096
+  oneInchOracleAddress: 0x080ab73787a8b13ec7f40bd7d00d6cc07f9b24d0
+  rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
   rplFaucetAddress: 0x6aC372F4bd37b9588D7eAb93A67E304421E26E48
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0-b.2
-  image: rocketpool/smartnode:v1.0.0-beta.2
+  graffitiVersion: v1.0.0-b.3
+  image: rocketpool/smartnode:v1.0.0-beta.3
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -84,7 +86,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v1.2.2
+        image: sigp/lighthouse:v1.3.0
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -138,8 +140,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-80ab92-debug #v1.3.6
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-80ab92-debug #v1.3.6
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-74cf23-debug #v1.3.7
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-74cf23-debug #v1.3.7
         link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti
@@ -168,7 +170,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.3.2
+        image: consensys/teku:21.4.0
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
