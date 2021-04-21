@@ -71,8 +71,12 @@ chains:
         image: rocketpool/smartnode-pow-proxy:v1.0.0-beta.0
         params:
         - name: Provider URL
-          desc: the Eth 1.0 client HTTP server address
+          desc: "the Eth 1.0 client HTTP server address and port \neg: http://192.168.0.100:8545 "
           env: PROVIDER_URL
+          required: true
+        - name: Provider URL
+          desc: "the Eth 1.0 client WS server address and port \neg: ws://192.168.0.100:8546 "
+          env: WS_PROVIDER_URL
           required: true
   eth2:
     provider: eth2:5052

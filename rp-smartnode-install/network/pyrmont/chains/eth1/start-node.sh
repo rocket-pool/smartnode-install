@@ -39,7 +39,7 @@ fi
 # Custom provider startup
 if [ "$CLIENT" = "custom" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --port 8545 --providerUrl $PROVIDER_URL
+    exec /go/bin/rocketpool-pow-proxy --port 8545 --providerUrl $PROVIDER_URL --wsPort 8546 --wsURL $WS_PROVIDER_URL
 
 fi
 
