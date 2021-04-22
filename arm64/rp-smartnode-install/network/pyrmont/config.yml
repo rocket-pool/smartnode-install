@@ -70,11 +70,17 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: jclapis/rocketpool-pow-proxy:v1.0.0-beta.0
+        image: jclapis/rocketpool-pow-proxy:v1.0.0-beta.4
         params:
-        - name: Provider URL
-          desc: the Eth 1.0 client HTTP server address
-          env: PROVIDER_URL
+        - name: Provider HTTP URL
+          desc: "The Eth 1.0 client HTTP server address and port\n
+            For example: http://192.168.0.100:8545"
+          env: HTTP_PROVIDER_URL
+          required: true
+        - name: Provider Websocket URL
+          desc: "The Eth 1.0 client websocket server address and port\n
+            For example: ws://192.168.0.100:8546"
+          env: WS_PROVIDER_URL
           required: true
   eth2:
     provider: eth2:5052

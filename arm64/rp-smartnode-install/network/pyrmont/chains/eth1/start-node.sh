@@ -31,7 +31,7 @@ fi
 # Infura startup
 if [ "$CLIENT" = "infura" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --port 8545 --network goerli --projectId $INFURA_PROJECT_ID
+    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --wsPort 8546 --network goerli --projectId $INFURA_PROJECT_ID
 
 fi
 
@@ -39,7 +39,7 @@ fi
 # Custom provider startup
 if [ "$CLIENT" = "custom" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --port 8545 --providerUrl $PROVIDER_URL
+    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --wsPort 8546 --httpProviderUrl $HTTP_PROVIDER_URL --wsProviderUrl $WS_PROVIDER_URL
 
 fi
 
