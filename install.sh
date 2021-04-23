@@ -111,9 +111,21 @@ fi
 
 # Get package files URL
 if [ "$PACKAGE_VERSION" = "latest" ]; then
-    PACKAGE_URL="https://github.com/jclapis/smartnode-install/releases/latest/download/rp-smartnode-install-$ARCH.tar.xz"
+    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install-$ARCH.tar.xz"
 else
-    PACKAGE_URL="https://github.com/jclapis/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
+    # Check the version for backwards compatibility
+    BETA_VERSION=$(echo "$PACKAGE_VERSION" | rev | cut -d "." -f1 | rev)
+    if [ $BETA_VERSION -ge 4 ]; then
+        # Modern version
+        PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
+    else
+        # Legacy version
+        if [ "$ARCH" = "amd64" ]; then
+            PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install.tar.xz"
+        else
+            fail "This version does not support arm64 systems."
+        fi
+    fi
 fi
 
 
