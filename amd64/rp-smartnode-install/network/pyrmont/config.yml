@@ -12,6 +12,7 @@ smartnode:
   validatorKeychainPath: /.rocketpool/data/validators
   validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
   gasPrice: 0 # desired gas price in gwei, zero for recommended price
+  txWatchUrl: https://goerli.etherscan.io/tx
 chains:
   eth1:
     provider: http://eth1:8545
