@@ -1,0 +1,118 @@
+version: "3.4"
+services:
+  eth1:
+    image: ${ETH1_IMAGE}
+    container_name: ${COMPOSE_PROJECT_NAME}_eth1
+    restart: unless-stopped
+    stop_grace_period: 3m
+    ports:
+      - "30303:30303/udp"
+      - "30303:30303/tcp"
+    volumes:
+      - eth1clientdata:/ethclient
+      - ./chains/eth1:/setup:ro
+    networks:
+      - net
+    environment:
+      - CLIENT=${ETH1_CLIENT}
+      - ETHSTATS_LABEL=${ETHSTATS_LABEL}
+      - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
+      - INFURA_PROJECT_ID=${INFURA_PROJECT_ID}
+      - HTTP_PROVIDER_URL=${HTTP_PROVIDER_URL}
+      - WS_PROVIDER_URL=${WS_PROVIDER_URL}
+      - GETH_CACHE_SIZE=${GETH_CACHE_SIZE}
+      - GETH_MAX_PEERS=${GETH_MAX_PEERS}
+      - ETH1_P2P_PORT=${ETH1_P2P_PORT}
+    entrypoint: sh
+    command: "/setup/start-node.sh"
+  eth2:
+    image: ${ETH2_IMAGE}
+    user: root
+    container_name: ${COMPOSE_PROJECT_NAME}_eth2
+    restart: unless-stopped
+    stop_grace_period: 3m
+    ports:
+      - "9001:9001/tcp"
+      - "9001:9001/udp"
+    volumes:
+      - ./data:/data
+      - eth2clientdata:/ethclient
+      - ./chains/eth2:/setup:ro
+    networks:
+      - net
+    environment:
+      - CLIENT=${ETH2_CLIENT}
+      - ETH1_PROVIDER=${ETH1_PROVIDER}
+      - ETH1_WS_PROVIDER=${ETH1_WS_PROVIDER}
+      - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
+      - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
+      - ETH2_P2P_PORT=${ETH2_P2P_PORT}
+      - ETH2_MAX_PEERS=${ETH2_MAX_PEERS}
+    entrypoint: sh
+    command: "/setup/start-beacon.sh"
+    depends_on:
+      - eth1
+  validator:
+    image: ${VALIDATOR_IMAGE}
+    user: root
+    container_name: ${COMPOSE_PROJECT_NAME}_validator
+    restart: unless-stopped
+    stop_grace_period: 3m
+    volumes:
+      - ./data:/data
+      - ./chains/eth2:/setup:ro
+    networks:
+      - net
+    environment:
+      - CLIENT=${VALIDATOR_CLIENT}
+      - ETH2_PROVIDER=${ETH2_PROVIDER}
+      - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
+      - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
+    entrypoint: sh
+    command: "/setup/start-validator.sh"
+    depends_on:
+      - eth2
+  api:
+    image: ${SMARTNODE_IMAGE}
+    container_name: ${COMPOSE_PROJECT_NAME}_api
+    restart: unless-stopped
+    stop_signal: SIGKILL
+    stop_grace_period: 1s
+    volumes:
+      - .:/.rocketpool
+    networks:
+      - net
+    depends_on:
+      - eth1
+    entrypoint: /bin/sleep
+    command: "infinity"
+  node:
+    image: ${SMARTNODE_IMAGE}
+    container_name: ${COMPOSE_PROJECT_NAME}_node
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/.rocketpool
+    networks:
+      - net
+    command: "node"
+    depends_on:
+      - eth1
+      - eth2
+  watchtower:
+    image: ${SMARTNODE_IMAGE}
+    container_name: ${COMPOSE_PROJECT_NAME}_watchtower
+    restart: unless-stopped
+    volumes:
+      - .:/.rocketpool
+    networks:
+      - net
+    command: "watchtower"
+    depends_on:
+      - eth1
+      - eth2
+networks:
+  net:
+volumes:
+  eth1clientdata:
+  eth2clientdata:

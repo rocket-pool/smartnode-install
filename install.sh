@@ -7,6 +7,38 @@
 ##
 
 
+# Print a failure message to stderr and exit
+fail() {
+    MESSAGE=$1
+    RED='\033[0;31m'
+    >&2 echo -e "\n${RED}**ERROR**\n$MESSAGE"
+    exit 1
+}
+
+
+# Get CPU architecture
+UNAME_VAL=$(uname -m)
+ARCH=""
+case $UNAME_VAL in
+    x86_64)  ARCH="amd64" ;;
+    aarch64) ARCH="arm64" ;;
+    *)       fail "CPU architecture not supported: $UNAME_VAL" ;;
+esac
+
+
+# Get the platform type
+PLATFORM=$(uname -s)
+if [ "$PLATFORM" = "Linux" ]; then
+    if command -v lsb_release &>/dev/null ; then
+        PLATFORM=$(lsb_release -si)
+    elif [ -f "/etc/centos-release" ]; then
+        PLATFORM="CentOS"
+    elif [ -f "/etc/fedora-release" ]; then
+        PLATFORM="Fedora"
+    fi
+fi
+
+
 ##
 # Config
 ##
@@ -29,14 +61,6 @@ DOCKER_COMPOSE_VERSION="1.26.2"
 ##
 
 
-# Print a failure message to stderr and exit
-fail() {
-    MESSAGE=$1
-    >&2 echo "$MESSAGE"
-    exit 1
-}
-
-
 # Print progress
 progress() {
     STEP_NUMBER=$1
@@ -47,8 +71,26 @@ progress() {
 
 # Docker installation steps
 install_docker_compose() {
-    sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
-    sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
+    if [ $ARCH = "amd64" ]; then
+        sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
+        sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
+    elif [ $ARCH = "arm64" ]; then
+        if command -v apt &> /dev/null ; then
+            sudo apt install -y libffi-dev libssl-dev
+            sudo apt install -y python3 python3-pip
+            sudo apt remove -y python-configparser
+            sudo pip3 install docker-compose
+        else
+            RED='\033[0;31m'
+            echo ""
+            echo -e "${RED}**ERROR**"
+            echo "Automatic installation of docker-compose for the $PLATFORM operating system on ARM64 is not currently supported."
+            echo "Please install docker-compose manually, then try this again with the '-d' flag to skip OS dependency installation."
+            echo "Be sure to add yourself to the docker group (e.g. 'sudo usermod -aG docker $USER') after installing docker."
+            echo "Log out and back in, or restart your system after you run this command."
+            exit 1
+        fi
+    fi
 }
 add_user_docker() {
     sudo usermod -aG docker $USER || fail "Could not add user to docker group."
@@ -75,24 +117,23 @@ while getopts "dn:v:" FLAG; do
 done
 
 
-# Get the platform type
-PLATFORM=$(uname -s)
-if [ "$PLATFORM" = "Linux" ]; then
-    if command -v lsb_release &>/dev/null ; then
-        PLATFORM=$(lsb_release -si)
-    elif [ -f "/etc/centos-release" ]; then
-        PLATFORM="CentOS"
-    elif [ -f "/etc/fedora-release" ]; then
-        PLATFORM="Fedora"
-    fi
-fi
-
-
 # Get package files URL
 if [ "$PACKAGE_VERSION" = "latest" ]; then
-    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install.tar.xz"
+    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install-$ARCH.tar.xz"
 else
-    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install.tar.xz"
+    # Check the version for backwards compatibility
+    BETA_VERSION=$(echo "$PACKAGE_VERSION" | rev | cut -d "." -f1 | rev)
+    if [ $BETA_VERSION -ge 4 ]; then
+        # Modern version
+        PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
+    else
+        # Legacy version
+        if [ "$ARCH" = "amd64" ]; then
+            PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install.tar.xz"
+        else
+            fail "This version does not support arm64 systems."
+        fi
+    fi
 fi
 
 
@@ -193,11 +234,14 @@ case "$PLATFORM" in
 
     # Unsupported OS
     *)
+        RED='\033[0;31m'
+        echo ""
+        echo -e "${RED}**ERROR**"
         echo "Automatic dependency installation for the $PLATFORM operating system is not supported."
         echo "Please install docker and docker-compose manually, then try again with the '-d' flag to skip OS dependency installation."
         echo "Be sure to add yourself to the docker group with 'sudo usermod -aG docker $USER' after installing docker."
         echo "Log out and back in, or restart your system after you run this command."
-        fail "Could not install OS dependencies."
+        exit 1
     ;;
 
 esac
@@ -223,7 +267,6 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 { test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."; } >&2
 { cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
-
 
 }
 install "$@"
