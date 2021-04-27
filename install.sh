@@ -10,7 +10,8 @@
 # Print a failure message to stderr and exit
 fail() {
     MESSAGE=$1
-    >&2 echo "$MESSAGE"
+    RED='\033[0;31m'
+    >&2 echo -e "\n${RED}**ERROR**\n$MESSAGE"
     exit 1
 }
 
@@ -74,17 +75,20 @@ install_docker_compose() {
         sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
         sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
     elif [ $ARCH = "arm64" ]; then
-        if [ command -v apt &> /dev/null ]; then
+        if command -v apt &> /dev/null ; then
             sudo apt install -y libffi-dev libssl-dev
             sudo apt install -y python3 python3-pip
             sudo apt remove -y python-configparser
             sudo pip3 install docker-compose
         else
+            RED='\033[0;31m'
+            echo ""
+            echo -e "${RED}**ERROR**"
             echo "Automatic installation of docker-compose for the $PLATFORM operating system on ARM64 is not currently supported."
             echo "Please install docker-compose manually, then try this again with the '-d' flag to skip OS dependency installation."
-            echo "Be sure to add yourself to the docker group (e.g. 'sudo usermod -aG docker $USER' or your platform's equivalent) after installing docker."
+            echo "Be sure to add yourself to the docker group (e.g. 'sudo usermod -aG docker $USER') after installing docker."
             echo "Log out and back in, or restart your system after you run this command."
-            fail "Could not install docker-compose."
+            exit 1
         fi
     fi
 }
@@ -230,11 +234,14 @@ case "$PLATFORM" in
 
     # Unsupported OS
     *)
+        RED='\033[0;31m'
+        echo ""
+        echo -e "${RED}**ERROR**"
         echo "Automatic dependency installation for the $PLATFORM operating system is not supported."
         echo "Please install docker and docker-compose manually, then try again with the '-d' flag to skip OS dependency installation."
         echo "Be sure to add yourself to the docker group with 'sudo usermod -aG docker $USER' after installing docker."
         echo "Log out and back in, or restart your system after you run this command."
-        fail "Could not install OS dependencies."
+        exit 1
     ;;
 
 esac
