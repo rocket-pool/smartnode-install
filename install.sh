@@ -15,11 +15,7 @@ fail() {
 }
 
 
-##
 # Get CPU architecture
-##
-
-
 UNAME_VAL=$(uname -m)
 ARCH=""
 case $UNAME_VAL in
@@ -27,6 +23,19 @@ case $UNAME_VAL in
     aarch64) ARCH="arm64" ;;
     *)       fail "CPU architecture not supported: $UNAME_VAL" ;;
 esac
+
+
+# Get the platform type
+PLATFORM=$(uname -s)
+if [ "$PLATFORM" = "Linux" ]; then
+    if command -v lsb_release &>/dev/null ; then
+        PLATFORM=$(lsb_release -si)
+    elif [ -f "/etc/centos-release" ]; then
+        PLATFORM="CentOS"
+    elif [ -f "/etc/fedora-release" ]; then
+        PLATFORM="Fedora"
+    fi
+fi
 
 
 ##
@@ -65,10 +74,18 @@ install_docker_compose() {
         sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
         sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
     elif [ $ARCH = "arm64" ]; then
-        sudo apt-get install -y libffi-dev libssl-dev
-        sudo apt-get install -y python3 python3-pip
-        sudo apt-get remove -y python-configparser
-        sudo pip3 install docker-compose
+        if [ command -v apt &> /dev/null ]; then
+            sudo apt install -y libffi-dev libssl-dev
+            sudo apt install -y python3 python3-pip
+            sudo apt remove -y python-configparser
+            sudo pip3 install docker-compose
+        else
+            echo "Automatic installation of docker-compose for the $PLATFORM operating system on ARM64 is not currently supported."
+            echo "Please install docker-compose manually, then try this again with the '-d' flag to skip OS dependency installation."
+            echo "Be sure to add yourself to the docker group (e.g. 'sudo usermod -aG docker $USER' or your platform's equivalent) after installing docker."
+            echo "Log out and back in, or restart your system after you run this command."
+            fail "Could not install docker-compose."
+        fi
     fi
 }
 add_user_docker() {
@@ -94,19 +111,6 @@ while getopts "dn:v:" FLAG; do
         *) fail "Incorrect usage." ;;
     esac
 done
-
-
-# Get the platform type
-PLATFORM=$(uname -s)
-if [ "$PLATFORM" = "Linux" ]; then
-    if command -v lsb_release &>/dev/null ; then
-        PLATFORM=$(lsb_release -si)
-    elif [ -f "/etc/centos-release" ]; then
-        PLATFORM="CentOS"
-    elif [ -f "/etc/fedora-release" ]; then
-        PLATFORM="Fedora"
-    fi
-fi
 
 
 # Get package files URL
