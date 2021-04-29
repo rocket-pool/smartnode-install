@@ -8,6 +8,7 @@ services:
     ports:
       - "30303:30303/udp"
       - "30303:30303/tcp"
+      - "8545:8545/tcp"
     volumes:
       - eth1clientdata:/ethclient
       - ./chains/eth1:/setup:ro
