@@ -59,7 +59,7 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     volumes:
-      - ./data/validators:/data/validators
+      - ./data/validators:/validators
       - ./chains/eth2:/setup:ro
     networks:
       - net
