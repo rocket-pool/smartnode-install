@@ -35,7 +35,7 @@ services:
       - "9001:9001/tcp"
       - "9001:9001/udp"
     volumes:
-      - ./data:/data
+      - ./data/validators:/validators
       - eth2clientdata:/ethclient
       - ./chains/eth2:/setup:ro
     networks:
@@ -59,7 +59,7 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     volumes:
-      - ./data:/data
+      - ./data/validators:/validators
       - ./chains/eth2:/setup:ro
     networks:
       - net
