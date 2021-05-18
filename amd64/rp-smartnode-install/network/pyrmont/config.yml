@@ -71,6 +71,7 @@ chains:
           \t\tfor use in production."
         image: rocketpool/smartnode-pow-proxy:v1.0.0-beta.0
         link: https://dashboard.pokt.network/
+        compatibleEth2Clients: lighthouse;prysm;teku
         params:
         - name: Pocket App or Load Balancer ID
           desc: the ID of your Pocket App; if you use a Load Balancer, prefix it with lb/
