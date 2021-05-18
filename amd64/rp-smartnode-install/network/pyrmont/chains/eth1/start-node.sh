@@ -35,6 +35,12 @@ if [ "$CLIENT" = "infura" ]; then
 
 fi
 
+# Pocket startup
+if [ "$CLIENT" = "pocket" ]; then
+
+    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --providerType pocket --network eth-goerli --projectId $POCKET_PROJECT_ID
+
+fi
 
 # Custom provider startup
 if [ "$CLIENT" = "custom" ]; then
