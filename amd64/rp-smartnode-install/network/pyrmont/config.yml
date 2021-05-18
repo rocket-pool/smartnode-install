@@ -57,7 +57,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc1
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc2
         link: https://infura.io/
         params:
         - name: Infura Project ID
@@ -69,15 +69,14 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a light client for Eth 1.0. Suitable\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-beta.0
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc2
         link: https://dashboard.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         params:
         - name: Pocket App or Load Balancer ID
           desc: the ID of your Pocket App; if you use a Load Balancer, prefix it with lb/
-          default: lb/60772fb70e2a131ca026e10e
           env: POCKET_PROJECT_ID
-          regex: ^[\/0-9a-zA-Z]{24+}$
+          regex: ^(lb\/)?[0-9a-zA-Z]{24,}$
           required: true
       - id: custom
         name: Custom
