@@ -11,15 +11,16 @@ smartnode:
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
   validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
-  gasPrice: 0 # desired gas price in gwei, zero for recommended price
-  rplClaimGasThreshold: 1000 # RPL claims will stop if the network's average gas is above this limit; set to 0 to disable automatic claiming of RPL rewards
+  gasPrice: 0 # The desired gas price, in gwei, to use for transactions. Set it to 0 to use the network's average price.
+  rplClaimGasThreshold: 150 # Automatic RPL reward claims will wait until the network's average gas price, in gwei, is below this limit.
+                            # Set it to 0 to disable automatic claiming of RPL rewards entirely.
   txWatchUrl: https://goerli.etherscan.io/tx
 chains:
   eth1:
     provider: http://eth1:8545
     wsProvider: ws://eth1:8546
     mainnetProvider: http://eth1:8545
-    chainID: 5 # goerli chain
+    chainID: 5 # Goerli
     client:
       options:
       - id: geth
