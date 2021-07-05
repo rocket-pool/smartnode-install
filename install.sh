@@ -45,7 +45,7 @@ fi
 
 
 # The total number of steps in the installation process
-TOTAL_STEPS="7"
+TOTAL_STEPS="8"
 # The Rocket Pool user data path
 RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
@@ -136,6 +136,9 @@ else
     fi
 fi
 
+
+# Get Prater genesis SSZ
+PRATER_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/prater/genesis.ssz"
 
 # Create temporary data folder; clean up on exit
 TEMPDIR=$(mktemp -d 2>/dev/null) || fail "Could not create temporary data directory."
@@ -268,6 +271,12 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 { cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 
+
+# Get Prater SSZ for Prysm
+progress 8 "Downloading Prater Genesis SSZ for Prysm..."
+{ curl -L "$PRATER_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not download genesis SSZ for Prater."; } >&2
+
 }
+
 install "$@"
 
