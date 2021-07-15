@@ -137,8 +137,8 @@ else
 fi
 
 
-# Get Prater genesis SSZ
-PRATER_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/prater/genesis.ssz"
+# Get genesis SSZ for the current network
+NETWORK_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/$PACKAGE_VERSION/genesis.ssz"
 
 # Create temporary data folder; clean up on exit
 TEMPDIR=$(mktemp -d 2>/dev/null) || fail "Could not create temporary data directory."
@@ -272,9 +272,9 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 { find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 
 
-# Get Prater SSZ for Prysm
-progress 8 "Downloading Prater Genesis SSZ for Prysm..."
-{ curl -L "$PRATER_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not download genesis SSZ for Prater."; } >&2
+# Get Network SSZ for Prysm
+progress 8 "Downloading $NETWORK Genesis SSZ for Prysm..."
+{ curl -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not download genesis SSZ for $NETWORK."; } >&2
 
 }
 
