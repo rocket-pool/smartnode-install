@@ -228,17 +228,17 @@ fi
 declare -a CORECMDS
 
 ## Verify the users home dir exists
-CORECMDS+=("Verifying User Home Dir Exists@test -n '$USERHOMEDIR' && test -d '$USERHOMEDIR' || fail 'User home directory does not exist at $USERHOMEDIR.'")
+CORECMDS+=("Verifying User Home Dir Exists@test -n '$USERHOMEDIR' && test -d '$USERHOMEDIR' &> $OUTPUTTO || fail 'User home directory does not exist at $USERHOMEDIR.'")
 
 # Docker installation steps
 install_docker_compose() {
     if [ $ARCH = "amd64" ]; then
-        CORECMDS+=("Docker Compose: Downloading...@sudo curl -L 'https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose || fail 'Could not download docker-compose'")
-        CORECMDS+=("Docker Compose: Downloading...@sudo chmod a+x /usr/local/bin/docker-compose || fail 'Could not set executable permissions on docker-compose'")
+        CORECMDS+=("Docker Compose: Downloading...@sudo curl -L 'https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose &> $OUTPUTTO || fail 'Could not download docker-compose'")
+        CORECMDS+=("Docker Compose: Setting permissions@sudo chmod a+x /usr/local/bin/docker-compose || fail 'Could not set executable permissions on docker-compose'")
     elif [ $ARCH = "arm64" ]; then
         if command -v apt &> /dev/null ; then
-            CORECMDS+=("Docker Compose ARM: Installing dependencies@sudo apt install -y libffi-dev libssl-dev python3 python3-pip && sudo apt remove -y python-configparser || fail 'Could not install docker compose ARM dependencies'")
-            CORECMDS+=("Docker Compose ARM: Installing...@sudo pip3 install docker-compose || fail 'Could not install docker compose ARM'")
+            CORECMDS+=("Docker Compose ARM: Installing dependencies@sudo apt install -y libffi-dev libssl-dev python3 python3-pip && sudo apt remove -y python-configparser  &> $OUTPUTTO || fail 'Could not install docker compose ARM dependencies'")
+            CORECMDS+=("Docker Compose ARM: Installing...@sudo pip3 install docker-compose  &> $OUTPUTTO || fail 'Could not install docker compose ARM'")
         else
             RED='\033[0;31m'
             echo ""
@@ -254,7 +254,7 @@ install_docker_compose() {
 
 # Add user to docker group
 add_user_docker() {
-    CORECMDS+=("Docker Compose: Adding user to group@sudo usermod -aG docker $USERNAME || fail 'Could not add user $USERNAME to docker group.'")
+    CORECMDS+=("Docker Compose: Adding user to group@sudo usermod -aG docker $USERNAME  &> $OUTPUTTO || fail 'Could not add user $USERNAME to docker group.'")
 }
 
 
@@ -269,14 +269,14 @@ if [ -z "$NO_DEPS" ]; then
         PLATFORM_NAME=$(echo "$PLATFORM" | tr '[:upper:]' '[:lower:]')
 
         # Install OS dependencies
-        CORECMDS+=("OS: Updating $PLATFORM_NAME OS package definitions@sudo apt-get -y update || fail 'Could not update OS package definitions'")
-        CORECMDS+=("OS: Installing $PLATFORM_NAME OS packages@sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common ntp || fail 'Could not install OS packages'")
+        CORECMDS+=("OS: Updating $PLATFORM_NAME OS package definitions@sudo apt-get -y update  &> $OUTPUTTO || fail 'Could not update OS package definitions'")
+        CORECMDS+=("OS: Installing $PLATFORM_NAME OS packages@sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common ntp  &> $OUTPUTTO || fail 'Could not install OS packages'")
 
         # Install docker
-        CORECMDS+=("Docker: Adding repository key@curl -fsSL 'https://download.docker.com/linux/$PLATFORM_NAME/gpg' | sudo apt-key add - || fail 'Could not add docker repository key'")
-        CORECMDS+=("Docker: Adding repository@sudo add-apt-repository 'deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable' || fail 'Could not add docker repository'")
-        CORECMDS+=("Docker: Updating $PLATFORM_NAME OS package definitions@sudo apt-get -y update || fail 'Could not update OS package definitions'")
-        CORECMDS+=("Docker: Installing required packages@sudo apt-get -y install docker-ce docker-ce-cli containerd.io || fail 'Could not install docker packages'")
+        CORECMDS+=("Docker: Adding repository key@curl -fsSL 'https://download.docker.com/linux/$PLATFORM_NAME/gpg' | sudo apt-key add -  &> $OUTPUTTO || fail 'Could not add docker repository key'")
+        CORECMDS+=("Docker: Adding repository@sudo add-apt-repository 'deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable'  &> $OUTPUTTO || fail 'Could not add docker repository'")
+        CORECMDS+=("Docker: Updating $PLATFORM_NAME OS package definitions@sudo apt-get -y update  &> $OUTPUTTO || fail 'Could not update OS package definitions'")
+        CORECMDS+=("Docker: Installing required packages@sudo apt-get -y install docker-ce docker-ce-cli containerd.io  &> $OUTPUTTO || fail 'Could not install docker packages'")
 
         # Install docker-compose
         install_docker_compose
@@ -290,13 +290,13 @@ if [ -z "$NO_DEPS" ]; then
     CentOS)
 
         # Install OS dependencies
-        CORECMDS+=("OS: Installing utils@sudo yum install -y yum-utils chrony || fail 'Could not install OS packages'")
-        CORECMDS+=("OS: Starting chrony daemon@sudo systemctl start chronyd || fail 'Could not start chrony daemon'")
+        CORECMDS+=("OS: Installing utils@sudo yum install -y yum-utils chrony &> $OUTPUTTO || fail 'Could not install OS packages'")
+        CORECMDS+=("OS: Starting chrony daemon@sudo systemctl start chronyd &> $OUTPUTTO || fail 'Could not start chrony daemon'")
 
         # Install docker
-        CORECMDS+=("Docker: Adding repository@sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || fail 'Could not add docker repository'")
-        CORECMDS+=("Docker: Installing required packages@sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io || fail 'Could not install docker packages'")
-        CORECMDS+=("Docker: Starting docker daemon@sudo systemctl start docker || fail 'Could not start docker daemon'")
+        CORECMDS+=("Docker: Adding repository@sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo &> $OUTPUTTO || fail 'Could not add docker repository'")
+        CORECMDS+=("Docker: Installing required packages@sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io &> $OUTPUTTO || fail 'Could not install docker packages'")
+        CORECMDS+=("Docker: Starting docker daemon@sudo systemctl start docker &> $OUTPUTTO || fail 'Could not start docker daemon'")
 
         # Install docker-compose
         install_docker_compose
@@ -310,13 +310,13 @@ if [ -z "$NO_DEPS" ]; then
     Fedora)
 
         # Install OS dependencies
-        CORECMDS+=("OS: Installing utils@sudo dnf -y install dnf-plugins-core chrony || fail 'Could not install OS packages'")
-        CORECMDS+=("OS: Starting chrony daemon@sudo systemctl start chronyd || fail 'Could not start chrony daemon'")
+        CORECMDS+=("OS: Installing utils@sudo dnf -y install dnf-plugins-core chrony &> $OUTPUTTO || fail 'Could not install OS packages'")
+        CORECMDS+=("OS: Starting chrony daemon@sudo systemctl start chronyd &> $OUTPUTTO || fail 'Could not start chrony daemon'")
         
         # Install docker
-        CORECMDS+=("Docker: Adding repository@sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo || fail 'Could not add docker repository'")
-        CORECMDS+=("Docker: Installing required packages@sudo dnf -y install docker-ce docker-ce-cli containerd.io || fail 'Could not install docker packages'")
-        CORECMDS+=("Docker: Starting docker daemon@sudo systemctl start docker || fail 'Could not start docker daemon'")
+        CORECMDS+=("Docker: Adding repository@sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo &> $OUTPUTTO || fail 'Could not add docker repository'")
+        CORECMDS+=("Docker: Installing required packages@sudo dnf -y install docker-ce docker-ce-cli containerd.io &> $OUTPUTTO || fail 'Could not install docker packages'")
+        CORECMDS+=("Docker: Starting docker daemon@sudo systemctl start docker &> $OUTPUTTO || fail 'Could not start docker daemon'")
 
         # Install docker-compose
         install_docker_compose
@@ -343,6 +343,22 @@ else
     echo "Skipping steps 1 - 4 (OS dependencies & docker)"
 fi
 
+
+# Create ~/.rocketpool dir & files
+CORECMDS+=("Rocket Pool: Creating user directory@mkdir -p '$RP_PATH/data/validators' &> $OUTPUTTO || fail 'Could not create the Rocket Pool user data directory'")
+CORECMDS+=("Rocket Pool: Creating user settings file@touch -a '$RP_PATH/settings.yml' &> $OUTPUTTO || fail 'Could not create the Rocket Pool user settings file'")
+
+# Download and extract package files
+CORECMDS+=("Rocket Pool: Downloading smart node package and extracting files...@curl -L '$PACKAGE_URL' | tar -xJ -C '$TEMPDIR' &> $OUTPUTTO || fail 'Could not download and extract the Rocket Pool package files'")
+CORECMDS+=("Rocket Pool: Verifying extracted smart node package files@test -d '$PACKAGE_FILES_PATH' &> $OUTPUTTO || fail 'Could not extract the Rocket Pool package files'")
+
+# Copy package files
+CORECMDS+=("Rocket Pool: Verifying network files for $NETWORK@test -d '$NETWORK_FILES_PATH' &> $OUTPUTTO || fail 'No package files were found for the selected network'")
+CORECMDS+=("Rocket Pool: Copying $NETWORK files@cp -r '$NETWORK_FILES_PATH/'* '$RP_PATH' &> $OUTPUTTO || fail 'Could not copy network package files to the Rocket Pool user data directory'")
+CORECMDS+=("Rocket Pool: Setting permissions on required files@find '$RP_PATH/chains' -name '*.sh' -exec chmod +x {} \; 2>/dev/null &> $OUTPUTTO || fail 'Could not set executable permissions on package files'")
+
+# Get Network SSZ for Prysm
+CORECMDS+=("ETH2 Client: Downloading genesis SSZ for Prysm@curl -L '$NETWORK_GENESIS_URL' -o '$RP_PATH/data/validators/genesis.ssz' &> $OUTPUTTO || fail 'Could download genesis ssz for Prysm'")
 
 
 
@@ -424,7 +440,7 @@ do
     sleep 0.35s
     ## Run the current commands
     #echo "$CORESTEPCOMMANDS"
-    eval "$CORESTEPCOMMANDS" &> $OUTPUTTO
+    eval "$CORESTEPCOMMANDS"
     ## Count the steps
     CORESTEPCURRENT=$((CORESTEPCURRENT+1))
 done
