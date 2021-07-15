@@ -122,8 +122,8 @@ if [ "$PACKAGE_VERSION" = "latest" ]; then
     PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install-$ARCH.tar.xz"
 else
     # Check the version for backwards compatibility
-    BETA_VERSION=$(echo "$PACKAGE_VERSION" | rev | cut -d "." -f1 | rev)
-    if [ $BETA_VERSION -ge 4 ]; then
+    RP_VERSION=$(echo "$PACKAGE_VERSION" | rev | cut -d "." -f1 | rev)
+    if [ $RP_VERSION -ge 4 ]; then
         # Modern version
         PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
     else
@@ -138,7 +138,7 @@ fi
 
 
 # Get genesis SSZ for the current network
-NETWORK_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/$PACKAGE_VERSION/genesis.ssz"
+NETWORK_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/$NETWORK/genesis.ssz"
 
 # Create temporary data folder; clean up on exit
 TEMPDIR=$(mktemp -d 2>/dev/null) || fail "Could not create temporary data directory."
