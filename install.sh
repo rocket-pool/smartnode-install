@@ -290,23 +290,19 @@ if [ -z "$NO_DEPS" ]; then
     CentOS)
 
         # Install OS dependencies
-        progress 1 "Installing OS dependencies..."
-        { sudo yum install -y yum-utils chrony || fail "Could not install OS packages."; } >&2
-        { sudo systemctl start chronyd || fail "Could not start chrony daemon."; } >&2
+        CORECMDS+=("OS: Installing utils@sudo yum install -y yum-utils chrony || fail 'Could not install OS packages'")
+        CORECMDS+=("OS: Starting chrony daemon@sudo systemctl start chronyd || fail 'Could not start chrony daemon'")
 
         # Install docker
-        progress 2 "Installing docker..."
-        { sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || fail "Could not add docker repository."; } >&2
-        { sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
-        { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
+        CORECMDS+=("Docker: Adding repository@sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || fail 'Could not add docker repository'")
+        CORECMDS+=("Docker: Installing required packages@sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io || fail 'Could not install docker packages'")
+        CORECMDS+=("Docker: Starting docker daemon@sudo systemctl start docker || fail 'Could not start docker daemon'")
 
         # Install docker-compose
-        progress 3 "Installing docker-compose..."
-        >&2 install_docker_compose
+        install_docker_compose
 
         # Add user to docker group
-        progress 4 "Adding user to docker group..."
-        >&2 add_user_docker
+        add_user_docker
 
     ;;
 
@@ -314,23 +310,19 @@ if [ -z "$NO_DEPS" ]; then
     Fedora)
 
         # Install OS dependencies
-        progress 1 "Installing OS dependencies..."
-        { sudo dnf -y install dnf-plugins-core chrony || fail "Could not install OS packages."; } >&2
-        { sudo systemctl start chronyd || fail "Could not start chrony daemon."; } >&2
-
+        CORECMDS+=("OS: Installing utils@sudo dnf -y install dnf-plugins-core chrony || fail 'Could not install OS packages'")
+        CORECMDS+=("OS: Starting chrony daemon@sudo systemctl start chronyd || fail 'Could not start chrony daemon'")
+        
         # Install docker
-        progress 2 "Installing docker..."
-        { sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo || fail "Could not add docker repository."; } >&2
-        { sudo dnf -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
-        { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
+        CORECMDS+=("Docker: Adding repository@sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo || fail 'Could not add docker repository'")
+        CORECMDS+=("Docker: Installing required packages@sudo dnf -y install docker-ce docker-ce-cli containerd.io || fail 'Could not install docker packages'")
+        CORECMDS+=("Docker: Starting docker daemon@sudo systemctl start docker || fail 'Could not start docker daemon'")
 
         # Install docker-compose
-        progress 3 "Installing docker-compose..."
-        >&2 install_docker_compose
+        install_docker_compose
 
         # Add user to docker group
-        progress 4 "Adding user to docker group..."
-        >&2 add_user_docker
+        add_user_docker
 
     ;;
 
@@ -418,8 +410,6 @@ do
     ## Echo the line in a delimited format for the GUI
     if [[ "$INSTALLER_TYPE" == "gui" ]]; then
         echo "CORE|$CORESTEPTOTAL|$CORESTEPCURRENT|$CORESTEPDESC"
-        ## Small delay between each so the any watcher doesn't miss really super quick commands (eg GUI)
-        sleep 0.25s
     else
         progress $CORESTEPCURRENT $CORESTEPTOTAL 2 $CORESTEPDESC
         {
@@ -430,6 +420,8 @@ do
             echo ""
         } &> $OUTPUTTO
     fi
+    ## Small delay between each so the any watcher doesn't miss really super quick commands (eg GUI)
+    sleep 0.35s
     ## Run the current commands
     #echo "$CORESTEPCOMMANDS"
     eval "$CORESTEPCOMMANDS" &> $OUTPUTTO
