@@ -105,10 +105,10 @@ do
         # Get the version
         GITPACKAGEVER=${PARAMS[$((PARAMCOUNT+1))]}
     fi
-    # Network ID to use - Should be passed '-n 77' etc
+    # Network name to use - Should be passed 'prater' or 'mainnet' etc
     if [[ "$i" == "-n" ]]; then
         # Get the version
-        NETWORK_ID=${PARAMS[$((PARAMCOUNT+1))]}
+        NETWORK=${PARAMS[$((PARAMCOUNT+1))]}
     fi
     # Temp dir to unpack the files to (optional, one will be created if not passed). Should be passed '-t $TEMPDIRlocation'
     if [[ "$i" == "-t" ]]; then
@@ -436,7 +436,7 @@ do
             echo ""
         } &> $OUTPUTTO
     fi
-    ## Small delay between each so the any watcher doesn't miss really super quick commands (eg GUI)
+    ## Small delay between each so any watcher doesn't miss really super quick commands (eg GUI)
     sleep 0.35s
     ## Run the current commands
     #echo "$CORESTEPCOMMANDS"
