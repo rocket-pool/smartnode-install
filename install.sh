@@ -45,7 +45,7 @@ fi
 # -----------------------------------------------------------------------------
 ##
 
-# Current user executing sudo
+# Current user executing sudo (works without the need for $HOME which isn't supported in some shells)
 USERNAME="$(logname)"
 USEREXEC="sudo -u $USERNAME"
 # Current home directory to use
@@ -103,7 +103,7 @@ do
     # Package release version to download - Should be passed '-p 0.0.1' etc
     if [[ "$i" == "-p" ]]; then
         # Get the version
-        GITPACKAGEVER=${PARAMS[$((PARAMCOUNT+1))]}
+        PACKAGE_VERSION=${PARAMS[$((PARAMCOUNT+1))]}
     fi
     # Network name to use - Should be passed 'prater' or 'mainnet' etc
     if [[ "$i" == "-n" ]]; then
