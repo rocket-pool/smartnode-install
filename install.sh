@@ -201,7 +201,7 @@ function clearprogress() {
 
 # Get package files URL
 if [ "$PACKAGE_VERSION" = "latest" ]; then
-    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install-$ARCH.tar.xz"
+    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install.tar.xz"
 else
     # Check the version for backwards compatibility
     RP_VERSION=$(echo "$PACKAGE_VERSION" | rev | cut -d "." -f1 | rev)
@@ -283,6 +283,18 @@ if [ -z "$NO_DEPS" ]; then
 
         # Add user to docker group
         add_user_docker
+
+    ;;
+
+    # Darwin
+    Darwin)
+
+        # Get platform name
+        PLATFORM_NAME=$(echo "$PLATFORM" | tr '[:upper:]' '[:lower:]')
+
+        # Install docker
+        #CORECMDS+=("Installing Homebrew@curl -fsSL 'https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh' &> $OUTPUTTO || fail 'Could not install Homebrew'")
+        #CORECMDS+=("Docker: Installing via Homebrew@brew install homebrew/cask/docker &> $OUTPUTTO || fail 'Could not install via Homebrew'")
 
     ;;
 
