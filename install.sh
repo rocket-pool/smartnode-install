@@ -51,9 +51,9 @@ RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
 PACKAGE_VERSION="latest"
 # The default network to run Rocket Pool on
-NETWORK="pyrmont"
+NETWORK="prater"
 # The version of docker-compose to install
-DOCKER_COMPOSE_VERSION="1.26.2"
+DOCKER_COMPOSE_VERSION="1.29.2"
 
 
 ##
@@ -137,8 +137,8 @@ else
 fi
 
 
-# Get Prater genesis SSZ
-PRATER_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/prater/genesis.ssz"
+# Get network genesis SSZ
+NETWORK_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/$NETWORK/genesis.ssz"
 
 # Create temporary data folder; clean up on exit
 TEMPDIR=$(mktemp -d 2>/dev/null) || fail "Could not create temporary data directory."
@@ -272,9 +272,9 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 { find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 
 
-# Get Prater SSZ for Prysm
-progress 8 "Downloading Prater Genesis SSZ for Prysm..."
-{ curl -L "$PRATER_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not download genesis SSZ for Prater."; } >&2
+# Get etwork SSZ for Prysm
+progress 8 "Downloading $NETWORK Genesis SSZ for Prysm..."
+{ curl -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not download genesis SSZ for $NETWORK."; } >&2
 
 }
 
