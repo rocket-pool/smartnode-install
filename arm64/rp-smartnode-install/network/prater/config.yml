@@ -28,7 +28,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: rocketpool/client-go:v1.10.4
+        image: rocketpool/client-go:v1.10.5
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -139,7 +139,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:arm64-v1.3.0
+        image: statusim/nimbus-eth2:arm64-v1.4.1
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -197,7 +197,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: rocketpool/teku:21.6.0
+        image: rocketpool/teku:21.6.1
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
