@@ -6,8 +6,8 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     ports:
-      - "${ETH1_P2P_PORT}:${ETH1_P2P_PORT}/udp"
-      - "${ETH1_P2P_PORT}:${ETH1_P2P_PORT}/tcp"
+      - "${ETH1_P2P_PORT:-30303}:${ETH1_P2P_PORT:-30303}/udp"
+      - "${ETH1_P2P_PORT:-30303}:${ETH1_P2P_PORT:-30303}/tcp"
     volumes:
       - eth1clientdata:/ethclient
       - ./chains/eth1:/setup:ro
@@ -33,8 +33,8 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     ports:
-      - "${ETH2_P2P_PORT}:${ETH2_P2P_PORT}/tcp"
-      - "${ETH2_P2P_PORT}:${ETH2_P2P_PORT}/udp"
+      - "${ETH2_P2P_PORT:-9001}:${ETH2_P2P_PORT:-9001}/tcp"
+      - "${ETH2_P2P_PORT:-9001}:${ETH2_P2P_PORT:-9001}/udp"
     volumes:
       - ./data/validators:/validators
       - eth2clientdata:/ethclient
