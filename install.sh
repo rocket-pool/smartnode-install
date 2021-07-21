@@ -121,19 +121,7 @@ done
 if [ "$PACKAGE_VERSION" = "latest" ]; then
     PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install-$ARCH.tar.xz"
 else
-    # Check the version for backwards compatibility
-    RP_VERSION=$(echo "$PACKAGE_VERSION" | rev | cut -d "." -f1 | rev)
-    if [ $RP_VERSION -ge 4 ]; then
-        # Modern version
-        PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
-    else
-        # Legacy version
-        if [ "$ARCH" = "amd64" ]; then
-            PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install.tar.xz"
-        else
-            fail "This version does not support arm64 systems."
-        fi
-    fi
+    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
 fi
 
 
@@ -146,7 +134,7 @@ trap 'rm -rf "$TEMPDIR"' EXIT
 
 
 # Get temporary data paths
-PACKAGE_FILES_PATH="$TEMPDIR/rp-smartnode-install"
+PACKAGE_FILES_PATH="$TEMPDIR/$ARCH/rp-smartnode-install"
 NETWORK_FILES_PATH="$PACKAGE_FILES_PATH/network/$NETWORK"
 
 
