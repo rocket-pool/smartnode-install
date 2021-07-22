@@ -28,7 +28,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: rocketpool/client-go:v1.10.5
+        image: rocketpool/client-go:v1.10.6
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -167,8 +167,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: rocketpool/prysm:v1.4.1
-        validatorImage: rocketpool/prysm:v1.4.1
+        beaconImage: rocketpool/prysm:v1.4.2
+        validatorImage: rocketpool/prysm:v1.4.2
         link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti
