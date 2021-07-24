@@ -115,6 +115,7 @@ build_docker_smartnode() {
 # Builds the Docker Manifest and pushes it to Docker Hub
 build_docker_manifest() {
     echo -n "Building Docker Manifest image... "
+    rm -f ~/.docker/manifests/docker.io_rocketpool_smartnode-$VERSION
     docker manifest create rocketpool/smartnode:$VERSION --amend rocketpool/smartnode:$VERSION-amd64 --amend rocketpool/smartnode:$VERSION-arm64
     docker manifest push --purge rocketpool/smartnode:$VERSION
     echo "done!"
