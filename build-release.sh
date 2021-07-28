@@ -154,7 +154,7 @@ esac
 # Parse arguments
 while getopts "acpmndv:" FLAG; do
     case "$FLAG" in
-        a) CLI=true PACKAGES=true DAEMON=true DOCKER=true ;;
+        a) CLI=true PACKAGES=true DAEMON=true DOCKER=true MANIFEST=true ;;
         c) CLI=true ;;
         p) PACKAGES=true ;;
         m) DAEMON=true ;;
