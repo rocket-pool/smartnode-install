@@ -1,12 +1,12 @@
 rocketpool:
-  storageAddress: ---
-  oneInchOracleAddress: 0x080ab73787a8b13ec7f40bd7d00d6cc07f9b24d0
+  storageAddress: 0xd8Cd47263414aFEca62d6e2a3917d6600abDceB3
+  oneInchOracleAddress: 0x4eDC966Df24264C9C817295a0753804EcC46Dd22
   rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
-  rplFaucetAddress: ---
+  rplFaucetAddress: 0x95D6b8E2106E3B30a72fC87e2B56ce15E37853F9
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0-rc3
-  image: rocketpool/smartnode:v1.0.0-rc3
+  graffitiVersion: v1.0.0-rc4
+  image: rocketpool/smartnode:v1.0.0-rc4
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
