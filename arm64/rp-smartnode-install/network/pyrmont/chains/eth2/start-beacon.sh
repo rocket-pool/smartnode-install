@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This script launches ETH2 beacon clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
 
