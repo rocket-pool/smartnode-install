@@ -262,7 +262,11 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 
 # Get Network SSZ for Prysm
 progress 8 "Downloading $NETWORK Genesis SSZ for Prysm..."
-{ curl -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not download genesis SSZ for $NETWORK."; } >&2
+{
+    if ! [ -f "$RP_PATH/data/validators/genesis.ssz" ]; then
+        curl -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not save genesis SSZ for $NETWORK. Please make sure you have write permissions to the '~/.rocketpool/data/validators' folder.";
+    fi
+} >&2
 
 }
 
