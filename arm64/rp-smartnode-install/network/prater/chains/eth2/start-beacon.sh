@@ -2,8 +2,13 @@
 # This script launches ETH2 beacon clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
 
+# only show client identifier if version string is under 9 characters
+if ((${#ROCKET_POOL_VERSION} < 9)); then
+    IDENTIFIER="-${CLIENT::1}"
+fi
+
 # Get graffiti text
-GRAFFITI="RP $ROCKET_POOL_VERSION"
+GRAFFITI="RP${IDENTIFIER^^} $ROCKET_POOL_VERSION"
 if [ ! -z "$CUSTOM_GRAFFITI" ]; then
     GRAFFITI="$GRAFFITI ($CUSTOM_GRAFFITI)"
 fi
