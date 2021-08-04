@@ -164,8 +164,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-b36509-debug #v1.4.2
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-b36509-debug #v1.4.2
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-8bca66-debug #v1.4.3
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-8bca66-debug #v1.4.3
         link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti

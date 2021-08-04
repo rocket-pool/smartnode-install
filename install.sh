@@ -212,6 +212,7 @@ case "$PLATFORM" in
         { sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo || fail "Could not add docker repository."; } >&2
         { sudo dnf -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
         { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
+        { sudo systemctl enable docker || fail "Could not set docker daemon to auto-start on boot."; } >&2
 
         # Install docker-compose
         progress 3 "Installing docker-compose..."
