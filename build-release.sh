@@ -109,6 +109,7 @@ build_docker_smartnode() {
     echo -n "Pushing to Docker Hub... "
     docker push rocketpool/smartnode:$VERSION-$ARCH || fail "Error pushing Docker Smartnode image to Docker Hub."
     echo "done!"
+    
     cd ..
 }
 
@@ -123,6 +124,7 @@ build_docker_pow_proxy() {
     echo -n "Pushing to Docker Hub... "
     docker push rocketpool/smartnode-pow-proxy:$VERSION-$ARCH || fail "Error pushing Docker POW Proxy image to Docker Hub."
     echo "done!"
+    
     cd ..
 }
 
