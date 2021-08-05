@@ -139,7 +139,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:arm64-v1.4.2
+        image: statusim/nimbus-eth2:multiarch-v1.4.2
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
