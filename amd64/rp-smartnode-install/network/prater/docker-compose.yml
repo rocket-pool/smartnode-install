@@ -96,7 +96,7 @@ services:
       - .:/.rocketpool
     networks:
       - net
-    command: "node"
+    command: "-m 0.0.0.0 -r ${NODE_METRICS_PORT:-8009} node"
     depends_on:
       - eth1
       - eth2

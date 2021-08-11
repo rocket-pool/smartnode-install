@@ -1,0 +1,24 @@
+# Default Prometheus configuration for Rocket Pool
+
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:${PROMETHEUS_PORT:-9091}']
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:${NODE_EXPORTER_PORT:-9101}']
+
+  - job_name: 'eth2'
+    static_configs:
+      - targets: ['eth2:${ETH2_METRICS_PORT:-8008}']
+
+  - job_name: 'rocketpool'
+    scrape_interval: 5m
+    scrape_timeout: 5m
+    static_configs:
+      - targets: ['node:${NODE_METRICS_PORT:-8009}']

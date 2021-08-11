@@ -1,0 +1,37 @@
+version: "3.4"
+services:
+  node-exporter:
+    image: prom/node-exporter:v1.2.2
+    container_name: ${COMPOSE_PROJECT_NAME}_exporter
+    restart: unless-stopped
+    command: "--path.rootfs=/host"
+    volumes:
+      - "/:/host:ro,rslave"
+    networks:
+      - ${COMPOSE_PROJECT_NAME}_net
+    pid: host
+  prometheus:
+    image: prom/prometheus:v2.28.1
+    container_name: ${COMPOSE_PROJECT_NAME}_prometheus
+    restart: unless-stopped
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      - ${COMPOSE_PROJECT_NAME}_net
+  grafana:
+    image: grafana/grafana:8.1.1
+    container_name: ${COMPOSE_PROJECT_NAME}_grafana
+    restart: unless-stopped
+    environment:
+      - GF_SERVER_HTTP_PORT=${GRAFANA_PORT:-3001}
+    ports: 
+      - "${GRAFANA_PORT:-3001}:${GRAFANA_PORT:-3001}/tcp"
+    volumes:
+      - "grafana-storage:/var/lib/grafana"
+    networks:
+      - ${COMPOSE_PROJECT_NAME}_net
+networks:
+  ${COMPOSE_PROJECT_NAME}_net:
+    external: true
+volumes:
+  grafana-storage:

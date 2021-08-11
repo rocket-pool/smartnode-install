@@ -36,6 +36,10 @@ if [ "$CLIENT" = "nimbus" ]; then
         CMD="$CMD --max-peers=$ETH2_MAX_PEERS"
     fi
 
+    if [ ! -z "$ENABLE_METRICS" ]; then
+        CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT"
+    fi
+
     # Graffiti breaks if it's in the CMD string instead of here because of spaces
     exec ${CMD} --graffiti="$GRAFFITI"
 
