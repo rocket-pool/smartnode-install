@@ -11,7 +11,9 @@ scrape_configs:
 
   - job_name: 'node'
     static_configs:
-      - targets: ['node-exporter:${NODE_EXPORTER_PORT:-9101}']
+      # node-exporter is on the host network so it can get access to the actual machine's network info
+      # We have to use 'hosts.docker.internal' to refer to it due to this configuration
+      - targets: ['host.docker.internal:${NODE_EXPORTER_PORT:-9101}']
 
   - job_name: 'eth2'
     static_configs:

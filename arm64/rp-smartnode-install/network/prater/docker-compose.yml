@@ -49,6 +49,8 @@ services:
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
       - ETH2_P2P_PORT=${ETH2_P2P_PORT}
       - ETH2_MAX_PEERS=${ETH2_MAX_PEERS}
+      - ENABLE_METRICS=${ENABLE_METRICS}
+      - ETH2_METRICS_PORT=${ETH2_METRICS_PORT}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
@@ -96,7 +98,7 @@ services:
       - .:/.rocketpool
     networks:
       - net
-    command: "node"
+    command: "-m 0.0.0.0 -r ${NODE_METRICS_PORT:-8009} node"
     depends_on:
       - eth1
       - eth2

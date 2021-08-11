@@ -234,7 +234,7 @@ metrics:
     type: uint16
   - name: Node Exporter Metrics Port
     desc: The port for Prometheus's Node Exporter to make its metrics available on
-    env: NODE_METRICS_PORT
+    env: EXPORTER_METRICS_PORT
     blankText: the default of 9101
     default: 9101
     type: uint16

@@ -7,8 +7,7 @@ services:
     command: "--path.rootfs=/host --web.listen-address=:${EXPORTER_METRICS_PORT:-9101}"
     volumes:
       - "/:/host:ro,rslave"
-    networks:
-      - net
+    network_mode: host
     pid: host
   prometheus:
     image: prom/prometheus:v2.28.1
@@ -17,8 +16,12 @@ services:
     command: "--web.listen-address=:${PROMETHEUS_PORT:-9091} --config.file=/etc/prometheus/prometheus.yml"
     volumes:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "prometheus-data:/prometheus"
     networks:
       - net
+      - monitor-net
+    extra_hosts:
+      - "host.docker.internal: 172.23.5.254"
   grafana:
     image: grafana/grafana:8.1.1
     container_name: ${COMPOSE_PROJECT_NAME}_grafana
@@ -32,6 +35,17 @@ services:
     networks:
       - net
 networks:
+  # Bridge so node-exporter can get the real NIC details
+  # See https://stackoverflow.com/a/66689508 for more info
+  monitor-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.23.0.0/16
+          ip_range: 172.23.5.0/24
+          gateway: 172.23.5.254
   net:
 volumes:
   grafana-storage:
+  prometheus-data:
