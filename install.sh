@@ -54,6 +54,21 @@ PACKAGE_VERSION="latest"
 NETWORK="prater"
 # The version of docker-compose to install
 DOCKER_COMPOSE_VERSION="1.29.2"
+# Progress output streams
+OUTPUTTO="/dev/null"
+
+
+
+# Parse arguments
+while getopts "dn:v:g" FLAG; do
+    case "$FLAG" in
+        d) NO_DEPS=true ;;
+        n) NETWORK="$OPTARG" ;;
+        v) PACKAGE_VERSION="$OPTARG" ;;
+        g) GUI_INSTALL=true ;;
+        *) fail "Incorrect usage." ;;
+    esac
+done
 
 
 ##
@@ -65,15 +80,20 @@ DOCKER_COMPOSE_VERSION="1.29.2"
 progress() {
     STEP_NUMBER=$1
     MESSAGE=$2
-    echo "Step $STEP_NUMBER of $TOTAL_STEPS: $MESSAGE"
+    if [ -z "$GUI_INSTALL" ]; then
+        echo "Step $STEP_NUMBER of $TOTAL_STEPS: $MESSAGE"
+    else
+        # GUI Format
+        echo "GUI|$TOTAL_STEPS|$STEP_NUMBER|$MESSAGE"
+    fi
 }
 
 
 # Docker installation steps
 install_docker_compose() {
     if [ $ARCH = "amd64" ]; then
-        sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
-        sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
+        sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose  &> $OUTPUTTO || fail "Could not download docker-compose."
+        sudo chmod a+x /usr/local/bin/docker-compose  &> $OUTPUTTO || fail "Could not set executable permissions on docker-compose."
     elif [ $ARCH = "arm64" ]; then
         if command -v apt &> /dev/null ; then
             sudo apt install -y libffi-dev libssl-dev
@@ -93,7 +113,7 @@ install_docker_compose() {
     fi
 }
 add_user_docker() {
-    sudo usermod -aG docker $USER || fail "Could not add user to docker group."
+    sudo usermod -aG docker $USER  &> $OUTPUTTO || fail "Could not add user to docker group."
 }
 
 
@@ -105,16 +125,6 @@ install() {
 # Initialization
 ##
 
-
-# Parse arguments
-while getopts "dn:v:" FLAG; do
-    case "$FLAG" in
-        d) NO_DEPS=true ;;
-        n) NETWORK="$OPTARG" ;;
-        v) PACKAGE_VERSION="$OPTARG" ;;
-        *) fail "Incorrect usage." ;;
-    esac
-done
 
 
 # Get package files URL
@@ -129,7 +139,7 @@ fi
 NETWORK_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/$NETWORK/genesis.ssz"
 
 # Create temporary data folder; clean up on exit
-TEMPDIR=$(mktemp -d 2>/dev/null) || fail "Could not create temporary data directory."
+TEMPDIR=$(mktemp -d 2>/dev/null)  &> $OUTPUTTO || fail "Could not create temporary data directory."
 trap 'rm -rf "$TEMPDIR"' EXIT
 
 
@@ -155,15 +165,15 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
-        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common ntp || fail "Could not install OS packages."; } >&2
+        { sudo apt-get -y update  &> $OUTPUTTO || fail "Could not update OS package definitions."; }
+        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common ntp  &> $OUTPUTTO || fail "Could not install OS packages."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
-        { curl -fsSL "https://download.docker.com/linux/$PLATFORM_NAME/gpg" | sudo apt-key add - || fail "Could not add docker repository key."; } >&2
-        { sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable" || fail "Could not add docker repository."; } >&2
-        { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
-        { sudo apt-get -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
+        { curl -fsSL "https://download.docker.com/linux/$PLATFORM_NAME/gpg" | sudo apt-key add -  &> $OUTPUTTO || fail "Could not add docker repository key."; } >&2
+        { sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable"  &> $OUTPUTTO || fail "Could not add docker repository."; } >&2
+        { sudo apt-get -y update  &> $OUTPUTTO || fail "Could not update OS package definitions."; } >&2
+        { sudo apt-get -y install docker-ce docker-ce-cli containerd.io  &> $OUTPUTTO || fail "Could not install docker packages."; } >&2
 
         # Install docker-compose
         progress 3 "Installing docker-compose..."
@@ -180,14 +190,14 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        { sudo yum install -y yum-utils chrony || fail "Could not install OS packages."; } >&2
-        { sudo systemctl start chronyd || fail "Could not start chrony daemon."; } >&2
+        { sudo yum install -y yum-utils chrony  &> $OUTPUTTO || fail "Could not install OS packages."; } >&2
+        { sudo systemctl start chronyd  &> $OUTPUTTO || fail "Could not start chrony daemon."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
-        { sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || fail "Could not add docker repository."; } >&2
-        { sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
-        { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
+        { sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo  &> $OUTPUTTO || fail "Could not add docker repository."; } >&2
+        { sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io  &> $OUTPUTTO || fail "Could not install docker packages."; } >&2
+        { sudo systemctl start docker  &> $OUTPUTTO || fail "Could not start docker daemon."; } >&2
 
         # Install docker-compose
         progress 3 "Installing docker-compose..."
@@ -204,15 +214,15 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        { sudo dnf -y install dnf-plugins-core chrony || fail "Could not install OS packages."; } >&2
-        { sudo systemctl start chronyd || fail "Could not start chrony daemon."; } >&2
+        { sudo dnf -y install dnf-plugins-core chrony  &> $OUTPUTTO || fail "Could not install OS packages."; } >&2
+        { sudo systemctl start chronyd  &> $OUTPUTTO || fail "Could not start chrony daemon."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
-        { sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo || fail "Could not add docker repository."; } >&2
-        { sudo dnf -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
-        { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
-        { sudo systemctl enable docker || fail "Could not set docker daemon to auto-start on boot."; } >&2
+        { sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo  &> $OUTPUTTO || fail "Could not add docker repository."; } >&2
+        { sudo dnf -y install docker-ce docker-ce-cli containerd.io  &> $OUTPUTTO || fail "Could not install docker packages."; } >&2
+        { sudo systemctl start docker  &> $OUTPUTTO || fail "Could not start docker daemon."; } >&2
+        { sudo systemctl enable docker  &> $OUTPUTTO || fail "Could not set docker daemon to auto-start on boot."; } >&2
 
         # Install docker-compose
         progress 3 "Installing docker-compose..."
@@ -244,26 +254,26 @@ fi
 
 # Create ~/.rocketpool dir & files
 progress 5 "Creating Rocket Pool user data directory..."
-{ mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
-{ touch -a "$RP_PATH/settings.yml" || fail "Could not create the Rocket Pool user settings file."; } >&2
+{ mkdir -p "$RP_PATH/data/validators"  &> $OUTPUTTO || fail "Could not create the Rocket Pool user data directory."; } >&2
+{ touch -a "$RP_PATH/settings.yml"  &> $OUTPUTTO || fail "Could not create the Rocket Pool user settings file."; } >&2
 
 
 # Download and extract package files
 progress 6 "Downloading Rocket Pool package files..."
-{ curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."; } >&2
-{ test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool package files."; } >&2
+{ curl -L -s "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR"  &> $OUTPUTTO || fail "Could not download and extract the Rocket Pool package files."; } >&2
+{ test -d "$PACKAGE_FILES_PATH"  &> $OUTPUTTO || fail "Could not extract the Rocket Pool package files."; } >&2
 
 
 # Copy package files
 progress 7 "Copying package files to Rocket Pool user data directory..."
-{ test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."; } >&2
-{ cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
-{ find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
+{ test -d "$NETWORK_FILES_PATH"  &> $OUTPUTTO || fail "No package files were found for the selected network."; } >&2
+{ cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH"  &> $OUTPUTTO || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
+{ find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null  &> $OUTPUTTO || fail "Could not set executable permissions on package files."; } >&2
 
 
 # Get Network SSZ for Prysm
 progress 8 "Downloading $NETWORK Genesis SSZ for Prysm..."
-{ sudo curl -J -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not save genesis SSZ for $NETWORK."; } >&2
+{ sudo curl -J -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz"  &> $OUTPUTTO || fail "Could not save genesis SSZ for $NETWORK."; } >&2
 
 }
 
