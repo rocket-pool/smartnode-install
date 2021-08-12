@@ -1,43 +1,5 @@
 #!/bin/bash
 
-##
-# Rocket Pool service installation script
-# Prints progress messages to stdout
-# All command output is redirected to stderr
-##
-
-
-# Print a failure message to stderr and exit
-fail() {
-    MESSAGE=$1
-    RED='\033[0;31m'
-    >&2 echo -e "\n${RED}**ERROR**\n$MESSAGE"
-    exit 1
-}
-
-
-# Get CPU architecture
-UNAME_VAL=$(uname -m)
-ARCH=""
-case $UNAME_VAL in
-    x86_64)  ARCH="amd64" ;;
-    aarch64) ARCH="arm64" ;;
-    *)       fail "CPU architecture not supported: $UNAME_VAL" ;;
-esac
-
-
-# Get the platform type
-PLATFORM=$(uname -s)
-if [ "$PLATFORM" = "Linux" ]; then
-    if command -v lsb_release &>/dev/null ; then
-        PLATFORM=$(lsb_release -si)
-    elif [ -f "/etc/centos-release" ]; then
-        PLATFORM="CentOS"
-    elif [ -f "/etc/fedora-release" ]; then
-        PLATFORM="Fedora"
-    fi
-fi
-
 
 ##
 # Config
@@ -69,6 +31,52 @@ while getopts "dn:v:g" FLAG; do
         *) fail "Incorrect usage." ;;
     esac
 done
+
+
+##
+# Rocket Pool service installation script
+# Prints progress messages to stdout
+# All command output is redirected to stderr
+##
+
+
+# Print a failure message to stderr and exit
+fail() {
+    MESSAGE=$1
+    RED='\033[0;31m'
+    if [ -z "$GUI_INSTALL" ]; then
+        # CLI Friendly error messages
+        >&2 echo -e "\n${RED}**ERROR**\n$MESSAGE"
+    else
+        # GUI Friendly error messages
+        printf '%s\n' "$MESSAGE" >&2    ## Send message to stderr. Exclude >&2 if you don't want it that way.
+        exit "${2-1}"                   ## Return a code specified by $2 or 1 by default.
+    fi
+    exit 1
+}
+
+
+# Get CPU architecture
+UNAME_VAL=$(uname -m)
+ARCH=""
+case $UNAME_VAL in
+    x86_64)  ARCH="amd64" ;;
+    aarch64) ARCH="arm64" ;;
+    *)       fail "CPU architecture not supported: $UNAME_VAL" ;;
+esac
+
+
+# Get the platform type
+PLATFORM=$(uname -s)
+if [ "$PLATFORM" = "Linux" ]; then
+    if command -v lsb_release &>/dev/null ; then
+        PLATFORM=$(lsb_release -si)
+    elif [ -f "/etc/centos-release" ]; then
+        PLATFORM="CentOS"
+    elif [ -f "/etc/fedora-release" ]; then
+        PLATFORM="Fedora"
+    fi
+fi
 
 
 ##
