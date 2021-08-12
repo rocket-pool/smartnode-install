@@ -3,17 +3,27 @@ services:
   node-exporter:
     image: prom/node-exporter:v1.2.2
     container_name: ${COMPOSE_PROJECT_NAME}_exporter
+    cap_drop:
+      - ALL
+    user: "65534:65534"
     restart: unless-stopped
-    command: "--path.rootfs=/host --web.listen-address=:${EXPORTER_METRICS_PORT:-9101}"
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.textfile.directory=/host/textfile_collector"
+      - "--web.listen-address=:${EXPORTER_METRICS_PORT:-9101}"
     volumes:
-      - "/:/host:ro,rslave"
+      - /proc:/host/proc:ro,rslave
+      - /sys:/host/sys:ro,rslave
+      - /var/lib/node_exporter/textfile_collector:/host/textfile_collector:ro
     network_mode: host
-    pid: host
   prometheus:
     image: prom/prometheus:v2.28.1
     container_name: ${COMPOSE_PROJECT_NAME}_prometheus
     restart: unless-stopped
-    command: "--web.listen-address=:${PROMETHEUS_PORT:-9091} --config.file=/etc/prometheus/prometheus.yml"
+    command:
+      - "--web.listen-address=:${PROMETHEUS_PORT:-9091}"
+      - "--config.file=/etc/prometheus/prometheus.yml"
     volumes:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml"
       - "prometheus-data:/prometheus"
