@@ -99,7 +99,7 @@ chains:
           env: WS_PROVIDER_URL
           required: true
   eth2:
-    provider: eth2:5052
+    provider: http://eth2:5052
     client:
       options:
       - id: lighthouse
