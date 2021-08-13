@@ -81,7 +81,7 @@ install_docker_compose() {
             sudo apt install -y libffi-dev libssl-dev
             sudo apt install -y python3 python3-pip
             sudo apt remove -y python-configparser
-            sudo pip3 install docker-compose
+            pip3 install --upgrade docker-compose==$DOCKER_COMPOSE_VERSION
         else
             RED='\033[0;31m'
             echo ""

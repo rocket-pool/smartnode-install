@@ -28,7 +28,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.10.6
+        image: ethereum/client-go:v1.10.7
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -194,7 +194,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.7.0
+        image: consensys/teku:21.8.0
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
@@ -215,7 +215,6 @@ chains:
           default: 9001
           blankText: the default of 9001
 metrics:
-  enabled: false
   params:
   - name: ETH2 Metrics Port
     desc: The port for the Beacon Chain client to make its metrics available on
