@@ -218,7 +218,7 @@ chains:
           default: 9001
           blankText: the default of 9001
 metrics:
-  enabled: true
+  enabled: false
   params:
   - name: ETH2 Metrics Port
     desc: The port for the Beacon Chain client to make its metrics available on

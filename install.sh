@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ##
 # Rocket Pool service installation script
@@ -6,12 +6,14 @@
 # All command output is redirected to stderr
 ##
 
+COLOR_RED='\033[0;31m'
+COLOR_YELLOW='\033[33m'
+COLOR_RESET='\033[0m'
 
 # Print a failure message to stderr and exit
 fail() {
     MESSAGE=$1
-    RED='\033[0;31m'
-    >&2 echo -e "\n${RED}**ERROR**\n$MESSAGE"
+    >&2 echo -e "\n${COLOR_RED}**ERROR**\n$MESSAGE${COLOR_RESET}"
     exit 1
 }
 
@@ -263,7 +265,17 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 
 # Get Network SSZ for Prysm
 progress 8 "Downloading $NETWORK Genesis SSZ for Prysm..."
-{ sudo curl -J -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || fail "Could not save genesis SSZ for $NETWORK."; } >&2
+{ 
+    if [ -f "$RP_PATH/data/validators/genesis.ssz" ]; then
+        echo "Already downloaded."
+    else
+        curl -J -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || (
+        echo "\n${COLOR_YELLOW}Could not save the Prysm genesis.ssz file for Prater.
+If you are not using Prysm, you can ignore this.
+If you are using Prysm, please run the following command:
+curl -J -L \"$NETWORK_GENESIS_URL\" -o \"$RP_PATH/data/validators/genesis.ssz\"${COLOR_RESET}" >&2 )
+    fi
+} >&2
 
 }
 
