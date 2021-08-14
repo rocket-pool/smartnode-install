@@ -24,6 +24,7 @@ ARCH=""
 case $UNAME_VAL in
     x86_64)  ARCH="amd64" ;;
     aarch64) ARCH="arm64" ;;
+    arm64)   ARCH="arm64" ;;
     *)       fail "CPU architecture not supported: $UNAME_VAL" ;;
 esac
 
@@ -47,7 +48,7 @@ fi
 
 
 # The total number of steps in the installation process
-TOTAL_STEPS="8"
+TOTAL_STEPS="7"
 # The Rocket Pool user data path
 RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
@@ -126,9 +127,6 @@ else
     PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
 fi
 
-
-# Get genesis SSZ for the current network
-NETWORK_GENESIS_URL="https://github.com/eth2-clients/eth2-networks/raw/master/shared/$NETWORK/genesis.ssz"
 
 # Create temporary data folder; clean up on exit
 TEMPDIR=$(mktemp -d 2>/dev/null) || fail "Could not create temporary data directory."
@@ -261,21 +259,6 @@ progress 7 "Copying package files to Rocket Pool user data directory..."
 { test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."; } >&2
 { cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
-
-
-# Get Network SSZ for Prysm
-progress 8 "Downloading $NETWORK Genesis SSZ for Prysm..."
-{ 
-    if [ -f "$RP_PATH/data/validators/genesis.ssz" ]; then
-        echo "Already downloaded."
-    else
-        curl -J -L "$NETWORK_GENESIS_URL" -o "$RP_PATH/data/validators/genesis.ssz" || (
-        echo "\n${COLOR_YELLOW}Could not save the Prysm genesis.ssz file for Prater.
-If you are not using Prysm, you can ignore this.
-If you are using Prysm, please run the following command:
-curl -J -L \"$NETWORK_GENESIS_URL\" -o \"$RP_PATH/data/validators/genesis.ssz\"${COLOR_RESET}" >&2 )
-    fi
-} >&2
 
 }
 
