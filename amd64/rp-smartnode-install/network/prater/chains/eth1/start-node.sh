@@ -39,7 +39,7 @@ fi
 # Pocket startup
 if [ "$CLIENT" = "pocket" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --network eth-goerli --projectId $POCKET_PROJECT_ID --providerType pocket 
+    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --network eth-goerli --projectId $POCKET_PROJECT_ID --providerType pocket
 
 fi
 

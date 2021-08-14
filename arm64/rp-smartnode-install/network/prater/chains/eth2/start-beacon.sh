@@ -48,7 +48,7 @@ fi
 
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
-    
+
     # Get Prater SSZ
     if [ ! -f "/validators/genesis.ssz" ]; then
         wget "https://github.com/eth2-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
@@ -58,6 +58,12 @@ if [ "$CLIENT" = "prysm" ]; then
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
+    fi
+
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $ETH2_METRICS_PORT"
+    else
+        CMD="$CMD --disable-monitoring"
     fi
 
     exec ${CMD}

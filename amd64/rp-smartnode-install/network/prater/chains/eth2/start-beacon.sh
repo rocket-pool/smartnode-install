@@ -60,6 +60,12 @@ if [ "$CLIENT" = "prysm" ]; then
         CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
     fi
 
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $ETH2_METRICS_PORT"
+    else
+        CMD="$CMD --disable-monitoring"
+    fi
+
     exec ${CMD}
 
 fi
