@@ -32,6 +32,9 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
+    # Get rid of the protocol prefix
+    ETH2_PROVIDER=$(echo $ETH2_PROVIDER | sed -E 's/.*\:\/\/(.*)/\1/')
+
     exec /app/cmd/validator/validator --accept-terms-of-use --prater --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider "$ETH2_PROVIDER" --graffiti "$GRAFFITI"
 
 fi
