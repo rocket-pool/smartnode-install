@@ -12,7 +12,7 @@ fi
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
-    exec /usr/local/bin/lighthouse validator --network prater --datadir /validators/lighthouse --init-slashing-protection --beacon-node "http://$ETH2_PROVIDER" --graffiti "$GRAFFITI"
+    exec /usr/local/bin/lighthouse validator --network prater --datadir /validators/lighthouse --init-slashing-protection --beacon-node "http://$ETH2_PROVIDER" --graffiti "$GRAFFITI" ${VALIDATOR_EXTRA_ARGS}
 
 fi
 
@@ -35,7 +35,7 @@ if [ "$CLIENT" = "prysm" ]; then
     # Get rid of the protocol prefix
     ETH2_PROVIDER=$(echo $ETH2_PROVIDER | sed -E 's/.*\:\/\/(.*)/\1/')
 
-    exec /app/cmd/validator/validator --accept-terms-of-use --prater --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider "$ETH2_PROVIDER" --graffiti "$GRAFFITI"
+    exec /app/cmd/validator/validator --accept-terms-of-use --prater --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider "$ETH2_PROVIDER" --graffiti "$GRAFFITI" ${VALIDATOR_EXTRA_ARGS}
 
 fi
 
@@ -43,7 +43,7 @@ fi
 # Teku startup
 if [ "$CLIENT" = "teku" ]; then
 
-    exec /opt/teku/bin/teku validator-client --network=prater --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint="http://$ETH2_PROVIDER" --validators-graffiti="$GRAFFITI"
+    exec /opt/teku/bin/teku validator-client --network=prater --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint="http://$ETH2_PROVIDER" --validators-graffiti="$GRAFFITI" ${VALIDATOR_EXTRA_ARGS}
 
 fi
 

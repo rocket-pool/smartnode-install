@@ -23,7 +23,7 @@ if [ "$CLIENT" = "geth" ]; then
         CMD="$CMD --port $ETH1_P2P_PORT"
     fi
 
-    exec ${CMD} --http.vhosts '*'
+    exec ${CMD} --http.vhosts '*' ${ETH1_EXTRA_ARGS}
 
 fi
 
@@ -31,7 +31,7 @@ fi
 # Infura startup
 if [ "$CLIENT" = "infura" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --wsPort 8546 --network goerli --projectId $INFURA_PROJECT_ID --providerType infura
+    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --wsPort 8546 --network goerli --projectId $INFURA_PROJECT_ID --providerType infura $ETH1_EXTRA_ARGS
 
 fi
 
@@ -39,7 +39,7 @@ fi
 # Pocket startup
 if [ "$CLIENT" = "pocket" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --network eth-goerli --projectId $POCKET_PROJECT_ID --providerType pocket 
+    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --network eth-goerli --projectId $POCKET_PROJECT_ID --providerType pocket $ETH1_EXTRA_ARGS
 
 fi
 
@@ -47,7 +47,7 @@ fi
 # Custom provider startup
 if [ "$CLIENT" = "custom" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --wsPort 8546 --httpProviderUrl $HTTP_PROVIDER_URL --wsProviderUrl $WS_PROVIDER_URL --providerType=""
+    exec /go/bin/rocketpool-pow-proxy --httpPort 8545 --wsPort 8546 --httpProviderUrl $HTTP_PROVIDER_URL --wsProviderUrl $WS_PROVIDER_URL --providerType="" $ETH1_EXTRA_ARGS
 
 fi
 

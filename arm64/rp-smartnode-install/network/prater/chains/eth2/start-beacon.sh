@@ -18,7 +18,7 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --target-peers $ETH2_MAX_PEERS"
     fi
 
-    exec ${CMD}
+    exec ${CMD} ${ETH2_EXTRA_ARGS}
 
 fi
 
@@ -41,7 +41,7 @@ if [ "$CLIENT" = "nimbus" ]; then
     fi
 
     # Graffiti breaks if it's in the CMD string instead of here because of spaces
-    exec ${CMD} --graffiti="$GRAFFITI"
+    exec ${CMD} --graffiti="$GRAFFITI" ${ETH2_EXTRA_ARGS}
 
 fi
 
@@ -60,7 +60,7 @@ if [ "$CLIENT" = "prysm" ]; then
         CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
     fi
 
-    exec ${CMD}
+    exec ${CMD} ${ETH2_EXTRA_ARGS}
 
 fi
 
@@ -74,6 +74,6 @@ if [ "$CLIENT" = "teku" ]; then
         CMD="$CMD --p2p-peer-lower-bound=$ETH2_MAX_PEERS --p2p-peer-upper-bound=$ETH2_MAX_PEERS"
     fi
 
-    exec ${CMD}
+    exec ${CMD} ${ETH2_EXTRA_ARGS}
 
 fi

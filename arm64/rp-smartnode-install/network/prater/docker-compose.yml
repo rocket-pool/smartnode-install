@@ -24,6 +24,7 @@ services:
       - GETH_CACHE_SIZE=${GETH_CACHE_SIZE}
       - GETH_MAX_PEERS=${GETH_MAX_PEERS}
       - ETH1_P2P_PORT=${ETH1_P2P_PORT}
+      - ETH1_EXTRA_ARGS=${ETH1_EXTRA_ARGS}
     entrypoint: sh
     command: "/setup/start-node.sh"
   eth2:
@@ -51,6 +52,7 @@ services:
       - ETH2_MAX_PEERS=${ETH2_MAX_PEERS}
       - ENABLE_METRICS=${ENABLE_METRICS}
       - ETH2_METRICS_PORT=${ETH2_METRICS_PORT}
+      - ETH2_EXTRA_ARGS=${ETH2_EXTRA_ARGS}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
@@ -71,6 +73,7 @@ services:
       - ETH2_PROVIDER=${ETH2_PROVIDER}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
+      - VALIDATOR_EXTRA_ARGS=${VALIDATOR_EXTRA_ARGS}
     entrypoint: sh
     command: "/setup/start-validator.sh"
     depends_on:
