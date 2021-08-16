@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 5,
-  "iteration": 1629138314346,
+  "iteration": 1629139895456,
   "links": [],
   "panels": [
     {
@@ -923,7 +923,7 @@
               "viz": false
             },
             "lineInterpolation": "stepBefore",
-            "lineWidth": 0,
+            "lineWidth": 3,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -938,6 +938,7 @@
               "mode": "off"
             }
           },
+          "decimals": 1,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -973,7 +974,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(validator_successful_attestations{job=\"validator\"}[$__rate_interval]) * on(pubkey) validator_inclusion_distance{job=\"validator\"}) * 45",
+          "expr": "irate(validator_successful_attestations{job=\"validator\"}[$__rate_interval]) * on(pubkey) validator_inclusion_distance{job=\"validator\"} * 15",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -3735,5 +3736,5 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.0.0 for Prysm",
   "uid": "Ur22GG77z3",
-  "version": 12
+  "version": 13
 }
