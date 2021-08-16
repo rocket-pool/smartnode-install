@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 5,
-  "iteration": 1629088135943,
+  "iteration": 1629134353595,
   "links": [],
   "panels": [
     {
@@ -652,7 +652,7 @@
     },
     {
       "datasource": null,
-      "description": "Your CPU's current clock speed (averaged across all cores)",
+      "description": "The temperature of your CPU (you can set this to Tctl or Tdie, whichever you prefer to monitor).\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -663,12 +663,20 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "yellow",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 65
               }
             ]
           },
-          "unit": "hertz"
+          "unit": "celsius"
         },
         "overrides": []
       },
@@ -678,10 +686,10 @@
         "x": 4,
         "y": 5
       },
-      "id": 78,
+      "id": 82,
       "options": {
         "colorMode": "value",
-        "graphMode": "none",
+        "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -698,13 +706,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg(node_cpu_frequency_max_hertz{job=\"node\"})",
+          "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "CPU Speed",
+      "title": "CPU Temp",
       "type": "stat"
     },
     {
@@ -965,7 +973,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(validator_successful_attestations{job=\"validator\"}[$__rate_interval]) * on(pubkey) validator_inclusion_distance{job=\"validator\"}) * 15",
+          "expr": "sum(rate(validator_successful_attestations{job=\"validator\"}[$__rate_interval]) * on(pubkey) validator_inclusion_distance{job=\"validator\"}) * 45",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1069,11 +1077,39 @@
     },
     {
       "datasource": null,
-      "description": "The temperature of your CPU (you can set this to Tctl or Tdie, whichever you prefer to monitor).\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "Tracks the amount of CPU consumption for the eth2 client and the total system. 100% means all of your CPU core are being used at their full capacity. The yellow line indicates how much CPU a single core can provide in your system.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 70,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -1082,55 +1118,102 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 50
-              },
-              {
-                "color": "red",
-                "value": 65
               }
             ]
           },
-          "unit": "celsius"
+          "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Single Core Cap"
+            },
+            "properties": [
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Prysm"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#3274D9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 4,
+        "h": 6,
         "w": 6,
         "x": 0,
         "y": 8
       },
-      "id": 82,
+      "id": 56,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
         },
-        "text": {},
-        "textMode": "auto"
+        "tooltip": {
+          "mode": "single"
+        }
       },
       "pluginVersion": "8.1.1",
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
+          "expr": "(1 - avg by (instance) (irate(node_cpu_seconds_total{job=\"node\", mode=\"idle\"}[$__rate_interval]))) * 100",
+          "hide": false,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Total",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "(sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) + sum(avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval])))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Prysm",
           "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Single Core Cap",
+          "refId": "C"
         }
       ],
-      "title": "CPU Temp",
-      "type": "stat"
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "CPU Usage",
+      "type": "timeseries"
     },
     {
       "datasource": null,
@@ -1438,7 +1521,7 @@
     },
     {
       "datasource": null,
-      "description": "Tracks the amount of CPU consumption for the eth2 client and the total system. 100% means all of your CPU core are being used at their full capacity. The yellow line indicates how much CPU a single core can provide in your system.",
+      "description": "This tracks how long it takes between one of your processes trying to read from / write to your SSD, and when that operation is actually performed. Think of this like \"how long SSD reads and writes have to wait in a queue before completing\". The longer this time, the longer it takes for your node to perform its Beacon Chain duties.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1482,60 +1565,21 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "s"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Single Core Cap"
-            },
-            "properties": [
-              {
-                "id": "custom.fillOpacity",
-                "value": 0
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 2
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Prysm"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#3274D9",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 5,
         "w": 6,
         "x": 0,
-        "y": 12
+        "y": 14
       },
-      "id": 56,
+      "id": 76,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "hidden",
           "placement": "bottom"
         },
         "tooltip": {
@@ -1546,34 +1590,15 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(1 - avg by (instance) (irate(node_cpu_seconds_total{job=\"node\", mode=\"idle\"}[$__rate_interval]))) * 100",
-          "hide": false,
+          "expr": "irate(node_pressure_io_waiting_seconds_total{job=\"node\"}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "Total",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "(sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) + sum(avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval])))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "Prysm",
+          "legendFormat": "",
           "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "legendFormat": "Single Core Cap",
-          "refId": "C"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "CPU Usage",
+      "title": "I/O Wait Time",
       "type": "timeseries"
     },
     {
@@ -1740,96 +1765,6 @@
       "title": "Beacon Chain Rewards (Updates Every 5 Minutes)",
       "transparent": true,
       "type": "text"
-    },
-    {
-      "datasource": null,
-      "description": "The average read/write latency of your SSD. The lower it is, the faster your machine can process and respond to Beacon Chain activities like attesting. Change the `device` setting in the queries to be the SSD you want to track (typically the one with your chain data on it).\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 70,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 0,
-        "y": 17
-      },
-      "id": 70,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.1.1",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "irate(node_disk_write_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_writes_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "Write",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "irate(node_disk_read_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_reads_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
-          "interval": "",
-          "legendFormat": "Read",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "SSD Latency",
-      "type": "timeseries"
     },
     {
       "datasource": null,
@@ -2035,6 +1970,96 @@
       "timeShift": null,
       "title": "Solo Staking APR",
       "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "The average read/write latency of your SSD. The lower it is, the faster your machine can process and respond to Beacon Chain activities like attesting. Change the `device` setting in the queries to be the SSD you want to track (typically the one with your chain data on it).\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 70,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 19
+      },
+      "id": 70,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "irate(node_disk_write_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_writes_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Write",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "irate(node_disk_read_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_reads_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
+          "interval": "",
+          "legendFormat": "Read",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "SSD Latency",
+      "type": "timeseries"
     },
     {
       "datasource": null,
@@ -2312,88 +2337,6 @@
     },
     {
       "datasource": null,
-      "description": "This tracks how long it takes between one of your processes trying to read from / write to your SSD, and when that operation is actually performed. Think of this like \"how long SSD reads and writes have to wait in a queue before completing\". The longer this time, the longer it takes for your node to perform its Beacon Chain duties.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 70,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 0,
-        "y": 21
-      },
-      "id": 76,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.1.1",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "irate(node_pressure_io_waiting_seconds_total{job=\"node\"}[$__rate_interval])",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "I/O Wait Time",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 9,
@@ -2579,7 +2522,7 @@
               }
             ]
           },
-          "unit": "ETH"
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -2637,7 +2580,7 @@
               }
             ]
           },
-          "unit": "RPL"
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -2695,7 +2638,7 @@
               }
             ]
           },
-          "unit": "RPL"
+          "unit": "locale"
         },
         "overrides": []
       },
@@ -3792,5 +3735,5 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.0.0 for Prysm",
   "uid": "Ur22GG77z3",
-  "version": 10
+  "version": 11
 }
