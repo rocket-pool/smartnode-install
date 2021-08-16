@@ -12,7 +12,13 @@ fi
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
-    exec /usr/local/bin/lighthouse validator --network prater --datadir /validators/lighthouse --init-slashing-protection --beacon-node "$ETH2_PROVIDER" --graffiti "$GRAFFITI"
+    CMD="/usr/local/bin/lighthouse validator --network prater --datadir /validators/lighthouse --init-slashing-protection --beacon-node $ETH2_PROVIDER"
+
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $VALIDATOR_METRICS_PORT"
+    fi
+
+    exec ${CMD} --graffiti "$GRAFFITI"
 
 fi
 

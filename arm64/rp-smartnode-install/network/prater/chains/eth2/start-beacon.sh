@@ -18,6 +18,10 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --target-peers $ETH2_MAX_PEERS"
     fi
 
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $ETH2_METRICS_PORT --validator-monitor-auto"
+    fi
+
     exec ${CMD}
 
 fi
@@ -36,7 +40,7 @@ if [ "$CLIENT" = "nimbus" ]; then
         CMD="$CMD --max-peers=$ETH2_MAX_PEERS"
     fi
 
-    if [ ! -z "$ENABLE_METRICS" ]; then
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT"
     fi
 
