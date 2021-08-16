@@ -1948,7 +1948,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "((rocketpool_node_beacon_balance{job=\"rocketpool\"}) - (rocketpool_node_beacon_balance{job=\"rocketpool\"} offset 1d != 0)) / 32 / 2 * 365",
+          "expr": "((rocketpool_node_beacon_balance{job=\"rocketpool\"}) - (rocketpool_node_beacon_balance{job=\"rocketpool\"} offset 1d != 0)) / 32 / rocketpool_node_active_minipool_count{job=\"rocketpool\"} * 365",
           "hide": false,
           "interval": "",
           "legendFormat": "annualized daily return",
@@ -3674,7 +3674,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "eth2:9100",
           "value": "eth2:9100"
         },
@@ -3724,5 +3724,5 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.0.0 for Nimbus",
   "uid": "Ur22GG77z4",
-  "version": 13
+  "version": 14
 }
