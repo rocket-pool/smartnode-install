@@ -84,6 +84,10 @@ if [ "$CLIENT" = "teku" ]; then
         CMD="$CMD --p2p-peer-lower-bound=$ETH2_MAX_PEERS --p2p-peer-upper-bound=$ETH2_MAX_PEERS"
     fi
 
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT --metrics-host-allowlist=*" 
+    fi
+
     exec ${CMD}
 
 fi

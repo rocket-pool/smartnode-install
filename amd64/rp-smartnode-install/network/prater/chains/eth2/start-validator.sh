@@ -57,7 +57,13 @@ fi
 # Teku startup
 if [ "$CLIENT" = "teku" ]; then
 
-    exec /opt/teku/bin/teku validator-client --network=prater --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint="$ETH2_PROVIDER" --validators-graffiti="$GRAFFITI"
+    CMD="/opt/teku/bin/teku validator-client --network=prater --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$ETH2_PROVIDER"
+
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VALIDATOR_METRICS_PORT --metrics-host-allowlist=*" 
+    fi
+
+    exec ${CMD} --validators-graffiti="$GRAFFITI"
 
 fi
 
