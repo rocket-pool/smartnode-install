@@ -136,7 +136,7 @@
     },
     {
       "datasource": null,
-      "description": "This will turn red when you system needs to be rebooted because of security updates.\n\nSetting this up is Operating System specific, so it doesn't come ready out of the box; see the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "This will turn red when your system needs to be rebooted because of security updates.\n\nSetting this up is Operating System specific, so it doesn't come ready out of the box; see the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -180,7 +180,7 @@
       "id": 224,
       "options": {
         "colorMode": "background",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
