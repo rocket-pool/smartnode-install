@@ -262,8 +262,8 @@ install() {
 
     # Create ~/.rocketpool dir & files
     progress 5 "Creating Rocket Pool user data directory..."
-    { mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
-    { touch -a "$RP_PATH/settings.yml" || fail "Could not create the Rocket Pool user settings file."; } >&2
+    { mkdir -p "$RP_PATH/data/validators"  &> $OUTPUTTO || fail "Could not create the Rocket Pool user data directory."; } >&2
+    { touch -a "$RP_PATH/settings.yml"  &> $OUTPUTTO || fail "Could not create the Rocket Pool user settings file."; } >&2
 
 
     # Download and extract package files
