@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 4,
-  "iteration": 1629138267746,
+  "iteration": 1629168569396,
   "links": [],
   "panels": [
     {
@@ -348,17 +348,8 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
+          "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -401,7 +392,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "vc_signed_attestations_total{job=\"validator\", status=\"success\"} OR on() vector(0)",
+          "expr": "sum(vc_signed_attestations_total{job=\"validator\", status=\"success\"} or vector(0))",
           "hide": false,
           "interval": "",
           "legendFormat": "Attestations",
@@ -409,7 +400,8 @@
         },
         {
           "exemplar": true,
-          "expr": "vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"} OR on() vector(0)",
+          "expr": "sum(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"} or vector(0))",
+          "instant": false,
           "interval": "",
           "legendFormat": "Proposals",
           "refId": "A"
@@ -418,6 +410,7 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "Validator Activity",
+      "transformations": [],
       "type": "stat"
     },
     {
@@ -494,7 +487,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(rate(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"}[$__rate_interval])) * 45 OR on() vector(0)",
+          "expr": "sum(rate(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"}[$__rate_interval]) or vector(0)) * 45",
           "hide": false,
           "interval": "",
           "legendFormat": "Proposal",
@@ -502,7 +495,7 @@
         },
         {
           "exemplar": true,
-          "expr": "(rate(vc_signed_attestations_total{job=\"validator\", status=\"success\"}[$__rate_interval])) * 45 OR on() vector(0)",
+          "expr": "sum(rate(vc_signed_attestations_total{job=\"validator\", status=\"success\"}[$__rate_interval]) or vector(0)) * 45",
           "interval": "",
           "legendFormat": "Attestation",
           "refId": "B"
@@ -935,7 +928,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate (validator_monitor_attestation_in_aggregate_delay_seconds_bucket{job=\"eth2\", src=\"gossip\"}[$__rate_interval])) without (validator)",
+          "expr": "sum(rate(validator_monitor_attestation_in_aggregate_delay_seconds_bucket{job=\"eth2\", src=\"gossip\"}[$__rate_interval])) without (validator)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1389,7 +1382,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sync_peers_per_status{job=\"eth2\", sync_status=\"Synced\"}",
+          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1473,7 +1466,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sync_peers_per_status{job=\"eth2\", sync_status=\"Synced\"}",
+          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "B"
@@ -3700,5 +3693,5 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.0.0 for Lighthouse",
   "uid": "Ur22GG77z2",
-  "version": 21
+  "version": 24
 }
