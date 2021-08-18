@@ -10,6 +10,11 @@ TEXTFILE_COLLECTOR_PATH="/var/lib/node_exporter/textfile_collector"
 UPDATE_SCRIPT_PATH="/usr/share"
 
 
+COLOR_RED='\033[0;31m'
+COLOR_YELLOW='\033[33m'
+COLOR_RESET='\033[0m'
+
+
 # Print a failure message to stderr and exit
 fail() {
     MESSAGE=$1
@@ -62,6 +67,14 @@ if [ "$INSTALLER" == "dnf" ]; then
 fi
 
 
+# Check if SELinux is enabled
+if [ $(selinuxenabled && echo $?) -ne 0 ]; then
+    SELINUX=false
+else
+    SELINUX=true
+fi
+
+
 # The default smart node package version to download
 PACKAGE_VERSION="latest"
 
@@ -102,7 +115,6 @@ trap 'rm -rf "$TEMPDIR"' EXIT
 
 # Get temporary data paths
 PACKAGE_FILES_PATH="$TEMPDIR/rp-update-tracker"
-NETWORK_FILES_PATH="$PACKAGE_FILES_PATH/network/$NETWORK"
 
 
 case "$INSTALLER" in
@@ -143,7 +155,10 @@ case "$INSTALLER" in
         # Install dependencies
         progress 1 "Installing dependencies..."
         { sudo dnf -y check-update; } >&2
-        { sudo dnf -y install dnf-utils moreutils || fail "Could not install OS dependencies.";  } >&2
+        { sudo dnf -y install epel-release dnf-utils || fail "Could not install OS dependencies.";  } >&2
+        # PowerTools is needed for CentOS 8 to install moreutils, but it will fail for e.g. Fedora
+        { sudo dnf config-manager --set-enabled powertools || true; } >&2
+        { sudo dnf -y install moreutils || fail "Could not install moreutils.";  } >&2
 
         # Download and extract package files
         progress 2 "Downloading Rocket Pool update tracker package files..."
@@ -164,9 +179,19 @@ case "$INSTALLER" in
 
         # Install the update checking service
         progress 4 "Installing update tracker service..."
-        { sudo systemctl daemon-reload || fail "Couldn't update systemctl daemons."; } >&2
-        { sudo systemctl enable rp-update-tracker || fail "Couldn't enable update tracker service."; } >&2
-        { sudo systemctl start rp-update-tracker || fail "Couldn't start update tracker service."; } >&2
+        if [ "$SELINUX" = true ]; then
+            echo -e "${COLOR_YELLOW}Your system has SELinux enabled, so Rocket Pool can't automatically start the update tracker service."
+            echo "Please run the following commands manually:"
+            echo ""
+            echo -e '\tsudo restorecon /usr/share/rp-dnf-check.sh /usr/share/rp-version-check.sh /etc/systemd/system/rp-update-tracker.service /etc/systemd/system/rp-update-tracker.timer'
+            echo -e '\tsudo systemctl enable rp-update-tracker'
+            echo -e '\tsudo systemctl start rp-update-tracker'
+            echo -e "${COLOR_RESET}"
+        else
+            { sudo systemctl daemon-reload || fail "Couldn't update systemctl daemons."; } >&2
+            { sudo systemctl enable rp-update-tracker || fail "Couldn't enable update tracker service."; } >&2
+            { sudo systemctl start rp-update-tracker || fail "Couldn't start update tracker service."; } >&2
+        fi
 
     ;;
 
@@ -179,7 +204,7 @@ case "$INSTALLER" in
 
         # Install dependencies
         progress 1 "Installing dependencies..."
-        { sudo yum -y check-update; } >&2
+        { sudo yum -y check-update; } >&2echo
         { sudo yum -y install epel-release yum-utils || fail "Could not install OS dependencies.";  } >&2
         { sudo yum -y install moreutils || fail "Could not install moreutils.";  } >&2
 
@@ -202,9 +227,19 @@ case "$INSTALLER" in
 
         # Install the update checking service
         progress 4 "Installing update tracker service..."
-        { sudo systemctl daemon-reload || fail "Couldn't update systemctl daemons."; } >&2
-        { sudo systemctl enable rp-update-tracker || fail "Couldn't enable update tracker service."; } >&2
-        { sudo systemctl start rp-update-tracker || fail "Couldn't start update tracker service."; } >&2
+        if [ "$SELINUX" = true ]; then
+            echo -e "${COLOR_YELLOW}Your system has SELinux enabled, so Rocket Pool can't automatically start the update tracker service."
+            echo "Please run the following commands manually:"
+            echo ""
+            echo -e '\tsudo restorecon /usr/share/rp-yum-check.sh /usr/share/rp-version-check.sh /etc/systemd/system/rp-update-tracker.service /etc/systemd/system/rp-update-tracker.timer'
+            echo -e '\tsudo systemctl enable rp-update-tracker'
+            echo -e '\tsudo systemctl start rp-update-tracker'
+            echo -e "${COLOR_RESET}"
+        else
+            { sudo systemctl daemon-reload || fail "Couldn't update systemctl daemons."; } >&2
+            { sudo systemctl enable rp-update-tracker || fail "Couldn't enable update tracker service."; } >&2
+            { sudo systemctl start rp-update-tracker || fail "Couldn't start update tracker service."; } >&2
+        fi
 
     ;;
 
