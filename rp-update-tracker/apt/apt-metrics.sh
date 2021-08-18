@@ -1,9 +1,16 @@
 #!/bin/sh
 
-APT_CHECK=$(/usr/lib/update-notifier/apt-check 2>&1 || echo "0;0")
+if [ -f /usr/lib/update-notifier/apt-check ]; then
+    # For Ubuntu systems
+    APT_CHECK=$(/usr/lib/update-notifier/apt-check 2>&1 || echo "0;0")
+    UPDATES=$(echo "$APT_CHECK" | cut -d ';' -f 1)
+    SECURITY=$(echo "$APT_CHECK" | cut -d ';' -f 2)
+else
+    # For Debian systems
+    UPDATES=$(LANG=C apt dist-upgrade -s | grep -P '^\d+ upgraded'| cut -d" " -f1)
+    SECURITY=0
+fi
 
-UPDATES=$(echo "$APT_CHECK" | cut -d ';' -f 1)
-SECURITY=$(echo "$APT_CHECK" | cut -d ';' -f 2)
 REBOOT=$([ -f /var/run/reboot-required ] && echo 1 || echo 0)
 
 echo "# HELP os_upgrades_pending Apt package pending updates by origin."

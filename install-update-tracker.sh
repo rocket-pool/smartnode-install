@@ -128,7 +128,9 @@ case "$INSTALLER" in
         # Install dependencies 
         progress 1 "Installing dependencies..."
         { sudo apt -y update; } >&2
-        { sudo apt -y install update-notifier-common moreutils || fail "Could not install OS dependencies.";  } >&2
+        # Debian doesn't have update-notifier-common
+        { sudo apt -y install update-notifier-common || true; } >&2
+        { sudo apt -y install moreutils || fail "Could not install OS dependencies.";  } >&2
 
         # Download and extract package files
         progress 2 "Downloading Rocket Pool update tracker package files..."
@@ -155,9 +157,10 @@ case "$INSTALLER" in
         # Install dependencies
         progress 1 "Installing dependencies..."
         { sudo dnf -y check-update; } >&2
-        { sudo dnf -y install epel-release dnf-utils || fail "Could not install OS dependencies.";  } >&2
-        # PowerTools is needed for CentOS 8 to install moreutils, but it will fail for e.g. Fedora
+        { sudo dnf -y install dnf-utils || fail "Could not install OS dependencies.";  } >&2
+        # PowerTools and epel-release are needed for CentOS 8 to install moreutils, but it will fail for e.g. Fedora
         { sudo dnf config-manager --set-enabled powertools || true; } >&2
+        { sudo dnf -y install epel-release || true;  } >&2
         { sudo dnf -y install moreutils || fail "Could not install moreutils.";  } >&2
 
         # Download and extract package files
@@ -205,7 +208,9 @@ case "$INSTALLER" in
         # Install dependencies
         progress 1 "Installing dependencies..."
         { sudo yum -y check-update; } >&2echo
-        { sudo yum -y install epel-release yum-utils || fail "Could not install OS dependencies.";  } >&2
+        { sudo yum -y install yum-utils || fail "Could not install OS dependencies.";  } >&2
+        # CentOS 7 requires epel-release, but ignore it if it doesn't exist for others
+        { sudo yum -y install epel-release  || true; } >&2
         { sudo yum -y install moreutils || fail "Could not install moreutils.";  } >&2
 
         # Download and extract package files
