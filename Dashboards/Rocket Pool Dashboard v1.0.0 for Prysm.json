@@ -197,7 +197,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "node_reboot_required{job=\"node\"}",
+          "expr": "os_reboot_required{job=\"node\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -257,7 +257,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max(apt_upgrades_pending{job=\"node\"})",
+          "expr": "max(os_upgrades_pending{job=\"node\"})",
           "interval": "",
           "legendFormat": "OS",
           "refId": "A"
