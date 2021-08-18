@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Expose DNF updates and restart info to Prometheus.
+# Expose yum updates and restart info to Prometheus.
 #
 # Based on yum.sh by Slawomir Gonet <slawek@otwiera.cz>
 # and apt.sh by Ben Kochie <superq@gmail.com>
@@ -20,7 +20,7 @@ mute && /^[[:print:]]+\.[[:print:]]+/ {
 '
 
 check_upgrades() {
-  /usr/bin/dnf -q check-update |
+  /usr/bin/yum -q check-update |
     /usr/bin/xargs -n3 |
     awk "${filter_awk_script}" |
     sort |
@@ -32,7 +32,7 @@ upgrades=$(check_upgrades)
 
 REBOOT=$(needs-restarting -r > /dev/null 2>&1 ; echo "$?")
 
-echo '# HELP os_upgrades_pending DNF package pending updates by origin.'
+echo '# HELP os_upgrades_pending Yum package pending updates by origin.'
 echo '# TYPE os_upgrades_pending gauge'
 if [[ -n "${upgrades}" ]] ; then
   echo "${upgrades}"

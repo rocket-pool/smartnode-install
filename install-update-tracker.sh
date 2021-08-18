@@ -50,6 +50,18 @@ if [ "$PLATFORM" = "Linux" ]; then
 fi
 
 
+# Check for DNF or YUM
+if [ "$INSTALLER" == "dnf" ]; then
+    if ! command -v dnf &>/dev/null ; then
+        if command -v yum &>/dev/null ; then
+            INSTALLER="yum"
+        else
+            fail "You're using a Fedora / CentOS / RHEL system ($OS_ID) but DNF or YUM don't seem to be installed.";
+        fi
+    fi
+fi
+
+
 # The default smart node package version to download
 PACKAGE_VERSION="latest"
 
@@ -158,6 +170,45 @@ case "$INSTALLER" in
 
     ;;
 
+
+    # Legacy CentOS / Fedora / RHEL with Yum
+    yum)
+
+        # The total number of steps in the installation process
+        TOTAL_STEPS="4"
+
+        # Install dependencies
+        progress 1 "Installing dependencies..."
+        { sudo yum -y check-update || fail "Could not update OS package definitions."; } >&2
+        { sudo yum -y install epel-release yum-utils || fail "Could not install OS dependencies.";  } >&2
+        { sudo yum -y install moreutils || fail "Could not install moreutils.";  } >&2
+
+        # Download and extract package files
+        progress 2 "Downloading Rocket Pool update tracker package files..."
+        { curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool update tracker package files."; } >&2
+        { test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool update tracker package files."; } >&2
+
+        # Install the update tracker files
+        progress 3 "Installing update tracker..."
+        { sudo mkdir -p "$TEXTFILE_COLLECTOR_PATH" || fail "Could not create textfile collector path."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/yum/yum-metrics.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move yum update collector."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/rp-version-check.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move Rocket Pool update collector."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/yum/rp-yum-check.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move update tracker script."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/yum/rp-update-tracker.service" "/etc/systemd/system" || fail "Could not move update tracker service."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/yum/rp-update-tracker.timer" "/etc/systemd/system" || fail "Could not move update tracker timer."; } >&2
+        { sudo chmod +x "$UPDATE_SCRIPT_PATH/yum-metrics.sh" || fail "Could not set permissions on dnf update collector."; } >&2
+        { sudo chmod +x "$UPDATE_SCRIPT_PATH/rp-version-check.sh" || fail "Could not set permissions on Rocket Pool update collector."; } >&2
+        { sudo chmod +x "$UPDATE_SCRIPT_PATH/rp-yum-check.sh" || fail "Could not set permissions on Rocket Pool update tracker script."; } >&2
+
+        # Install the update checking service
+        progress 4 "Installing update tracker service..."
+        { sudo systemctl daemon-reload || fail "Couldn't update systemctl daemons."; } >&2
+        { sudo systemctl enable rp-update-tracker || fail "Couldn't enable update tracker service."; } >&2
+        { sudo systemctl start rp-update-tracker || fail "Couldn't start update tracker service."; } >&2
+
+
+    ;;
+
     # Unsupported package manager
     *)
         RED='\033[0;31m'
@@ -168,6 +219,7 @@ case "$INSTALLER" in
         exit 1
     ;;
 
+esac
 }
 
 install "$@"
