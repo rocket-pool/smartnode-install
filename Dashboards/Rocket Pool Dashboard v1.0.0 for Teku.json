@@ -1,4 +1,64 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.1.1"
+    },
+    {
+      "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -21,8 +81,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 8,
-  "iteration": 1629168757699,
+  "id": null,
+  "iteration": 1629307223801,
   "links": [],
   "panels": [
     {
@@ -3669,12 +3729,8 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "eth2:9100",
-          "value": "eth2:9100"
-        },
-        "datasource": "Prometheus",
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(process_virtual_memory_bytes,instance)",
         "description": null,
         "error": null,
@@ -3719,6 +3775,6 @@
   },
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.0.0 for Teku",
-  "uid": "Ur22GG77z5",
-  "version": 4
+  "uid": "Ur22GG77zTK",
+  "version": 1
 }
