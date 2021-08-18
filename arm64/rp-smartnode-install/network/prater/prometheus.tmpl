@@ -13,14 +13,18 @@ scrape_configs:
     static_configs:
       # node-exporter is on the host network so it can get access to the actual machine's network info
       # We have to use 'hosts.docker.internal' to refer to it due to this configuration
-      - targets: ['host.docker.internal:${NODE_EXPORTER_PORT:-9101}']
+      - targets: ['host.docker.internal:${NODE_EXPORTER_PORT:-9103}']
 
   - job_name: 'eth2'
     static_configs:
-      - targets: ['eth2:${ETH2_METRICS_PORT:-8008}']
+      - targets: ['eth2:${ETH2_METRICS_PORT:-9100}']
+
+  - job_name: 'validator'
+    static_configs:
+      - targets: ['validator:${VALIDATOR_METRICS_PORT:-9101}']
 
   - job_name: 'rocketpool'
     scrape_interval: 5m
     scrape_timeout: 5m
     static_configs:
-      - targets: ['node:${NODE_METRICS_PORT:-8009}']
+      - targets: ['node:${NODE_METRICS_PORT:-9102}']

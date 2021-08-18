@@ -73,6 +73,8 @@ services:
       - ETH2_PROVIDER=${ETH2_PROVIDER}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
+      - ENABLE_METRICS=${ENABLE_METRICS}
+      - VALIDATOR_METRICS_PORT=${VALIDATOR_METRICS_PORT}
       - VALIDATOR_EXTRA_ARGS=${ETH1_EXTRA_ARGS}
     entrypoint: sh
     command: "/setup/start-validator.sh"
@@ -101,7 +103,7 @@ services:
       - .:/.rocketpool
     networks:
       - net
-    command: "-m 0.0.0.0 -r ${NODE_METRICS_PORT:-8009} node"
+    command: "-m 0.0.0.0 -r ${NODE_METRICS_PORT:-9102} node"
     depends_on:
       - eth1
       - eth2

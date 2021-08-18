@@ -11,7 +11,7 @@ services:
       - "--path.procfs=/host/proc"
       - "--path.sysfs=/host/sys"
       - "--collector.textfile.directory=/host/textfile_collector"
-      - "--web.listen-address=:${EXPORTER_METRICS_PORT:-9101}"
+      - "--web.listen-address=:${EXPORTER_METRICS_PORT:-9103}"
     volumes:
       - /proc:/host/proc:ro,rslave
       - /sys:/host/sys:ro,rslave
@@ -37,9 +37,9 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_grafana
     restart: unless-stopped
     environment:
-      - GF_SERVER_HTTP_PORT=${GRAFANA_PORT:-3001}
+      - GF_SERVER_HTTP_PORT=${GRAFANA_PORT:-3100}
     ports: 
-      - "${GRAFANA_PORT:-3001}:${GRAFANA_PORT:-3001}/tcp"
+      - "${GRAFANA_PORT:-3100}:${GRAFANA_PORT:-3100}/tcp"
     volumes:
       - "grafana-storage:/var/lib/grafana"
     networks:

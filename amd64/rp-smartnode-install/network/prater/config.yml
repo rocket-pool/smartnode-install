@@ -194,7 +194,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.8.0
+        image: consensys/teku:21.8.1
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
@@ -219,20 +219,25 @@ metrics:
   - name: ETH2 Metrics Port
     desc: The port for the Beacon Chain client to make its metrics available on
     env: ETH2_METRICS_PORT
-    blankText: the default of 8008
-    default: 8008
+    blankText: the default of 9100
+    default: 9100
+  - name: Validator Metrics Port
+    desc: The port for the Validator client to make its metrics available on
+    env: VALIDATOR_METRICS_PORT
+    blankText: the default of 9101
+    default: 9101
     type: uint16
   - name: Rocket Pool Node Metrics Port
     desc: The port for the Rocket Pool Node to make its metrics available on
     env: NODE_METRICS_PORT
-    blankText: the default of 8009
-    default: 8009
+    blankText: the default of 9102
+    default: 9102
     type: uint16
   - name: Node Exporter Metrics Port
     desc: The port for Prometheus's Node Exporter to make its metrics available on
     env: EXPORTER_METRICS_PORT
-    blankText: the default of 9101
-    default: 9101
+    blankText: the default of 9103
+    default: 9103
     type: uint16
   - name: Prometheus Port
     desc: The port for Prometheus to make its metrics available on
@@ -243,6 +248,6 @@ metrics:
   - name: Grafana Port
     desc: The port for Grafana to listen on for HTTP requests
     env: GRAFANA_PORT
-    blankText: the default of 3001
-    default: 3001
+    blankText: the default of 3100
+    default: 3100
     type: uint16

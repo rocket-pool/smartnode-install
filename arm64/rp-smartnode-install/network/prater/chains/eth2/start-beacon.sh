@@ -18,7 +18,15 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --target-peers $ETH2_MAX_PEERS"
     fi
 
+<<<<<<< HEAD
     exec ${CMD} ${ETH2_EXTRA_ARGS}
+=======
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $ETH2_METRICS_PORT --validator-monitor-auto"
+    fi
+
+    exec ${CMD}
+>>>>>>> master
 
 fi
 
@@ -36,7 +44,7 @@ if [ "$CLIENT" = "nimbus" ]; then
         CMD="$CMD --max-peers=$ETH2_MAX_PEERS"
     fi
 
-    if [ ! -z "$ENABLE_METRICS" ]; then
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT"
     fi
 
@@ -48,7 +56,7 @@ fi
 
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
-    
+
     # Get Prater SSZ
     if [ ! -f "/validators/genesis.ssz" ]; then
         wget "https://github.com/eth2-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
@@ -58,6 +66,12 @@ if [ "$CLIENT" = "prysm" ]; then
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
+    fi
+
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $ETH2_METRICS_PORT"
+    else
+        CMD="$CMD --disable-monitoring"
     fi
 
     exec ${CMD} ${ETH2_EXTRA_ARGS}
@@ -72,6 +86,10 @@ if [ "$CLIENT" = "teku" ]; then
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-peer-lower-bound=$ETH2_MAX_PEERS --p2p-peer-upper-bound=$ETH2_MAX_PEERS"
+    fi
+
+    if [ "$ENABLE_METRICS" -eq "1" ]; then
+        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT --metrics-host-allowlist=*" 
     fi
 
     exec ${CMD} ${ETH2_EXTRA_ARGS}
