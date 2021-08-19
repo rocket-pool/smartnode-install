@@ -60,7 +60,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc5
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc6
         link: https://infura.io/
         params:
         - name: Infura Project ID
@@ -72,7 +72,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a light client for Eth 1.0. Suitable\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc5
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc6
         link: https://dashboard.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         params:
@@ -86,7 +86,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc5
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc6
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
