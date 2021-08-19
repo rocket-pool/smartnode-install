@@ -42,7 +42,7 @@ services:
       - "${GRAFANA_PORT:-3100}:${GRAFANA_PORT:-3100}/tcp"
     volumes:
       - "./grafana/prometheus-datasource.yml:/etc/grafana/provisioning/datasources/prometheus.yml"
-      - "./grafana/dashboards/provisioning.yml:/etc/grafana/provisioning/dashboards/dashboards.yml"
+      - "./grafana/dashboards/:/etc/grafana/provisioning/dashboards/"
       - "grafana-storage:/var/lib/grafana"
     networks:
       - net
