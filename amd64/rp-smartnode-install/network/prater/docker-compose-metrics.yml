@@ -12,10 +12,14 @@ services:
       - "--path.sysfs=/host/sys"
       - "--collector.textfile.directory=/host/textfile_collector"
       - "--web.listen-address=:${EXPORTER_METRICS_PORT:-9103}"
+      # Uncomment the line below if you want to monitor the free space of a 2nd disk 
+      # - "--path.rootfs=/rootfs"
     volumes:
       - /proc:/host/proc:ro,rslave
       - /sys:/host/sys:ro,rslave
       - /var/lib/node_exporter/textfile_collector:/host/textfile_collector:ro
+      # Uncomment the line below if you want to monitor the free space of a 2nd disk 
+      # - /:/rootfs:ro 	
     network_mode: host
   prometheus:
     image: prom/prometheus:v2.28.1
@@ -24,6 +28,9 @@ services:
     command:
       - "--web.listen-address=:${PROMETHEUS_PORT:-9091}"
       - "--config.file=/etc/prometheus/prometheus.yml"
+    # Uncomment the lines below if you want to expose Prometheus to your local network, so other machines can access it
+    # ports:
+      # - "${PROMETHEUS_PORT:-9091}:${PROMETHEUS_PORT:-9091}/tcp"
     volumes:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml"
       - "prometheus-data:/prometheus"

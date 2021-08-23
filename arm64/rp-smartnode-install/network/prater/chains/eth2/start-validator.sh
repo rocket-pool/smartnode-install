@@ -57,7 +57,10 @@ fi
 # Teku startup
 if [ "$CLIENT" = "teku" ]; then
 
-    CMD="/opt/teku/bin/teku validator-client --network=prater --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$ETH2_PROVIDER"
+    # Remove any lock files that were left over accidentally after an unclean shutdown
+    rm -f /validators/teku/keys/*.lock
+
+    CMD="/opt/teku/bin/teku validator-client --network=prater --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$ETH2_PROVIDER --validators-keystore-locking-enabled=false"
 
     if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VALIDATOR_METRICS_PORT --metrics-host-allowlist=*" 
