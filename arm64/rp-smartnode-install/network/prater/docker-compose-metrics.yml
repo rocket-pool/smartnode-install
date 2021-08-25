@@ -19,7 +19,7 @@ services:
       - /sys:/host/sys:ro,rslave
       - /var/lib/node_exporter/textfile_collector:/host/textfile_collector:ro
       # Uncomment the line below if you want to monitor the free space of a 2nd disk 
-      # - /:/rootfs:ro 	
+      # - /:/rootfs:ro
     network_mode: host
   prometheus:
     image: prom/prometheus:v2.28.1
