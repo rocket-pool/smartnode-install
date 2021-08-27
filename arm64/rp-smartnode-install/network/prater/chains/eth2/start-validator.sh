@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # This script launches ETH2 validator clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
 
