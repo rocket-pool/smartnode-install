@@ -3,12 +3,13 @@
 
 
 # only show client identifier if version string is under 9 characters
-if ((${#ROCKET_POOL_VERSION} < 9)); then
-    IDENTIFIER="-${CLIENT::1}"
+version_length=`echo -n $ROCKET_POOL_VERSION | wc -c`
+if [ $version_length -lt 9 ]; then
+    IDENTIFIER=`echo -n $CLIENT | head -c 1 | tr [a-z] [A-Z] | sed 's/^/-/'`
 fi
 
 # Get graffiti text
-GRAFFITI="RP${IDENTIFIER^^} $ROCKET_POOL_VERSION"
+GRAFFITI="RP$IDENTIFIER $ROCKET_POOL_VERSION"
 if [ ! -z "$CUSTOM_GRAFFITI" ]; then
     GRAFFITI="$GRAFFITI ($CUSTOM_GRAFFITI)"
 fi
