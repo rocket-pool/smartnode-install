@@ -70,8 +70,11 @@ chains:
           required: true
       - id: pocket
         name: Pocket
-        desc: "\tUse Pocket Network as a light client for Eth 1.0. Suitable\n
-          \t\tfor use in production."
+        desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
+          \t\tSuitable for use in production.\n
+          \t\tPlease enter 'lb/' followed by the Gateway ID (example: lb/{12345...})\n
+          \t\t(leave blank for the standard Rocket Pool Gateway ID for Pocket)
+          "
         image: rocketpool/smartnode-pow-proxy:v1.0.0-rc7
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
