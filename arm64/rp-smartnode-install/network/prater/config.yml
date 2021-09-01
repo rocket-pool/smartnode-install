@@ -167,8 +167,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: rocketpool/prysm:v1.4.3
-        validatorImage: rocketpool/prysm:v1.4.3
+        beaconImage: rocketpool/prysm:v2.0.0-rc.1
+        validatorImage: rocketpool/prysm:v2.0.0-rc.1
         link: https://docs.prylabs.network/docs/getting-started
         params:
         - name: Custom Graffiti
