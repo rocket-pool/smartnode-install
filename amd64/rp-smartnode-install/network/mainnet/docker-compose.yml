@@ -6,8 +6,8 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     ports:
-      - "30303:30303/udp"
-      - "30303:30303/tcp"
+      - "${ETH1_P2P_PORT:-30303}:${ETH1_P2P_PORT:-30303}/udp"
+      - "${ETH1_P2P_PORT:-30303}:${ETH1_P2P_PORT:-30303}/tcp"
     volumes:
       - eth1clientdata:/ethclient
       - ./chains/eth1:/setup:ro
@@ -33,8 +33,8 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     ports:
-      - "9001:9001/tcp"
-      - "9001:9001/udp"
+      - "${ETH2_P2P_PORT:-9001}:${ETH2_P2P_PORT:-9001}/tcp"
+      - "${ETH2_P2P_PORT:-9001}:${ETH2_P2P_PORT:-9001}/udp"
     volumes:
       - ./data/validators:/validators
       - eth2clientdata:/ethclient
@@ -49,6 +49,8 @@ services:
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
       - ETH2_P2P_PORT=${ETH2_P2P_PORT}
       - ETH2_MAX_PEERS=${ETH2_MAX_PEERS}
+      - ENABLE_METRICS=${ENABLE_METRICS}
+      - ETH2_METRICS_PORT=${ETH2_METRICS_PORT}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
@@ -69,6 +71,8 @@ services:
       - ETH2_PROVIDER=${ETH2_PROVIDER}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
+      - ENABLE_METRICS=${ENABLE_METRICS}
+      - VALIDATOR_METRICS_PORT=${VALIDATOR_METRICS_PORT}
     entrypoint: sh
     command: "/setup/start-validator.sh"
     depends_on:
@@ -96,7 +100,7 @@ services:
       - .:/.rocketpool
     networks:
       - net
-    command: "node"
+    command: "-m 0.0.0.0 -r ${NODE_METRICS_PORT:-9102} node"
     depends_on:
       - eth1
       - eth2
