@@ -5,7 +5,7 @@
 # Geth startup
 if [ "$CLIENT" = "geth" ]; then
 
-    CMD="/usr/local/bin/geth --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port 8545 --http.api eth,net,personal,web3 --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api eth,net,personal,web3"
+    CMD="/usr/local/bin/geth --mainnet --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port 8545 --http.api eth,net,personal,web3 --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api eth,net,personal,web3"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
