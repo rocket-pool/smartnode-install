@@ -5,7 +5,25 @@
 # Geth startup
 if [ "$CLIENT" = "geth" ]; then
 
-    CMD="/usr/local/bin/geth --mainnet --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port 8545 --http.api eth,net,personal,web3 --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api eth,net,personal,web3"
+    # Install taskset and ionice
+    apk add util-linux
+
+    # Get the number of available cores
+    CORE_COUNT=$(grep -c ^processor /proc/cpuinfo)
+
+    # Give Geth access to the last core
+    CURRENT_CORE=$((CORE_COUNT - 1))
+    CORE_STRING="$CURRENT_CORE"
+
+    # If there are more than 2 cores, limit Geth to use all but the first 2
+    CURRENT_CORE=$((CURRENT_CORE - 1))
+    while [ "$CURRENT_CORE" -gt "1" ]; do
+        CORE_STRING="$CORE_STRING,$CURRENT_CORE"
+        CURRENT_CORE=$((CURRENT_CORE - 1))
+    done
+
+    # Run Geth with the CPU pinning so it doesn't eat the entire machine, and give it the lowest I/O priority
+    CMD="taskset -c $CORE_STRING ionice -c 3 /usr/local/bin/geth --mainnet --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port 8545 --http.api eth,net,personal,web3 --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api eth,net,personal,web3"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
