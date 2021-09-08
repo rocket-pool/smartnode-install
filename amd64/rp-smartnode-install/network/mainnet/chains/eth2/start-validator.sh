@@ -66,7 +66,7 @@ if [ "$CLIENT" = "teku" ]; then
     # Remove any lock files that were left over accidentally after an unclean shutdown
     rm -f /validators/teku/keys/*.lock
 
-    CMD="/opt/teku/bin/teku validator-client --network=mainnet --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$ETH2_PROVIDER --validators-keystore-locking-enabled=false"
+    CMD="/opt/teku/bin/teku validator-client --network=mainnet --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$ETH2_PROVIDER --validators-keystore-locking-enabled=false --log-destination=CONSOLE"
 
     if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VALIDATOR_METRICS_PORT --metrics-host-allowlist=*" 
