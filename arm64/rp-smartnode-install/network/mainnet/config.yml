@@ -40,8 +40,8 @@ chains:
             of RAM, or 512 if you have 8 GB"
           env: GETH_CACHE_SIZE
           type: uint
-          blankText: the default of 256
-          default: 256
+          blankText: the default of 512
+          default: 512
         - name: Max Peers
           desc: "The maximum number of peers that Geth should connect to -\n
             this can be lowered down to 12 to improve performance on low-power\n
