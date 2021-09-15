@@ -113,7 +113,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v1.5.1
+        image: sigp/lighthouse:v1.5.2
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -198,7 +198,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: rocketpool/teku:21.8.2
+        image: rocketpool/teku:21.9.1
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
