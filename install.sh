@@ -54,7 +54,7 @@ RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
 PACKAGE_VERSION="latest"
 # The default network to run Rocket Pool on
-NETWORK="prater"
+NETWORK="mainnet"
 # The version of docker-compose to install
 DOCKER_COMPOSE_VERSION="1.29.2"
 
@@ -156,7 +156,7 @@ case "$PLATFORM" in
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
         { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
-        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common ntp || fail "Could not install OS packages."; } >&2
+        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common chrony || fail "Could not install OS packages."; } >&2
 
         # Install docker
         progress 2 "Installing docker..."
