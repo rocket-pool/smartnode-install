@@ -964,7 +964,7 @@
     },
     {
       "datasource": null,
-      "description": "This tracks the inclusion distance for each of your attestations. Ideally they would all be 1, meaning the attestation was received by your peers when it was expected (the very next slot). This corresponds to a 0 on Beaconcha.in's \"Optimal Inclusion Distance\" display.\n\nIf you see a large distance, you should confirm it using a separate block explorer like https://prater.beaconcha.in.",
+      "description": "This tracks the inclusion distance for each of your attestations. Ideally they would all be 1, meaning the attestation was received by your peers when it was expected (the very next slot). This corresponds to a 0 on Beaconcha.in's \"Optimal Inclusion Distance\" display.\n\nIf you see a large distance, you should confirm it using a separate block explorer like https://beaconcha.in.",
       "fieldConfig": {
         "defaults": {
           "color": {
