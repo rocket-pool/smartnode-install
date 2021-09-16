@@ -26,7 +26,6 @@ services:
       - ETH1_P2P_PORT=${ETH1_P2P_PORT}
     entrypoint: sh
     command: "/setup/start-node.sh"
-    cap_drop: all
   eth2:
     image: ${ETH2_IMAGE}
     user: root
@@ -56,7 +55,6 @@ services:
     command: "/setup/start-beacon.sh"
     depends_on:
       - eth1
-    cap_drop: all
   validator:
     image: ${VALIDATOR_IMAGE}
     user: root
@@ -79,7 +77,6 @@ services:
     command: "/setup/start-validator.sh"
     depends_on:
       - eth2
-    cap_drop: all
   api:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_api
@@ -94,7 +91,6 @@ services:
       - eth1
     entrypoint: /bin/sleep
     command: "infinity"
-    cap_drop: all
   node:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_node
@@ -108,7 +104,6 @@ services:
     depends_on:
       - eth1
       - eth2
-    cap_drop: all
   watchtower:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_watchtower
@@ -121,7 +116,6 @@ services:
     depends_on:
       - eth1
       - eth2
-    cap_drop: all
 networks:
   net:
 volumes:
