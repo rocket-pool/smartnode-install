@@ -78,12 +78,13 @@ chains:
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         params:
-        - name: Pocket App or Load Balancer ID
-          desc: the ID of your Pocket App; if you use a Load Balancer, prefix it with lb/
+        - name: Gateway ID
+          desc: "the ID of your Pocket App\"n
+          For example: lb/{12345...})"
           env: POCKET_PROJECT_ID
           regex: (^$|^(lb\/)?[0-9a-zA-Z]{24,}$)
           default: lb/6126b4a783e49000343a3a47
-          blankText: the standard Rocket Pool project ID for Pocket
+          blankText: the default Rocket Pool's Gateway ID for Pocket
       - id: custom
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
