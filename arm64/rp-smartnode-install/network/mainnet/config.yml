@@ -169,6 +169,7 @@ chains:
         beaconImage: rocketpool/prysm:v1.4.4
         validatorImage: rocketpool/prysm:v1.4.4
         link: https://docs.prylabs.network/docs/getting-started
+        supermajority: true
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max

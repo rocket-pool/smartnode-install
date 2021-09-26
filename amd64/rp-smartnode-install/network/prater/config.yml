@@ -168,6 +168,7 @@ chains:
         beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-49dce5-debug #v2.0.0-rc.1
         validatorImage: prysmaticlabs/prysm-validator:HEAD-49dce5-debug #v2.0.0-rc.1
         link: https://docs.prylabs.network/docs/getting-started
+        supermajority: true
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
