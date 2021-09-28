@@ -52,6 +52,10 @@ if [ "$CLIENT" = "nimbus" ]; then
         CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT"
     fi
 
+    if [ ! -z "$EXTERNAL_IP" ]; then
+        CMD="$CMD --nat=extip:$EXTERNAL_IP"
+    fi
+
     # Graffiti breaks if it's in the CMD string instead of here because of spaces
     exec ${CMD} --graffiti="$GRAFFITI"
 
