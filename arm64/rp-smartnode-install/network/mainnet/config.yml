@@ -151,8 +151,8 @@ chains:
             a constrained network"
           env: ETH2_MAX_PEERS
           type: uint
-          blankText: the default of 50
-          default: 50
+          blankText: the default of 80
+          default: 80
         - name: P2P Port
           desc: The port to use for P2P (blockchain) traffic
           env: ETH2_P2P_PORT
