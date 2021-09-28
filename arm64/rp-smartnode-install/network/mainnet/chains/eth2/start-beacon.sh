@@ -41,7 +41,7 @@ if [ "$CLIENT" = "nimbus" ]; then
     mkdir -p /validators/nimbus/validators
     mkdir -p /validators/nimbus/secrets
 
-    # Pin Nimbus to the first core so Geth doesn't interfere with it and give it the highest I/O priority
+    # Give Nimbus the highest I/O priority
     CMD="taskset -c 0 ionice -c 2 -n 0 /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=mainnet --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT --web3-url=$ETH1_WS_PROVIDER --rpc --rpc-address=0.0.0.0 --rpc-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
