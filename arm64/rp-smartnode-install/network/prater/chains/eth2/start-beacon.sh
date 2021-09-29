@@ -91,6 +91,10 @@ fi
 # Teku startup
 if [ "$CLIENT" = "teku" ]; then
 
+    # Restrict the JVM's heap size to reduce RAM load
+    export JAVA_OPTS=-Xmx3g
+
+    # Give Teku access to all cores and maximum I/O priority
     CMD="ionice -c 2 -n 0 /opt/teku/bin/teku --network=prater --data-path=/ethclient/teku --p2p-port=$ETH2_P2P_PORT --eth1-endpoint=$ETH1_PROVIDER --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=5052 --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
