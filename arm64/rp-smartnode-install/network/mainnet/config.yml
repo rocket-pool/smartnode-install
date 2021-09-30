@@ -70,19 +70,20 @@ chains:
           required: true
       - id: pocket
         name: Pocket
-        desc: "\tUse Pocket Network as a light client for Eth 1.0. Suitable\n
-          \t\tfor use in production."
+        desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
+          \t\tSuitable for use in production.\n"
         image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 100000
         params:
-        - name: Pocket App or Load Balancer ID
-          desc: the ID of your Pocket App; if you use a Load Balancer, prefix it with lb/
+        - name: Gateway ID
+          desc: "\tPlease enter 'lb/' followed by the Gateway ID (example: lb/{12345...})\n
+          \t\t(leave blank for the standard Rocket Pool Gateway ID for Pocket)"
           env: POCKET_PROJECT_ID
           regex: (^$|^(lb\/)?[0-9a-zA-Z]{24,}$)
           default: lb/613bb4ae8c124d00353c40a1
-          blankText: the standard Rocket Pool project ID for Pocket
+          blankText: the standard Rocket Pool Gateway ID for Pocket
       - id: custom
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
