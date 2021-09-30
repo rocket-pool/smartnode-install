@@ -80,7 +80,7 @@ chains:
           \t\t(leave blank for the standard Rocket Pool Gateway ID for Pocket)"
           env: POCKET_PROJECT_ID
           regex: (^$|^(lb\/)?[0-9a-zA-Z]{24,}$)
-          default: lb/6126b4a783e49000343a3a47
+          default: lb/613bb4ae8c124d00353c40a1
           blankText: the standard Rocket Pool Gateway ID for Pocket
       - id: custom
         name: Custom
