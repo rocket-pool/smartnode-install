@@ -4,8 +4,8 @@ rocketpool:
   rplTokenAddress: ---
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0-pre
-  image: rocketpool/smartnode:v1.0.0-pre
+  graffitiVersion: v1.0.0-dev
+  image: rocketpool/smartnode:v1.0.0-dev
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -60,7 +60,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
         link: https://infura.io/
         params:
         - name: Infura Project ID
@@ -72,7 +72,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 100000
@@ -88,7 +88,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -152,8 +152,8 @@ chains:
             a constrained network"
           env: ETH2_MAX_PEERS
           type: uint
-          blankText: the default of 50
-          default: 50
+          blankText: the default of 80
+          default: 80
         - name: P2P Port
           desc: The port to use for P2P (blockchain) traffic
           env: ETH2_P2P_PORT
@@ -170,6 +170,7 @@ chains:
         beaconImage: rocketpool/prysm:v1.4.4
         validatorImage: rocketpool/prysm:v1.4.4
         link: https://docs.prylabs.network/docs/getting-started
+        supermajority: true
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
@@ -197,7 +198,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: rocketpool/teku:21.9.1
+        image: rocketpool/teku:21.9.2
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
