@@ -63,6 +63,10 @@ fi
 # Teku startup
 if [ "$CLIENT" = "teku" ]; then
 
+    # Teku won't start unless the validator directories already exist
+    mkdir -p /validators/teku/keys
+    mkdir -p /validators/teku/passwords
+
     # Remove any lock files that were left over accidentally after an unclean shutdown
     rm -f /validators/teku/keys/*.lock
 

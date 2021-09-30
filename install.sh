@@ -110,9 +110,10 @@ install() {
 
 
 # Parse arguments
-while getopts "dn:v:" FLAG; do
+while getopts "dp:n:v:" FLAG; do
     case "$FLAG" in
         d) NO_DEPS=true ;;
+        p) RP_PATH="$OPTARG" ;;
         n) NETWORK="$OPTARG" ;;
         v) PACKAGE_VERSION="$OPTARG" ;;
         *) fail "Incorrect usage." ;;
