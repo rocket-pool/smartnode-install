@@ -14,6 +14,7 @@ smartnode:
   rplClaimGasThreshold: 150 # Automatic RPL reward claims will wait until the network's average gas price, in gwei, is below this limit.
                             # Set it to 0 to disable automatic claiming of RPL rewards entirely
   txWatchUrl: https://etherscan.io/tx
+  stakeUrl: https://stake.rocketpool.net
 chains:
   eth1:
     provider: http://eth1:8545
