@@ -140,7 +140,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: rocketpool/nimbus-eth2:altair-beta-edad6e5
+        image: rocketpool/nimbus-eth2:altair-beta-5e83f09
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
