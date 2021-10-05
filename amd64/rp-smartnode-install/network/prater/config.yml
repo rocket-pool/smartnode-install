@@ -140,7 +140,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: rocketpool/nimbus-eth2:altair-beta-4a7a62c
+        image: statusim/nimbus-eth2:multiarch-v1.5.0
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -167,8 +167,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-161a13-debug #v2.0.0-rc.2
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-161a13-debug #v2.0.0-rc.2
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-f7845a-debug #v2.0.0
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-f7845a-debug #v2.0.0
         link: https://docs.prylabs.network/docs/getting-started
         supermajority: true
         params:
