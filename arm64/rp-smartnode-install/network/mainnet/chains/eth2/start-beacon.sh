@@ -19,7 +19,7 @@ fi
 if [ "$CLIENT" = "lighthouse" ]; then
 
     # Give Lighthouse access to all cores and maximum I/O priority
-    CMD="ionice -c 2 -n 0 /usr/local/bin/lighthouse beacon --network prater --datadir /ethclient/lighthouse --port $ETH2_P2P_PORT --discovery-port $ETH2_P2P_PORT --eth1 --eth1-endpoints $ETH1_PROVIDER --http --http-address 0.0.0.0 --http-port 5052 --eth1-blocks-per-log-query 150 --disable-upnp"
+    CMD="ionice -c 2 -n 0 /usr/local/bin/lighthouse beacon --network mainnet --datadir /ethclient/lighthouse --port $ETH2_P2P_PORT --discovery-port $ETH2_P2P_PORT --eth1 --eth1-endpoints $ETH1_PROVIDER --http --http-address 0.0.0.0 --http-port 5052 --eth1-blocks-per-log-query 150 --disable-upnp"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --target-peers $ETH2_MAX_PEERS"
@@ -42,7 +42,7 @@ if [ "$CLIENT" = "nimbus" ]; then
     mkdir -p /validators/nimbus/secrets
 
     # Give Nimbus the highest I/O priority
-    CMD="ionice -c 2 -n 0 /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=prater --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT --web3-url=$ETH1_WS_PROVIDER --rpc --rpc-address=0.0.0.0 --rpc-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
+    CMD="ionice -c 2 -n 0 /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=mainnet --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT --web3-url=$ETH1_WS_PROVIDER --rpc --rpc-address=0.0.0.0 --rpc-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --max-peers=$ETH2_MAX_PEERS"
@@ -65,13 +65,8 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
-    # Get Prater SSZ
-    if [ ! -f "/validators/genesis.ssz" ]; then
-        wget "https://github.com/eth2-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
-    fi
-
     # Give Prysm access to all cores and maximum I/O priority
-    CMD="ionice -c 2 -n 0 /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use --prater --genesis-state=/validators/genesis.ssz --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER --rpc-host 0.0.0.0 --rpc-port 5052 --eth1-header-req-limit 150"
+    CMD="ionice -c 2 -n 0 /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use --mainnet --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER --rpc-host 0.0.0.0 --rpc-port 5052 --eth1-header-req-limit 150"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
@@ -95,7 +90,7 @@ if [ "$CLIENT" = "teku" ]; then
     export JAVA_OPTS=-Xmx3g
 
     # Give Teku access to all cores and maximum I/O priority
-    CMD="ionice -c 2 -n 0 /opt/teku/bin/teku --network=prater --data-path=/ethclient/teku --p2p-port=$ETH2_P2P_PORT --eth1-endpoint=$ETH1_PROVIDER --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=5052 --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE"
+    CMD="ionice -c 2 -n 0 /opt/teku/bin/teku --network=mainnet --data-path=/ethclient/teku --p2p-port=$ETH2_P2P_PORT --eth1-endpoint=$ETH1_PROVIDER --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=5052 --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-peer-lower-bound=$ETH2_MAX_PEERS --p2p-peer-upper-bound=$ETH2_MAX_PEERS"

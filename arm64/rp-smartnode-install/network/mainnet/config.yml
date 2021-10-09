@@ -1,12 +1,11 @@
 rocketpool:
-  storageAddress: 0xDeE7ec57E6b9f7F9A27e68821F3763e9d2537096
-  oneInchOracleAddress: 0x080ab73787a8b13ec7f40bd7d00d6cc07f9b24d0
-  rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
-  rplFaucetAddress: 0x6aC372F4bd37b9588D7eAb93A67E304421E26E48
+  storageAddress: ---
+  oneInchOracleAddress: ---
+  rplTokenAddress: ---
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0-rc1
-  image: rocketpool/smartnode:v1.0.0-rc1
+  graffitiVersion: v1.0.0-pre2
+  image: rocketpool/smartnode:v1.0.0-pre2
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -14,13 +13,13 @@ smartnode:
   gasPrice: 0 # The desired gas price, in gwei, to use for transactions. Set it to 0 to use the network's average price.
   rplClaimGasThreshold: 150 # Automatic RPL reward claims will wait until the network's average gas price, in gwei, is below this limit.
                             # Set it to 0 to disable automatic claiming of RPL rewards entirely
-  txWatchUrl: https://goerli.etherscan.io/tx
+  txWatchUrl: https://etherscan.io/tx
+  stakeUrl: https://stake.rocketpool.net
 chains:
   eth1:
     provider: http://eth1:8545
     wsProvider: ws://eth1:8546
-    mainnetProvider: http://eth1:8545
-    chainID: 5 # Goerli
+    chainID: 1 # Mainnet
     client:
       options:
       - id: geth
@@ -28,7 +27,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: rocketpool/client-go:v1.10.3
+        image: ethereum/client-go:v1.10.9
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
@@ -42,8 +41,8 @@ chains:
             of RAM, or 512 if you have 8 GB"
           env: GETH_CACHE_SIZE
           type: uint
-          blankText: the default of 256
-          default: 256
+          blankText: the default of 512
+          default: 512
         - name: Max Peers
           desc: "The maximum number of peers that Geth should connect to -\n
             this can be lowered down to 12 to improve performance on low-power\n
@@ -56,12 +55,13 @@ chains:
           desc: The port for Geth to use for P2P (blockchain) traffic
           env: ETH1_P2P_PORT
           blankText: the default of 30303
+          default: 30303
           type: uint16
       - id: infura
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc2
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre2
         link: https://infura.io/
         params:
         - name: Infura Project ID
@@ -71,23 +71,25 @@ chains:
           required: true
       - id: pocket
         name: Pocket
-        desc: "\tUse Pocket Network as a light client for Eth 1.0. Suitable\n
-          \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc2
-        link: https://dashboard.pokt.network/
+        desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
+          \t\tSuitable for use in production.\n"
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre2
+        link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
+        eventLogInterval: 100000
         params:
-        - name: Pocket App or Load Balancer ID
-          desc: the ID of your Pocket App; if you use a Load Balancer, prefix it with lb/
+        - name: Gateway ID
+          desc: "\tPlease enter 'lb/' followed by the Gateway ID (example: lb/{12345...})\n
+          \t\t(leave blank for the standard Rocket Pool Gateway ID for Pocket)"
           env: POCKET_PROJECT_ID
           regex: (^$|^(lb\/)?[0-9a-zA-Z]{24,}$)
-          default: lb/60772fb70e2a131ca026e10e
-          blankText: the standard Rocket Pool project ID for Pocket
+          default: lb/613bb4ae8c124d00353c40a1
+          blankText: the standard Rocket Pool Gateway ID for Pocket
       - id: custom
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-rc1
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre2
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -100,7 +102,7 @@ chains:
           env: WS_PROVIDER_URL
           required: true
   eth2:
-    provider: eth2:5052
+    provider: http://eth2:5052
     client:
       options:
       - id: lighthouse
@@ -111,7 +113,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v1.3.0
+        image: sigp/lighthouse:v1.5.2
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -138,7 +140,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:arm64-v1.2.2
+        image: statusim/nimbus-eth2:multiarch-v1.5.0
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -151,8 +153,8 @@ chains:
             a constrained network"
           env: ETH2_MAX_PEERS
           type: uint
-          blankText: the default of 50
-          default: 50
+          blankText: the default of 80
+          default: 80
         - name: P2P Port
           desc: The port to use for P2P (blockchain) traffic
           env: ETH2_P2P_PORT
@@ -166,9 +168,10 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: rocketpool/prysm:v1.3.9
-        validatorImage: rocketpool/prysm:v1.3.9
+        beaconImage: rocketpool/prysm:v2.0.0
+        validatorImage: rocketpool/prysm:v2.0.0
         link: https://docs.prylabs.network/docs/getting-started
+        supermajority: true
         params:
         - name: Custom Graffiti
           desc: optional - for adding custom text to signed Eth 2.0 blocks - 16 chars max
@@ -196,7 +199,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: rocketpool/teku:21.5.0
+        image: rocketpool/teku:21.9.2
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
@@ -216,3 +219,40 @@ chains:
           type: uint16
           default: 9001
           blankText: the default of 9001
+metrics:
+  params:
+  - name: ETH2 Metrics Port
+    desc: The port for the Beacon Chain client to make its metrics available on
+    env: ETH2_METRICS_PORT
+    blankText: the default of 9100
+    default: 9100
+  - name: Validator Metrics Port
+    desc: The port for the Validator client to make its metrics available on
+    env: VALIDATOR_METRICS_PORT
+    blankText: the default of 9101
+    default: 9101
+    type: uint16
+  - name: Rocket Pool Node Metrics Port
+    desc: The port for the Rocket Pool Node to make its metrics available on
+    env: NODE_METRICS_PORT
+    blankText: the default of 9102
+    default: 9102
+    type: uint16
+  - name: Node Exporter Metrics Port
+    desc: The port for Prometheus's Node Exporter to make its metrics available on
+    env: EXPORTER_METRICS_PORT
+    blankText: the default of 9103
+    default: 9103
+    type: uint16
+  - name: Prometheus Port
+    desc: The port for Prometheus to make its metrics available on
+    env: PROMETHEUS_PORT
+    blankText: the default of 9091
+    default: 9091
+    type: uint16
+  - name: Grafana Port
+    desc: The port for Grafana to listen on for HTTP requests
+    env: GRAFANA_PORT
+    blankText: the default of 3100
+    default: 3100
+    type: uint16

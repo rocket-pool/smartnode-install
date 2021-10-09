@@ -27,6 +27,12 @@ services:
       - ETH1_P2P_PORT=${ETH1_P2P_PORT}
     entrypoint: sh
     command: "/setup/start-node.sh"
+    cap_drop:
+      - all
+    cap_add:
+      - dac_override
+    security_opt:
+      - no-new-privileges
   eth2:
     image: ${ETH2_IMAGE}
     user: root
@@ -50,10 +56,19 @@ services:
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
       - ETH2_P2P_PORT=${ETH2_P2P_PORT}
       - ETH2_MAX_PEERS=${ETH2_MAX_PEERS}
+      - ENABLE_METRICS=${ENABLE_METRICS}
+      - ETH2_METRICS_PORT=${ETH2_METRICS_PORT}
+      - EXTERNAL_IP=${EXTERNAL_IP}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
       - eth1
+    cap_drop:
+      - all
+    cap_add:
+      - dac_override
+    security_opt:
+      - no-new-privileges
   validator:
     image: ${VALIDATOR_IMAGE}
     user: root
@@ -70,10 +85,18 @@ services:
       - ETH2_PROVIDER=${ETH2_PROVIDER}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
+      - ENABLE_METRICS=${ENABLE_METRICS}
+      - VALIDATOR_METRICS_PORT=${VALIDATOR_METRICS_PORT}
     entrypoint: sh
     command: "/setup/start-validator.sh"
     depends_on:
       - eth2
+    cap_drop:
+      - all
+    cap_add:
+      - dac_override
+    security_opt:
+      - no-new-privileges
   api:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_api
@@ -88,6 +111,12 @@ services:
       - eth1
     entrypoint: /bin/sleep
     command: "infinity"
+    cap_drop:
+      - all
+    cap_add:
+      - dac_override
+    security_opt:
+      - no-new-privileges
   node:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_node
@@ -97,10 +126,16 @@ services:
       - .:/.rocketpool
     networks:
       - net
-    command: "node"
+    command: "-m 0.0.0.0 -r ${NODE_METRICS_PORT:-9102} node"
     depends_on:
       - eth1
       - eth2
+    cap_drop:
+      - all
+    cap_add:
+      - dac_override
+    security_opt:
+      - no-new-privileges
   watchtower:
     image: ${SMARTNODE_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME}_watchtower
@@ -113,6 +148,12 @@ services:
     depends_on:
       - eth1
       - eth2
+    cap_drop:
+      - all
+    cap_add:
+      - dac_override
+    security_opt:
+      - no-new-privileges
 networks:
   net:
 volumes:

@@ -71,6 +71,12 @@ build_install_packages() {
     mv amd64/rp-smartnode-install-amd64.tar.xz ../$VERSION
     mv arm64/rp-smartnode-install-arm64.tar.xz ../$VERSION
     cp install.sh ../$VERSION
+    cp install-update-tracker.sh ../$VERSION
+    echo "done!"
+
+    echo -n "Building update tracker package... "
+    tar cfJ rp-update-tracker.tar.xz rp-update-tracker || fail "Error building update tracker package."
+    mv rp-update-tracker.tar.xz ../$VERSION
     echo "done!"
 
     cd ..
@@ -109,6 +115,7 @@ build_docker_smartnode() {
     echo -n "Pushing to Docker Hub... "
     docker push rocketpool/smartnode:$VERSION-$ARCH || fail "Error pushing Docker Smartnode image to Docker Hub."
     echo "done!"
+    
     cd ..
 }
 
@@ -123,6 +130,7 @@ build_docker_pow_proxy() {
     echo -n "Pushing to Docker Hub... "
     docker push rocketpool/smartnode-pow-proxy:$VERSION-$ARCH || fail "Error pushing Docker POW Proxy image to Docker Hub."
     echo "done!"
+    
     cd ..
 }
 
