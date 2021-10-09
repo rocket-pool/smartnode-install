@@ -24,6 +24,35 @@ chains:
     chainID: 5 # Goerli
     client:
       options:
+      - id: nethermind
+        name: Nethermind
+        desc: "\tNethermind is an open source multiplatform .NET Core\n
+          \t\timplementation of the Ethereum protocol,\n
+          \t\tfocusing on performance and flexibility."
+        image: nethermind/nethermind:1.10.79
+        link: https://nethermind.io/
+        params:
+          - name: Ethstats Node Name
+            desc: Node Name (optional) - for reporting Eth 1.0 node status to stats.goerli.net
+            env: ETHSTATS_LABEL
+          - name: Ethstats Contact
+            desc: Contact (optional) - for reporting Eth 1.0 node status to stats.goerli.net
+            env: ETHSTATS_LOGIN
+          - name: Max Peers
+            desc:
+              "The maximum number of peers that Nethermind should connect to -\n
+              this can be lowered down to 25 to improve performance on low-power\n
+              systems or constrained networks."
+            env: NETHERMIND_MAX_PEERS
+            blankText: the default of 50
+            default: 50
+            type: uint
+          - name: P2P Port
+            desc: The port for Nethermind to use for P2P (blockchain) traffic
+            env: ETH1_P2P_PORT
+            blankText: the default of 30303
+            default: 30303
+            type: uint16
       - id: geth
         name: Geth
         desc: "\tGeth is one of the three original implementations of the\n

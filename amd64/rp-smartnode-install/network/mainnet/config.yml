@@ -47,7 +47,7 @@ chains:
               default: 50
               type: uint
             - name: P2P Port
-              desc: The port for Geth to use for P2P (blockchain) traffic
+              desc: The port for Nethermind to use for P2P (blockchain) traffic
               env: ETH1_P2P_PORT
               blankText: the default of 30303
               default: 30303
