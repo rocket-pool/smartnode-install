@@ -29,7 +29,7 @@ chains:
         desc: "\tNethermind is an open source multiplatform .NET Core\n
           \t\timplementation of the Ethereum protocol,\n
           \t\tfocusing on performance and flexibility."
-        image: nethermind/nethermind:1.10.79
+        image: nethermind/nethermind:latest
         link: https://nethermind.io/
         params:
           - name: Ethstats Node Name

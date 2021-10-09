@@ -30,7 +30,7 @@ fi
 # Nethermind startup
 if [ "$CLIENT" = "nethermind" ]; then
 
-    CMD="/nethermind/Nethermind.Runner --config goerli --datadir /ethclient/nethermind --JsonRpc.Enabled true --Init.WebSocketsEnabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port 8545 --JsonRpc.WebSocketsPort 8546 --JsonRpc.EnabledModules ['Eth', 'Net', 'Personal', 'Web3']"
+    CMD="/nethermind/Nethermind.Runner --config mainnet --datadir /ethclient/nethermind --JsonRpc.Enabled true --Init.WebSocketsEnabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port 8545 --JsonRpc.WebSocketsPort 8546 --JsonRpc.EnabledModules ['Eth', 'Net', 'Personal', 'Web3']"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Contact $ETHSTATS_LOGIN"
