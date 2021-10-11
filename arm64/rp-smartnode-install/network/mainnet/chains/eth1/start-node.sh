@@ -45,6 +45,26 @@ if [ "$CLIENT" = "geth" ]; then
 
 fi
 
+# Nethermind startup
+if [ "$CLIENT" = "nethermind" ]; then
+
+    CMD="/nethermind/Nethermind.Runner --config mainnet --datadir /ethclient/nethermind --JsonRpc.Enabled true --Init.WebSocketsEnabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port 8545 --JsonRpc.WebSocketsPort 8546 --JsonRpc.EnabledModules ['Eth', 'Net', 'Personal', 'Web3']"
+
+    if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
+        CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Contact $ETHSTATS_LOGIN"
+    fi
+
+    if [ ! -z "$NETHERMIND_MAX_PEERS" ]; then
+        CMD="$CMD --Network.MaxActivePeers $NETHERMIND_MAX_PEERS"
+    fi
+
+    if [ ! -z "$ETH1_P2P_PORT" ]; then
+        CMD="$CMD --Network.P2PPort $ETH1_P2P_PORT --Network.DiscoveryPort $ETH1_P2P_PORT"
+    fi
+
+    exec ${CMD}
+
+fi
 
 # Infura startup
 if [ "$CLIENT" = "infura" ]; then
