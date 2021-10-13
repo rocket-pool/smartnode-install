@@ -4,8 +4,8 @@ rocketpool:
   rplTokenAddress: ---
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0-pre2
-  image: rocketpool/smartnode:v1.0.0-pre2
+  graffitiVersion: v1.0.0-pre3
+  image: rocketpool/smartnode:v1.0.0-pre3
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -30,12 +30,6 @@ chains:
         image: ethereum/client-go:v1.10.9
         link: https://geth.ethereum.org/
         params:
-        - name: Ethstats Label
-          desc: optional - for reporting Eth 1.0 node status to ethstats.net
-          env: ETHSTATS_LABEL
-        - name: Ethstats Login
-          desc: optional - for reporting Eth 1.0 node status to ethstats.net
-          env: ETHSTATS_LOGIN
         - name: Cache Size
           desc: "Geth's cache size, in MB - set this to 256 if you have 4 GB\n
             of RAM, or 512 if you have 8 GB"
@@ -59,7 +53,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre2
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre3
         link: https://infura.io/
         params:
         - name: Infura Project ID
@@ -71,7 +65,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre2
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre3
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 100000
@@ -87,7 +81,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre2
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre3
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -138,7 +132,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:multiarch-v1.5.0
+        image: statusim/nimbus-eth2:multiarch-v1.5.1
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -165,8 +159,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-f7845a-debug #v2.0.0
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-f7845a-debug #v2.0.0
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-843ed5-debug #v2.0.1
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-843ed5-debug #v2.0.1
         link: https://docs.prylabs.network/docs/getting-started
         supermajority: true
         params:

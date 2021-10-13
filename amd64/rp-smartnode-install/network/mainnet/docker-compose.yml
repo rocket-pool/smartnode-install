@@ -8,6 +8,9 @@ services:
     ports:
       - "${ETH1_P2P_PORT:-30303}:${ETH1_P2P_PORT:-30303}/udp"
       - "${ETH1_P2P_PORT:-30303}:${ETH1_P2P_PORT:-30303}/tcp"
+      # Uncomment the following lines to allow other non-Docker processes on your system to use the ETH1 API
+      # - "8545:8545/tcp"
+      # - "8546:8546/tcp"
     volumes:
       - eth1clientdata:/ethclient
       - ./chains/eth1:/setup:ro
@@ -41,6 +44,8 @@ services:
     ports:
       - "${ETH2_P2P_PORT:-9001}:${ETH2_P2P_PORT:-9001}/tcp"
       - "${ETH2_P2P_PORT:-9001}:${ETH2_P2P_PORT:-9001}/udp"
+      # Uncomment the following line to allow other non-Docker processes on your system to use the ETH2 API
+      # - "5052:5052/tcp"
     volumes:
       - ./data/validators:/validators
       - eth2clientdata:/ethclient
