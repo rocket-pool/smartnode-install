@@ -30,6 +30,12 @@ chains:
         image: ethereum/client-go:v1.10.9
         link: https://geth.ethereum.org/
         params:
+        - name: Ethstats Label
+          desc: optional - for reporting Eth 1.0 node status to ethstats.net
+          env: ETHSTATS_LABEL
+        - name: Ethstats Login
+          desc: optional - for reporting Eth 1.0 node status to ethstats.net
+          env: ETHSTATS_LOGIN
         - name: Cache Size
           desc: "Geth's cache size, in MB - set this to 256 if you have 4 GB\n
             of RAM, or 512 if you have 8 GB"
