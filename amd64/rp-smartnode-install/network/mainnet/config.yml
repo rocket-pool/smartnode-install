@@ -27,7 +27,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.10.10
+        image: ethereum/client-go:v1.10.11
         link: https://geth.ethereum.org/
         params:
         - name: Ethstats Label
