@@ -34,9 +34,11 @@ chains:
         - name: Ethstats Label
           desc: optional - for reporting Eth 1.0 node status to ethstats.net
           env: ETHSTATS_LABEL
+          advanced: true
         - name: Ethstats Login
           desc: optional - for reporting Eth 1.0 node status to ethstats.net
           env: ETHSTATS_LOGIN
+          advanced: true
         - name: Cache Size
           desc: "Geth's cache size, in MB - set this to 256 if you have 4 GB\n
             of RAM, or 512 if you have 8 GB"
@@ -56,6 +58,7 @@ chains:
           blankText: the default of 30303
           default: 30303
           type: uint16
+          advanced: true
       - id: infura
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
@@ -132,6 +135,7 @@ chains:
           type: uint16
           default: 9001
           blankText: the default of 9001
+          advanced: true
       - id: nimbus
         name: Nimbus
         desc: "\tNimbus is a client implementation for both Ethereum 2.0 and\n
@@ -139,7 +143,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:multiarch-v1.5.1
+        image: statusim/nimbus-eth2:multiarch-v1.5.2
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -159,6 +163,7 @@ chains:
           type: uint16
           default: 9001
           blankText: the default of 9001
+          advanced: true
       - id: prysm
         name: Prysm
         desc: "\tPrysm is a Go implementation of Ethereum 2.0 protocol with a\n
@@ -188,6 +193,7 @@ chains:
           type: uint16
           default: 9001
           blankText: the default of 9001
+          advanced: true
       - id: teku
         name: Teku
         desc: "\tPegaSys Teku (formerly known as Artemis) is a Java-based\n 
@@ -217,6 +223,7 @@ chains:
           type: uint16
           default: 9001
           blankText: the default of 9001
+          advanced: true
 metrics:
   params:
   - name: ETH2 Metrics Port
@@ -224,33 +231,39 @@ metrics:
     env: ETH2_METRICS_PORT
     blankText: the default of 9100
     default: 9100
+    advanced: true
   - name: Validator Metrics Port
     desc: The port for the Validator client to make its metrics available on
     env: VALIDATOR_METRICS_PORT
     blankText: the default of 9101
     default: 9101
     type: uint16
+    advanced: true
   - name: Rocket Pool Node Metrics Port
     desc: The port for the Rocket Pool Node to make its metrics available on
     env: NODE_METRICS_PORT
     blankText: the default of 9102
     default: 9102
     type: uint16
+    advanced: true
   - name: Node Exporter Metrics Port
     desc: The port for Prometheus's Node Exporter to make its metrics available on
     env: EXPORTER_METRICS_PORT
     blankText: the default of 9103
     default: 9103
     type: uint16
+    advanced: true
   - name: Prometheus Port
     desc: The port for Prometheus to make its metrics available on
     env: PROMETHEUS_PORT
     blankText: the default of 9091
     default: 9091
     type: uint16
+    advanced: true
   - name: Grafana Port
     desc: The port for Grafana to listen on for HTTP requests
     env: GRAFANA_PORT
     blankText: the default of 3100
     default: 3100
     type: uint16
+    advanced: true
