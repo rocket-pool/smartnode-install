@@ -46,6 +46,7 @@ chains:
           type: uint
           blankText: the default of 512
           default: 512
+          advanced: true
         - name: Max Peers
           desc: "The maximum number of peers that Geth should connect to -\n
             this can be lowered down to 12 to improve performance on low-power\n
@@ -54,6 +55,7 @@ chains:
           type: uint
           blankText: the default of 12
           default: 12
+          advanced: true
         - name: P2P Port
           desc: The port for Geth to use for P2P (blockchain) traffic
           env: ETH1_P2P_PORT
@@ -131,6 +133,8 @@ chains:
           env: ETH2_MAX_PEERS
           type: uint
           blankText: the default of 50
+          default: 50
+          advanced: true
         - name: P2P Port
           desc: The port to use for P2P (blockchain) traffic
           env: ETH2_P2P_PORT
@@ -160,6 +164,7 @@ chains:
           type: uint
           blankText: the default of 80
           default: 80
+          advanced: true
         - name: P2P Port
           desc: The port to use for P2P (blockchain) traffic
           env: ETH2_P2P_PORT
@@ -190,6 +195,8 @@ chains:
           env: ETH2_MAX_PEERS
           type: uint
           blankText: the default of 45
+          default: 45
+          advanced: true
         - name: P2P Port
           desc: The port to use for P2P (blockchain) traffic
           env: ETH2_P2P_PORT
@@ -220,6 +227,8 @@ chains:
           env: ETH2_MAX_PEERS
           type: uint
           blankText: the default of 74
+          default: 45
+          advanced: true
         - name: P2P Port
           desc: The port to use for P2P (blockchain) traffic
           env: ETH2_P2P_PORT
