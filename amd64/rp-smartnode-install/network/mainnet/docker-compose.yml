@@ -63,6 +63,7 @@ services:
       - ENABLE_METRICS=${ENABLE_METRICS}
       - ETH2_METRICS_PORT=${ETH2_METRICS_PORT}
       - EXTERNAL_IP=${EXTERNAL_IP}
+      - ETH2_CHECKPOINT_SYNC_URL=${ETH2_CHECKPOINT_SYNC_URL}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:

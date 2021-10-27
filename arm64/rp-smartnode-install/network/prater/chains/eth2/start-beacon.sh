@@ -29,6 +29,10 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $ETH2_METRICS_PORT --validator-monitor-auto"
     fi
 
+    if [ ! -z "$ETH2_CHECKPOINT_SYNC_URL" ]; then
+        CMD="$CMD --checkpoint-sync-url $ETH2_CHECKPOINT_SYNC_URL"
+    fi
+
     exec ${CMD}
 
 fi
@@ -103,6 +107,10 @@ if [ "$CLIENT" = "teku" ]; then
 
     if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT --metrics-host-allowlist=*" 
+    fi
+
+    if [ ! -z "$ETH2_CHECKPOINT_SYNC_URL" ]; then
+        CMD="$CMD --initial-state=$ETH2_CHECKPOINT_SYNC_URL/eth/v1/debug/beacon/states/finalized"
     fi
 
     exec ${CMD}
