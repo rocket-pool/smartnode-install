@@ -1,0 +1,10 @@
+[Unit]
+Description=Checks for Rocket Pool updates periodically
+Wants=rp-update-tracker.timer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/share/rp-check.sh
+
+[Install]
+WantedBy=multi-user.target
