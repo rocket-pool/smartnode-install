@@ -4,8 +4,8 @@ rocketpool:
   rplTokenAddress: ---
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0-pre4
-  image: rocketpool/smartnode:v1.0.0-pre4
+  graffitiVersion: v1.0.0-dev
+  image: rocketpool/smartnode:v1.0.0-dev
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -29,6 +29,7 @@ chains:
           \t\tlicensed under the GNU LGPL v3."
         image: ethereum/client-go:v1.10.11
         link: https://geth.ethereum.org/
+        eventLogInterval: 25000
         params:
         - name: Ethstats Label
           desc: optional - for reporting Eth 1.0 node status to ethstats.net
@@ -66,8 +67,9 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre4
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
         link: https://infura.io/
+        eventLogInterval: 25000
         params:
         - name: Infura Project ID
           desc: the ID of your project created in Infura
@@ -78,10 +80,10 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre4
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
-        eventLogInterval: 100000
+        eventLogInterval: 25000
         params:
         - name: Gateway ID
           desc: "If using a custom gateway, enter 'lb/' followed by the Gateway ID (example: lb/{12345...}"
@@ -94,7 +96,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre4
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
