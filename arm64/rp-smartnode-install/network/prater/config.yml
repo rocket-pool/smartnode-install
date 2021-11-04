@@ -5,8 +5,8 @@ rocketpool:
   rplFaucetAddress: 0x95D6b8E2106E3B30a72fC87e2B56ce15E37853F9
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0-dev
-  image: rocketpool/smartnode:v1.0.0-dev
+  graffitiVersion: v1.0.0-pre5
+  image: rocketpool/smartnode:v1.0.0-pre5
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -68,7 +68,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre5
         link: https://infura.io/
         eventLogInterval: 25000
         params:
@@ -81,7 +81,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre5
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
@@ -97,7 +97,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0-dev
+        image: rocketpool/smartnode-pow-proxy:v1.0.0-pre5
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
