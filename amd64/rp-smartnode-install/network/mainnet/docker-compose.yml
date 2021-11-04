@@ -149,7 +149,7 @@ services:
       - .:/.rocketpool
     networks:
       - net
-    command: "watchtower"
+    command: "-m 0.0.0.0 -r ${WATCHTOWER_METRICS_PORT:-9104} watchtower"
     depends_on:
       - eth1
       - eth2

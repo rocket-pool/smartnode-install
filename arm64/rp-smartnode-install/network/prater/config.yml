@@ -277,6 +277,13 @@ metrics:
     default: 9103
     type: uint16
     advanced: true
+  - name: Rocket Pool Watchtower Metrics Port
+    desc: The port for the Rocket Pool Watchtower to make its metrics available on
+    env: WATCHTOWER_METRICS_PORT
+    blankText: the default of 9104
+    default: 9104
+    type: uint16
+    advanced: true
   - name: Prometheus Port
     desc: The port for Prometheus to make its metrics available on
     env: PROMETHEUS_PORT
