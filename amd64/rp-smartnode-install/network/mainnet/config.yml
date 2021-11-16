@@ -4,8 +4,8 @@ rocketpool:
   rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0
-  image: rocketpool/smartnode:v1.0.0
+  graffitiVersion: v1.1.0-dev
+  image: rocketpool/smartnode:v1.1.0-dev
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -27,7 +27,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.10.11
+        image: ethereum/client-go:v1.10.12
         link: https://geth.ethereum.org/
         eventLogInterval: 25000
         params:
@@ -67,7 +67,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0
+        image: rocketpool/smartnode-pow-proxy:v1.1.0-dev
         link: https://infura.io/
         eventLogInterval: 25000
         params:
@@ -80,7 +80,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.0.0
+        image: rocketpool/smartnode-pow-proxy:v1.1.0-dev
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
@@ -96,7 +96,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0
+        image: rocketpool/smartnode-pow-proxy:v1.1.0-dev
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -155,7 +155,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:multiarch-v1.5.2
+        image: statusim/nimbus-eth2:multiarch-v1.5.4
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -219,7 +219,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.10.1
+        image: consensys/teku:21.11.1
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
