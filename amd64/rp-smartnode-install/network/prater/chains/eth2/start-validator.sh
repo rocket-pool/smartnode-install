@@ -47,7 +47,14 @@ if [ "$CLIENT" = "prysm" ]; then
     # Get rid of the protocol prefix
     ETH2_PROVIDER=$(echo $ETH2_PROVIDER | sed -E 's/.*\:\/\/(.*)/\1/')
 
-    CMD="/app/cmd/validator/validator --accept-terms-of-use --prater --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $ETH2_PROVIDER"
+    if [ -z "$ETH2_RPC_PORT" ]; then
+        ETH2_RPC_PORT="5053"
+    fi
+
+    # Replace the HTTP port with Prysm's RPC port
+    ETH2_RPC_PROVIDER="$( echo $ETH2_PROVIDER | grep -o '.*:' )$ETH2_RPC_PORT"
+
+    CMD="/app/cmd/validator/validator --accept-terms-of-use --prater --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $ETH2_RPC_PROVIDER"
 
     if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $VALIDATOR_METRICS_PORT"

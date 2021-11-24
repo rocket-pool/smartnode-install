@@ -5,8 +5,8 @@ rocketpool:
   rplFaucetAddress: 0x95D6b8E2106E3B30a72fC87e2B56ce15E37853F9
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.1.0-rc1
-  image: rocketpool/smartnode:v1.1.0-rc1
+  graffitiVersion: v1.1.0-dev
+  image: rocketpool/smartnode:v1.1.0-dev
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -70,7 +70,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.1.0-rc1
+        image: rocketpool/smartnode-pow-proxy:v1.1.0-dev
         link: https://infura.io/
         eventLogInterval: 25000
         params:
@@ -83,7 +83,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.1.0-rc1
+        image: rocketpool/smartnode-pow-proxy:v1.1.0-dev
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
@@ -99,7 +99,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.1.0-rc1
+        image: rocketpool/smartnode-pow-proxy:v1.1.0-dev
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -188,8 +188,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-a80b1c-debug #v2.0.2
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-a80b1c-debug #v2.0.2
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-39c33b-debug #v2.0.3
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-39c33b-debug #v2.0.3
         link: https://docs.prylabs.network/docs/getting-started
         supermajority: true
         params:
@@ -212,6 +212,13 @@ chains:
           type: uint16
           default: 9001
           blankText: the default of 9001
+          advanced: true
+        - name: RPC Port
+          desc: The port to use for RPC (Beacon Node to Validator Client) traffic
+          env: ETH2_RPC_PORT
+          type: uint16
+          default: 5053
+          blankText: the default of 5053
           advanced: true
       - id: teku
         name: Teku

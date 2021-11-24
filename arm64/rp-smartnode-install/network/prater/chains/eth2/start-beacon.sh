@@ -46,7 +46,7 @@ if [ "$CLIENT" = "nimbus" ]; then
     mkdir -p /validators/nimbus/secrets
 
     # Give Nimbus the highest I/O priority
-    CMD="ionice -c 2 -n 0 /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=prater --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT --web3-url=$ETH1_WS_PROVIDER --rpc --rpc-address=0.0.0.0 --rpc-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
+    CMD="ionice -c 2 -n 0 /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=prater --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT --web3-url=$ETH1_WS_PROVIDER --rest --rest-address=0.0.0.0 --rest-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --max-peers=$ETH2_MAX_PEERS"
@@ -74,8 +74,12 @@ if [ "$CLIENT" = "prysm" ]; then
         wget "https://github.com/eth2-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
     fi
 
+    if [ -z "$ETH2_RPC_PORT" ]; then
+        ETH2_RPC_PORT="5053"
+    fi
+
     # Give Prysm access to all cores and maximum I/O priority
-    CMD="ionice -c 2 -n 0 /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use --prater --genesis-state=/validators/genesis.ssz --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER --rpc-host 0.0.0.0 --rpc-port 5052 --eth1-header-req-limit 150"
+    CMD="ionice -c 2 -n 0 /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use --prater --genesis-state=/validators/genesis.ssz --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER --rpc-host 0.0.0.0 --rpc-port $ETH2_RPC_PORT --grpc-gateway-host 0.0.0.0 --grpc-gateway-port 5052 --eth1-header-req-limit 150"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
