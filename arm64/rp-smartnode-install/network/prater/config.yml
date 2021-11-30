@@ -5,8 +5,8 @@ rocketpool:
   rplFaucetAddress: 0x95D6b8E2106E3B30a72fC87e2B56ce15E37853F9
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.1.0-rc3
-  image: rocketpool/smartnode:v1.1.0-rc3
+  graffitiVersion: v1.1.0
+  image: rocketpool/smartnode:v1.1.0
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -14,7 +14,7 @@ smartnode:
   maxFee: 0 # The maximum amount you're willing to pay, in gwei, to use for transactions.
             # Set it to 0 if you want to view the current suggested prices and choose this number manually for each transaction.
   maxPriorityFee: 2 # The most "extra" you want to spend on a transaction to make it faster, in gwei. 
-  rplClaimGasThreshold: 150 # Automatic RPL reward claims will wait until the network's average max fee, in gwei, is below this limit.
+  rplClaimGasThreshold: 150 # Automatic RPL reward claims and minipool staking will wait until the network's average max fee, in gwei, is below this limit.
                             # Set it to 0 to disable automatic claiming of RPL rewards entirely.
   txWatchUrl: https://goerli.etherscan.io/tx
   stakeUrl: https://testnet.rocketpool.net
@@ -70,7 +70,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.1.0-rc3
+        image: rocketpool/smartnode-pow-proxy:v1.1.0
         link: https://infura.io/
         eventLogInterval: 25000
         params:
@@ -83,7 +83,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.1.0-rc3
+        image: rocketpool/smartnode-pow-proxy:v1.1.0
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
@@ -99,7 +99,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.1.0-rc3
+        image: rocketpool/smartnode-pow-proxy:v1.1.0
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -188,8 +188,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: rocketpool/prysm:v2.0.3
-        validatorImage: rocketpool/prysm:v2.0.3
+        beaconImage: rocketpool/prysm:v2.0.4
+        validatorImage: rocketpool/prysm:v2.0.4
         link: https://docs.prylabs.network/docs/getting-started
         supermajority: true
         params:
