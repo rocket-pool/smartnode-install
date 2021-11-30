@@ -4,14 +4,16 @@ rocketpool:
   rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.0.0
-  image: rocketpool/smartnode:v1.0.0
+  graffitiVersion: v1.1.0
+  image: rocketpool/smartnode:v1.1.0
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
   validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
-  gasPrice: 0 # The desired gas price, in gwei, to use for transactions. Set it to 0 to use the network's average price.
-  rplClaimGasThreshold: 150 # Automatic RPL reward claims will wait until the network's average gas price, in gwei, is below this limit.
+  maxFee: 0 # The maximum amount you're willing to pay, in gwei, to use for transactions.
+            # Set it to 0 if you want to view the current suggested prices and choose this number manually for each transaction.
+  maxPriorityFee: 2 # The most "extra" you want to spend on a transaction to make it faster, in gwei. 
+  rplClaimGasThreshold: 150 # Automatic RPL reward claims and minipool staking will wait until the network's average max fee, in gwei, is below this limit.
                             # Set it to 0 to disable automatic claiming of RPL rewards entirely.
   txWatchUrl: https://etherscan.io/tx
   stakeUrl: https://stake.rocketpool.net
@@ -27,7 +29,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.10.11
+        image: ethereum/client-go:v1.10.13
         link: https://geth.ethereum.org/
         eventLogInterval: 25000
         params:
@@ -67,7 +69,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0
+        image: rocketpool/smartnode-pow-proxy:v1.1.0
         link: https://infura.io/
         eventLogInterval: 25000
         params:
@@ -80,7 +82,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.0.0
+        image: rocketpool/smartnode-pow-proxy:v1.1.0
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
@@ -96,7 +98,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.0.0
+        image: rocketpool/smartnode-pow-proxy:v1.1.0
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -155,7 +157,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:multiarch-v1.5.2
+        image: statusim/nimbus-eth2:multiarch-v1.5.4
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
@@ -185,8 +187,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-a80b1c-debug #v2.0.2
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-a80b1c-debug #v2.0.2
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-1d53fd-debug #v2.0.4
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-1d53fd-debug #v2.0.4
         link: https://docs.prylabs.network/docs/getting-started
         supermajority: true
         params:
@@ -210,6 +212,13 @@ chains:
           default: 9001
           blankText: the default of 9001
           advanced: true
+        - name: RPC Port
+          desc: The port to use for RPC (Beacon Node to Validator Client) traffic
+          env: ETH2_RPC_PORT
+          type: uint16
+          default: 5053
+          blankText: the default of 5053
+          advanced: true
       - id: teku
         name: Teku
         desc: "\tPegaSys Teku (formerly known as Artemis) is a Java-based\n 
@@ -219,7 +228,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.10.1
+        image: consensys/teku:21.11.1
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti

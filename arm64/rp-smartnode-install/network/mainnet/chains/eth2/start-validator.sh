@@ -46,8 +46,15 @@ if [ "$CLIENT" = "prysm" ]; then
 
     # Get rid of the protocol prefix
     ETH2_PROVIDER=$(echo $ETH2_PROVIDER | sed -E 's/.*\:\/\/(.*)/\1/')
+    
+    if [ -z "$ETH2_RPC_PORT" ]; then
+        ETH2_RPC_PORT="5053"
+    fi
 
-    CMD="/app/cmd/validator/validator --accept-terms-of-use --mainnet --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $ETH2_PROVIDER"
+    # Replace the HTTP port with Prysm's RPC port
+    ETH2_RPC_PROVIDER="$( echo $ETH2_PROVIDER | grep -o '.*:' )$ETH2_RPC_PORT"
+
+    CMD="/app/cmd/validator/validator --accept-terms-of-use --mainnet --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $ETH2_RPC_PROVIDER"
 
     if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $VALIDATOR_METRICS_PORT"
@@ -70,7 +77,7 @@ if [ "$CLIENT" = "teku" ]; then
     # Remove any lock files that were left over accidentally after an unclean shutdown
     rm -f /validators/teku/keys/*.lock
 
-    CMD="/opt/teku/bin/teku validator-client --network=mainnet --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$ETH2_PROVIDER --validators-keystore-locking-enabled=false --log-destination=CONSOLE"
+    CMD="/opt/teku/bin/teku validator-client --network=mainnet --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$ETH2_PROVIDER --validators-keystore-locking-enabled=false"
 
     if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VALIDATOR_METRICS_PORT --metrics-host-allowlist=*" 

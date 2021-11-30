@@ -44,7 +44,7 @@ if [ "$CLIENT" = "nimbus" ]; then
     mkdir -p /validators/nimbus/validators
     mkdir -p /validators/nimbus/secrets
 
-    CMD="/home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=mainnet --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT --web3-url=$ETH1_WS_PROVIDER --rpc --rpc-address=0.0.0.0 --rpc-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
+    CMD="/home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=mainnet --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT --web3-url=$ETH1_WS_PROVIDER --rest --rest-address=0.0.0.0 --rest-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --max-peers=$ETH2_MAX_PEERS"
@@ -67,7 +67,11 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
-    CMD="/app/cmd/beacon-chain/beacon-chain --accept-terms-of-use --mainnet --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER --rpc-host 0.0.0.0 --rpc-port 5052 --eth1-header-req-limit 150"
+    if [ -z "$ETH2_RPC_PORT" ]; then
+        ETH2_RPC_PORT="5053"
+    fi
+
+    CMD="/app/cmd/beacon-chain/beacon-chain --accept-terms-of-use --mainnet --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER --rpc-host 0.0.0.0 --rpc-port $ETH2_RPC_PORT --grpc-gateway-host 0.0.0.0 --grpc-gateway-port 5052 --eth1-header-req-limit 150"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
