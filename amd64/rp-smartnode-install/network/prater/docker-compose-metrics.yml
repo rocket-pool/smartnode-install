@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   node-exporter:
-    image: prom/node-exporter:v1.2.2
+    image: prom/node-exporter:v1.3.1
     container_name: ${COMPOSE_PROJECT_NAME}_exporter
     cap_drop:
       - ALL
@@ -22,7 +22,7 @@ services:
       # - /:/rootfs:ro
     network_mode: host
   prometheus:
-    image: prom/prometheus:v2.28.1
+    image: prom/prometheus:v2.31.1
     container_name: ${COMPOSE_PROJECT_NAME}_prometheus
     restart: unless-stopped
     command:
@@ -40,7 +40,7 @@ services:
     extra_hosts:
       - "host.docker.internal: 172.23.5.254"
   grafana:
-    image: grafana/grafana:8.1.1
+    image: grafana/grafana:8.3.2
     container_name: ${COMPOSE_PROJECT_NAME}_grafana
     restart: unless-stopped
     environment:
