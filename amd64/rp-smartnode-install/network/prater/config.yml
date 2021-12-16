@@ -106,8 +106,9 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.2.0-dev
+        image: rocketpool/smartnode-pow-proxy:v1.1.2
         fallback: true
+        eventLogInterval: 25000
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -196,8 +197,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-1d53fd-debug #v2.0.4
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-1d53fd-debug #v2.0.4
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-d6338f-debug #v2.0.5
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-d6338f-debug #v2.0.5
         link: https://docs.prylabs.network/docs/getting-started
         supermajority: true
         params:
@@ -237,7 +238,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.11.1
+        image: consensys/teku:21.12.2
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti

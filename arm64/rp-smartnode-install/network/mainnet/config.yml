@@ -4,8 +4,8 @@ rocketpool:
   rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.1.1
-  image: rocketpool/smartnode:v1.1.1
+  graffitiVersion: v1.1.2
+  image: rocketpool/smartnode:v1.1.2
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -69,7 +69,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.1.1
+        image: rocketpool/smartnode-pow-proxy:v1.1.2
         link: https://infura.io/
         eventLogInterval: 25000
         params:
@@ -82,7 +82,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.1.1
+        image: rocketpool/smartnode-pow-proxy:v1.1.2
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
@@ -98,7 +98,8 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.1.1
+        image: rocketpool/smartnode-pow-proxy:v1.1.2
+        eventLogInterval: 25000
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n
@@ -187,8 +188,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: rocketpool/prysm:v2.0.4
-        validatorImage: rocketpool/prysm:v2.0.4
+        beaconImage: rocketpool/prysm:v2.0.5
+        validatorImage: rocketpool/prysm:v2.0.5
         link: https://docs.prylabs.network/docs/getting-started
         supermajority: true
         params:
@@ -233,7 +234,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: rocketpool/teku:21.11.1
+        image: consensys/teku:21.12.2
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
