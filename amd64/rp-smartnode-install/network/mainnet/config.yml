@@ -229,7 +229,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.12.1
+        image: consensys/teku:21.12.2
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
