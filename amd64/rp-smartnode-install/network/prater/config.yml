@@ -107,7 +107,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.1.2
+        image: rocketpool/smartnode-pow-proxy:v1.2.0-dev
         fallback: true
         eventLogInterval: 25000
         params:
