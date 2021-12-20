@@ -24,8 +24,8 @@ chains:
     wsProvider: ws://eth1:8546
     fallbackProvider: http://eth1-fallback:8545
     fallbackWsProvider: ws://eth1-fallback:8546
-    reconnectDelay: 5m # How long to wait before attempting to reconnect to the main ETH1 provider
-                       # after it loses connection - the format can be e.g 30s, 5m, 1h, 5m30s, etc.
+    reconnectDelay: 60s # How long to wait before attempting to reconnect to the main ETH1 provider
+                        # after it loses connection - the format can be e.g 30s, 5m, 1h, 5m30s, etc.
     pruneProvisioner: rocketpool/eth1-prune-provision:v0.0.1
     chainID: 5 # Goerli
     client:
