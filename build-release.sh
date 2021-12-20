@@ -50,7 +50,6 @@ build_cli() {
     ./build.sh || fail "Error building CLI binaries."
     mv rocketpool-cli-linux-amd64 ../../$VERSION
     mv rocketpool-cli-darwin-amd64 ../../$VERSION
-    mv rocketpool-cli-windows-amd64.exe ../../$VERSION
     mv rocketpool-cli-linux-arm64 ../../$VERSION
     mv rocketpool-cli-darwin-arm64 ../../$VERSION
     echo "done!"
@@ -135,6 +134,21 @@ build_docker_pow_proxy() {
 }
 
 
+# Builds the Docker prune provisioner image and pushes it to Docker Hub
+build_docker_prune_provision() {
+    cd smartnode || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
+
+    echo "Building Docker Prune Provisioner image..."
+    docker build -t rocketpool/eth1-prune-provision:$VERSION-$ARCH -f docker/rocketpool-prune-provision . || fail "Error building Docker Prune Provision image."
+    echo "done!"
+    echo -n "Pushing to Docker Hub... "
+    docker push rocketpool/eth1-prune-provision:$VERSION-$ARCH || fail "Error pushing Docker Prune Provision image to Docker Hub."
+    echo "done!"
+    
+    cd ..
+}
+
+
 # Builds the Docker Manifests and pushes them to Docker Hub
 build_docker_manifest() {
     echo -n "Building Docker manifests... "
@@ -150,19 +164,33 @@ build_docker_manifest() {
 }
 
 
+# Builds the Docker Manifest for the prune provisioner and pushes it to Docker Hub
+build_docker_prune_provision_manifest() {
+    echo -n "Building Docker Prune Provision manifests... "
+    rm -f ~/.docker/manifests/docker.io_rocketpool_eth1-prune-provision-$VERSION
+    docker manifest create rocketpool/eth1-prune-provision:$VERSION --amend rocketpool/eth1-prune-provision:$VERSION-amd64 --amend rocketpool/eth1-prune-provision:$VERSION-arm64
+    echo "done!"
+    echo -n "Pushing to Docker Hub... "
+    docker manifest push --purge rocketpool/eth1-prune-provision:$VERSION
+    echo "done!"
+}
+
+
 # Print usage
 usage() {
     echo "Usage: build-release.sh [options] -v <version number>"
     echo "This script assumes it is in a directory that contains subdirectories for all of the Rocket Pool repositories."
     echo "To copy the arm64 daemon binary from a remote system, set the appropriate variables at the top of this file."
     echo "Options:"
-    echo $'\t-a\tBuild all of the artifacts'
+    echo $'\t-a\tBuild all of the artifacts, except for the prune provisioner'
     echo $'\t-c\tBuild the CLI binaries for all platforms'
     echo $'\t-m\tBuild the Daemon binary for this local platform'
     echo $'\t-p\tBuild the Smartnode installer packages'
     echo $'\t-d\tBuild the Docker Smartnode image and push it to Docker Hub'
     echo $'\t-x\tBuild the Docker POW Proxy image and push it to Docker Hub'
-    echo $'\t-n\tBuild the Docker manifests, and push them to Docker Hub'
+    echo $'\t-n\tBuild the Docker manifests (Smartnode and POW Proxy), and push them to Docker Hub'
+    echo $'\t-r\tBuild the Docker Prune Provisioner image and push it to Docker Hub'
+    echo $'\t-f\tBuild the Docker manifest for the Prune Provisioner and push it to Docker Hub'
     exit 0
 }
 
@@ -181,7 +209,7 @@ case $UNAME_VAL in
 esac
 
 # Parse arguments
-while getopts "acpmndxv:" FLAG; do
+while getopts "acpmndxrfv:" FLAG; do
     case "$FLAG" in
         a) CLI=true PACKAGES=true DAEMON=true DOCKER=true MANIFEST=true PROXY=true ;;
         c) CLI=true ;;
@@ -190,6 +218,8 @@ while getopts "acpmndxv:" FLAG; do
         d) DOCKER=true ;;
         x) PROXY=true ;;
         n) MANIFEST=true ;;
+        r) PRUNE=true ;;
+        f) PRUNE_MANIFEST=true ;;
         v) VERSION="$OPTARG" ;;
         *) usage ;;
     esac
@@ -220,4 +250,10 @@ if [ "$PROXY" = true ]; then
 fi
 if [ "$MANIFEST" = true ]; then
     build_docker_manifest
+fi
+if [ "$PRUNE" = true ]; then
+    build_docker_prune_provision
+fi
+if [ "$PRUNE_MANIFEST" = true ]; then
+    build_docker_prune_provision_manifest
 fi
