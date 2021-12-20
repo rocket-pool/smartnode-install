@@ -4,8 +4,8 @@ rocketpool:
   rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.1.3
-  image: rocketpool/smartnode:v1.1.3
+  graffitiVersion: v1.2.0-dev
+  image: rocketpool/smartnode:v1.2.0-dev
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -21,6 +21,11 @@ chains:
   eth1:
     provider: http://eth1:8545
     wsProvider: ws://eth1:8546
+    fallbackProvider: http://eth1-fallback:8545
+    fallbackWsProvider: ws://eth1-fallback:8546
+    reconnectDelay: 60s # How long to wait before attempting to reconnect to the main ETH1 provider
+                        # after it loses connection - the format can be e.g 30s, 5m, 1h, 5m30s, etc.
+    pruneProvisioner: rocketpool/eth1-prune-provision:v0.0.1
     chainID: 1 # Mainnet
     client:
       options:
@@ -32,6 +37,7 @@ chains:
         image: ethereum/client-go:v1.10.13
         link: https://geth.ethereum.org/
         eventLogInterval: 25000
+        fallback: false
         params:
         - name: Ethstats Label
           desc: optional - for reporting Eth 1.0 node status to ethstats.net
@@ -69,9 +75,10 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.1.3
+        image: rocketpool/smartnode-pow-proxy:v1.2.0-dev
         link: https://infura.io/
         eventLogInterval: 25000
+        fallback: true
         params:
         - name: Infura Project ID
           desc: the ID of your project created in Infura
@@ -82,10 +89,11 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.1.3
+        image: rocketpool/smartnode-pow-proxy:v1.2.0-dev
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
+        fallback: true
         params:
         - name: Gateway ID
           desc: "If using a custom gateway, enter 'lb/' followed by the Gateway ID (example: lb/{12345...}"
@@ -98,8 +106,9 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.1.3
+        image: rocketpool/smartnode-pow-proxy:v1.2.0-dev
         eventLogInterval: 25000
+        fallback: true
         params:
         - name: Provider HTTP URL
           desc: "The Eth 1.0 client HTTP server address and port\n

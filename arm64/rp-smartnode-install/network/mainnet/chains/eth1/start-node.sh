@@ -22,26 +22,34 @@ if [ "$CLIENT" = "geth" ]; then
         CURRENT_CORE=$((CURRENT_CORE - 1))
     done
 
-    # Run Geth with the CPU pinning so it doesn't eat the entire machine, and give it the lowest I/O priority
-    CMD="taskset -c $CORE_STRING ionice -c 3 /usr/local/bin/geth --mainnet --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port 8545 --http.api eth,net,personal,web3 --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api eth,net,personal,web3"
+    if [ -f "/ethclient/prune.lock" ]; then
 
-    if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
-        CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
+        taskset -c $CORE_STRING ionice -c 3 /usr/local/bin/geth snapshot prune-state --mainnet --datadir /ethclient/geth && rm /ethclient/prune.lock
+
+    else 
+
+        # Run Geth with the CPU pinning so it doesn't eat the entire machine, and give it the lowest I/O priority
+        CMD="taskset -c $CORE_STRING ionice -c 3 /usr/local/bin/geth --mainnet --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port 8545 --http.api eth,net,personal,web3 --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api eth,net,personal,web3"
+
+        if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
+            CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
+        fi
+
+        if [ ! -z "$GETH_CACHE_SIZE" ]; then
+            CMD="$CMD --cache $GETH_CACHE_SIZE"
+        fi
+
+        if [ ! -z "$GETH_MAX_PEERS" ]; then
+            CMD="$CMD --maxpeers $GETH_MAX_PEERS"
+        fi
+
+        if [ ! -z "$ETH1_P2P_PORT" ]; then
+            CMD="$CMD --port $ETH1_P2P_PORT"
+        fi
+
+        exec ${CMD} --http.vhosts '*'
+
     fi
-
-    if [ ! -z "$GETH_CACHE_SIZE" ]; then
-        CMD="$CMD --cache $GETH_CACHE_SIZE"
-    fi
-
-    if [ ! -z "$GETH_MAX_PEERS" ]; then
-        CMD="$CMD --maxpeers $GETH_MAX_PEERS"
-    fi
-
-    if [ ! -z "$ETH1_P2P_PORT" ]; then
-        CMD="$CMD --port $ETH1_P2P_PORT"
-    fi
-
-    exec ${CMD} --http.vhosts '*'
 
 fi
 

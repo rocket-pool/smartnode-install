@@ -17,8 +17,14 @@ fi
 
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
+    
+    ETH1_ENDPOINTS="$ETH1_PROVIDER"
 
-    CMD="/usr/local/bin/lighthouse beacon --network mainnet --datadir /ethclient/lighthouse --port $ETH2_P2P_PORT --discovery-port $ETH2_P2P_PORT --eth1 --eth1-endpoints $ETH1_PROVIDER --http --http-address 0.0.0.0 --http-port 5052 --eth1-blocks-per-log-query 150 --disable-upnp"
+    if [ ! -z "$ETH1_FALLBACK_PROVIDER" ]; then
+        ETH1_ENDPOINTS="$ETH1_PROVIDER,$ETH1_FALLBACK_PROVIDER"
+    fi
+
+    CMD="/usr/local/bin/lighthouse beacon --network mainnet --datadir /ethclient/lighthouse --port $ETH2_P2P_PORT --discovery-port $ETH2_P2P_PORT --eth1 --eth1-endpoints $ETH1_ENDPOINTS --http --http-address 0.0.0.0 --http-port 5052 --eth1-blocks-per-log-query 150 --disable-upnp"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --target-peers $ETH2_MAX_PEERS"
@@ -40,11 +46,17 @@ fi
 # Nimbus startup
 if [ "$CLIENT" = "nimbus" ]; then
 
+    ETH1_WS_PROVIDER_ARG="--web3-url=$ETH1_WS_PROVIDER"
+
+    if [ ! -z "$ETH1_FALLBACK_WS_PROVIDER" ]; then
+        ETH1_WS_PROVIDER_ARG="--web3-url=$ETH1_WS_PROVIDER --web3-url=$ETH1_FALLBACK_WS_PROVIDER"
+    fi
+
     # Nimbus won't start unless the validator directories already exist
     mkdir -p /validators/nimbus/validators
     mkdir -p /validators/nimbus/secrets
 
-    CMD="/home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=mainnet --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT --web3-url=$ETH1_WS_PROVIDER --rest --rest-address=0.0.0.0 --rest-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
+    CMD="/home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=mainnet --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT $ETH1_WS_PROVIDER_ARG --rest --rest-address=0.0.0.0 --rest-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --max-peers=$ETH2_MAX_PEERS"
@@ -70,8 +82,14 @@ if [ "$CLIENT" = "prysm" ]; then
     if [ -z "$ETH2_RPC_PORT" ]; then
         ETH2_RPC_PORT="5053"
     fi
+    
+    FALLBACK_PROVIDER=""
 
-    CMD="/app/cmd/beacon-chain/beacon-chain --accept-terms-of-use --mainnet --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER --rpc-host 0.0.0.0 --rpc-port $ETH2_RPC_PORT --grpc-gateway-host 0.0.0.0 --grpc-gateway-port 5052 --eth1-header-req-limit 150"
+    if [ ! -z "$ETH1_FALLBACK_PROVIDER" ]; then
+        FALLBACK_PROVIDER="--fallback-web3provider=$ETH1_FALLBACK_PROVIDER"
+    fi
+
+    CMD="/app/cmd/beacon-chain/beacon-chain --accept-terms-of-use --mainnet --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER $FALLBACK_PROVIDER --rpc-host 0.0.0.0 --rpc-port $ETH2_RPC_PORT --grpc-gateway-host 0.0.0.0 --grpc-gateway-port 5052 --eth1-header-req-limit 150"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
@@ -91,7 +109,13 @@ fi
 # Teku startup
 if [ "$CLIENT" = "teku" ]; then
 
-    CMD="/opt/teku/bin/teku --network=mainnet --data-path=/ethclient/teku --p2p-port=$ETH2_P2P_PORT --eth1-endpoint=$ETH1_PROVIDER --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=5052 --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE"
+    ETH1_ENDPOINTS="$ETH1_PROVIDER"
+
+    if [ ! -z "$ETH1_FALLBACK_PROVIDER" ]; then
+        ETH1_ENDPOINTS="$ETH1_PROVIDER,$ETH1_FALLBACK_PROVIDER"
+    fi
+
+    CMD="/opt/teku/bin/teku --network=mainnet --data-path=/ethclient/teku --p2p-port=$ETH2_P2P_PORT --eth1-endpoints=$ETH1_ENDPOINTS --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=5052 --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE"
 
     if [ ! -z "$ETH2_MAX_PEERS" ]; then
         CMD="$CMD --p2p-peer-lower-bound=$ETH2_MAX_PEERS --p2p-peer-upper-bound=$ETH2_MAX_PEERS"
