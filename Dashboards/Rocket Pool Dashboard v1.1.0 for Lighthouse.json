@@ -610,7 +610,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The total CPU usage of Teku's Beacon Chain and Validator clients combined, with respect to all cores on your CPU.",
+      "description": "The total CPU usage of Lighthouse's Beacon Chain and Validator clients combined, with respect to all cores on your CPU.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -676,7 +676,7 @@
           "refId": "A"
         }
       ],
-      "title": "Teku CPU",
+      "title": "Lighthouse CPU",
       "type": "stat"
     },
     {
@@ -814,7 +814,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The amount of RAM that the Teku Beacon Chain and Validator clients are using together.",
+      "description": "The amount of RAM that the Lighthouse Beacon Chain and Validator clients are using together.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -878,7 +878,7 @@
           "refId": "A"
         }
       ],
-      "title": "Teku RAM",
+      "title": "Lighthouse RAM",
       "type": "stat"
     },
     {
@@ -1144,7 +1144,7 @@
         "colorScale": "sqrt",
         "colorScheme": "interpolateOranges",
         "exponent": 0.5,
-        "mode": "spectrum"
+        "mode": "opacity"
       },
       "dataFormat": "tsbuckets",
       "description": "This tracks the delay between when you sent an attestation and your peers on the Beacon Chain network reported receiving it. Ideally, you want most of them to report that they received it within 4 seconds - otherwise you may be penalized for being late.",
@@ -4282,6 +4282,6 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.1.0 for Lighthouse",
   "uid": "Ur22GG77zLH110",
-  "version": 4,
+  "version": 3,
   "weekStart": ""
 }
