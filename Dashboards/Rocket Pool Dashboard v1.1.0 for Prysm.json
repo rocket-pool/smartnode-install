@@ -79,7 +79,7 @@
       }
     ]
   },
-  "description": "This is the standard dashboard for Rocket Pool node operators that use Teku.",
+  "description": "This is the standard dashboard for Rocket Pool node operators that use Prysm.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 14886,
@@ -135,7 +135,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "A count of how long Teku's Beacon Chain client has been running. If you don't restart it, this is about the same as your total system uptime.",
+      "description": "A count of how long Prysm's Beacon Chain client has been running. If you don't restart it, this is about the same as your total system uptime.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -604,7 +604,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The total CPU usage of Teku's Beacon Chain and Validator clients combined, with respect to all cores on your CPU.",
+      "description": "The total CPU usage of Prysm's Beacon Chain and Validator clients combined, with respect to all cores on your CPU.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -670,7 +670,7 @@
           "refId": "A"
         }
       ],
-      "title": "Teku CPU",
+      "title": "Prysm CPU",
       "type": "stat"
     },
     {
@@ -808,7 +808,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The amount of RAM that the Teku Beacon Chain and Validator clients are using together.",
+      "description": "The amount of RAM that the Prysm Beacon Chain and Validator clients are using together.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -872,7 +872,7 @@
           "refId": "A"
         }
       ],
-      "title": "Teku RAM",
+      "title": "Prysm RAM",
       "type": "stat"
     },
     {
@@ -1306,7 +1306,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Teku"
+              "options": "Prysm"
             },
             "properties": [
               {
@@ -1352,7 +1352,7 @@
           "expr": "(sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) + sum(avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval])))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
           "instant": false,
           "interval": "",
-          "legendFormat": "Teku",
+          "legendFormat": "Prysm",
           "refId": "A"
         },
         {
@@ -1441,7 +1441,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Teku"
+              "options": "Prysm"
             },
             "properties": [
               {
@@ -1502,7 +1502,7 @@
           "expr": "sum(process_resident_memory_bytes{job=\"eth2\"}) + sum(process_resident_memory_bytes{job=\"validator\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "Teku",
+          "legendFormat": "Prysm",
           "refId": "C"
         }
       ],
