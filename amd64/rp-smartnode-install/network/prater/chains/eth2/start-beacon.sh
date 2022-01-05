@@ -81,7 +81,7 @@ if [ "$CLIENT" = "prysm" ]; then
 
     # Get Prater SSZ
     if [ ! -f "/validators/genesis.ssz" ]; then
-        wget "https://github.com/eth2-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
+        wget "https://github.com/eth-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
     fi
 
     if [ -z "$ETH2_RPC_PORT" ]; then
