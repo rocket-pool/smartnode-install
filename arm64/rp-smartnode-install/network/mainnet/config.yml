@@ -4,8 +4,8 @@ rocketpool:
   rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.2.0
-  image: rocketpool/smartnode:v1.2.0
+  graffitiVersion: v1.2.1-dev
+  image: rocketpool/smartnode:v1.2.1-dev
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
@@ -34,7 +34,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.10.14
+        image: ethereum/client-go:v1.10.15
         link: https://geth.ethereum.org/
         eventLogInterval: 25000
         fallback: false
@@ -75,7 +75,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.2.0
+        image: rocketpool/smartnode-pow-proxy:v1.2.1-dev
         link: https://infura.io/
         eventLogInterval: 25000
         fallback: true
@@ -89,7 +89,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.2.0
+        image: rocketpool/smartnode-pow-proxy:v1.2.1-dev
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
@@ -106,7 +106,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.2.0
+        image: rocketpool/smartnode-pow-proxy:v1.2.1-dev
         eventLogInterval: 25000
         fallback: true
         params:
@@ -243,7 +243,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:21.12.2
+        image: consensys/teku:22.1.0
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
