@@ -16,6 +16,7 @@ smartnode:
   maxPriorityFee: 2 # The most "extra" you want to spend on a transaction to make it faster, in gwei. 
   rplClaimGasThreshold: 150 # Automatic RPL reward claims and minipool staking will wait until the network's average max fee, in gwei, is below this limit.
                             # Set it to 0 to disable automatic claiming of RPL rewards entirely.
+                            # Run `docker restart rocketpool_node` in docker mode or `sudo systemctl restart rp-node` in hybrid mode for changes to take effect.
   txWatchUrl: https://goerli.etherscan.io/tx
   stakeUrl: https://testnet.rocketpool.net
 chains:
