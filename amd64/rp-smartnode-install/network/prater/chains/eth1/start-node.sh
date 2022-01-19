@@ -7,7 +7,7 @@ if [ "$CLIENT" = "geth" ]; then
 
     if [ -f "/ethclient/prune.lock" ]; then
 
-        /usr/local/bin/geth snapshot prune-state --goerli --datadir /ethclient/geth && rm /ethclient/prune.lock
+        /usr/local/bin/geth snapshot prune-state --goerli --datadir /ethclient/geth ; rm /ethclient/prune.lock
 
     else 
 

@@ -24,7 +24,7 @@ if [ "$CLIENT" = "geth" ]; then
 
     if [ -f "/ethclient/prune.lock" ]; then
 
-        taskset -c $CORE_STRING ionice -c 3 /usr/local/bin/geth snapshot prune-state --goerli --datadir /ethclient/geth --bloomfilter.size 512 && rm /ethclient/prune.lock
+        taskset -c $CORE_STRING ionice -c 3 /usr/local/bin/geth snapshot prune-state --goerli --datadir /ethclient/geth --bloomfilter.size 512 ; rm /ethclient/prune.lock
 
     else 
 
