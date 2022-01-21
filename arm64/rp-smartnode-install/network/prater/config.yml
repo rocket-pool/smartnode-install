@@ -14,12 +14,16 @@ smartnode:
   maxFee: 0 # Set this number to the max fee you want to use as the default for all of your transactions, including automatic ones.
             # If set to 0, the Smartnode will suggest a max fee for you based on the network's current fees.
             # If set to anything else, the Smartnode will ignore the current network fees and use this instead. 
-  maxPriorityFee: 2 # The most "extra" you want to spend on a transaction to make it faster, in gwei. 
+  maxPriorityFee: 2 # The most "extra" you want to spend on a transaction to make it faster, in gwei.
   rplClaimGasThreshold: 150 # Automatic RPL reward claims will wait until the network's average max fee, in gwei, is below this limit.
                             # Set it to 0 to disable automatic claiming of RPL rewards entirely.
+                            # Run `docker restart rocketpool_node` in Docker Mode or `sudo systemctl restart rp-node` in Hybrid Mode
+                            # after changing this for the change to take effect.
                             # NOTE: THIS WILL BE RESET WHEN YOU UPGRADE OR REINSTALL ROCKET POOL.
   minipoolStakeGasThreshold: 150 # Staking of new minipools by the rocketpool_node container (once the scrub window has passed) will wait
                                  # until the network's average max fee, in gwei, is below this limit.
+                                 # Run `docker restart rocketpool_node` in Docker Mode or `sudo systemctl restart rp-node` in Hybrid Mode
+                                 # after changing this for the change to take effect.
                                  # NOTE: THIS WILL BE RESET WHEN YOU UPGRADE OR REINSTALL ROCKET POOL.
   txWatchUrl: https://goerli.etherscan.io/tx
   stakeUrl: https://testnet.rocketpool.net
