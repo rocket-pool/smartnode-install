@@ -11,11 +11,16 @@ smartnode:
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
   validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
-  maxFee: 0 # The maximum amount you're willing to pay, in gwei, to use for transactions.
-            # Set it to 0 if you want to view the current suggested prices and choose this number manually for each transaction.
+  maxFee: 0 # Set this number to the max fee you want to use as the default for all of your transactions, including automatic ones.
+            # If set to 0, the Smartnode will suggest a max fee for you based on the network's current fees.
+            # If set to anything else, the Smartnode will ignore the current network fees and use this instead. 
   maxPriorityFee: 2 # The most "extra" you want to spend on a transaction to make it faster, in gwei. 
-  rplClaimGasThreshold: 150 # Automatic RPL reward claims and minipool staking will wait until the network's average max fee, in gwei, is below this limit.
+  rplClaimGasThreshold: 150 # Automatic RPL reward claims will wait until the network's average max fee, in gwei, is below this limit.
                             # Set it to 0 to disable automatic claiming of RPL rewards entirely.
+                            # NOTE: THIS WILL BE RESET WHEN YOU UPGRADE OR REINSTALL ROCKET POOL.
+  minipoolStakeGasThreshold: 150 # Staking of new minipools by the rocketpool_node container (once the scrub window has passed) will wait
+                                 # until the network's average max fee, in gwei, is below this limit.
+                                 # NOTE: THIS WILL BE RESET WHEN YOU UPGRADE OR REINSTALL ROCKET POOL.
   txWatchUrl: https://goerli.etherscan.io/tx
   stakeUrl: https://testnet.rocketpool.net
 chains:
