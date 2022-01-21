@@ -4,18 +4,26 @@ rocketpool:
   rplTokenAddress: 0xb4efd85c19999d84251304bda99e90b92300bd93
 smartnode:
   projectName: rocketpool
-  graffitiVersion: v1.2.1
-  image: rocketpool/smartnode:v1.2.1
+  graffitiVersion: v1.2.2-dev
+  image: rocketpool/smartnode:v1.2.2-dev
   passwordPath: /.rocketpool/data/password
   walletPath: /.rocketpool/data/wallet
   validatorKeychainPath: /.rocketpool/data/validators
   validatorRestartCommand: "$HOME/.rocketpool/chains/eth2/restart-validator.sh"
-  maxFee: 0 # The maximum amount you're willing to pay, in gwei, to use for transactions.
-            # Set it to 0 if you want to view the current suggested prices and choose this number manually for each transaction.
-  maxPriorityFee: 2 # The most "extra" you want to spend on a transaction to make it faster, in gwei. 
-  rplClaimGasThreshold: 150 # Automatic RPL reward claims and minipool staking will wait until the network's average max fee, in gwei, is below this limit.
+  maxFee: 0 # Set this number to the max fee you want to use as the default for all of your transactions, including automatic ones.
+            # If set to 0, the Smartnode will suggest a max fee for you based on the network's current fees.
+            # If set to anything else, the Smartnode will ignore the current network fees and use this instead. 
+  maxPriorityFee: 2 # The most "extra" you want to spend on a transaction to make it faster, in gwei.
+  rplClaimGasThreshold: 150 # Automatic RPL reward claims will wait until the network's average max fee, in gwei, is below this limit.
                             # Set it to 0 to disable automatic claiming of RPL rewards entirely.
-                            # Run `docker restart rocketpool_node` in docker mode or `sudo systemctl restart rp-node` in hybrid mode for changes to take effect.
+                            # Run `docker restart rocketpool_node` in Docker Mode or `sudo systemctl restart rp-node` in Hybrid Mode
+                            # after changing this for the change to take effect.
+                            # NOTE: THIS WILL BE RESET WHEN YOU UPGRADE OR REINSTALL ROCKET POOL.
+  minipoolStakeGasThreshold: 150 # Staking of new minipools by the rocketpool_node container (once the scrub window has passed) will wait
+                                 # until the network's average max fee, in gwei, is below this limit.
+                                 # Run `docker restart rocketpool_node` in Docker Mode or `sudo systemctl restart rp-node` in Hybrid Mode
+                                 # after changing this for the change to take effect.
+                                 # NOTE: THIS WILL BE RESET WHEN YOU UPGRADE OR REINSTALL ROCKET POOL.
   txWatchUrl: https://etherscan.io/tx
   stakeUrl: https://stake.rocketpool.net
 chains:
@@ -76,7 +84,7 @@ chains:
         name: Infura
         desc: "\tUse infura.io as a light client for Eth 1.0. Not recommended\n
           \t\tfor use in production."
-        image: rocketpool/smartnode-pow-proxy:v1.2.1
+        image: rocketpool/smartnode-pow-proxy:v1.2.2-dev
         link: https://infura.io/
         eventLogInterval: 25000
         fallback: true
@@ -90,7 +98,7 @@ chains:
         name: Pocket
         desc: "\tUse Pocket Network as a decentralized light client for Eth 1.0.\n
           \t\tSuitable for use in production.\n"
-        image: rocketpool/smartnode-pow-proxy:v1.2.1
+        image: rocketpool/smartnode-pow-proxy:v1.2.2-dev
         link: https://www.portal.pokt.network/
         compatibleEth2Clients: lighthouse;prysm;teku
         eventLogInterval: 25000
@@ -107,7 +115,7 @@ chains:
         name: Custom
         desc: "\tUse a custom Eth 1.0 client at a specified address (does not\n
           \t\twork on localhost)."
-        image: rocketpool/smartnode-pow-proxy:v1.2.1
+        image: rocketpool/smartnode-pow-proxy:v1.2.2-dev
         eventLogInterval: 25000
         fallback: true
         params:
@@ -133,7 +141,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v2.0.1
+        image: sigp/lighthouse:v2.1.0
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -168,7 +176,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:multiarch-v1.5.5
+        image: statusim/nimbus-eth2:multiarch-v1.6.0
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
