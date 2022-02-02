@@ -169,6 +169,15 @@ chains:
           default: 9001
           blankText: the default of 9001
           advanced: true
+        - name: Doppelgänger Detection
+          desc: "Would you like to enable doppelgänger detection? (y/n)
+                 If enabled, Lighthouse will *intentionally* miss 1 or 2 attestations on startup to check\n
+                 if validator keys are already running elsewhere. If they are, Lighthouse will disable\n
+                 validation duties for them to prevent you from being slashed."
+          env: ETH2_DOPPELGANGER_DETECTION
+          regex: ^[yn]$
+          default: n
+          blankText: the default of n (disabled)
       - id: nimbus
         name: Nimbus
         desc: "\tNimbus is a client implementation for both Ethereum 2.0 and\n
@@ -199,6 +208,15 @@ chains:
           default: 9001
           blankText: the default of 9001
           advanced: true
+        - name: Doppelgänger Detection
+          desc: "Would you like to enable doppelgänger detection? (y/n)
+                 If enabled, Nimbus will *intentionally* miss 1 or 2 attestations on startup to check\n
+                 if validator keys are already running elsewhere. If they are, Nimbus will disable\n
+                 validation duties for them to prevent you from being slashed."
+          env: ETH2_DOPPELGANGER_DETECTION
+          regex: ^[yn]$
+          default: n
+          blankText: the default of n (disabled)
       - id: prysm
         name: Prysm
         desc: "\tPrysm is a Go implementation of Ethereum 2.0 protocol with a\n
@@ -238,6 +256,15 @@ chains:
           default: 5053
           blankText: the default of 5053
           advanced: true
+        - name: Doppelgänger Detection
+          desc: "Would you like to enable doppelgänger detection? (y/n)
+                 If enabled, Prysm will *intentionally* miss 1 or 2 attestations on startup to check\n
+                 if validator keys are already running elsewhere. If they are, Prysm will disable\n
+                 validation duties for them to prevent you from being slashed."
+          env: ETH2_DOPPELGANGER_DETECTION
+          regex: ^[yn]$
+          default: n
+          blankText: the default of n (disabled)
       - id: teku
         name: Teku
         desc: "\tPegaSys Teku (formerly known as Artemis) is a Java-based\n 

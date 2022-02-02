@@ -66,6 +66,7 @@ services:
       - ETH2_METRICS_PORT=${ETH2_METRICS_PORT}
       - EXTERNAL_IP=${EXTERNAL_IP}
       - ETH2_CHECKPOINT_SYNC_URL=${ETH2_CHECKPOINT_SYNC_URL}
+      - ETH2_DOPPELGANGER_DETECTION=${ETH2_DOPPELGANGER_DETECTION}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     depends_on:
@@ -94,6 +95,7 @@ services:
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
       - ENABLE_METRICS=${ENABLE_METRICS}
       - VALIDATOR_METRICS_PORT=${VALIDATOR_METRICS_PORT}
+      - ETH2_DOPPELGANGER_DETECTION=${ETH2_DOPPELGANGER_DETECTION}
     entrypoint: sh
     command: "/setup/start-validator.sh"
     depends_on:

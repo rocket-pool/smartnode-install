@@ -20,6 +20,10 @@ if [ "$CLIENT" = "lighthouse" ]; then
 
     CMD="/usr/local/bin/lighthouse validator --network mainnet --datadir /validators/lighthouse --init-slashing-protection --beacon-node $ETH2_PROVIDER"
 
+    if [ "$ETH2_DOPPELGANGER_DETECTION" = "y" ]; then
+        CMD="$CMD --enable-doppelganger-protection"
+    fi
+
     if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $VALIDATOR_METRICS_PORT"
     fi
@@ -55,6 +59,10 @@ if [ "$CLIENT" = "prysm" ]; then
     ETH2_RPC_PROVIDER="$( echo $ETH2_PROVIDER | grep -o '.*:' )$ETH2_RPC_PORT"
 
     CMD="/app/cmd/validator/validator --accept-terms-of-use --mainnet --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $ETH2_RPC_PROVIDER"
+
+    if [ "$ETH2_DOPPELGANGER_DETECTION" = "y" ]; then
+        CMD="$CMD --enable-doppelganger"
+    fi
 
     if [ "$ENABLE_METRICS" -eq "1" ]; then
         CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $VALIDATOR_METRICS_PORT"
