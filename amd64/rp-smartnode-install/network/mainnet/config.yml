@@ -141,7 +141,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v2.1.0
+        image: sigp/lighthouse:v2.1.2
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -224,8 +224,8 @@ chains:
           \t\tby Prysmatic Labs, a company with the sole focus on the\n
           \t\tdevelopment of their client. Prysm is written in Go and released\n
           \t\tunder a GPL-3.0 license."
-        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-d6338f-debug #v2.0.5
-        validatorImage: prysmaticlabs/prysm-validator:HEAD-d6338f-debug #v2.0.5
+        beaconImage: prysmaticlabs/prysm-beacon-chain:HEAD-e26cde-debug #v2.0.6
+        validatorImage: prysmaticlabs/prysm-validator:HEAD-e26cde-debug #v2.0.6
         link: https://docs.prylabs.network/docs/getting-started
         supermajority: true
         params:
@@ -274,7 +274,7 @@ chains:
           \t\tinteracting with the core Ethereum platform. Teku is Apache 2\n
           \t\tlicensed and written in Java, a language notable for its\n
           \t\tmaturity & ubiquity."
-        image: consensys/teku:22.1.0
+        image: consensys/teku:22.1.1
         link: https://docs.teku.consensys.net/en/stable/
         params:
         - name: Custom Graffiti
