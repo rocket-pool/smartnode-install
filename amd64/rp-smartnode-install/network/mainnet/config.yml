@@ -43,7 +43,7 @@ chains:
         desc: "\tGeth is one of the three original implementations of the\n
           \t\tEthereum protocol. It is written in Go, fully open source and\n
           \t\tlicensed under the GNU LGPL v3."
-        image: ethereum/client-go:v1.10.15
+        image: ethereum/client-go:v1.10.16
         link: https://geth.ethereum.org/
         eventLogInterval: 25000
         fallback: false
@@ -141,7 +141,7 @@ chains:
           \t\talong with the Ethereum Foundation, Consensys, and private\n
           \t\tindividuals. Lighthouse is built in Rust and offered under an\n
           \t\tApache 2.0 License."
-        image: sigp/lighthouse:v2.1.2
+        image: sigp/lighthouse:v2.1.3
         link: https://lighthouse-book.sigmaprime.io/
         params:
         - name: Custom Graffiti
@@ -185,7 +185,7 @@ chains:
           \t\tterms of resources used. This allows it to perform well on\n
           \t\tembedded systems, resource-restricted devices -- including\n
           \t\tRaspberry Pis and mobile devices -- and multi-purpose servers."
-        image: statusim/nimbus-eth2:multiarch-v1.6.0
+        image: statusim/nimbus-eth2:multiarch-v1.7.0
         link: https://nimbus.guide/intro.html
         params:
         - name: Custom Graffiti
