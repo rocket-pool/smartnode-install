@@ -57,6 +57,18 @@ if [ "$CLIENT" = "nimbus" ]; then
     mkdir -p /validators/nimbus/validators
     mkdir -p /validators/nimbus/secrets
 
+    # Handle checkpoint syncing
+    if [ ! -z "$ETH2_CHECKPOINT_SYNC_URL" ]; then
+        # Ignore it if a DB already exists
+        if [ -f "/ethclient/nimbus/db/nbc.sqlite3" ]; then 
+            echo "Nimbus database already exists, ignoring checkpoint sync."
+        else 
+            echo "Starting checkpoint sync for Nimbus..."
+            ionice -c 2 -n 0 /home/user/nimbus-eth2/build/nimbus_beacon_node trustedNodeSync --network=mainnet --data-dir=/ethclient/nimbus --trusted-node-url=$ETH2_CHECKPOINT_SYNC_URL --backfill=false
+            echo "Checkpoint sync complete!"
+        fi
+    fi
+
     # Give Nimbus the highest I/O priority
     CMD="ionice -c 2 -n 0 /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=mainnet --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT $ETH1_WS_PROVIDER_ARG --rest --rest-address=0.0.0.0 --rest-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
 
