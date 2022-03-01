@@ -8,33 +8,29 @@
 version: "3.8"
 services:
   eth1:
-    image: ${ETH1_IMAGE}
+    image: ${EC_CONTAINER_TAG}
     container_name: ${COMPOSE_PROJECT_NAME}_eth1
     restart: unless-stopped
     stop_grace_period: 3m
-    ports:
-      - "${ETH1_P2P_PORT:-30303}:${ETH1_P2P_PORT:-30303}/udp"
-      - "${ETH1_P2P_PORT:-30303}:${ETH1_P2P_PORT:-30303}/tcp"
-      ${ETH1_OPEN_API_PORTS} # TODO: envsubst
-      # Uncomment the following lines to allow other non-Docker processes on your system to use the ETH1 API
-      # - "8545:8545/tcp"
-      # - "8546:8546/tcp"
+    ports: [ "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/udp", "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/tcp"${EC_OPEN_API_PORTS} ]
     volumes:
       - eth1clientdata:/ethclient
       - ./chains/eth1:/setup:ro
     networks:
       - net
     environment:
-      - CLIENT=${ETH1_CLIENT}
+      - NETWORK=${NETWORK}
+      - CLIENT=${EC_CLIENT}
       - ETHSTATS_LABEL=${ETHSTATS_LABEL}
       - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
       - INFURA_PROJECT_ID=${INFURA_PROJECT_ID}
-      - POCKET_PROJECT_ID=${POCKET_PROJECT_ID}
-      - HTTP_PROVIDER_URL=${HTTP_PROVIDER_URL}
-      - WS_PROVIDER_URL=${WS_PROVIDER_URL}
-      - GETH_CACHE_SIZE=${GETH_CACHE_SIZE}
-      - GETH_MAX_PEERS=${GETH_MAX_PEERS}
-      - ETH1_P2P_PORT=${ETH1_P2P_PORT}
+      - POCKET_GATEWAY_ID=${POCKET_GATEWAY_ID}
+      - EC_CACHE_SIZE=${EC_CACHE_SIZE}
+      - EC_MAX_PEERS=${EC_MAX_PEERS}
+      - EC_P2P_PORT=${EC_P2P_PORT}
+      - EC_ADDITIONAL_FLAGS=${EC_ADDITIONAL_FLAGS}
+      - EC_HTTP_PORT=${EC_HTTP_PORT}
+      - EC_WS_PORT=${EC_WS_PORT}
     entrypoint: sh
     command: "/setup/start-node.sh"
     cap_drop:

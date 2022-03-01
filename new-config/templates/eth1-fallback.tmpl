@@ -8,24 +8,29 @@
 version: "3.8"
 services:
   eth1-fallback:
-    image: ${ETH1_FALLBACK_IMAGE}
+    image: ${FALLBACK_EC_CONTAINER_TAG}
     container_name: ${COMPOSE_PROJECT_NAME}_eth1-fallback
     restart: unless-stopped
     stop_grace_period: 3m
+    ports: [ ${EC_OPEN_API_PORTS} ]
     volumes:
       - eth1fallbackclientdata:/ethclient
       - ./chains/eth1:/setup:ro
     networks:
       - net
     environment:
-      - CLIENT=${ETH1_FALLBACK_CLIENT}
+      - NETWORK=${NETWORK}
+      - CLIENT=${FALLBACK_EC_CLIENT}
       - ETHSTATS_LABEL=${FALLBACK_ETHSTATS_LABEL}
       - ETHSTATS_LOGIN=${FALLBACK_ETHSTATS_LOGIN}
       - INFURA_PROJECT_ID=${FALLBACK_INFURA_PROJECT_ID}
-      - POCKET_PROJECT_ID=${FALLBACK_POCKET_PROJECT_ID}
-      - HTTP_PROVIDER_URL=${FALLBACK_HTTP_PROVIDER_URL}
-      - WS_PROVIDER_URL=${FALLBACK_WS_PROVIDER_URL}
-      - ETH1_P2P_PORT=${FALLBACK_ETH1_P2P_PORT}
+      - POCKET_GATEWAY_ID=${FALLBACK_POCKET_GATEWAY_ID}
+      - EC_CACHE_SIZE=${FALLBACK_EC_CACHE_SIZE}
+      - EC_MAX_PEERS=${FALLBACK_EC_MAX_PEERS}
+      - EC_P2P_PORT=${FALLBACK_EC_P2P_PORT}
+      - EC_ADDITIONAL_FLAGS=${FALLBACK_EC_ADDITIONAL_FLAGS}
+      - EC_HTTP_PORT=${FALLBACK_EC_HTTP_PORT}
+      - EC_WS_PORT=${FALLBACK_EC_WS_PORT}
     entrypoint: sh
     command: "/setup/start-node.sh"
     cap_drop:

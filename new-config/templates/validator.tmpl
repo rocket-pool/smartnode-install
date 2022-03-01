@@ -8,7 +8,7 @@
 version: "3.8"
 services:
   validator:
-    image: ${VALIDATOR_IMAGE}
+    image: ${VC_CONTAINER_TAG}
     user: root
     container_name: ${COMPOSE_PROJECT_NAME}_validator
     restart: unless-stopped
@@ -19,13 +19,16 @@ services:
     networks:
       - net
     environment:
-      - CLIENT=${VALIDATOR_CLIENT}
-      - ETH2_PROVIDER=${ETH2_PROVIDER}
+      - NETWORK=${NETWORK}
+      - CLIENT=${CC_CLIENT}
+      - CC_API_ENDPOINT=${CC_API_ENDPOINT}
+      - CC_RPC_ENDPOINT=${CC_RPC_ENDPOINT}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
       - ENABLE_METRICS=${ENABLE_METRICS}
-      - VALIDATOR_METRICS_PORT=${VALIDATOR_METRICS_PORT}
-      - ETH2_DOPPELGANGER_DETECTION=${ETH2_DOPPELGANGER_DETECTION}
+      - VC_METRICS_PORT=${VC_METRICS_PORT}
+      - DOPPELGANGER_DETECTION=${DOPPELGANGER_DETECTION}
+      - VC_ADDITIONAL_FLAGS=${VC_ADDITIONAL_FLAGS}
     entrypoint: sh
     command: "/setup/start-validator.sh"
     cap_drop:

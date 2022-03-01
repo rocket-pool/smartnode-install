@@ -32,14 +32,14 @@ fi
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
-    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --beacon-node $ETH2_PROVIDER"
+    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --beacon-node $CC_API_ENDPOINT $VC_ADDITIONAL_FLAGS"
 
-    if [ "$ETH2_DOPPELGANGER_DETECTION" = "y" ]; then
+    if [ "$DOPPELGANGER_DETECTION" = "y" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
     if [ "$ENABLE_METRICS" -eq "1" ]; then
-        CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $VALIDATOR_METRICS_PORT"
+        CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $VC_METRICS_PORT"
     fi
 
     exec ${CMD} --graffiti "$GRAFFITI"
@@ -63,23 +63,16 @@ fi
 if [ "$CLIENT" = "prysm" ]; then
 
     # Get rid of the protocol prefix
-    ETH2_PROVIDER=$(echo $ETH2_PROVIDER | sed -E 's/.*\:\/\/(.*)/\1/')
+    CC_RPC_ENDPOINT=$(echo $CC_RPC_ENDPOINT | sed -E 's/.*\:\/\/(.*)/\1/')
 
-    if [ -z "$ETH2_RPC_PORT" ]; then
-        ETH2_RPC_PORT="5053"
-    fi
+    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_RPC_ENDPOINT $VC_ADDITIONAL_FLAGS"
 
-    # Replace the HTTP port with Prysm's RPC port
-    ETH2_RPC_PROVIDER="$( echo $ETH2_PROVIDER | grep -o '.*:' )$ETH2_RPC_PORT"
-
-    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $ETH2_RPC_PROVIDER"
-
-    if [ "$ETH2_DOPPELGANGER_DETECTION" = "y" ]; then
+    if [ "$DOPPELGANGER_DETECTION" = "y" ]; then
         CMD="$CMD --enable-doppelganger"
     fi
 
-    if [ "$ENABLE_METRICS" -eq "1" ]; then
-        CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $VALIDATOR_METRICS_PORT"
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $VC_METRICS_PORT"
     else
         CMD="$CMD --disable-account-metrics"
     fi
@@ -99,10 +92,10 @@ if [ "$CLIENT" = "teku" ]; then
     # Remove any lock files that were left over accidentally after an unclean shutdown
     rm -f /validators/teku/keys/*.lock
 
-    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$ETH2_PROVIDER --validators-keystore-locking-enabled=false"
+    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false"
 
-    if [ "$ENABLE_METRICS" -eq "1" ]; then
-        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VALIDATOR_METRICS_PORT --metrics-host-allowlist=*" 
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=* $VC_ADDITIONAL_FLAGS" 
     fi
 
     exec ${CMD} --validators-graffiti="$GRAFFITI"

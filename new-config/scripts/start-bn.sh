@@ -41,24 +41,24 @@ fi
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
     
-    ETH1_ENDPOINTS="$ETH1_PROVIDER"
+    ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT"
 
-    if [ ! -z "$ETH1_FALLBACK_PROVIDER" ]; then
-        ETH1_ENDPOINTS="$ETH1_PROVIDER,$ETH1_FALLBACK_PROVIDER"
+    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
+        ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT,$FALLBACK_EC_HTTP_ENDPOINT"
     fi
 
-    CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $ETH2_P2P_PORT --discovery-port $ETH2_P2P_PORT --eth1 --eth1-endpoints $ETH1_ENDPOINTS --http --http-address 0.0.0.0 --http-port 5052 --eth1-blocks-per-log-query 150 --disable-upnp"
+    CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --eth1 --eth1-endpoints $ETH1_ENDPOINTS --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp $BN_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$ETH2_MAX_PEERS" ]; then
-        CMD="$CMD --target-peers $ETH2_MAX_PEERS"
+    if [ ! -z "$BN_MAX_PEERS" ]; then
+        CMD="$CMD --target-peers $BN_MAX_PEERS"
     fi
 
-    if [ "$ENABLE_METRICS" -eq "1" ]; then
+    if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $ETH2_METRICS_PORT --validator-monitor-auto"
     fi
 
-    if [ ! -z "$ETH2_CHECKPOINT_SYNC_URL" ]; then
-        CMD="$CMD --checkpoint-sync-url $ETH2_CHECKPOINT_SYNC_URL"
+    if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
+        CMD="$CMD --checkpoint-sync-url $CHECKPOINT_SYNC_URL"
     fi
 
     exec ${CMD}
@@ -69,10 +69,10 @@ fi
 # Nimbus startup
 if [ "$CLIENT" = "nimbus" ]; then
 
-    ETH1_WS_PROVIDER_ARG="--web3-url=$ETH1_WS_PROVIDER"
+    ETH1_WS_PROVIDER_ARG="--web3-url=$EC_WS_ENDPOINT"
 
-    if [ ! -z "$ETH1_FALLBACK_WS_PROVIDER" ]; then
-        ETH1_WS_PROVIDER_ARG="--web3-url=$ETH1_WS_PROVIDER --web3-url=$ETH1_FALLBACK_WS_PROVIDER"
+    if [ ! -z "$FALLBACK_EC_WS_ENDPOINT" ]; then
+        ETH1_WS_PROVIDER_ARG="--web3-url=$EC_WS_ENDPOINT --web3-url=$FALLBACK_EC_WS_ENDPOINT"
     fi
 
     # Nimbus won't start unless the validator directories already exist
@@ -80,29 +80,29 @@ if [ "$CLIENT" = "nimbus" ]; then
     mkdir -p /validators/nimbus/secrets
 
     # Handle checkpoint syncing
-    if [ ! -z "$ETH2_CHECKPOINT_SYNC_URL" ]; then
+    if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
         # Ignore it if a DB already exists
         if [ -f "/ethclient/nimbus/db/nbc.sqlite3" ]; then 
             echo "Nimbus database already exists, ignoring checkpoint sync."
         else 
             echo "Starting checkpoint sync for Nimbus..."
-            $PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node trustedNodeSync --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --trusted-node-url=$ETH2_CHECKPOINT_SYNC_URL --backfill=false
+            $PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node trustedNodeSync --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --trusted-node-url=$CHECKPOINT_SYNC_URL --backfill=false
             echo "Checkpoint sync complete!"
         fi
     fi
 
-    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$ETH2_P2P_PORT --udp-port=$ETH2_P2P_PORT $ETH1_WS_PROVIDER_ARG --rest --rest-address=0.0.0.0 --rest-port=5052 --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0"
+    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT $ETH1_WS_PROVIDER_ARG --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0 $BN_ADDITIONAL_FLAGS"
 
-    if [ ! "$ETH2_DOPPELGANGER_DETECTION" = "y" ]; then
+    if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --doppelganger-detection=false"
     fi
 
-    if [ ! -z "$ETH2_MAX_PEERS" ]; then
-        CMD="$CMD --max-peers=$ETH2_MAX_PEERS"
+    if [ ! -z "$BN_MAX_PEERS" ]; then
+        CMD="$CMD --max-peers=$BN_MAX_PEERS"
     fi
 
-    if [ "$ENABLE_METRICS" -eq "1" ]; then
-        CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT"
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$BN_METRICS_PORT"
     fi
 
     if [ ! -z "$EXTERNAL_IP" ]; then
@@ -124,25 +124,21 @@ if [ "$CLIENT" = "prysm" ]; then
             wget "https://github.com/eth-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
         fi
     fi
-
-    if [ -z "$ETH2_RPC_PORT" ]; then
-        ETH2_RPC_PORT="5053"
-    fi
     
     FALLBACK_PROVIDER=""
 
-    if [ ! -z "$ETH1_FALLBACK_PROVIDER" ]; then
-        FALLBACK_PROVIDER="--fallback-web3provider=$ETH1_FALLBACK_PROVIDER"
+    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
+        FALLBACK_PROVIDER="--fallback-web3provider=$FALLBACK_EC_HTTP_ENDPOINT"
     fi
 
-    CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $ETH2_P2P_PORT --p2p-udp-port $ETH2_P2P_PORT --http-web3provider $ETH1_PROVIDER $FALLBACK_PROVIDER --rpc-host 0.0.0.0 --rpc-port $ETH2_RPC_PORT --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150"
+    CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --http-web3provider $EC_HTTP_ENDPOINT $FALLBACK_PROVIDER --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 $BN_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$ETH2_MAX_PEERS" ]; then
-        CMD="$CMD --p2p-max-peers $ETH2_MAX_PEERS"
+    if [ ! -z "$BN_MAX_PEERS" ]; then
+        CMD="$CMD --p2p-max-peers $BN_MAX_PEERS"
     fi
 
-    if [ "$ENABLE_METRICS" -eq "1" ]; then
-        CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $ETH2_METRICS_PORT"
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $BN_METRICS_PORT"
     else
         CMD="$CMD --disable-monitoring"
     fi
@@ -155,10 +151,10 @@ fi
 # Teku startup
 if [ "$CLIENT" = "teku" ]; then
 
-    ETH1_ENDPOINTS="$ETH1_PROVIDER"
+    ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT"
 
-    if [ ! -z "$ETH1_FALLBACK_PROVIDER" ]; then
-        ETH1_ENDPOINTS="$ETH1_PROVIDER,$ETH1_FALLBACK_PROVIDER"
+    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
+        ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT,$FALLBACK_EC_HTTP_ENDPOINT"
     fi
 
     # Restrict the JVM's heap size to reduce RAM load on ARM systems
@@ -166,18 +162,18 @@ if [ "$CLIENT" = "teku" ]; then
         export JAVA_OPTS=-Xmx2g
     fi
 
-    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$ETH2_P2P_PORT --eth1-endpoints=$ETH1_ENDPOINTS --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=5052 --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE"
+    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --eth1-endpoints=$ETH1_ENDPOINTS --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE $BN_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$ETH2_MAX_PEERS" ]; then
-        CMD="$CMD --p2p-peer-lower-bound=$ETH2_MAX_PEERS --p2p-peer-upper-bound=$ETH2_MAX_PEERS"
+    if [ ! -z "$BN_MAX_PEERS" ]; then
+        CMD="$CMD --p2p-peer-lower-bound=$BN_MAX_PEERS --p2p-peer-upper-bound=$BN_MAX_PEERS"
     fi
 
-    if [ "$ENABLE_METRICS" -eq "1" ]; then
-        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$ETH2_METRICS_PORT --metrics-host-allowlist=*" 
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$BN_METRICS_PORT --metrics-host-allowlist=*" 
     fi
 
-    if [ ! -z "$ETH2_CHECKPOINT_SYNC_URL" ]; then
-        CMD="$CMD --initial-state=$ETH2_CHECKPOINT_SYNC_URL/eth/v1/debug/beacon/states/finalized"
+    if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
+        CMD="$CMD --initial-state=$CHECKPOINT_SYNC_URL/eth/v1/debug/beacon/states/finalized"
     fi
 
     exec ${CMD}

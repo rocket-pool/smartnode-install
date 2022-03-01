@@ -55,16 +55,16 @@ if [ "$CLIENT" = "geth" ]; then
             CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
         fi
 
-        if [ ! -z "$GETH_CACHE_SIZE" ]; then
-            CMD="$CMD --cache $GETH_CACHE_SIZE"
+        if [ ! -z "$EC_CACHE_SIZE" ]; then
+            CMD="$CMD --cache $EC_CACHE_SIZE"
         fi
 
-        if [ ! -z "$GETH_MAX_PEERS" ]; then
-            CMD="$CMD --maxpeers $GETH_MAX_PEERS"
+        if [ ! -z "$EC_MAX_PEERS" ]; then
+            CMD="$CMD --maxpeers $EC_MAX_PEERS"
         fi
 
-        if [ ! -z "$ETH1_P2P_PORT" ]; then
-            CMD="$CMD --port $ETH1_P2P_PORT"
+        if [ ! -z "$EC_P2P_PORT" ]; then
+            CMD="$CMD --port $EC_P2P_PORT"
         fi
 
         exec ${CMD} --http.vhosts '*'
@@ -77,7 +77,7 @@ fi
 # Infura startup
 if [ "$CLIENT" = "infura" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --wsPort ${EC_WS_PORT:-8546} --network $INFURA_NETWORK --projectId $INFURA_PROJECT_ID --providerType infura
+    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --wsPort ${EC_WS_PORT:-8546} --network $INFURA_NETWORK --projectId $INFURA_PROJECT_ID --providerType infura $EC_ADDITIONAL_FLAGS
 
 fi
 
@@ -85,7 +85,7 @@ fi
 # Pocket startup
 if [ "$CLIENT" = "pocket" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --network $POCKET_NETWORK --projectId $POCKET_PROJECT_ID --providerType pocket
+    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --network $POCKET_NETWORK --projectId $POCKET_PROJECT_ID --providerType pocket $EC_ADDITIONAL_FLAGS
 
 fi
 
@@ -93,7 +93,6 @@ fi
 # Custom provider startup
 if [ "$CLIENT" = "custom" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --wsPort ${EC_WS_PORT:-8546} --httpProviderUrl $HTTP_PROVIDER_URL --wsProviderUrl $WS_PROVIDER_URL --providerType=""
-
+    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --wsPort ${EC_WS_PORT:-8546} --httpProviderUrl $HTTP_PROVIDER_URL --wsProviderUrl $WS_PROVIDER_URL --providerType="" $EC_ADDITIONAL_FLAGS
 fi
 

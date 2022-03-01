@@ -8,17 +8,12 @@
 version: "3.8"
 services:
   eth2:
-    image: ${ETH2_IMAGE}
+    image: ${BN_CONTAINER_TAG}
     user: root
     container_name: ${COMPOSE_PROJECT_NAME}_eth2
     restart: unless-stopped
     stop_grace_period: 3m
-    ports:
-      - "${ETH2_P2P_PORT:-9001}:${ETH2_P2P_PORT:-9001}/tcp"
-      - "${ETH2_P2P_PORT:-9001}:${ETH2_P2P_PORT:-9001}/udp"
-      ${ETH2_OPEN_API_PORTS} # TODO: envsubst
-      # Uncomment the following line to allow other non-Docker processes on your system to use the ETH2 API
-      # - "5052:5052/tcp"
+    ports: [ "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/tcp", "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/udp"${BN_OPEN_PORTS} ]
     volumes:
       - ./data/validators:/validators
       - eth2clientdata:/ethclient
@@ -26,20 +21,24 @@ services:
     networks:
       - net
     environment:
-      - CLIENT=${ETH2_CLIENT}
-      - ETH1_PROVIDER=${ETH1_PROVIDER}
-      - ETH1_WS_PROVIDER=${ETH1_WS_PROVIDER}
-      - ETH1_FALLBACK_PROVIDER=${ETH1_FALLBACK_PROVIDER}
-      - ETH1_FALLBACK_WS_PROVIDER=${ETH1_FALLBACK_WS_PROVIDER}
+      - NETWORK=${NETWORK}
+      - CLIENT=${CC_CLIENT}
+      - EC_HTTP_ENDPOINT=${EC_HTTP_ENDPOINT}
+      - EC_WS_ENDPOINT=${EC_WS_ENDPOINT}
+      - FALLBACK_EC_HTTP_ENDPOINT=${FALLBACK_EC_HTTP_ENDPOINT}
+      - FALLBACK_EC_WS_ENDPOINT=${FALLBACK_EC_WS_ENDPOINT}
       - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
       - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
-      - ETH2_P2P_PORT=${ETH2_P2P_PORT}
-      - ETH2_MAX_PEERS=${ETH2_MAX_PEERS}
+      - BN_P2P_PORT=${BN_P2P_PORT}
+      - BN_API_PORT=${BN_API_PORT}
+      - BN_RPC_PORT=${BN_RPC_PORT}
+      - BN_MAX_PEERS=${BN_MAX_PEERS}
       - ENABLE_METRICS=${ENABLE_METRICS}
-      - ETH2_METRICS_PORT=${ETH2_METRICS_PORT}
+      - BN_METRICS_PORT=${BN_METRICS_PORT}
       - EXTERNAL_IP=${EXTERNAL_IP}
-      - ETH2_CHECKPOINT_SYNC_URL=${ETH2_CHECKPOINT_SYNC_URL}
-      - ETH2_DOPPELGANGER_DETECTION=${ETH2_DOPPELGANGER_DETECTION}
+      - CHECKPOINT_SYNC_URL=${CHECKPOINT_SYNC_URL}
+      - DOPPELGANGER_DETECTION=${DOPPELGANGER_DETECTION}
+      - BN_ADDITIONAL_FLAGS=${BN_ADDITIONAL_FLAGS}
     entrypoint: sh
     command: "/setup/start-beacon.sh"
     cap_drop:
