@@ -61,14 +61,11 @@ build_cli() {
 # Builds the .tar.xz file packages with the RP configuration files
 build_install_packages() {
     cd smartnode-install || fail "Directory ${PWD}/smartnode-install does not exist or you don't have permissions to access it."
-    rm -f amd64/rp-smartnode-install-amd64.tar.xz
-    rm -f arm64/rp-smartnode-install-arm64.tar.xz
+    rm -f rp-smartnode-install.tar.xz
 
     echo -n "Building Smartnode installer packages... "
-    tar cfJ amd64/rp-smartnode-install-amd64.tar.xz amd64/rp-smartnode-install || fail "Error building amd64 package."
-    tar cfJ arm64/rp-smartnode-install-arm64.tar.xz arm64/rp-smartnode-install || fail "Error building arm64 package."
-    mv amd64/rp-smartnode-install-amd64.tar.xz ../$VERSION
-    mv arm64/rp-smartnode-install-arm64.tar.xz ../$VERSION
+    tar cfJ rp-smartnode-install.tar.xz new-config || fail "Error building installer package."
+    mv rp-smartnode-install.tar.xz ../$VERSION
     cp install.sh ../$VERSION
     cp install-update-tracker.sh ../$VERSION
     echo "done!"

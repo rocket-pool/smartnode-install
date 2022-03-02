@@ -123,9 +123,9 @@ done
 
 # Get package files URL
 if [ "$PACKAGE_VERSION" = "latest" ]; then
-    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install-$ARCH.tar.xz"
+    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/latest/download/rp-smartnode-install.tar.xz"
 else
-    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install-$ARCH.tar.xz"
+    PACKAGE_URL="https://github.com/rocket-pool/smartnode-install/releases/download/$PACKAGE_VERSION/rp-smartnode-install.tar.xz"
 fi
 
 
@@ -135,8 +135,7 @@ trap 'rm -rf "$TEMPDIR"' EXIT
 
 
 # Get temporary data paths
-PACKAGE_FILES_PATH="$TEMPDIR/$ARCH/rp-smartnode-install"
-NETWORK_FILES_PATH="$PACKAGE_FILES_PATH/network/$NETWORK"
+PACKAGE_FILES_PATH="$TEMPDIR/new-config"
 
 
 ##
@@ -246,7 +245,7 @@ fi
 # Create ~/.rocketpool dir & files
 progress 5 "Creating Rocket Pool user data directory..."
 { mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
-{ touch -a "$RP_PATH/settings.yml" || fail "Could not create the Rocket Pool user settings file."; } >&2
+{ mkdir -p "$RP_PATH/runtime" || fail "Could not create the Rocket Pool runtime directory."; } >&2
 
 
 # Download and extract package files
@@ -257,9 +256,8 @@ progress 6 "Downloading Rocket Pool package files..."
 
 # Copy package files
 progress 7 "Copying package files to Rocket Pool user data directory..."
-{ test -d "$NETWORK_FILES_PATH" || fail "No package files were found for the selected network."; } >&2
-{ cp -r "$NETWORK_FILES_PATH/"* "$RP_PATH" || fail "Could not copy network package files to the Rocket Pool user data directory."; } >&2
-{ find "$RP_PATH/chains" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
+{ cp -r "$PACKAGE_FILES_PATH/"* "$RP_PATH" || fail "Could not copy package files to the Rocket Pool user data directory."; } >&2
+{ find "$RP_PATH/scripts" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 
 }
 
