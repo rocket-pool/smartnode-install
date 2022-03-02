@@ -3,13 +3,13 @@
 
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
-    $GETH_NETWORK=""
-    $INFURA_NETWORK="mainnet"
-    $POCKET_NETWORK="eth-mainnet"
+    GETH_NETWORK=""
+    INFURA_NETWORK="mainnet"
+    POCKET_NETWORK="eth-mainnet"
 elif [ "$NETWORK" = "prater" ]; then
-    $GETH_NETWORK="--goerli"
-    $INFURA_NETWORK="goerli"
-    $POCKET_NETWORK="eth-goerli"
+    GETH_NETWORK="--goerli"
+    INFURA_NETWORK="goerli"
+    POCKET_NETWORK="eth-goerli"
 else
     echo "Unknown network [$NETWORK]"
     exit 1

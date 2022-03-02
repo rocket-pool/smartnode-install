@@ -21,17 +21,17 @@ fi
 
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
-    $LH_NETWORK="mainnet"
-    $NIMBUS_NETWORK="mainnet"
-    $PRYSM_NETWORK="--mainnet"
-    $TEKU_NETWORK="mainnet"
-    $PRYSM_GENESIS_STATE=""
+    LH_NETWORK="mainnet"
+    NIMBUS_NETWORK="mainnet"
+    PRYSM_NETWORK="--mainnet"
+    TEKU_NETWORK="mainnet"
+    PRYSM_GENESIS_STATE=""
 elif [ "$NETWORK" = "prater" ]; then
-    $LH_NETWORK="prater"
-    $NIMBUS_NETWORK="prater"
-    $PRYSM_NETWORK="--prater"
-    $TEKU_NETWORK="mainnet"
-    $PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis.ssz"
+    LH_NETWORK="prater"
+    NIMBUS_NETWORK="prater"
+    PRYSM_NETWORK="--prater"
+    TEKU_NETWORK="mainnet"
+    PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis.ssz"
 else
     echo "Unknown network [$NETWORK]"
     exit 1

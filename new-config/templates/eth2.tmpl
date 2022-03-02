@@ -40,7 +40,7 @@ services:
       - DOPPELGANGER_DETECTION=${DOPPELGANGER_DETECTION}
       - BN_ADDITIONAL_FLAGS=${BN_ADDITIONAL_FLAGS}
     entrypoint: sh
-    command: "/setup/start-beacon.sh"
+    command: "/setup/start-bn.sh"
     cap_drop:
       - all
     cap_add:

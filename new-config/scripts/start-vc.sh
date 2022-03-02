@@ -16,13 +16,13 @@ fi
 
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
-    $LH_NETWORK="mainnet"
-    $PRYSM_NETWORK="--mainnet"
-    $TEKU_NETWORK="mainnet"
+    LH_NETWORK="mainnet"
+    PRYSM_NETWORK="--mainnet"
+    TEKU_NETWORK="mainnet"
 elif [ "$NETWORK" = "prater" ]; then
-    $LH_NETWORK="prater"
-    $PRYSM_NETWORK="--prater"
-    $TEKU_NETWORK="mainnet"
+    LH_NETWORK="prater"
+    PRYSM_NETWORK="--prater"
+    TEKU_NETWORK="mainnet"
 else
     echo "Unknown network [$NETWORK]"
     exit 1

@@ -30,7 +30,7 @@ services:
       - DOPPELGANGER_DETECTION=${DOPPELGANGER_DETECTION}
       - VC_ADDITIONAL_FLAGS=${VC_ADDITIONAL_FLAGS}
     entrypoint: sh
-    command: "/setup/start-validator.sh"
+    command: "/setup/start-vc.sh"
     cap_drop:
       - all
     cap_add:
