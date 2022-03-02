@@ -15,7 +15,7 @@ services:
     ports: [ ${EC_OPEN_API_PORTS} ]
     volumes:
       - eth1fallbackclientdata:/ethclient
-      - ./chains/eth1:/setup:ro
+      - ./scripts:/setup:ro
     networks:
       - net
     environment:

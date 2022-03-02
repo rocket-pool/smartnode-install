@@ -15,7 +15,7 @@ services:
     stop_grace_period: 3m
     volumes:
       - ./data/validators:/validators
-      - ./chains/eth2:/setup:ro
+      - ./scripts:/setup:ro
     networks:
       - net
     environment:

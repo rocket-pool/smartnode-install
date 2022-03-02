@@ -17,7 +17,7 @@ services:
     volumes:
       - ./data/validators:/validators
       - eth2clientdata:/ethclient
-      - ./chains/eth2:/setup:ro
+      - ./scripts:/setup:ro
     networks:
       - net
     environment:
