@@ -14,7 +14,7 @@ services:
     stop_signal: SIGKILL
     stop_grace_period: 1s
     volumes:
-      - .:/.rocketpool
+      - ${ROCKETPOOL_DATA_FOLDER}:/.rocketpool/data
     networks:
       - net
     entrypoint: /bin/sleep

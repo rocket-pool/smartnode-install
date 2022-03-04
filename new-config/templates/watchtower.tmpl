@@ -12,7 +12,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_watchtower
     restart: unless-stopped
     volumes:
-      - .:/.rocketpool
+      - ${ROCKETPOOL_DATA_FOLDER}:/.rocketpool/data
     networks:
       - net
     command: "-m 0.0.0.0 -r ${WATCHTOWER_METRICS_PORT:-9104} watchtower"
