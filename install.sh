@@ -48,7 +48,7 @@ fi
 
 
 # The total number of steps in the installation process
-TOTAL_STEPS="7"
+TOTAL_STEPS="8"
 # The Rocket Pool user data path
 RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
@@ -242,21 +242,62 @@ else
 fi
 
 
+# Check for existing installation
+progress 5 "Checking for existing installation..."
+if [ -d $RP_PATH ]; then 
+    # Check for legacy files - key on the old config.yml
+    if [ -f "$RP_PATH/config.yml" ]; then
+        progress 5 "Old installation detected, backing it up and migrating to new config system..."
+        OLD_CONFIG_BACKUP_PATH="$RP_PATH/old_config_backup"
+        { mkdir -p $OLD_CONFIG_BACKUP_PATH || fail "Could not create old config backup folder."; } >&2
+
+        if [ -f "$RP_PATH/config.yml" ]; then 
+            { mv "$RP_PATH/config.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move config.yml to backup folder."; } >&2
+        fi
+        if [ -f "$RP_PATH/settings.yml" ]; then 
+            { mv "$RP_PATH/settings.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move settings.ym to backup folder."; } >&2
+        fi
+        if [ -f "$RP_PATH/docker-compose.yml" ]; then 
+            { mv "$RP_PATH/docker-compose.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move docker-compose.yml to backup folder."; } >&2
+        fi
+        if [ -f "$RP_PATH/docker-compose-metrics.yml" ]; then 
+            { mv "$RP_PATH/docker-compose-metrics.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move docker-compose-metrics.yml to backup folder."; } >&2
+        fi
+        if [ -f "$RP_PATH/docker-compose-fallback.yml" ]; then 
+            { mv "$RP_PATH/docker-compose-fallback.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move docker-compose-fallback.yml to backup folder."; } >&2
+        fi
+        if [ -f "$RP_PATH/prometheus.tmpl" ]; then 
+            { mv "$RP_PATH/prometheus.tmpl" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move prometheus.tmpl to backup folder."; } >&2
+        fi
+        if [ -f "$RP_PATH/grafana-prometheus-datasource.yml" ]; then 
+            { mv "$RP_PATH/grafana-prometheus-datasource.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move grafana-prometheus-datasource.yml to backup folder."; } >&2
+        fi
+        if [ -d "$RP_PATH/chains" ]; then 
+            { mv "$RP_PATH/chains" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move chains directory to backup folder."; } >&2
+        fi
+    fi
+fi
+
+
 # Create ~/.rocketpool dir & files
-progress 5 "Creating Rocket Pool user data directory..."
+progress 6 "Creating Rocket Pool user data directory..."
 { mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
 { mkdir -p "$RP_PATH/runtime" || fail "Could not create the Rocket Pool runtime directory."; } >&2
 
 
 # Download and extract package files
-progress 6 "Downloading Rocket Pool package files..."
+progress 7 "Downloading Rocket Pool package files..."
 { curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."; } >&2
 { test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool package files."; } >&2
 
 
 # Copy package files
-progress 7 "Copying package files to Rocket Pool user data directory..."
-{ cp -r "$PACKAGE_FILES_PATH/"* "$RP_PATH" || fail "Could not copy package files to the Rocket Pool user data directory."; } >&2
+progress 8 "Copying package files to Rocket Pool user data directory..."
+{ cp -r "$PACKAGE_FILES_PATH/addons" "$RP_PATH" || fail "Could not copy addons folder to the Rocket Pool user data directory."; } >&2
+{ cp -r -n "$PACKAGE_FILES_PATH/override" "$RP_PATH" || fail "Could not copy new override files to the Rocket Pool user data directory."; } >&2
+{ cp -r "$PACKAGE_FILES_PATH/scripts" "$RP_PATH" || fail "Could not copy scripts folder to the Rocket Pool user data directory."; } >&2
+{ cp -r "$PACKAGE_FILES_PATH/templates" "$RP_PATH" || fail "Could not copy templates folder to the Rocket Pool user data directory."; } >&2
+{ cp "$PACKAGE_FILES_PATH" "$RP_PATH" || fail "Could not copy base files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/scripts" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 
 }
