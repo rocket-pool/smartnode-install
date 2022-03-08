@@ -8,7 +8,7 @@
 version: "3.8"
 services:
   grafana:
-    image: ${GRAFANA_IMAGE}
+    image: ${GRAFANA_CONTAINER_TAG}
     container_name: ${COMPOSE_PROJECT_NAME}_grafana
     restart: unless-stopped
     environment:
