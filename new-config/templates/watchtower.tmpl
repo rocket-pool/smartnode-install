@@ -12,6 +12,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_watchtower
     restart: unless-stopped
     volumes:
+      - ${ROCKETPOOL_FOLDER}:/.rocketpool
       - ${ROCKETPOOL_DATA_FOLDER}:/.rocketpool/data
     networks:
       - net

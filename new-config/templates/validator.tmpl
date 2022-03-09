@@ -14,8 +14,8 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     volumes:
-      - ./data/validators:/validators
-      - ./scripts:/setup:ro
+      - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
+      - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:
       - net
     environment:

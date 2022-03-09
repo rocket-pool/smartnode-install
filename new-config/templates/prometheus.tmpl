@@ -16,11 +16,10 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports: [${PROMETHEUS_OPEN_PORTS}]
     volumes:
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "${ROCKETPOOL_FOLDER}/prometheus.yml:/etc/prometheus/prometheus.yml"
       - "prometheus-data:/prometheus"
     networks:
       - net
-      - monitor-net
     extra_hosts:
       - "host.docker.internal: host-gateway"
 networks:

@@ -15,9 +15,9 @@ services:
     stop_grace_period: 3m
     ports: [ "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/tcp", "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/udp"${BN_OPEN_PORTS} ]
     volumes:
-      - ./data/validators:/validators
+      - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
       - eth2clientdata:/ethclient
-      - ./scripts:/setup:ro
+      - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:
       - net
     environment:

@@ -15,7 +15,7 @@ services:
     user: "65534:65534"
     restart: unless-stopped
     command: [ "--path.procfs=/host/proc", "--path.sysfs=/host/sys", "--collector.textfile.directory=/host/textfile_collector", "--web.listen-address=:${EXPORTER_METRICS_PORT:-9103}"${EXPORTER_ROOTFS_COMMAND} ]
-    volumes: [ /proc:/host/proc:ro,rslave, /sys:/host/sys:ro,rslave, /var/lib/node_exporter/textfile_collector:/host/textfile_collector:ro${EXPORTER_ROOTFS_VOLUME} ]
+    volumes: [ "/proc:/host/proc:ro,rslave", "/sys:/host/sys:ro,rslave", "/var/lib/node_exporter/textfile_collector:/host/textfile_collector:ro"${EXPORTER_ROOTFS_VOLUME} ]
     network_mode: host
 networks:
   net:

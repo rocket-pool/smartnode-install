@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ${ROCKETPOOL_FOLDER}:/.rocketpool
       - ${ROCKETPOOL_DATA_FOLDER}:/.rocketpool/data
     networks:
       - net

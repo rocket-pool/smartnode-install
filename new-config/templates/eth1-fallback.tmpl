@@ -15,7 +15,7 @@ services:
     ports: [ ${EC_OPEN_API_PORTS} ]
     volumes:
       - eth1fallbackclientdata:/ethclient
-      - ./scripts:/setup:ro
+      - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:
       - net
     environment:
