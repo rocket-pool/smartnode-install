@@ -255,7 +255,7 @@ if [ -d $RP_PATH ]; then
             { mv "$RP_PATH/config.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move config.yml to backup folder."; } >&2
         fi
         if [ -f "$RP_PATH/settings.yml" ]; then 
-            { mv "$RP_PATH/settings.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move settings.ym to backup folder."; } >&2
+            { mv "$RP_PATH/settings.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move settings.yml to backup folder."; } >&2
         fi
         if [ -f "$RP_PATH/docker-compose.yml" ]; then 
             { mv "$RP_PATH/docker-compose.yml" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move docker-compose.yml to backup folder."; } >&2

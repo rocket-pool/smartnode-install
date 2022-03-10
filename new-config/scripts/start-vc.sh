@@ -22,7 +22,7 @@ if [ "$NETWORK" = "mainnet" ]; then
 elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
     PRYSM_NETWORK="--prater"
-    TEKU_NETWORK="mainnet"
+    TEKU_NETWORK="prater"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
