@@ -38,7 +38,7 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
-    if [ "$ENABLE_METRICS" -eq "1" ]; then
+    if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $VC_METRICS_PORT"
     fi
 

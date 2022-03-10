@@ -85,7 +85,7 @@ fi
 # Pocket startup
 if [ "$CLIENT" = "pocket" ]; then
 
-    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --network $POCKET_NETWORK --projectId $POCKET_PROJECT_ID --providerType pocket $EC_ADDITIONAL_FLAGS
+    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --network $POCKET_NETWORK --projectId $POCKET_GATEWAY_ID --providerType pocket $EC_ADDITIONAL_FLAGS
 
 fi
 
@@ -94,5 +94,6 @@ fi
 if [ "$CLIENT" = "custom" ]; then
 
     exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --wsPort ${EC_WS_PORT:-8546} --httpProviderUrl $HTTP_PROVIDER_URL --wsProviderUrl $WS_PROVIDER_URL --providerType="" $EC_ADDITIONAL_FLAGS
+
 fi
 

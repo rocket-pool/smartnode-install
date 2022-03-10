@@ -30,7 +30,7 @@ elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
     NIMBUS_NETWORK="prater"
     PRYSM_NETWORK="--prater"
-    TEKU_NETWORK="mainnet"
+    TEKU_NETWORK="prater"
     PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis.ssz"
 else
     echo "Unknown network [$NETWORK]"
@@ -54,7 +54,7 @@ if [ "$CLIENT" = "lighthouse" ]; then
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $ETH2_METRICS_PORT --validator-monitor-auto"
+        CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $BN_METRICS_PORT --validator-monitor-auto"
     fi
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
@@ -173,7 +173,7 @@ if [ "$CLIENT" = "teku" ]; then
     fi
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
-        CMD="$CMD --initial-state=$CHECKPOINT_SYNC_URL/eth/v1/debug/beacon/states/finalized"
+        CMD="$CMD --initial-state=$CHECKPOINT_SYNC_URL/eth/v2/debug/beacon/states/finalized"
     fi
 
     exec ${CMD}
