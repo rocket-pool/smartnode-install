@@ -12,7 +12,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_eth1-fallback
     restart: unless-stopped
     stop_grace_period: 3m
-    ports: [ ${EC_OPEN_API_PORTS} ]
+    ports: [ ${FALLBACK_EC_OPEN_API_PORTS} ]
     volumes:
       - eth1fallbackclientdata:/ethclient
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
