@@ -21,7 +21,6 @@ if [ "$CLIENT" = "geth" ]; then
     # Performance tuning for ARM systems
     UNAME_VAL=$(uname -m)
     if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
-        PERF_PREFIX="taskset -c $CORE_STRING ionice -c 3"
 
         # Install taskset and ionice
         apk add util-linux
@@ -39,6 +38,8 @@ if [ "$CLIENT" = "geth" ]; then
             CORE_STRING="$CORE_STRING,$CURRENT_CORE"
             CURRENT_CORE=$((CURRENT_CORE - 1))
         done
+        
+        PERF_PREFIX="taskset -c $CORE_STRING ionice -c 3"
     fi
 
     # Check for the prune flag and run that first if requested
