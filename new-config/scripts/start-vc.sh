@@ -34,7 +34,7 @@ if [ "$CLIENT" = "lighthouse" ]; then
 
     CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --beacon-node $CC_API_ENDPOINT $VC_ADDITIONAL_FLAGS"
 
-    if [ "$DOPPELGANGER_DETECTION" = "y" ]; then
+    if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
@@ -67,7 +67,7 @@ if [ "$CLIENT" = "prysm" ]; then
 
     CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_RPC_ENDPOINT $VC_ADDITIONAL_FLAGS"
 
-    if [ "$DOPPELGANGER_DETECTION" = "y" ]; then
+    if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger"
     fi
 
