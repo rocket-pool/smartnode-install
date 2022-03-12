@@ -111,11 +111,15 @@ if [ "$CLIENT" = "teku" ]; then
     CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false"
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=* $VC_ADDITIONAL_FLAGS" 
+        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=* $VC_ADDITIONAL_FLAGS"
+    fi
+
+    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
+        CMD="$CMD --validators-proposer-default-fee-recipient=$NODE_FEE_RECIPIENT"
     fi
 
     if [ ! -z "$FEE_RECIPIENT_FILE" ]; then
-        CMD="$CMD --validators-proposer-config /validators/teku/$FEE_RECIPIENT_FILE"
+        CMD="$CMD --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false"
     fi
 
     exec ${CMD} --validators-graffiti="$GRAFFITI"
