@@ -42,6 +42,14 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $VC_METRICS_PORT"
     fi
 
+    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
+        CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
+    fi
+
+    if [ ! -z "$FEE_RECIPIENT_FILE" ]; then
+        CMD="$CMD --suggested-fee-recipient-file /validators/lighthouse/$FEE_RECIPIENT_FILE"
+    fi
+
     exec ${CMD} --graffiti "$GRAFFITI"
 
 fi
@@ -77,6 +85,14 @@ if [ "$CLIENT" = "prysm" ]; then
         CMD="$CMD --disable-account-metrics"
     fi
 
+    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
+        CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
+    fi
+
+    if [ ! -z "$FEE_RECIPIENT_FILE" ]; then
+        CMD="$CMD --validators-proposer-config-dir /validators/prysm-non-hd/$FEE_RECIPIENT_FILE"
+    fi
+
     exec ${CMD} --graffiti "$GRAFFITI"
 
 fi
@@ -96,6 +112,10 @@ if [ "$CLIENT" = "teku" ]; then
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=* $VC_ADDITIONAL_FLAGS" 
+    fi
+
+    if [ ! -z "$FEE_RECIPIENT_FILE" ]; then
+        CMD="$CMD --validators-proposer-config /validators/teku/$FEE_RECIPIENT_FILE"
     fi
 
     exec ${CMD} --validators-graffiti="$GRAFFITI"

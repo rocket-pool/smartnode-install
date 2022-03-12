@@ -39,6 +39,8 @@ services:
       - CHECKPOINT_SYNC_URL=${CHECKPOINT_SYNC_URL}
       - DOPPELGANGER_DETECTION=${DOPPELGANGER_DETECTION}
       - BN_ADDITIONAL_FLAGS=${BN_ADDITIONAL_FLAGS}
+      - NODE_FEE_RECIPIENT=${NODE_FEE_RECIPIENT}
+      - FEE_RECIPIENT_FILE=${FEE_RECIPIENT_FILE}
     entrypoint: sh
     command: "/setup/start-bn.sh"
     cap_drop:

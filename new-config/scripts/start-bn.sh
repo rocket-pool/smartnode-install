@@ -61,6 +61,10 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --checkpoint-sync-url $CHECKPOINT_SYNC_URL"
     fi
 
+    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
+        CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
+    fi
+
     exec ${CMD}
 
 fi
@@ -137,6 +141,10 @@ if [ "$CLIENT" = "prysm" ]; then
         CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $BN_METRICS_PORT"
     else
         CMD="$CMD --disable-monitoring"
+    fi
+
+    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
+        CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
     fi
 
     exec ${CMD}
