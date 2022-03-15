@@ -276,6 +276,12 @@ if [ -d $RP_PATH ]; then
             { mv "$RP_PATH/chains" "$OLD_CONFIG_BACKUP_PATH" || fail "Could not move chains directory to backup folder."; } >&2
         fi
     fi
+
+    # Back up existing config file
+    if [ -f "$RP_PATH/user-settings.yml" ]; then
+        progress 5 "Backing up configuration settings to user-settings-backup.yml..."
+        { cp "$RP_PATH/user-settings.yml" "$RP_PATH/user-settings-backup.yml" || fail "Could not backup configuration settings."; } >&2
+    fi
 fi
 
 
