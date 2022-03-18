@@ -69,10 +69,10 @@ fi
 # Nimbus startup
 if [ "$CLIENT" = "nimbus" ]; then
 
-    ETH1_PROVIDER_ARG="--web3-url=$EC_HTTP_ENDPOINT"
+    ETH1_PROVIDER_ARG="--web3-url=$EC_WS_ENDPOINT"
 
-    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
-        ETH1_PROVIDER_ARG="--web3-url=$EC_HTTP_ENDPOINT --web3-url=$FALLBACK_EC_HTTP_ENDPOINT"
+    if [ ! -z "$FALLBACK_EC_WS_ENDPOINT" ]; then
+        ETH1_PROVIDER_ARG="--web3-url=$EC_WS_ENDPOINT --web3-url=$FALLBACK_EC_WS_ENDPOINT"
     fi
 
     # Nimbus won't start unless the validator directories already exist
