@@ -135,7 +135,7 @@ trap 'rm -rf "$TEMPDIR"' EXIT
 
 
 # Get temporary data paths
-PACKAGE_FILES_PATH="$TEMPDIR/new-config"
+PACKAGE_FILES_PATH="$TEMPDIR/install"
 
 
 ##
