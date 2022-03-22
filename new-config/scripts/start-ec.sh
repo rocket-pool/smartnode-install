@@ -90,11 +90,3 @@ if [ "$CLIENT" = "pocket" ]; then
 
 fi
 
-
-# Custom provider startup
-if [ "$CLIENT" = "custom" ]; then
-
-    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --wsPort ${EC_WS_PORT:-8546} --httpProviderUrl $HTTP_PROVIDER_URL --wsProviderUrl $WS_PROVIDER_URL --providerType="" $EC_ADDITIONAL_FLAGS
-
-fi
-
