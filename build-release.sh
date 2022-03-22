@@ -64,7 +64,7 @@ build_install_packages() {
     rm -f rp-smartnode-install.tar.xz
 
     echo -n "Building Smartnode installer packages... "
-    tar cfJ rp-smartnode-install.tar.xz new-config || fail "Error building installer package."
+    tar cfJ rp-smartnode-install.tar.xz install || fail "Error building installer package."
     mv rp-smartnode-install.tar.xz ../$VERSION
     cp install.sh ../$VERSION
     cp install-update-tracker.sh ../$VERSION
