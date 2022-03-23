@@ -52,7 +52,7 @@ if [ "$CLIENT" = "lighthouse" ]; then
         ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT,$FALLBACK_EC_HTTP_ENDPOINT"
     fi
 
-    CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --eth1 --eth1-endpoints $ETH1_ENDPOINTS --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --execution-endpoints http://eth1:8551 --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --merge --jwt-secrets=/secrets/jwtsecret --terminal-total-difficulty-override=20000000000000 --boot-nodes=enr:-Iq4QMCTfIMXnow27baRUb35Q8iiFHSIDBJh6hQM5Axohhf4b6Kr_cOCu0htQ5WvVqKvFgY28893DHAg8gnBAXsAVqmGAX53x8JggmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --target-peers $BN_MAX_PEERS"

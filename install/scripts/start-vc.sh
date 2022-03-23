@@ -23,6 +23,10 @@ elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
+elif [ "$NETWORK" = "kiln" ]; then
+    LH_NETWORK="kiln"
+    PRYSM_NETWORK="--kiln"
+    TEKU_NETWORK="kiln"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -46,7 +50,7 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
     fi
 
-    if [ ! -z "$FEE_RECIPIENT_FILE" ]; then
+    if [ ! -z "$FEE_RECIPIENT_FILE" && -f "$FEE_RECIPIENT_FILE" ]; then
         CMD="$CMD --suggested-fee-recipient-file /validators/lighthouse/$FEE_RECIPIENT_FILE"
     fi
 
@@ -89,7 +93,7 @@ if [ "$CLIENT" = "prysm" ]; then
         CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
     fi
 
-    if [ ! -z "$FEE_RECIPIENT_FILE" ]; then
+    if [ ! -z "$FEE_RECIPIENT_FILE" && -f "$FEE_RECIPIENT_FILE" ]; then
         CMD="$CMD --validators-proposer-config-dir /validators/prysm-non-hd/$FEE_RECIPIENT_FILE"
     fi
 
@@ -118,7 +122,7 @@ if [ "$CLIENT" = "teku" ]; then
         CMD="$CMD --validators-proposer-default-fee-recipient=$NODE_FEE_RECIPIENT"
     fi
 
-    if [ ! -z "$FEE_RECIPIENT_FILE" ]; then
+    if [ ! -z "$FEE_RECIPIENT_FILE" && -f "$FEE_RECIPIENT_FILE" ]; then
         CMD="$CMD --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false"
     fi
 

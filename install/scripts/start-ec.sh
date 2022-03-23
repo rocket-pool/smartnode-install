@@ -48,7 +48,17 @@ if [ "$CLIENT" = "geth" ]; then
     # Run Geth normally
     else 
 
-        CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3,engine --ws --ws.addr 0.0.0.0 --ws.port ${EC_WS_PORT:-8546} --ws.api eth,net,personal,web3,engine --bootnodes enode://c354db99124f0faf677ff0e75c3cbbd568b2febc186af664e0c51ac435609badedc67a18a63adb64dacc1780a28dcefebfc29b83fd1a3f4aa3c0eb161364cf94@164.92.130.5:30303 --authrpc.jwtsecret /ethclient/geth/jwtsecret --authrpc.addr 0.0.0.0 --authrpc.vhosts=* --override.terminaltotaldifficulty 20000000000000 --syncmode=full $EC_ADDITIONAL_FLAGS"
+        # Get the Kiln genesis file if required
+        if [ "$NETWORK" = "kiln" ]; then
+            if [ ! -f "/ethclient/geth/genesis.json" ]; then
+                mkdir -p /ethclient/geth
+                wget "https://github.com/eth-clients/merge-testnets/raw/main/kiln/genesis.json" -O "/ethclient/geth/genesis.json"
+
+                $PERF_PREFIX /usr/local/bin/geth init "/ethclient/geth/genesis.json" --datadir /ethclient/geth
+            fi
+        fi
+
+        CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3,engine --http.corsdomain=* --ws --ws.addr 0.0.0.0 --ws.port ${EC_WS_PORT:-8546} --ws.api eth,net,personal,web3,engine --bootnodes enode://c354db99124f0faf677ff0e75c3cbbd568b2febc186af664e0c51ac435609badedc67a18a63adb64dacc1780a28dcefebfc29b83fd1a3f4aa3c0eb161364cf94@164.92.130.5:30303 --authrpc.jwtsecret /secrets/jwtsecret --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.vhosts=* --override.terminaltotaldifficulty 20000000000000 --syncmode=full --pprof $EC_ADDITIONAL_FLAGS"
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
             CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
