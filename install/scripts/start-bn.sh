@@ -32,6 +32,11 @@ elif [ "$NETWORK" = "prater" ]; then
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
     PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis.ssz"
+elif [ "$NETWORK" = "kiln" ]; then
+    LH_NETWORK="kiln"
+    NIMBUS_NETWORK=""
+    PRYSM_NETWORK=""
+    TEKU_NETWORK="kiln"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
