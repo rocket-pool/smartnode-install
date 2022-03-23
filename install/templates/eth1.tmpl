@@ -15,7 +15,7 @@ services:
     ports: [ "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/udp", "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/tcp"${EC_OPEN_API_PORTS} ]
     volumes:
       - eth1clientdata:/ethclient
-      - ./scripts:/setup:ro
+      - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:
       - net
     environment:
