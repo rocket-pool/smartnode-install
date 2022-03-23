@@ -84,13 +84,13 @@ install_docker_compose() {
             sudo apt remove -y python-configparser
             pip3 install --upgrade docker-compose==$DOCKER_COMPOSE_VERSION
         else
-            RED='\033[0;31m'
             echo ""
-            echo -e "${RED}**ERROR**"
+            echo -e "${COLOR_RED}**ERROR**"
             echo "Automatic installation of docker-compose for the $PLATFORM operating system on ARM64 is not currently supported."
             echo "Please install docker-compose manually, then try this again with the '-d' flag to skip OS dependency installation."
             echo "Be sure to add yourself to the docker group (e.g. 'sudo usermod -aG docker $USER') after installing docker."
             echo "Log out and back in, or restart your system after you run this command."
+            echo -e "${COLOR_RESET}"
             exit 1
         fi
     fi
@@ -135,7 +135,7 @@ trap 'rm -rf "$TEMPDIR"' EXIT
 
 
 # Get temporary data paths
-PACKAGE_FILES_PATH="$TEMPDIR/new-config"
+PACKAGE_FILES_PATH="$TEMPDIR/install"
 
 
 ##
