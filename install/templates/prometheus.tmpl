@@ -5,15 +5,13 @@
 # See https://docs.docker.com/compose/extends/#adding-and-overriding-configuration
 # for more information on overriding specific parameters of docker-compose files.
 
-version: "3.8"
+version: "3.7"
 services:
   prometheus:
     image: ${PROMETHEUS_CONTAINER_TAG}
     container_name: ${COMPOSE_PROJECT_NAME}_prometheus
     restart: unless-stopped
-    command:
-      - "--web.listen-address=:${PROMETHEUS_PORT:-9091}"
-      - "--config.file=/etc/prometheus/prometheus.yml"
+    command: [ "--web.listen-address=:${PROMETHEUS_PORT:-9091}", "--config.file=/etc/prometheus/prometheus.yml"${PROMETHEUS_ADDITIONAL_FLAGS} ]
     ports: [${PROMETHEUS_OPEN_PORTS}]
     volumes:
       - "${ROCKETPOOL_FOLDER}/prometheus.yml:/etc/prometheus/prometheus.yml"

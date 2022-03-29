@@ -5,7 +5,7 @@
 # See https://docs.docker.com/compose/extends/#adding-and-overriding-configuration
 # for more information on overriding specific parameters of docker-compose files.
 
-version: "3.8"
+version: "3.7"
 services:
   node-exporter:
     image: ${EXPORTER_CONTAINER_TAG}
@@ -14,7 +14,7 @@ services:
       - ALL
     user: "65534:65534"
     restart: unless-stopped
-    command: [ "--path.procfs=/host/proc", "--path.sysfs=/host/sys", "--collector.textfile.directory=/host/textfile_collector", "--web.listen-address=:${EXPORTER_METRICS_PORT:-9103}"${EXPORTER_ROOTFS_COMMAND} ]
+    command: [ "--path.procfs=/host/proc", "--path.sysfs=/host/sys", "--collector.textfile.directory=/host/textfile_collector", "--web.listen-address=:${EXPORTER_METRICS_PORT:-9103}"${EXPORTER_ROOTFS_COMMAND}${EXPORTER_ADDITIONAL_FLAGS} ]
     volumes: [ "/proc:/host/proc:ro,rslave", "/sys:/host/sys:ro,rslave", "/var/lib/node_exporter/textfile_collector:/host/textfile_collector:ro"${EXPORTER_ROOTFS_VOLUME} ]
     network_mode: host
 networks:
