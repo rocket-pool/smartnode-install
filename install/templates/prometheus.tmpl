@@ -20,7 +20,7 @@ services:
       - net
       - monitor-net
     extra_hosts:
-      - "host.docker.internal: host-gateway"
+      - "host.docker.internal:host-gateway"
 networks:
   # Bridge so node-exporter can get the real NIC details
   # See https://stackoverflow.com/a/66689508 for more info
