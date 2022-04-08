@@ -37,7 +37,7 @@ fi
 if [ "$CLIENT" = "lighthouse" ]; then
 
     # Copy the default fee recipient file from the template
-    if [ -f "/validators/lighthouse/$FEE_RECIPIENT_FILE" ]; then
+    if [ ! -f "/validators/lighthouse/$FEE_RECIPIENT_FILE" ]; then
         cp "/fr-default/lighthouse" "/validators/lighthouse/$FEE_RECIPIENT_FILE"
     fi
 
@@ -72,7 +72,7 @@ fi
 if [ "$CLIENT" = "prysm" ]; then
 
     # Copy the default fee recipient file from the template
-    if [ -f "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE" ]; then
+    if [ ! -f "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE" ]; then
         cp "/fr-default/prysm" "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE"
     fi
 
@@ -107,7 +107,7 @@ if [ "$CLIENT" = "teku" ]; then
     rm -f /validators/teku/keys/*.lock
 
     # Copy the default fee recipient file from the template
-    if [ -f "/validators/teku/$FEE_RECIPIENT_FILE" ]; then
+    if [ ! -f "/validators/teku/$FEE_RECIPIENT_FILE" ]; then
         cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
     fi
 
