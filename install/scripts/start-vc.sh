@@ -111,10 +111,10 @@ if [ "$CLIENT" = "teku" ]; then
         cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false"
+    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false $VC_ADDITIONAL_FLAGS"
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=* $VC_ADDITIONAL_FLAGS"
+        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=*"
     fi
 
     exec ${CMD} --validators-graffiti="$GRAFFITI"
