@@ -36,7 +36,12 @@ fi
 # Lighthouse startup
 if [ "$CLIENT" = "lighthouse" ]; then
 
-    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --beacon-nodes $CC_API_ENDPOINT $VC_ADDITIONAL_FLAGS"
+    # Copy the default fee recipient file from the template
+    if [ -f "/validators/lighthouse/$FEE_RECIPIENT_FILE" ]; then
+        cp "/fr-default/lighthouse" "/validators/lighthouse/$FEE_RECIPIENT_FILE"
+    fi
+
+    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --beacon-nodes $CC_API_ENDPOINT --suggested-fee-recipient-file /validators/lighthouse/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger-protection"
@@ -44,14 +49,6 @@ if [ "$CLIENT" = "lighthouse" ]; then
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $VC_METRICS_PORT"
-    fi
-
-    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
-        CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
-    fi
-
-    if [ ! -z "$FEE_RECIPIENT_FILE" && -f "$FEE_RECIPIENT_FILE" ]; then
-        CMD="$CMD --suggested-fee-recipient-file /validators/lighthouse/$FEE_RECIPIENT_FILE"
     fi
 
     exec ${CMD} --graffiti "$GRAFFITI"
@@ -74,10 +71,15 @@ fi
 # Prysm startup
 if [ "$CLIENT" = "prysm" ]; then
 
+    # Copy the default fee recipient file from the template
+    if [ -f "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE" ]; then
+        cp "/fr-default/prysm" "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE"
+    fi
+
     # Get rid of the protocol prefix
     CC_RPC_ENDPOINT=$(echo $CC_RPC_ENDPOINT | sed -E 's/.*\:\/\/(.*)/\1/')
 
-    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_RPC_ENDPOINT $VC_ADDITIONAL_FLAGS"
+    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_RPC_ENDPOINT --validators-proposer-config-dir /validators/prysm-non-hd/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger"
@@ -87,14 +89,6 @@ if [ "$CLIENT" = "prysm" ]; then
         CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $VC_METRICS_PORT"
     else
         CMD="$CMD --disable-account-metrics"
-    fi
-
-    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
-        CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
-    fi
-
-    if [ ! -z "$FEE_RECIPIENT_FILE" && -f "$FEE_RECIPIENT_FILE" ]; then
-        CMD="$CMD --validators-proposer-config-dir /validators/prysm-non-hd/$FEE_RECIPIENT_FILE"
     fi
 
     exec ${CMD} --graffiti "$GRAFFITI"
@@ -112,18 +106,15 @@ if [ "$CLIENT" = "teku" ]; then
     # Remove any lock files that were left over accidentally after an unclean shutdown
     rm -f /validators/teku/keys/*.lock
 
-    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false"
+    # Copy the default fee recipient file from the template
+    if [ -f "/validators/teku/$FEE_RECIPIENT_FILE" ]; then
+        cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
+    fi
+
+    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false"
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=* $VC_ADDITIONAL_FLAGS"
-    fi
-
-    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
-        CMD="$CMD --validators-proposer-default-fee-recipient=$NODE_FEE_RECIPIENT"
-    fi
-
-    if [ ! -z "$FEE_RECIPIENT_FILE" && -f "$FEE_RECIPIENT_FILE" ]; then
-        CMD="$CMD --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false"
     fi
 
     exec ${CMD} --validators-graffiti="$GRAFFITI"
