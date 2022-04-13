@@ -15,6 +15,7 @@ services:
     stop_grace_period: 3m
     volumes:
       - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
+      - ${ROCKETPOOL_DATA_FOLDER}/fr-default:/fr-default:ro
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:
       - net
@@ -29,6 +30,8 @@ services:
       - VC_METRICS_PORT=${VC_METRICS_PORT}
       - DOPPELGANGER_DETECTION=${DOPPELGANGER_DETECTION}
       - VC_ADDITIONAL_FLAGS=${VC_ADDITIONAL_FLAGS}
+      - NODE_FEE_RECIPIENT=${NODE_FEE_RECIPIENT}
+      - FEE_RECIPIENT_FILE=${FEE_RECIPIENT_FILE}
     entrypoint: sh
     command: "/setup/start-vc.sh"
     cap_drop:

@@ -32,6 +32,11 @@ elif [ "$NETWORK" = "prater" ]; then
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
     PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis.ssz"
+elif [ "$NETWORK" = "kiln" ]; then
+    LH_NETWORK="kiln"
+    NIMBUS_NETWORK=""
+    PRYSM_NETWORK=""
+    TEKU_NETWORK="kiln"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -47,7 +52,7 @@ if [ "$CLIENT" = "lighthouse" ]; then
         ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT,$FALLBACK_EC_HTTP_ENDPOINT"
     fi
 
-    CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --eth1 --eth1-endpoints $ETH1_ENDPOINTS --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --eth1 --eth1-endpoints $ETH1_ENDPOINTS --execution-endpoints http://eth1:8551 --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --merge --jwt-secrets=/secrets/jwtsecret --terminal-total-difficulty-override=20000000000000 --boot-nodes=enr:-Iq4QMCTfIMXnow27baRUb35Q8iiFHSIDBJh6hQM5Axohhf4b6Kr_cOCu0htQ5WvVqKvFgY28893DHAg8gnBAXsAVqmGAX53x8JggmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --target-peers $BN_MAX_PEERS"
@@ -61,6 +66,10 @@ if [ "$CLIENT" = "lighthouse" ]; then
         CMD="$CMD --checkpoint-sync-url $CHECKPOINT_SYNC_URL"
     fi
 
+    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
+        CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
+    fi
+
     exec ${CMD}
 
 fi
@@ -69,10 +78,10 @@ fi
 # Nimbus startup
 if [ "$CLIENT" = "nimbus" ]; then
 
-    ETH1_PROVIDER_ARG="--web3-url=$EC_WS_ENDPOINT"
+    ETH1_PROVIDER_ARG="--web3-url=$EC_HTTP_ENDPOINT"
 
-    if [ ! -z "$FALLBACK_EC_WS_ENDPOINT" ]; then
-        ETH1_PROVIDER_ARG="--web3-url=$EC_WS_ENDPOINT --web3-url=$FALLBACK_EC_WS_ENDPOINT"
+    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
+        ETH1_PROVIDER_ARG="--web3-url=$EC_HTTP_ENDPOINT --web3-url=$FALLBACK_EC_HTTP_ENDPOINT"
     fi
 
     # Nimbus won't start unless the validator directories already exist
@@ -91,7 +100,7 @@ if [ "$CLIENT" = "nimbus" ]; then
         fi
     fi
 
-    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT $ETH1_PROVIDER_ARG --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --num-threads=0 --doppelganger-detection=$DOPPELGANGER_DETECTION $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT $ETH1_PROVIDER_ARG --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --max-peers=$BN_MAX_PEERS"
@@ -137,6 +146,10 @@ if [ "$CLIENT" = "prysm" ]; then
         CMD="$CMD --monitoring-host 0.0.0.0 --monitoring-port $BN_METRICS_PORT"
     else
         CMD="$CMD --disable-monitoring"
+    fi
+
+    if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
+        CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
     fi
 
     exec ${CMD}
