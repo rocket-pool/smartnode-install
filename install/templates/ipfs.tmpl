@@ -19,14 +19,15 @@ services:
     networks:
       - net
     ports:
-      - 4001:${IPFS_P2P_PORT:-9400}/tcp
-      - 4001:${IPFS_P2P_PORT:-9400}/udp
+      - ${IPFS_P2P_PORT:-9400}:4001/tcp
+      - ${IPFS_P2P_PORT:-9400}:4001/udp
     cap_drop:
       - all
     cap_add:
       - dac_override
       - setgid
       - setuid
+      - chown
     security_opt:
       - no-new-privileges
 networks:
