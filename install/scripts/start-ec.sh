@@ -4,10 +4,12 @@
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
     GETH_NETWORK=""
+    NETHERMIND_NETWORK="mainnet"
     INFURA_NETWORK="mainnet"
     POCKET_NETWORK="eth-mainnet"
 elif [ "$NETWORK" = "prater" ]; then
     GETH_NETWORK="--goerli"
+    NETHERMIND_NETWORK="goerli"
     INFURA_NETWORK="goerli"
     POCKET_NETWORK="eth-goerli"
 else
@@ -70,6 +72,46 @@ if [ "$CLIENT" = "geth" ]; then
 
         exec ${CMD} --http.vhosts '*'
 
+    fi
+
+fi
+
+# Nethermind startup
+if [ "$CLIENT" = "nethermind" ]; then
+
+    # Performance tuning for ARM systems
+    UNAME_VAL=$(uname -m)
+    if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
+
+        # Get the number of available cores
+        CORE_COUNT=$(grep -c ^processor /proc/cpuinfo)
+
+        # Give Geth access to the last core
+        CURRENT_CORE=$((CORE_COUNT - 1))
+        CORE_STRING="$CURRENT_CORE"
+
+        # If there are more than 2 cores, limit Geth to use all but the first 2
+        CURRENT_CORE=$((CURRENT_CORE - 1))
+        while [ "$CURRENT_CORE" -gt "1" ]; do
+            CORE_STRING="$CORE_STRING,$CURRENT_CORE"
+            CURRENT_CORE=$((CURRENT_CORE - 1))
+        done
+        
+        PERF_PREFIX="taskset -c $CORE_STRING ionice -c 3"
+    fi
+
+    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --Init.WebSocketsEnabled true --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} $EC_ADDITIONAL_FLAGS"
+
+    if [ ! -z "$EC_CACHE_SIZE" ]; then
+        CMD="$CMD --Init.MemoryHint ${EC_CACHE_SIZE}000000"
+    fi
+
+    if [ ! -z "$EC_MAX_PEERS" ]; then
+        CMD="$CMD --Network.MaxActivePeers $EC_MAX_PEERS"
+    fi
+
+    if [ ! -z "$EC_P2P_PORT" ]; then
+        CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
     fi
 
 fi
