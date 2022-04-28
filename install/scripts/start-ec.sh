@@ -137,7 +137,7 @@ if [ "$CLIENT" = "besu" ]; then
     
     fi
 
-    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-http-apis=eth,net,personal,web3 --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --rpc-ws-apis=eth,net,personal,web3 --host-allowlist=* --revert-reason-enabled --data-storage-format=bonsai $EC_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --host-allowlist=* --revert-reason-enabled --data-storage-format=bonsai $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
