@@ -5,7 +5,9 @@
 # only show client identifier if version string is under 9 characters
 version_length=`echo -n $ROCKET_POOL_VERSION | wc -c`
 if [ $version_length -lt 9 ]; then
-    IDENTIFIER=`echo -n $CLIENT | head -c 1 | tr [a-z] [A-Z] | sed 's/^/-/'`
+    EC_INITIAL=`echo -n $EC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
+    CC_INITIAL=`echo -n $CC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
+    IDENTIFIER="-${EC_INITIAL}${CC_INITIAL}"
 fi
 
 # Get graffiti text
@@ -30,7 +32,7 @@ fi
 
 
 # Lighthouse startup
-if [ "$CLIENT" = "lighthouse" ]; then
+if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --logfile-max-number 0 --beacon-nodes $CC_API_ENDPOINT $VC_ADDITIONAL_FLAGS"
 
@@ -48,7 +50,7 @@ fi
 
 
 # Nimbus startup
-if [ "$CLIENT" = "nimbus" ]; then
+if [ "$CC_CLIENT" = "nimbus" ]; then
 
     # Do nothing since the validator is built into the beacon client
     trap 'kill -9 $sleep_pid' INT TERM
@@ -60,7 +62,7 @@ fi
 
 
 # Prysm startup
-if [ "$CLIENT" = "prysm" ]; then
+if [ "$CC_CLIENT" = "prysm" ]; then
 
     # Get rid of the protocol prefix
     CC_RPC_ENDPOINT=$(echo $CC_RPC_ENDPOINT | sed -E 's/.*\:\/\/(.*)/\1/')
@@ -83,7 +85,7 @@ fi
 
 
 # Teku startup
-if [ "$CLIENT" = "teku" ]; then
+if [ "$CC_CLIENT" = "teku" ]; then
 
     # Teku won't start unless the validator directories already exist
     mkdir -p /validators/teku/keys
