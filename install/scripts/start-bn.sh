@@ -3,7 +3,7 @@
 
 # Only show client identifier if version string is under 9 characters
 version_length=`echo -n $ROCKET_POOL_VERSION | wc -c`
-if [ $version_length -lt 9 ]; then
+if [ $version_length -lt 8 ]; then
     EC_INITIAL=`echo -n $EC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
     CC_INITIAL=`echo -n $CC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
     IDENTIFIER="-${EC_INITIAL}${CC_INITIAL}"
