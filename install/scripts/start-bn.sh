@@ -141,6 +141,10 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         CMD="$CMD --disable-monitoring"
     fi
 
+    if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
+        CMD="$CMD --checkpoint-sync-url=$CHECKPOINT_SYNC_URL --genesis-beacon-api-url=$CHECKPOINT_SYNC_URL"
+    fi
+
     exec ${CMD}
 
 fi
