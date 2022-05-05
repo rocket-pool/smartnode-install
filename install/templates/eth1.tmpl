@@ -9,6 +9,7 @@ version: "3.7"
 services:
   eth1:
     image: ${EC_CONTAINER_TAG}
+    user: root
     container_name: ${COMPOSE_PROJECT_NAME}_eth1
     restart: unless-stopped
     stop_grace_period: 3m

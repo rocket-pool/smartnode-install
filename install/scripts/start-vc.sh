@@ -4,8 +4,10 @@
 
 # only show client identifier if version string is under 9 characters
 version_length=`echo -n $ROCKET_POOL_VERSION | wc -c`
-if [ $version_length -lt 9 ]; then
-    IDENTIFIER=`echo -n $CLIENT | head -c 1 | tr [a-z] [A-Z] | sed 's/^/-/'`
+if [ $version_length -lt 8 ]; then
+    EC_INITIAL=`echo -n $EC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
+    CC_INITIAL=`echo -n $CC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
+    IDENTIFIER="-${EC_INITIAL}${CC_INITIAL}"
 fi
 
 # Get graffiti text
@@ -34,14 +36,14 @@ fi
 
 
 # Lighthouse startup
-if [ "$CLIENT" = "lighthouse" ]; then
+if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     # Copy the default fee recipient file from the template
     if [ ! -f "/validators/lighthouse/$FEE_RECIPIENT_FILE" ]; then
         cp "/fr-default/lighthouse" "/validators/lighthouse/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --beacon-nodes $CC_API_ENDPOINT --suggested-fee-recipient-file /validators/lighthouse/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
+    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --logfile-max-number 0 --beacon-nodes $CC_API_ENDPOINT --suggested-fee-recipient-file /validators/lighthouse/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger-protection"
@@ -57,7 +59,7 @@ fi
 
 
 # Nimbus startup
-if [ "$CLIENT" = "nimbus" ]; then
+if [ "$CC_CLIENT" = "nimbus" ]; then
 
     # Do nothing since the validator is built into the beacon client
     trap 'kill -9 $sleep_pid' INT TERM
@@ -69,7 +71,7 @@ fi
 
 
 # Prysm startup
-if [ "$CLIENT" = "prysm" ]; then
+if [ "$CC_CLIENT" = "prysm" ]; then
 
     # Copy the default fee recipient file from the template
     if [ ! -f "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE" ]; then
@@ -97,7 +99,7 @@ fi
 
 
 # Teku startup
-if [ "$CLIENT" = "teku" ]; then
+if [ "$CC_CLIENT" = "teku" ]; then
 
     # Teku won't start unless the validator directories already exist
     mkdir -p /validators/teku/keys
@@ -111,7 +113,7 @@ if [ "$CLIENT" = "teku" ]; then
         cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false $VC_ADDITIONAL_FLAGS"
+    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false $VC_ADDITIONAL_FLAGS"
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=*"

@@ -24,7 +24,8 @@ services:
       - net
     environment:
       - NETWORK=${NETWORK}
-      - CLIENT=${CC_CLIENT}
+      - EC_CLIENT=${EC_CLIENT}
+      - CC_CLIENT=${CC_CLIENT}
       - EC_HTTP_ENDPOINT=${EC_HTTP_ENDPOINT}
       - EC_WS_ENDPOINT=${EC_WS_ENDPOINT}
       - FALLBACK_EC_HTTP_ENDPOINT=${FALLBACK_EC_HTTP_ENDPOINT}
