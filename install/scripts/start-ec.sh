@@ -16,7 +16,7 @@ define_perf_prefix() {
         CORE_STRING="$CORE_STRING,$CURRENT_CORE"
         CURRENT_CORE=$((CURRENT_CORE - 1))
     done
-    
+
     PERF_PREFIX="taskset -c $CORE_STRING ionice -c 3"
 }
 
@@ -96,8 +96,17 @@ if [ "$CLIENT" = "nethermind" ]; then
 
         # Define the performance tuning prefix
         define_perf_prefix
-    
+
     fi
+
+    # Uncomment JSON RPC logging restrictions in the log config XML
+    sed -i 's/<!-- \(<logger name=\"JsonRpc\.\*\".*\/>\).*-->/\1/g' /nethermind/NLog.config
+
+    # Set JSON RPC logs to Warn in the log config XML
+    sed -i 's/\(<logger name=\"JsonRpc\.\*\" \)minlevel=\"Error\"\(.*\/>\)/\1minlevel=\"Warn\"\2/g' /nethermind/NLog.config
+
+    # Uncomment peer report logging restrictions in the log config XML
+    sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --Init.WebSocketsEnabled true --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 $EC_ADDITIONAL_FLAGS"
 
@@ -116,7 +125,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
     fi
-    
+
     exec ${CMD}
 
 fi
@@ -134,7 +143,7 @@ if [ "$CLIENT" = "besu" ]; then
 
         # Define the performance tuning prefix
         define_perf_prefix
-    
+
     fi
 
     CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai $EC_ADDITIONAL_FLAGS"

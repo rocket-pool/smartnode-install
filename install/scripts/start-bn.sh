@@ -42,7 +42,7 @@ fi
 
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
-    
+
     ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT"
 
     if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
@@ -122,7 +122,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
             wget "https://github.com/eth-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
         fi
     fi
-    
+
     FALLBACK_PROVIDER=""
 
     if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
