@@ -63,6 +63,10 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --checkpoint-sync-url $CHECKPOINT_SYNC_URL"
     fi
 
+    if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
+        CMD="$CMD --monitoring-endpoint $BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
+    fi
+
     exec ${CMD}
 
 fi
@@ -176,6 +180,10 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
         CMD="$CMD --initial-state=$CHECKPOINT_SYNC_URL/eth/v2/debug/beacon/states/finalized"
+    fi
+
+    if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics-publish-endpoint=$BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
     fi
 
     exec ${CMD}
