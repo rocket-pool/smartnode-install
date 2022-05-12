@@ -6,11 +6,11 @@ define_perf_prefix() {
     # Get the number of available cores
     CORE_COUNT=$(grep -c ^processor /proc/cpuinfo)
 
-    # Give Geth access to the last core
+    # Give the EC access to the last core
     CURRENT_CORE=$((CORE_COUNT - 1))
     CORE_STRING="$CURRENT_CORE"
 
-    # If there are more than 2 cores, limit Geth to use all but the first 2
+    # If there are more than 2 cores, limit the EC to use all but the first 2
     CURRENT_CORE=$((CURRENT_CORE - 1))
     while [ "$CURRENT_CORE" -gt "1" ]; do
         CORE_STRING="$CORE_STRING,$CURRENT_CORE"
@@ -108,7 +108,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --Init.WebSocketsEnabled true --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 $EC_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3  --Init.WebSocketsEnabled true --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --Pruning.Enabled true --Pruning.FullPruningTrigger VolumeFreeSpace --Pruning.FullPruningThresholdMb ${NETHERMIND_PRUNE_DISK_FS_THRESHOLD:-200}000 $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
@@ -124,6 +124,10 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
+    fi
+
+    if [ ! -z "$NETHERMIND_PRUNE_MEM_SIZE" ]; then
+        CMD="$CMD --Pruning.CacheMb $NETHERMIND_PRUNE_MEM_SIZE"
     fi
 
     exec ${CMD}
