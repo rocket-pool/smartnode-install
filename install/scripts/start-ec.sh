@@ -99,6 +99,12 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     fi
 
+    # Check for the prune flag
+    if [ -f "/ethclient/prune.lock" ]; then
+        NETHERMIND_PRUNE=1
+        rm /ethclient/prune.lock
+    fi
+
     # Uncomment JSON RPC logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"JsonRpc\.\*\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
@@ -108,7 +114,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3  --Init.WebSocketsEnabled true --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --Pruning.Enabled true --Pruning.FullPruningTrigger VolumeFreeSpace --Pruning.FullPruningThresholdMb ${NETHERMIND_PRUNE_DISK_FS_THRESHOLD:-200}000 $EC_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3  --Init.WebSocketsEnabled true --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
@@ -124,6 +130,12 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
+    fi
+
+    if [ ! -z "$NETHERMIND_PRUNE" ]; then
+        CMD="$CMD --Pruning.Mode Full --Pruning.ShutdownAfterFullPrune true --JsonRpc.AdditionalRpcUrls http://localhost:7434|http|admin"
+    else
+        CMD="$CMD --Pruning.Mode Memory"
     fi
 
     if [ ! -z "$NETHERMIND_PRUNE_MEM_SIZE" ]; then
