@@ -33,6 +33,7 @@ services:
       - EC_ADDITIONAL_FLAGS=${EC_ADDITIONAL_FLAGS}
       - EC_HTTP_PORT=${EC_HTTP_PORT}
       - EC_WS_PORT=${EC_WS_PORT}
+      - NETHERMIND_PRUNE_MEM_SIZE=${NETHERMIND_PRUNE_MEM_SIZE}
     entrypoint: sh
     command: "/setup/start-ec.sh"
     cap_drop:

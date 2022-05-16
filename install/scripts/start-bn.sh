@@ -47,7 +47,7 @@ fi
 
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
-    
+
     ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT"
 
     if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
@@ -70,6 +70,10 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     if [ ! -z "$NODE_FEE_RECIPIENT" ]; then
         CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
+    fi
+    
+    if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
+        CMD="$CMD --monitoring-endpoint $BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
     fi
 
     exec ${CMD}
@@ -131,7 +135,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
             wget "https://github.com/eth-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
         fi
     fi
-    
+
     FALLBACK_PROVIDER=""
 
     if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
@@ -189,6 +193,10 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
         CMD="$CMD --initial-state=$CHECKPOINT_SYNC_URL/eth/v2/debug/beacon/states/finalized"
+    fi
+
+    if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics-publish-endpoint=$BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
     fi
 
     exec ${CMD}
