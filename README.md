@@ -28,8 +28,8 @@ mkdir -p ~/bin && wget https://github.com/rocket-pool/smartnode-install/releases
 **Note: you may need to start a new shell session before you can run the `rocketpool` command.**
 
 
-### MacOS (64 bit)
-
+### MacOS Intel (64 bit)
+_
 With cURL:
 ```
 curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-amd64 -o /usr/local/bin/rocketpool && chmod +x /usr/local/bin/rocketpool
@@ -38,6 +38,18 @@ curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/downloa
 With wget:
 ```
 wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-amd64 -O /usr/local/bin/rocketpool && chmod +x /usr/local/bin/rocketpool
+```
+
+### MacOS M1 (64 bit)
+_
+With cURL:
+```
+curl -L https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-arm64 -o /opt/homebrew/bin/rocketpool && chmod +x /opt/homebrew/bin/rocketpool
+```
+
+With wget:
+```
+wget https://github.com/rocket-pool/smartnode-install/releases/latest/download/rocketpool-cli-darwin-arm64 -O /opt/homebrew/bin/rocketpool && chmod +x /opt/homebrew/bin/rocketpool
 ```
 
 
