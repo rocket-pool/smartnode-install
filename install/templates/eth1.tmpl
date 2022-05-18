@@ -34,6 +34,7 @@ services:
       - EC_WS_PORT=${EC_WS_PORT}
       - NETHERMIND_PRUNE_MEM_SIZE=${NETHERMIND_PRUNE_MEM_SIZE}
       - BESU_MAX_BACK_LAYERS=${BESU_MAX_BACK_LAYERS}
+      - EXTERNAL_IP=${EXTERNAL_IP}
     entrypoint: sh
     command: "/setup/start-ec.sh"
     cap_drop:
