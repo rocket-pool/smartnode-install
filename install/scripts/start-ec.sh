@@ -177,7 +177,7 @@ if [ "$CLIENT" = "besu" ]; then
         CMD="$CMD --p2p-port=$EC_P2P_PORT"
     fi
 
-    if [ ! -z "$BESU_MAX_BACK_LAYERS" ]l then
+    if [ ! -z "$BESU_MAX_BACK_LAYERS" ]; then
         CMD="$CMD --bonsai-maximum-back-layers-to-load=$BESU_MAX_BACK_LAYERS"
     fi
 
