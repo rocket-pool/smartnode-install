@@ -158,9 +158,9 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         CMD="$CMD --suggested-fee-recipient $NODE_FEE_RECIPIENT"
     fi
     
-    #if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
+    # if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
     #    CMD="$CMD --checkpoint-sync-url=$CHECKPOINT_SYNC_URL --genesis-beacon-api-url=$CHECKPOINT_SYNC_URL"
-    #fi
+    # fi
 
     exec ${CMD}
 

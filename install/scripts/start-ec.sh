@@ -10,9 +10,9 @@ define_perf_prefix() {
     CURRENT_CORE=$((CORE_COUNT - 1))
     CORE_STRING="$CURRENT_CORE"
 
-    # If there are more than 2 cores, limit the EC to use all but the first 2
+    # If there are more than 2 cores, limit the EC to use all but the first one
     CURRENT_CORE=$((CURRENT_CORE - 1))
-    while [ "$CURRENT_CORE" -gt "1" ]; do
+    while [ "$CURRENT_CORE" -gt "0" ]; do
         CORE_STRING="$CORE_STRING,$CURRENT_CORE"
         CURRENT_CORE=$((CURRENT_CORE - 1))
     done
@@ -133,7 +133,8 @@ if [ "$CLIENT" = "nethermind" ]; then
     fi
 
     if [ ! -z "$NETHERMIND_PRUNE" ]; then
-        CMD="$CMD --Pruning.Mode Full --Pruning.ShutdownAfterFullPrune true --JsonRpc.AdditionalRpcUrls http://localhost:7434|http|admin"
+        # --Pruning.ShutdownAfterFullPrune true
+        CMD="$CMD --Pruning.Mode Full --JsonRpc.AdditionalRpcUrls http://localhost:7434|http|admin"
     else
         CMD="$CMD --Pruning.Mode Memory"
     fi
@@ -162,7 +163,7 @@ if [ "$CLIENT" = "besu" ]; then
 
     fi
 
-    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP $EC_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP --nat-method=docker --p2p-host=$EXTERNAL_IP $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
@@ -174,6 +175,10 @@ if [ "$CLIENT" = "besu" ]; then
 
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --p2p-port=$EC_P2P_PORT"
+    fi
+
+    if [ ! -z "$BESU_MAX_BACK_LAYERS" ]; then
+        CMD="$CMD --bonsai-maximum-back-layers-to-load=$BESU_MAX_BACK_LAYERS"
     fi
 
     exec ${CMD}
