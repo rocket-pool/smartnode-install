@@ -29,6 +29,11 @@ elif [ "$NETWORK" = "kiln" ]; then
     LH_NETWORK="kiln"
     PRYSM_NETWORK="--kiln"
     TEKU_NETWORK="kiln"
+elif [ "$NETWORK" = "ropsten" ]; then
+    LH_NETWORK="ropsten"
+    NIMBUS_NETWORK="ropsten"
+    PRYSM_NETWORK="--ropsten"
+    TEKU_NETWORK="ropsten"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -85,7 +90,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     # Get rid of the protocol prefix
     CC_RPC_ENDPOINT=$(echo $CC_RPC_ENDPOINT | sed -E 's/.*\:\/\/(.*)/\1/')
 
-    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_RPC_ENDPOINT --validators-proposer-config-dir /validators/prysm-non-hd/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
+    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_RPC_ENDPOINT --fee-recipient-config-file /validators/prysm-non-hd/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger"
@@ -117,7 +122,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
         cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=false $VC_ADDITIONAL_FLAGS"
+    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=true $VC_ADDITIONAL_FLAGS"
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=*"
