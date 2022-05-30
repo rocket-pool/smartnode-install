@@ -155,9 +155,6 @@ if [ "$CLIENT" = "besu" ]; then
     UNAME_VAL=$(uname -m)
     if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
 
-        # Restrict the JVM's heap size to reduce RAM load on ARM systems
-        export JAVA_OPTS=-Xmx2g
-
         # Define the performance tuning prefix
         define_perf_prefix
 
@@ -179,6 +176,10 @@ if [ "$CLIENT" = "besu" ]; then
 
     if [ ! -z "$BESU_MAX_BACK_LAYERS" ]; then
         CMD="$CMD --bonsai-maximum-back-layers-to-load=$BESU_MAX_BACK_LAYERS"
+    fi
+
+    if [ "$BESU_JVM_HEAP_SIZE" -gt "0" ]; then
+        CMD="env JAVA_OPTS=\"-Xmx${BESU_JVM_HEAP_SIZE}m\" $CMD"
     fi
 
     exec ${CMD}

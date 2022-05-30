@@ -163,11 +163,6 @@ if [ "$CC_CLIENT" = "teku" ]; then
         ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT,$FALLBACK_EC_HTTP_ENDPOINT"
     fi
 
-    # Restrict the JVM's heap size to reduce RAM load on ARM systems
-    if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
-        export JAVA_OPTS=-Xmx2g
-    fi
-
     CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --eth1-endpoints=$ETH1_ENDPOINTS --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
@@ -184,6 +179,10 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
         CMD="$CMD --metrics-publish-endpoint=$BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
+    fi
+
+    if [ "$TEKU_JVM_HEAP_SIZE" -gt "0" ]; then
+        CMD="env JAVA_OPTS=\"-Xmx${TEKU_JVM_HEAP_SIZE}m\" $CMD"
     fi
 
     exec ${CMD}
