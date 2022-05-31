@@ -76,6 +76,10 @@ if [ "$CLIENT" = "geth" ]; then
             CMD="$CMD --maxpeers $EC_MAX_PEERS"
         fi
 
+        if [ "$ENABLE_METRICS" = "true" ]; then
+            CMD="$CMD --metrics --metrics.addr 0.0.0.0 --metrics.port $EC_METRICS_PORT"
+        fi
+
         if [ ! -z "$EC_P2P_PORT" ]; then
             CMD="$CMD --port $EC_P2P_PORT"
         fi
@@ -128,6 +132,10 @@ if [ "$CLIENT" = "nethermind" ]; then
         CMD="$CMD --Network.MaxActivePeers $EC_MAX_PEERS"
     fi
 
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT"
+    fi
+
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
     fi
@@ -168,6 +176,10 @@ if [ "$CLIENT" = "besu" ]; then
 
     if [ ! -z "$EC_MAX_PEERS" ]; then
         CMD="$CMD --max-peers=$EC_MAX_PEERS"
+    fi
+
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics-enabled --metrics-host=0.0.0.0 --metrics-port=$EC_METRICS_PORT"
     fi
 
     if [ ! -z "$EC_P2P_PORT" ]; then

@@ -15,6 +15,10 @@ scrape_configs:
       # We have to use 'hosts.docker.internal' to refer to it due to this configuration
       - targets: ['host.docker.internal:${NODE_EXPORTER_PORT:-9103}']
 
+  - job_name: 'eth1'
+    static_configs:
+      - targets: ['${EC_HOSTNAME:-eth1}:${EC_METRICS_PORT:-9105}']
+
   - job_name: 'eth2'
     static_configs:
       - targets: ['${CC_HOSTNAME:-eth2}:${BN_METRICS_PORT:-9100}']
