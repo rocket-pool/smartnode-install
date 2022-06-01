@@ -13,7 +13,20 @@ scrape_configs:
     static_configs:
       # node-exporter is on the host network so it can get access to the actual machine's network info
       # We have to use 'hosts.docker.internal' to refer to it due to this configuration
-      - targets: ['host.docker.internal:${NODE_EXPORTER_PORT:-9103}']
+      - targets: ['host.docker.internal:${EXPORTER_METRICS_PORT:-9103}']
+
+  - job_name: 'geth'
+    static_configs:
+      - targets: ['${EC_HOSTNAME:-eth1}:${EC_METRICS_PORT:-9105}']
+    metrics_path: /debug/metrics/prometheus
+
+  - job_name: 'nethermind'
+    static_configs:
+      - targets: ['${EC_HOSTNAME:-eth1}:${EC_METRICS_PORT:-9105}']
+
+  - job_name: 'besu'
+    static_configs:
+      - targets: ['${EC_HOSTNAME:-eth1}:${EC_METRICS_PORT:-9105}']
 
   - job_name: 'eth2'
     static_configs:

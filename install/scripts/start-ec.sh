@@ -86,6 +86,10 @@ if [ "$CLIENT" = "geth" ]; then
             CMD="$CMD --maxpeers $EC_MAX_PEERS"
         fi
 
+        if [ "$ENABLE_METRICS" = "true" ]; then
+            CMD="$CMD --metrics --metrics.addr 0.0.0.0 --metrics.port $EC_METRICS_PORT"
+        fi
+
         if [ ! -z "$EC_P2P_PORT" ]; then
             CMD="$CMD --port $EC_P2P_PORT"
         fi
@@ -142,6 +146,10 @@ if [ "$CLIENT" = "nethermind" ]; then
         CMD="$CMD --Network.MaxActivePeers $EC_MAX_PEERS"
     fi
 
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT"
+    fi
+
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
     fi
@@ -169,9 +177,6 @@ if [ "$CLIENT" = "besu" ]; then
     UNAME_VAL=$(uname -m)
     if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
 
-        # Restrict the JVM's heap size to reduce RAM load on ARM systems
-        export JAVA_OPTS=-Xmx2g
-
         # Define the performance tuning prefix
         define_perf_prefix
 
@@ -191,12 +196,20 @@ if [ "$CLIENT" = "besu" ]; then
         CMD="$CMD --max-peers=$EC_MAX_PEERS"
     fi
 
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics-enabled --metrics-host=0.0.0.0 --metrics-port=$EC_METRICS_PORT"
+    fi
+
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --p2p-port=$EC_P2P_PORT"
     fi
 
     if [ ! -z "$BESU_MAX_BACK_LAYERS" ]; then
         CMD="$CMD --bonsai-maximum-back-layers-to-load=$BESU_MAX_BACK_LAYERS"
+    fi
+
+    if [ "$BESU_JVM_HEAP_SIZE" -gt "0" ]; then
+        CMD="env JAVA_OPTS=\"-Xmx${BESU_JVM_HEAP_SIZE}m\" $CMD"
     fi
 
     exec ${CMD}
