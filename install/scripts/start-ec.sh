@@ -69,9 +69,9 @@ if [ "$CLIENT" = "geth" ]; then
         CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3,engine --http.corsdomain=* --authrpc.jwtsecret /secrets/jwtsecret --syncmode=full --gcmode=archive --pprof $EC_ADDITIONAL_FLAGS"
 
         if [ "$NETWORK" = "kiln" ]; then
-            CMD = "$CMD --override.terminaltotaldifficulty 20000000000000"
+            CMD="$CMD --override.terminaltotaldifficulty 20000000000000"
         elif [ "$NETWORK" = "ropsten" ]; then
-            CMD = "$CMD --override.terminaltotaldifficulty 100000000000000000000000"
+            CMD="$CMD --override.terminaltotaldifficulty 100000000000000000000000"
         fi
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
@@ -139,7 +139,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     fi
 
     if [ "$NETWORK" = "ropsten" ]; then
-        CMD = "$CMD --Merge.TerminalTotalDifficulty 100000000000000000000000"
+        CMD="$CMD --Merge.TerminalTotalDifficulty 100000000000000000000000"
     fi
 
     if [ ! -z "$EC_MAX_PEERS" ]; then
@@ -185,7 +185,7 @@ if [ "$CLIENT" = "besu" ]; then
     CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP --nat-method=docker --p2p-host=$EXTERNAL_IP --Xmerge-support --engine-rpc-enabled --engine-host-allowlist=* --engine-jwt-enabled --engine-jwt-secret=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" ]; then
-        CMD = "$CMD --override-genesis-config=\"terminalTotalDifficulty=100000000000000000000000\""
+        CMD="$CMD --override-genesis-config=\"terminalTotalDifficulty=100000000000000000000000\""
     fi
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
