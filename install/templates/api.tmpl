@@ -14,6 +14,7 @@ services:
     stop_signal: SIGKILL
     stop_grace_period: 1s
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ${ROCKETPOOL_FOLDER}:/.rocketpool
       - ${ROCKETPOOL_DATA_FOLDER}:/.rocketpool/data
     networks:
