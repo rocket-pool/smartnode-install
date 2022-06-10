@@ -138,10 +138,6 @@ if [ "$CLIENT" = "nethermind" ]; then
         CMD="$CMD --Init.MemoryHint ${EC_CACHE_SIZE}000000"
     fi
 
-    if [ "$NETWORK" = "ropsten" ]; then
-        CMD="$CMD --Merge.TerminalTotalDifficulty 50000000000000000"
-    fi
-
     if [ ! -z "$EC_MAX_PEERS" ]; then
         CMD="$CMD --Network.MaxActivePeers $EC_MAX_PEERS"
     fi

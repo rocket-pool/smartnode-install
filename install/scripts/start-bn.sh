@@ -160,10 +160,6 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --http-web3provider $EC_HTTP_ENDPOINT $FALLBACK_PROVIDER --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "ropsten" ]; then
-        CMD="$CMD --bootstrap-node=enr:-Iq4QMCTfIMXnow27baRUb35Q8iiFHSIDBJh6hQM5Axohhf4b6Kr_cOCu0htQ5WvVqKvFgY28893DHAg8gnBAXsAVqmGAX53x8JggmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk"
-    fi
-
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $BN_MAX_PEERS"
     fi
