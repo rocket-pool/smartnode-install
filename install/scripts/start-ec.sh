@@ -109,11 +109,11 @@ if [ "$CLIENT" = "nethermind" ]; then
         rm /ethclient/prune.lock
     fi
 
-    # Uncomment JSON RPC logging restrictions in the log config XML
-    sed -i 's/<!-- \(<logger name=\"JsonRpc\.\*\".*\/>\).*-->/\1/g' /nethermind/NLog.config
-
-    # Set JSON RPC logs to Warn in the log config XML
-    sed -i 's/\(<logger name=\"JsonRpc\.\*\" \)minlevel=\"Error\"\(.*\/>\)/\1minlevel=\"Warn\"\2/g' /nethermind/NLog.config
+    # Set the JSON RPC logging level
+    LOG_LINE=$(awk '/<logger name=\"\*\" minlevel=\"Off\" writeTo=\"seq\" \/>/{print NR}' /nethermind/NLog.config)
+    sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" final=\"true\"/>\\n" -i /nethermind/NLog.config
+    sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" minlevel=\"Warn\" writeTo=\"auto-colored-console-async\" final=\"true\"/>" -i /nethermind/NLog.config
+    sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" minlevel=\"Warn\" writeTo=\"file-async\"\/>" -i /nethermind/NLog.config
 
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
