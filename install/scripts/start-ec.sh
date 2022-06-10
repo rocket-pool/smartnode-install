@@ -128,7 +128,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3,Engine --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3,Engine --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
@@ -150,12 +150,13 @@ if [ "$CLIENT" = "nethermind" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
     fi
 
-    if [ ! -z "$NETHERMIND_PRUNE" ]; then
-        # --Pruning.ShutdownAfterFullPrune true
-        CMD="$CMD --Pruning.Mode Full --JsonRpc.AdditionalRpcUrls http://localhost:7434|http|admin"
-    else
-        CMD="$CMD --Pruning.Mode Memory"
-    fi
+#    if [ ! -z "$NETHERMIND_PRUNE" ]; then
+#        # --Pruning.ShutdownAfterFullPrune true
+#        CMD="$CMD --Pruning.Mode Full --JsonRpc.AdditionalRpcUrls http://localhost:7434|http|admin"
+#    else
+#        CMD="$CMD --Pruning.Mode Memory"
+#    fi
+    CMD=$"CMD --Pruning.Mode None"
 
     if [ ! -z "$NETHERMIND_PRUNE_MEM_SIZE" ]; then
         CMD="$CMD --Pruning.CacheMb $NETHERMIND_PRUNE_MEM_SIZE"
