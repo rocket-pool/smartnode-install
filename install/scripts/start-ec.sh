@@ -113,6 +113,11 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     fi
 
+    # Create the JWT secret
+    if [ ! -f "/secrets/jwtsecret" ]; then
+        openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
+    fi
+
     # Check for the prune flag
     if [ -f "/ethclient/prune.lock" ]; then
         NETHERMIND_PRUNE=1
@@ -176,6 +181,11 @@ if [ "$CLIENT" = "besu" ]; then
         # Define the performance tuning prefix
         define_perf_prefix
 
+    fi
+
+    # Create the JWT secret
+    if [ ! -f "/secrets/jwtsecret" ]; then
+        openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
     fi
 
     CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP --nat-method=docker --p2p-host=$EXTERNAL_IP --Xmerge-support --engine-rpc-enabled --engine-rpc-port=${EC_ENGINE_PORT:-8551} --engine-host-allowlist=* --engine-jwt-enabled --engine-jwt-secret=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
