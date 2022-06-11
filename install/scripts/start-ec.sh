@@ -181,7 +181,7 @@ if [ "$CLIENT" = "besu" ]; then
     CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP --nat-method=docker --p2p-host=$EXTERNAL_IP --Xmerge-support --engine-rpc-enabled --engine-host-allowlist=* --engine-jwt-enabled --engine-jwt-secret=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" ]; then
-        CMD="$CMD --override-genesis-config=\"terminalTotalDifficulty=50000000000000000\""
+        CMD="$CMD --override-genesis-config=terminalTotalDifficulty=50000000000000000"
     fi
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
