@@ -66,7 +66,7 @@ if [ "$CLIENT" = "geth" ]; then
     # Run Geth normally
     else
 
-        CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3,engine --http.corsdomain=* --authrpc.jwtsecret /secrets/jwtsecret --pprof $EC_ADDITIONAL_FLAGS"
+        CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3 --http.corsdomain=* --authrpc.addr 0.0.0.0 --authrpc.port ${EC_ENGINE_PORT:-8551} --authrpc.jwtsecret /secrets/jwtsecret --authrpc.vhosts=* --pprof $EC_ADDITIONAL_FLAGS"
 
         if [ "$NETWORK" = "kiln" ]; then
             CMD="$CMD --override.terminaltotaldifficulty 20000000000000"
@@ -128,7 +128,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3,Engine --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3 --JsonRpc.AdditionalRpcUrls http://0.0.0.0:${EC_ENGINE_PORT:-8551}|http|engine,eth --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
@@ -178,7 +178,7 @@ if [ "$CLIENT" = "besu" ]; then
 
     fi
 
-    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP --nat-method=docker --p2p-host=$EXTERNAL_IP --Xmerge-support --engine-rpc-enabled --engine-host-allowlist=* --engine-jwt-enabled --engine-jwt-secret=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP --nat-method=docker --p2p-host=$EXTERNAL_IP --Xmerge-support --engine-rpc-enabled --engine-rpc-port=${EC_ENGINE_PORT:-8551} --engine-host-allowlist=* --engine-jwt-enabled --engine-jwt-secret=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" ]; then
         CMD="$CMD --override-genesis-config=terminalTotalDifficulty=50000000000000000"

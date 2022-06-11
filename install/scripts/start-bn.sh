@@ -33,7 +33,7 @@ elif [ "$NETWORK" = "prater" ]; then
     NIMBUS_NETWORK="prater"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
-    PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis.ssz"
+    PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-prater.ssz"
 elif [ "$NETWORK" = "kiln" ]; then
     LH_NETWORK="kiln"
     NIMBUS_NETWORK=""
@@ -44,6 +44,7 @@ elif [ "$NETWORK" = "ropsten" ]; then
     NIMBUS_NETWORK="ropsten"
     PRYSM_NETWORK="--ropsten"
     TEKU_NETWORK="ropsten"
+    PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-ropsten.ssz"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -53,13 +54,7 @@ fi
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
 
-    ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT"
-
-    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
-        ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT,$FALLBACK_EC_HTTP_ENDPOINT"
-    fi
-
-    CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --eth1 --execution-endpoints $ETH1_ENDPOINTS --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --merge --jwt-secrets=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --eth1 --eth1-endpoints $EC_HTTP_ENDPOINT --execution-endpoints $EC_ENGINE_ENDPOINT --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --merge --jwt-secrets=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "kiln" ]; then
         CMD="$CMD --terminal-total-difficulty-override=20000000000000 --boot-nodes=enr:-Iq4QMCTfIMXnow27baRUb35Q8iiFHSIDBJh6hQM5Axohhf4b6Kr_cOCu0htQ5WvVqKvFgY28893DHAg8gnBAXsAVqmGAX53x8JggmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk"
@@ -91,12 +86,6 @@ fi
 # Nimbus startup
 if [ "$CC_CLIENT" = "nimbus" ]; then
 
-    ETH1_PROVIDER_ARG="--web3-url=$EC_HTTP_ENDPOINT"
-
-    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
-        ETH1_PROVIDER_ARG="--web3-url=$EC_HTTP_ENDPOINT --web3-url=$FALLBACK_EC_HTTP_ENDPOINT"
-    fi
-
     # Nimbus won't start unless the validator directories already exist
     mkdir -p /validators/nimbus/validators
     mkdir -p /validators/nimbus/secrets
@@ -118,7 +107,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         fi
     fi
 
-    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT $ETH1_PROVIDER_ARG --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/nimbus/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/nimbus/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" ]; then
         CMD="$CMD --terminal-total-difficulty-override=50000000000000000"
@@ -147,8 +136,12 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     # Get Prater SSZ if necessary
     if [ "$NETWORK" = "prater" ]; then
-        if [ ! -f "/validators/genesis.ssz" ]; then
-            wget "https://github.com/eth-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis.ssz"
+        if [ ! -f "/validators/genesis-prater.ssz" ]; then
+            wget "https://github.com/eth-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis-prater.ssz"
+        fi
+    elif [ "$NETWORK" = "ropsten" ]; then
+        if [ ! -f "/validators/genesis-ropsten.ssz" ]; then
+            wget "https://github.com/eth-clients/merge-testnets/raw/main/ropsten-beacon-chain/genesis.ssz" -O "/validators/genesis-ropsten.ssz"
         fi
     fi
 
@@ -158,7 +151,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         FALLBACK_PROVIDER="--fallback-web3provider=$FALLBACK_EC_HTTP_ENDPOINT"
     fi
 
-    CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --http-web3provider $EC_HTTP_ENDPOINT $FALLBACK_PROVIDER --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --http-web3provider $EC_ENGINE_ENDPOINT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $BN_MAX_PEERS"
@@ -182,13 +175,7 @@ fi
 # Teku startup
 if [ "$CC_CLIENT" = "teku" ]; then
 
-    ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT"
-
-    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
-        ETH1_ENDPOINTS="$EC_HTTP_ENDPOINT,$FALLBACK_EC_HTTP_ENDPOINT"
-    fi
-
-    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_HTTP_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=50000000000000000"
