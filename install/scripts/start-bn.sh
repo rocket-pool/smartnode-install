@@ -50,6 +50,11 @@ else
     exit 1
 fi
 
+# Check for the JWT auth file
+if [ ! -f "/secrets/jwtsecret" ]; then
+    echo "JWT secret file not found, please try again when the Execution Client has created one."
+    exit 1
+fi
 
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
