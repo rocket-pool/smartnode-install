@@ -1,19 +1,6 @@
 #!/bin/sh
 # This script launches ETH2 beacon clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
-# Only show client identifier if version string is under 9 characters
-version_length=`echo -n $ROCKET_POOL_VERSION | wc -c`
-if [ $version_length -lt 8 ]; then
-    EC_INITIAL=`echo -n $EC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
-    CC_INITIAL=`echo -n $CC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
-    IDENTIFIER="-${EC_INITIAL}${CC_INITIAL}"
-fi
-
-# Get graffiti text
-GRAFFITI="RP$IDENTIFIER $ROCKET_POOL_VERSION"
-if [ ! -z "$CUSTOM_GRAFFITI" ]; then
-    GRAFFITI="$GRAFFITI ($CUSTOM_GRAFFITI)"
-fi
 
 # Performance tuning for ARM systems
 UNAME_VAL=$(uname -m)
@@ -93,15 +80,6 @@ fi
 # Nimbus startup
 if [ "$CC_CLIENT" = "nimbus" ]; then
 
-    # Nimbus won't start unless the validator directories already exist
-    mkdir -p /validators/nimbus/validators
-    mkdir -p /validators/nimbus/secrets
-
-    # Copy the default fee recipient file from the template
-    if [ ! -f "/validators/nimbus/$FEE_RECIPIENT_FILE" ]; then
-        cp "/fr-default/nimbus" "/validators/nimbus/$FEE_RECIPIENT_FILE"
-    fi
-
     # Handle checkpoint syncing
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
         # Ignore it if a DB already exists
@@ -114,7 +92,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         fi
     fi
 
-    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/nimbus/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --max-peers=$BN_MAX_PEERS"
@@ -127,9 +105,6 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     if [ ! -z "$EXTERNAL_IP" ]; then
         CMD="$CMD --nat=extip:$EXTERNAL_IP"
     fi
-
-    # Graffiti breaks if it's in the CMD string instead of here because of spaces
-    exec ${CMD} --graffiti="$GRAFFITI"
 
 fi
 

@@ -70,11 +70,27 @@ fi
 # Nimbus startup
 if [ "$CC_CLIENT" = "nimbus" ]; then
 
-    # Do nothing since the validator is built into the beacon client
-    trap 'kill -9 $sleep_pid' INT TERM
-    sleep infinity &
-    sleep_pid=$!
-    wait
+    # Nimbus won't start unless the validator directories already exist
+    mkdir -p /validators/nimbus/validators
+    mkdir -p /validators/nimbus/secrets
+
+    # Copy the default fee recipient file from the template
+    if [ ! -f "/validators/nimbus/$FEE_RECIPIENT_FILE" ]; then
+        cp "/fr-default/nimbus" "/validators/nimbus/$FEE_RECIPIENT_FILE"
+    fi
+
+    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_validator_client --non-interactive  --beacon-node=$CC_API_ENDPOINT --data-dir=/ethclient/nimbus_vc --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets  $VC_ADDITIONAL_FLAGS"
+    # --network=$NIMBUS_NETWORK
+    # --insecure-netkey-password=true
+    # --doppelganger-detection=$DOPPELGANGER_DETECTION
+    # --suggested-fee-recipient=$(cat /validators/nimbus/$FEE_RECIPIENT_FILE)
+
+    #if [ "$ENABLE_METRICS" = "true" ]; then
+    #    CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$VC_METRICS_PORT"
+    #fi
+
+    # Graffiti breaks if it's in the CMD string instead of here because of spaces
+    exec ${CMD} --graffiti="$GRAFFITI"
 
 fi
 
