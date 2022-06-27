@@ -65,6 +65,8 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --terminal-total-difficulty-override=20000000000000 --boot-nodes=enr:-Iq4QMCTfIMXnow27baRUb35Q8iiFHSIDBJh6hQM5Axohhf4b6Kr_cOCu0htQ5WvVqKvFgY28893DHAg8gnBAXsAVqmGAX53x8JggmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk"
     elif [ "$NETWORK" = "ropsten" ]; then
         CMD="$CMD --terminal-total-difficulty-override=50000000000000000"
+    elif [ "$NETWORK" = "prater" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=100000000000000000000"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
@@ -180,6 +182,8 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     if [ "$NETWORK" = "ropsten" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=50000000000000000"
+    elif [ "$NETWORK" = "ropsten" ]; then
+        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=100000000000000000000"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
