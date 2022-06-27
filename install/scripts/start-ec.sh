@@ -72,6 +72,8 @@ if [ "$CLIENT" = "geth" ]; then
             CMD="$CMD --override.terminaltotaldifficulty 20000000000000"
         elif [ "$NETWORK" = "ropsten" ]; then
             CMD="$CMD --override.terminaltotaldifficulty 50000000000000000"
+        elif [ "$NETWORK" = "prater" ]; then
+            CMD="$CMD --override.terminaltotaldifficulty 100000000000000000000"
         fi
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
