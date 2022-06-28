@@ -137,6 +137,10 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3 --JsonRpc.AdditionalRpcUrls [\"http://0.0.0.0:${EC_ENGINE_PORT:-8551}|http|engine;eth\",\"http://127.0.0.1:7434|http|admin\"] --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
+    if [ "$NETWORK" = "prater" ]; then
+        CMD="$CMD --Merge.TerminalTotalDifficulty 100000000000000000000"
+    fi
+
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
     fi
@@ -194,6 +198,8 @@ if [ "$CLIENT" = "besu" ]; then
 
     if [ "$NETWORK" = "ropsten" ]; then
         CMD="$CMD --override-genesis-config=terminalTotalDifficulty=50000000000000000"
+    elif [ "$NETWORK" = "prater" ]; then
+        CMD="$CMD --override-genesis-config=terminalTotalDifficulty=100000000000000000000"
     fi
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
