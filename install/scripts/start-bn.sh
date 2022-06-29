@@ -148,12 +148,6 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         fi
     fi
 
-    FALLBACK_PROVIDER=""
-
-    if [ ! -z "$FALLBACK_EC_HTTP_ENDPOINT" ]; then
-        FALLBACK_PROVIDER="--fallback-web3provider=$FALLBACK_EC_HTTP_ENDPOINT"
-    fi
-
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --http-web3provider $EC_ENGINE_ENDPOINT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
