@@ -1,8 +1,12 @@
 #!/bin/sh
 # This script launches ETH2 validator clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
+# Slashing database import / export variables
+SLASHING_DB_FILE="/validators/slashing_protection.json"
+SLASHING_DB_IMPORT_INDICATOR="/validators/import.lock"
+SLASHING_DB_EXPORT_INDICATOR="/validators/export.lock"
 
-# only show client identifier if version string is under 9 characters
+# Only show client identifier if version string is under 8 characters
 version_length=`echo -n $ROCKET_POOL_VERSION | wc -c`
 if [ $version_length -lt 8 ]; then
     EC_INITIAL=`echo -n $EC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
@@ -28,6 +32,49 @@ elif [ "$NETWORK" = "prater" ]; then
 else
     echo "Unknown network [$NETWORK]"
     exit 1
+fi
+
+
+# Import the slashing DB
+if [ -f "$SLASHING_DB_IMPORT_INDICATOR" ]; then
+    if [ "$CC_CLIENT" = "lighthouse" ]; then
+        /usr/local/bin/lighthouse account validator slashing-protection import $SLASHING_DB_FILE --datadir /validators/lighthouse --network $LH_NETWORK && rm $SLASHING_DB_IMPORT_INDICATOR
+    fi
+
+    if [ "$CC_CLIENT" = "nimbus" ]; then
+        /home/user/nimbus-eth2/build/nimbus_beacon_node slashingdb import $SLASHING_DB_FILE --validators-dir=/validators/nimbus/validators && rm $SLASHING_DB_IMPORT_INDICATOR
+    fi
+
+    if [ "$CC_CLIENT" = "prysm" ]; then
+        /app/cmd/validator/validator slashing-protection-history import $PRYSM_NETWORK --accept-terms-of-use --datadir /validators/prysm-non-hd/direct --slashing-protection-json-file=$SLASHING_DB_FILE && rm $SLASHING_DB_IMPORT_INDICATOR
+    fi
+
+    if [ "$CC_CLIENT" = "teku" ]; then
+       /opt/teku/bin/teku slashing-protection import --data-path=/validators/teku--from=$SLASHING_DB_FILE && rm $SLASHING_DB_IMPORT_INDICATOR
+    fi
+
+    exit 0
+fi
+
+# Export the slashing DB
+if [ -f "$SLASHING_DB_EXPORT_INDICATOR" ]; then
+    if [ "$CC_CLIENT" = "lighthouse" ]; then
+        /usr/local/bin/lighthouse account validator slashing-protection export $SLASHING_DB_FILE --datadir /validators/lighthouse --network $LH_NETWORK && rm $SLASHING_DB_EXPORT_INDICATOR
+    fi
+
+    if [ "$CC_CLIENT" = "nimbus" ]; then
+        /home/user/nimbus-eth2/build/nimbus_beacon_node slashingdb export $SLASHING_DB_FILE --validators-dir=/validators/nimbus/validators && rm $SLASHING_DB_EXPORT_INDICATOR
+    fi
+
+    if [ "$CC_CLIENT" = "prysm" ]; then
+        /app/cmd/validator/validator slashing-protection-history export $PRYSM_NETWORK --accept-terms-of-use --datadir /validators/prysm-non-hd/direct --slashing-protection-export-dir=/validators && rm $SLASHING_DB_EXPORT_INDICATOR
+    fi
+
+    if [ "$CC_CLIENT" = "teku" ]; then
+       /opt/teku/bin/teku slashing-protection export --data-path=/validators/teku--to=$SLASHING_DB_FILE && rm $SLASHING_DB_EXPORT_INDICATOR
+    fi
+
+    exit 0
 fi
 
 
