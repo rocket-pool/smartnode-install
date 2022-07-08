@@ -176,7 +176,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     if [ "$NETWORK" = "ropsten" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=50000000000000000"
-    elif [ "$NETWORK" = "ropsten" ]; then
+    elif [ "$NETWORK" = "prater" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=100000000000000000000"
     fi
 
