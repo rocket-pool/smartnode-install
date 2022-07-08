@@ -162,8 +162,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     fi
 
     if [ ! -z "$NETHERMIND_PRUNE" ]; then
-        # --Pruning.FullPruningCompletionBehavior AlwaysShutdown
-        CMD="$CMD --Pruning.Mode Full"
+        CMD="$CMD --Pruning.Mode Full --Pruning.FullPruningCompletionBehavior AlwaysShutdown"
     else
         CMD="$CMD --Pruning.Mode Memory"
     fi
