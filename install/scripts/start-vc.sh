@@ -100,7 +100,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     fi
     
     # Set up the CC + fallback string
-    CC_URL_STRING=$CC_API_ENDPOINT
+    CC_URL_STRING=$CC_RPC_ENDPOINT
     if [ ! -z "$FALLBACK_CC_RPC_ENDPOINT" ]; then
         CC_URL_STRING="$CC_RPC_ENDPOINT,$FALLBACK_CC_RPC_ENDPOINT"
     fi
