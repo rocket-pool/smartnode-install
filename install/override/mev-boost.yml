@@ -5,5 +5,5 @@
 
 version: "3.7"
 services:
-  api:
+  mev-boost:
     x-rp-comment: Add your customizations below this line
