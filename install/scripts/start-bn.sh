@@ -175,7 +175,9 @@ if [ "$CC_CLIENT" = "teku" ]; then
     CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" ]; then
-        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=50000000000000000"
+        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=50000000000000000 --Xeb-endpoint=\"${MEV_BOOST_URL}\""
+    elif [ "$NETWORK" = "kiln" ]; then
+        CMD="$CMD --Xeb-endpoint=\"${MEV_BOOST_URL}\""
     elif [ "$NETWORK" = "prater" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=100000000000000000000"
     fi
