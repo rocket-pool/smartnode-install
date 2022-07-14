@@ -150,6 +150,10 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --http-web3provider $EC_ENGINE_ENDPOINT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+        CMD="$CMD --http-mev-relay ${MEV_BOOST_URL}"
+    fi
+
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --p2p-max-peers $BN_MAX_PEERS"
     fi
@@ -177,7 +181,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
     if [ "$NETWORK" = "ropsten" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=50000000000000000 --Xeb-endpoint=${MEV_BOOST_URL}"
     elif [ "$NETWORK" = "kiln" ]; then
-        CMD="$CMD --Xeb-endpoint=\"${MEV_BOOST_URL}\""
+        CMD="$CMD --Xeb-endpoint=${MEV_BOOST_URL}"
     elif [ "$NETWORK" = "prater" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=100000000000000000000"
     fi
