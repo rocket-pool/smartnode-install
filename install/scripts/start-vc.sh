@@ -137,7 +137,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
         cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=true --Xvalidators-proposer-blinded-blocks-enabled=true --Xvalidators-registration-default-enabled=true $VC_ADDITIONAL_FLAGS"
+    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=true --Xvalidators-proposer-blinded-blocks-enabled=true $VC_ADDITIONAL_FLAGS"
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=*"
