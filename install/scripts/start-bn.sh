@@ -69,6 +69,10 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --terminal-total-difficulty-override=100000000000000000000"
     fi
 
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+        CMD="$CMD --builder ${MEV_BOOST_URL}"
+    fi
+
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --target-peers $BN_MAX_PEERS"
     fi

@@ -60,6 +60,10 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+        CMD="$CMD --private-tx-proposals"
+    fi
+
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics --metrics-address 0.0.0.0 --metrics-port $VC_METRICS_PORT"
     fi
