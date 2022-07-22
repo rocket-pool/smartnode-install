@@ -54,7 +54,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CC_URL_STRING="$CC_API_ENDPOINT,$FALLBACK_CC_API_ENDPOINT"
     fi
 
-    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --logfile-max-number 0 --beacon-nodes $CC_URL_STRING --suggested-fee-recipient-file /validators/lighthouse/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
+    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --logfile-max-number 0 --beacon-nodes $CC_URL_STRING --suggested-fee-recipient $(cat /validators/lighthouse/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger-protection"
@@ -92,6 +92,9 @@ fi
 # Prysm startup
 if [ "$CC_CLIENT" = "prysm" ]; then
 
+    # Make the Prysm dir
+    mkdir -p /validators/prysm-non-hd/
+
     # Copy the default fee recipient file from the template
     if [ ! -f "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE" ]; then
         cp "/fr-default/prysm" "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE"
@@ -109,7 +112,11 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         CC_URL_STRING="$CC_RPC_ENDPOINT,$FALLBACK_CC_RPC_ENDPOINT"
     fi
 
-    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --proposer-settings-file /validators/prysm-non-hd/$FEE_RECIPIENT_FILE --enable-validator-registration $VC_ADDITIONAL_FLAGS"
+    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --proposer-settings-file /validators/prysm-non-hd/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
+
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+        CMD="$CMD --enable-validator-registration"
+    fi
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger"

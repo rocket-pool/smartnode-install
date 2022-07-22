@@ -74,6 +74,8 @@ if [ "$CLIENT" = "geth" ]; then
             CMD="$CMD --override.terminaltotaldifficulty 50000000000000000"
         elif [ "$NETWORK" = "prater" ]; then
             CMD="$CMD --override.terminaltotaldifficulty 100000000000000000000"
+        elif [ "$NETWORK" = "mainnet" ]; then
+            CMD="$CMD --override.terminaltotaldifficulty 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc00"
         fi
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
@@ -139,6 +141,8 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     if [ "$NETWORK" = "prater" ]; then
         CMD="$CMD --Merge.TerminalTotalDifficulty 100000000000000000000"
+    elif [ "$NETWORK" = "mainnet" ]; then
+        CMD="$CMD --Merge.TerminalTotalDifficulty 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc00"
     fi
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
@@ -199,6 +203,8 @@ if [ "$CLIENT" = "besu" ]; then
         CMD="$CMD --override-genesis-config=terminalTotalDifficulty=50000000000000000"
     elif [ "$NETWORK" = "prater" ]; then
         CMD="$CMD --override-genesis-config=terminalTotalDifficulty=100000000000000000000"
+    elif [ "$NETWORK" = "mainnet" ]; then
+        CMD="$CMD --override-genesis-config=terminalTotalDifficulty=115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
