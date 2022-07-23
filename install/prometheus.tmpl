@@ -21,11 +21,7 @@ scrape_configs:
       - targets: ['${EC_HOSTNAME:-eth1}:${EC_METRICS_PORT:-9105}']
     metrics_path: /debug/metrics/prometheus
 
-  - job_name: 'nethermind'
-    static_configs:
-      - targets: ['${EC_HOSTNAME:-eth1}:${EC_METRICS_PORT:-9105}']
-
-  - job_name: 'besu'
+  - job_name: 'eth1'
     static_configs:
       - targets: ['${EC_HOSTNAME:-eth1}:${EC_METRICS_PORT:-9105}']
 
