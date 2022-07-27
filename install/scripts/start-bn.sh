@@ -61,12 +61,8 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --execution-jwt=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "kiln" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=20000000000000 --boot-nodes=enr:-Iq4QMCTfIMXnow27baRUb35Q8iiFHSIDBJh6hQM5Axohhf4b6Kr_cOCu0htQ5WvVqKvFgY28893DHAg8gnBAXsAVqmGAX53x8JggmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk"
-    elif [ "$NETWORK" = "ropsten" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=50000000000000000"
-    elif [ "$NETWORK" = "prater" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=100000000000000000000"
+    if [ "$NETWORK" = "mainnet" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
@@ -120,6 +116,10 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
 
     CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/nimbus/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
 
+    if [ "$NETWORK" = "mainnet" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    fi
+
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
         CMD="$CMD --payload-builder=$MEV_BOOST_URL"
     fi
@@ -158,6 +158,10 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --http-web3provider $EC_ENGINE_ENDPOINT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
+    if [ "$NETWORK" = "mainnet" ]; then
+        CMD="$CMD --terminal-total-difficulty-override 115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    fi
+
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
         CMD="$CMD --http-mev-relay ${MEV_BOOST_URL}"
     fi
@@ -186,12 +190,12 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "ropsten" ]; then
-        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=50000000000000000 --Xeb-endpoint=${MEV_BOOST_URL}"
-    elif [ "$NETWORK" = "kiln" ]; then
+    if [ "$NETWORK" = "mainnet" ]; then
+        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    fi
+    
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
         CMD="$CMD --Xeb-endpoint=${MEV_BOOST_URL}"
-    elif [ "$NETWORK" = "prater" ]; then
-        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=100000000000000000000"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then

@@ -68,13 +68,7 @@ if [ "$CLIENT" = "geth" ]; then
 
         CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3 --http.corsdomain=* --authrpc.addr 0.0.0.0 --authrpc.port ${EC_ENGINE_PORT:-8551} --authrpc.jwtsecret /secrets/jwtsecret --authrpc.vhosts=* --pprof $EC_ADDITIONAL_FLAGS"
 
-        if [ "$NETWORK" = "kiln" ]; then
-            CMD="$CMD --override.terminaltotaldifficulty 20000000000000"
-        elif [ "$NETWORK" = "ropsten" ]; then
-            CMD="$CMD --override.terminaltotaldifficulty 50000000000000000"
-        elif [ "$NETWORK" = "prater" ]; then
-            CMD="$CMD --override.terminaltotaldifficulty 100000000000000000000"
-        elif [ "$NETWORK" = "mainnet" ]; then
+        if [ "$NETWORK" = "mainnet" ]; then
             CMD="$CMD --override.terminaltotaldifficulty 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc00"
         fi
 
@@ -139,9 +133,7 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3 --JsonRpc.AdditionalRpcUrls [\"http://0.0.0.0:${EC_ENGINE_PORT:-8551}|http|engine;eth\",\"http://127.0.0.1:7434|http|admin\"] --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --Merge.Enabled true --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "prater" ]; then
-        CMD="$CMD --Merge.TerminalTotalDifficulty 100000000000000000000"
-    elif [ "$NETWORK" = "mainnet" ]; then
+    if [ "$NETWORK" = "mainnet" ]; then
         CMD="$CMD --Merge.TerminalTotalDifficulty 115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
 
