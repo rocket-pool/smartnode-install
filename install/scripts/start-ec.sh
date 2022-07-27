@@ -191,11 +191,7 @@ if [ "$CLIENT" = "besu" ]; then
 
     CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_CHECKPOINT --fast-sync-min-peers=3 --nat-method=docker --p2p-host=$EXTERNAL_IP --Xmerge-support --engine-rpc-enabled --engine-rpc-port=${EC_ENGINE_PORT:-8551} --engine-host-allowlist=* --engine-jwt-secret=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "ropsten" ]; then
-        CMD="$CMD --override-genesis-config=terminalTotalDifficulty=50000000000000000"
-    elif [ "$NETWORK" = "prater" ]; then
-        CMD="$CMD --override-genesis-config=terminalTotalDifficulty=100000000000000000000"
-    elif [ "$NETWORK" = "mainnet" ]; then
+    if [ "$NETWORK" = "mainnet" ]; then
         CMD="$CMD --override-genesis-config=terminalTotalDifficulty=115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
 
