@@ -105,7 +105,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     if [ ! -z "$FALLBACK_CC_RPC_ENDPOINT" ]; then
         FALLBACK_CC_RPC_ENDPOINT=$(echo $FALLBACK_CC_RPC_ENDPOINT | sed -E 's/.*\:\/\/(.*)/\1/')
     fi
-    
+
     # Set up the CC + fallback string
     CC_URL_STRING=$CC_RPC_ENDPOINT
     if [ ! -z "$FALLBACK_CC_RPC_ENDPOINT" ]; then
@@ -148,10 +148,10 @@ if [ "$CC_CLIENT" = "teku" ]; then
         cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
+    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/teku/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
-        CMD="$CMD --validators-proposer-config-refresh-enabled=true --Xvalidators-proposer-blinded-blocks-enabled=true"
+        CMD="$CMD --validators-builder-registration-default-enabled=true"
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
