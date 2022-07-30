@@ -89,15 +89,14 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         cp "/fr-default/nimbus" "/validators/nimbus/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_validator_client --non-interactive  --beacon-node=$CC_API_ENDPOINT --data-dir=/ethclient/nimbus_vc --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets  $VC_ADDITIONAL_FLAGS"
-    # --network=$NIMBUS_NETWORK
+    CMD="/home/user/nimbus-eth2/build/nimbus_validator_client --non-interactive --beacon-node=$CC_API_ENDPOINT --data-dir=/ethclient/nimbus_vc --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION $VC_ADDITIONAL_FLAGS"
     # --insecure-netkey-password=true
-    # --doppelganger-detection=$DOPPELGANGER_DETECTION
+    # 
     # --suggested-fee-recipient=$(cat /validators/nimbus/$FEE_RECIPIENT_FILE)
 
-    #if [ "$ENABLE_METRICS" = "true" ]; then
-    #    CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$VC_METRICS_PORT"
-    #fi
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$VC_METRICS_PORT"
+    fi
 
     # Graffiti breaks if it's in the CMD string instead of here because of spaces
     exec ${CMD} --graffiti="$GRAFFITI"
