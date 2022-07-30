@@ -121,7 +121,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     fi
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
-        CMD="$CMD --payload-builder=$MEV_BOOST_URL"
+        CMD="$CMD --payload-builder-enable --payload-builder-url=$MEV_BOOST_URL"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
