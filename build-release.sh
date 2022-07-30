@@ -116,21 +116,6 @@ build_docker_smartnode() {
 }
 
 
-# Builds the Docker POW Proxy image and pushes it to Docker Hub
-build_docker_pow_proxy() {
-    cd smartnode || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
-
-    echo "Building Docker POW Proxy image..."
-    docker build -t rocketpool/smartnode-pow-proxy:$VERSION-$ARCH -f docker/rocketpool-pow-proxy-dockerfile . || fail "Error building Docker POW Proxy image."
-    echo "done!"
-    echo -n "Pushing to Docker Hub... "
-    docker push rocketpool/smartnode-pow-proxy:$VERSION-$ARCH || fail "Error pushing Docker POW Proxy image to Docker Hub."
-    echo "done!"
-    
-    cd ..
-}
-
-
 # Builds the Docker prune provisioner image and pushes it to Docker Hub
 build_docker_prune_provision() {
     cd smartnode || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
@@ -150,13 +135,10 @@ build_docker_prune_provision() {
 build_docker_manifest() {
     echo -n "Building Docker manifests... "
     rm -f ~/.docker/manifests/docker.io_rocketpool_smartnode-$VERSION
-    rm -f ~/.docker/manifests/docker.io_rocketpool_smartnode-pow-proxy-$VERSION
     docker manifest create rocketpool/smartnode:$VERSION --amend rocketpool/smartnode:$VERSION-amd64 --amend rocketpool/smartnode:$VERSION-arm64
-    docker manifest create rocketpool/smartnode-pow-proxy:$VERSION --amend rocketpool/smartnode-pow-proxy:$VERSION-amd64 --amend rocketpool/smartnode-pow-proxy:$VERSION-arm64
     echo "done!"
     echo -n "Pushing to Docker Hub... "
     docker manifest push --purge rocketpool/smartnode:$VERSION
-    docker manifest push --purge rocketpool/smartnode-pow-proxy:$VERSION
     echo "done!"
 }
 
@@ -206,14 +188,13 @@ case $UNAME_VAL in
 esac
 
 # Parse arguments
-while getopts "acpmndxrfv:" FLAG; do
+while getopts "acpmndrfv:" FLAG; do
     case "$FLAG" in
         a) CLI=true PACKAGES=true DAEMON=true DOCKER=true MANIFEST=true PROXY=true ;;
         c) CLI=true ;;
         p) PACKAGES=true ;;
         m) DAEMON=true ;;
         d) DOCKER=true ;;
-        x) PROXY=true ;;
         n) MANIFEST=true ;;
         r) PRUNE=true ;;
         f) PRUNE_MANIFEST=true ;;
@@ -241,9 +222,6 @@ if [ "$DAEMON" = true ]; then
 fi
 if [ "$DOCKER" = true ]; then
     build_docker_smartnode
-fi
-if [ "$PROXY" = true ]; then
-    build_docker_pow_proxy
 fi
 if [ "$MANIFEST" = true ]; then
     build_docker_manifest

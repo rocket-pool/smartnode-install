@@ -48,10 +48,20 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         cp "/fr-default/lighthouse" "/validators/lighthouse/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --logfile-max-number 0 --beacon-nodes $CC_API_ENDPOINT --suggested-fee-recipient-file /validators/lighthouse/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
+    # Set up the CC + fallback string
+    CC_URL_STRING=$CC_API_ENDPOINT
+    if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
+        CC_URL_STRING="$CC_API_ENDPOINT,$FALLBACK_CC_API_ENDPOINT"
+    fi
+
+    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --logfile-max-number 0 --beacon-nodes $CC_URL_STRING --suggested-fee-recipient $(cat /validators/lighthouse/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger-protection"
+    fi
+
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+        CMD="$CMD --private-tx-proposals"
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
@@ -98,6 +108,9 @@ fi
 # Prysm startup
 if [ "$CC_CLIENT" = "prysm" ]; then
 
+    # Make the Prysm dir
+    mkdir -p /validators/prysm-non-hd/
+
     # Copy the default fee recipient file from the template
     if [ ! -f "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE" ]; then
         cp "/fr-default/prysm" "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE"
@@ -105,8 +118,21 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     # Get rid of the protocol prefix
     CC_RPC_ENDPOINT=$(echo $CC_RPC_ENDPOINT | sed -E 's/.*\:\/\/(.*)/\1/')
+    if [ ! -z "$FALLBACK_CC_RPC_ENDPOINT" ]; then
+        FALLBACK_CC_RPC_ENDPOINT=$(echo $FALLBACK_CC_RPC_ENDPOINT | sed -E 's/.*\:\/\/(.*)/\1/')
+    fi
 
-    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_RPC_ENDPOINT --fee-recipient-config-file /validators/prysm-non-hd/$FEE_RECIPIENT_FILE $VC_ADDITIONAL_FLAGS"
+    # Set up the CC + fallback string
+    CC_URL_STRING=$CC_RPC_ENDPOINT
+    if [ ! -z "$FALLBACK_CC_RPC_ENDPOINT" ]; then
+        CC_URL_STRING="$CC_RPC_ENDPOINT,$FALLBACK_CC_RPC_ENDPOINT"
+    fi
+
+    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --suggested-fee-recipient $(cat /validators/prysm-non-hd/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+        CMD="$CMD --enable-builder"
+    fi
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger"
@@ -138,7 +164,11 @@ if [ "$CC_CLIENT" = "teku" ]; then
         cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-config=/validators/teku/$FEE_RECIPIENT_FILE --validators-proposer-config-refresh-enabled=true $VC_ADDITIONAL_FLAGS"
+    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/teku/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+        CMD="$CMD --validators-builder-registration-default-enabled=true"
+    fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=*"
