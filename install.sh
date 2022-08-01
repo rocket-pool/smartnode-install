@@ -110,15 +110,20 @@ install() {
 
 
 # Parse arguments
-while getopts "dp:n:v:" FLAG; do
+while getopts "dp:u:n:v:" FLAG; do
     case "$FLAG" in
         d) NO_DEPS=true ;;
         p) RP_PATH="$OPTARG" ;;
+        u) DATA_PATH="$OPTARG" ;;
         n) NETWORK="$OPTARG" ;;
         v) PACKAGE_VERSION="$OPTARG" ;;
         *) fail "Incorrect usage." ;;
     esac
 done
+
+if [ -z "$DATA_PATH" ]; then
+    DATA_PATH="$RP_PATH/data"
+fi
 
 
 # Get package files URL
@@ -287,10 +292,10 @@ fi
 
 # Create ~/.rocketpool dir & files
 progress 6 "Creating Rocket Pool user data directory..."
-{ mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
+{ mkdir -p "$DATA_PATH/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
 { mkdir -p "$RP_PATH/runtime" || fail "Could not create the Rocket Pool runtime directory."; } >&2
-{ mkdir -p "$RP_PATH/data/secrets" || fail "Could not create the Rocket Pool secrets directory."; } >&2
-{ mkdir -p "$RP_PATH/data/rewards-trees" || fail "Could not create the Rocket Pool rewards trees directory."; } >&2
+{ mkdir -p "$DATA_PATH/secrets" || fail "Could not create the Rocket Pool secrets directory."; } >&2
+{ mkdir -p "$DATA_PATH/rewards-trees" || fail "Could not create the Rocket Pool rewards trees directory."; } >&2
 
 
 # Download and extract package files
