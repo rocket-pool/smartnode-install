@@ -17,6 +17,8 @@ services:
       - ${ROCKETPOOL_DATA_FOLDER}:/.rocketpool/data
     networks:
       - net
+    environment:
+      - EC_CLIENT=${EC_CLIENT}
     command: "-m 0.0.0.0 -r ${NODE_METRICS_PORT:-9102} node"
     cap_drop:
       - all
