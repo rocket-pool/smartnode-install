@@ -60,7 +60,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
         CMD="$CMD --private-tx-proposals"
     fi
 
@@ -150,7 +150,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/teku/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
     fi
 

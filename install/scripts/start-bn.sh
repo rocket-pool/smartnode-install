@@ -65,7 +65,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
         CMD="$CMD --builder $MEV_BOOST_URL"
     fi
 
@@ -120,7 +120,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
         CMD="$CMD --payload-builder-enable --payload-builder-url=$MEV_BOOST_URL"
     fi
 
@@ -162,7 +162,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         CMD="$CMD --terminal-total-difficulty-override 115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
         CMD="$CMD --http-mev-relay ${MEV_BOOST_URL}"
     fi
 
@@ -194,7 +194,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
     
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" ]; then
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
         CMD="$CMD --Xeb-endpoint=${MEV_BOOST_URL}"
     fi
 
