@@ -11,16 +11,16 @@ services:
     image: ${MEV_BOOST_CONTAINER_TAG}
     container_name: ${COMPOSE_PROJECT_NAME}_mev-boost
     restart: unless-stopped
+    volumes:
+      - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:
       - net
-    entrypoint:   
-      - /app/mev-boost
-      - -${NETWORK}
-      - -addr
-      - 0.0.0.0:${MEV_BOOST_PORT}
-      - -relay-check
-      - -relays
-      - ${MEV_BOOST_RELAYS}
+    environment:
+      - NETWORK=${NETWORK}
+      - MEV_BOOST_PORT=${MEV_BOOST_PORT}
+      - MEV_BOOST_RELAYS=${MEV_BOOST_RELAYS}
+    entrypoint: sh
+    command: "/setup/start-mev-boost.sh"
     cap_drop:
       - all
     cap_add:
