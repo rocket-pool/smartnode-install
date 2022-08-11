@@ -16,7 +16,6 @@ services:
     ports: [ "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/tcp", "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/udp"${BN_OPEN_PORTS} ]
     volumes:
       - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
-      - ${ROCKETPOOL_DATA_FOLDER}/fr-default:/fr-default:ro
       - ${ROCKETPOOL_DATA_FOLDER}/secrets:/secrets:ro
       - eth2clientdata:/ethclient
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
@@ -49,6 +48,7 @@ services:
       - BITFLY_NODE_METRICS_MACHINE_NAME=${BITFLY_NODE_METRICS_MACHINE_NAME}
       - TEKU_JVM_HEAP_SIZE=${TEKU_JVM_HEAP_SIZE}
       - MEV_BOOST_URL=${MEV_BOOST_URL}
+      - RETH_ADDRESS=${RETH_ADDRESS}
     entrypoint: sh
     command: "/setup/start-bn.sh"
     cap_drop:

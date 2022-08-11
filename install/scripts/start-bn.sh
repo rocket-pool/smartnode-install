@@ -56,6 +56,12 @@ if [ ! -f "/secrets/jwtsecret" ]; then
     exit 1
 fi
 
+# Report a missing fee recipient file
+if [ ! -f "/validators/$FEE_RECIPIENT_FILE" ]; then
+    echo "Fee recipient file not found, please wait for the rocketpool_node process to create one."
+    exit 1
+fi
+
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
 
@@ -97,11 +103,6 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     mkdir -p /validators/nimbus/validators
     mkdir -p /validators/nimbus/secrets
 
-    # Copy the default fee recipient file from the template
-    if [ ! -f "/validators/nimbus/$FEE_RECIPIENT_FILE" ]; then
-        cp "/fr-default/nimbus" "/validators/nimbus/$FEE_RECIPIENT_FILE"
-    fi
-
     # Handle checkpoint syncing
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
         # Ignore it if a DB already exists
@@ -114,7 +115,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         fi
     fi
 
-    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/nimbus/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "mainnet" ]; then
         CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"

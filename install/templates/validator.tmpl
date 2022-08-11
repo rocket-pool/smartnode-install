@@ -15,7 +15,6 @@ services:
     stop_grace_period: 3m
     volumes:
       - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
-      - ${ROCKETPOOL_DATA_FOLDER}/fr-default:/fr-default:ro
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:
       - net
@@ -39,6 +38,7 @@ services:
       - BITFLY_NODE_METRICS_SECRET=${BITFLY_NODE_METRICS_SECRET}
       - BITFLY_NODE_METRICS_ENDPOINT=${BITFLY_NODE_METRICS_ENDPOINT}
       - BITFLY_NODE_METRICS_MACHINE_NAME=${BITFLY_NODE_METRICS_MACHINE_NAME}
+      - RETH_ADDRESS=${RETH_ADDRESS}
     entrypoint: sh
     command: "/setup/start-vc.sh"
     cap_drop:

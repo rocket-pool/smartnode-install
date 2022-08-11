@@ -39,14 +39,14 @@ else
     exit 1
 fi
 
+# Report a missing fee recipient file
+if [ ! -f "/validators/$FEE_RECIPIENT_FILE" ]; then
+    echo "Fee recipient file not found, please wait for the rocketpool_node process to create one."
+    exit 1
+fi
 
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
-
-    # Copy the default fee recipient file from the template
-    if [ ! -f "/validators/lighthouse/$FEE_RECIPIENT_FILE" ]; then
-        cp "/fr-default/lighthouse" "/validators/lighthouse/$FEE_RECIPIENT_FILE"
-    fi
 
     # Set up the CC + fallback string
     CC_URL_STRING=$CC_API_ENDPOINT
@@ -54,7 +54,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CC_URL_STRING="$CC_API_ENDPOINT,$FALLBACK_CC_API_ENDPOINT"
     fi
 
-    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --logfile-max-number 0 --beacon-nodes $CC_URL_STRING --suggested-fee-recipient $(cat /validators/lighthouse/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    CMD="/usr/local/bin/lighthouse validator --network $LH_NETWORK --datadir /validators/lighthouse --init-slashing-protection --logfile-max-number 0 --beacon-nodes $CC_URL_STRING --suggested-fee-recipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger-protection"
@@ -95,11 +95,6 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     # Make the Prysm dir
     mkdir -p /validators/prysm-non-hd/
 
-    # Copy the default fee recipient file from the template
-    if [ ! -f "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE" ]; then
-        cp "/fr-default/prysm" "/validators/prysm-non-hd/$FEE_RECIPIENT_FILE"
-    fi
-
     # Get rid of the protocol prefix
     CC_RPC_ENDPOINT=$(echo $CC_RPC_ENDPOINT | sed -E 's/.*\:\/\/(.*)/\1/')
     if [ ! -z "$FALLBACK_CC_RPC_ENDPOINT" ]; then
@@ -112,7 +107,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         CC_URL_STRING="$CC_RPC_ENDPOINT,$FALLBACK_CC_RPC_ENDPOINT"
     fi
 
-    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --suggested-fee-recipient $(cat /validators/prysm-non-hd/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --suggested-fee-recipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
         CMD="$CMD --enable-builder"
@@ -143,12 +138,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
     # Remove any lock files that were left over accidentally after an unclean shutdown
     rm -f /validators/teku/keys/*.lock
 
-    # Copy the default fee recipient file from the template
-    if [ ! -f "/validators/teku/$FEE_RECIPIENT_FILE" ]; then
-        cp "/fr-default/teku" "/validators/teku/$FEE_RECIPIENT_FILE"
-    fi
-
-    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/teku/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
