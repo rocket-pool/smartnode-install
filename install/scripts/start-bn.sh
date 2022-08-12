@@ -86,7 +86,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
         CMD="$CMD --checkpoint-sync-url $CHECKPOINT_SYNC_URL"
     fi
-    
+
     if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
         CMD="$CMD --monitoring-endpoint $BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
     fi
@@ -189,14 +189,14 @@ fi
 # Teku startup
 if [ "$CC_CLIENT" = "teku" ]; then
 
-    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret --validators-proposer-default-fee-recipient=$RETH_ADDRESS $BN_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "mainnet" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
-    
+
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
-        CMD="$CMD --Xeb-endpoint=${MEV_BOOST_URL}"
+        CMD="$CMD --builder-endpoint=${MEV_BOOST_URL}"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
@@ -204,7 +204,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$BN_METRICS_PORT --metrics-host-allowlist=*" 
+        CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$BN_METRICS_PORT --metrics-host-allowlist=*"
     fi
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
