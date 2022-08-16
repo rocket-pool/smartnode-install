@@ -48,7 +48,7 @@ fi
 
 
 # The total number of steps in the installation process
-TOTAL_STEPS="8"
+TOTAL_STEPS="9"
 # The Rocket Pool user data path
 RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
@@ -313,6 +313,10 @@ progress 8 "Copying package files to Rocket Pool user data directory..."
 { cp "$PACKAGE_FILES_PATH/grafana-prometheus-datasource.yml" "$PACKAGE_FILES_PATH/prometheus.tmpl" "$RP_PATH" || fail "Could not copy base files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/scripts" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 { touch -a "$RP_PATH/.firstrun" || fail "Could not create the first-run flag file."; } >&2
+
+# Clean up unnecessary files from old installations
+progress 9 "Cleaning up obsolete files from previous installs..."
+{ rm -rf "$DATA_PATH/fr-default" || echo "NOTE: Could not remove '$DATA_PATH/fr-default' which is no longer needed."; } >&2
 
 }
 
