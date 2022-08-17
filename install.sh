@@ -48,7 +48,7 @@ fi
 
 
 # The total number of steps in the installation process
-TOTAL_STEPS="8"
+TOTAL_STEPS="9"
 # The Rocket Pool user data path
 RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
@@ -110,15 +110,20 @@ install() {
 
 
 # Parse arguments
-while getopts "dp:n:v:" FLAG; do
+while getopts "dp:u:n:v:" FLAG; do
     case "$FLAG" in
         d) NO_DEPS=true ;;
         p) RP_PATH="$OPTARG" ;;
+        u) DATA_PATH="$OPTARG" ;;
         n) NETWORK="$OPTARG" ;;
         v) PACKAGE_VERSION="$OPTARG" ;;
         *) fail "Incorrect usage." ;;
     esac
 done
+
+if [ -z "$DATA_PATH" ]; then
+    DATA_PATH="$RP_PATH/data"
+fi
 
 
 # Get package files URL
@@ -287,10 +292,10 @@ fi
 
 # Create ~/.rocketpool dir & files
 progress 6 "Creating Rocket Pool user data directory..."
-{ mkdir -p "$RP_PATH/data/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
+{ mkdir -p "$DATA_PATH/validators" || fail "Could not create the Rocket Pool user data directory."; } >&2
 { mkdir -p "$RP_PATH/runtime" || fail "Could not create the Rocket Pool runtime directory."; } >&2
-{ mkdir -p "$RP_PATH/data/secrets" || fail "Could not create the Rocket Pool secrets directory."; } >&2
-{ mkdir -p "$RP_PATH/data/rewards-trees" || fail "Could not create the Rocket Pool rewards trees directory."; } >&2
+{ mkdir -p "$DATA_PATH/secrets" || fail "Could not create the Rocket Pool secrets directory."; } >&2
+{ mkdir -p "$DATA_PATH/rewards-trees" || fail "Could not create the Rocket Pool rewards trees directory."; } >&2
 
 
 # Download and extract package files
@@ -308,6 +313,10 @@ progress 8 "Copying package files to Rocket Pool user data directory..."
 { cp "$PACKAGE_FILES_PATH/grafana-prometheus-datasource.yml" "$PACKAGE_FILES_PATH/prometheus.tmpl" "$RP_PATH" || fail "Could not copy base files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/scripts" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 { touch -a "$RP_PATH/.firstrun" || fail "Could not create the first-run flag file."; } >&2
+
+# Clean up unnecessary files from old installations
+progress 9 "Cleaning up obsolete files from previous installs..."
+{ rm -rf "$DATA_PATH/fr-default" || echo "NOTE: Could not remove '$DATA_PATH/fr-default' which is no longer needed."; } >&2
 
 }
 

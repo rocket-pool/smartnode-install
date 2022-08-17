@@ -15,7 +15,6 @@ services:
     stop_grace_period: 3m
     volumes:
       - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
-      - ${ROCKETPOOL_DATA_FOLDER}/fr-default:/fr-default:ro
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:
       - net
