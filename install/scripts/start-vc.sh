@@ -89,7 +89,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         cp "/fr-default/nimbus" "/validators/nimbus/$FEE_RECIPIENT_FILE"
     fi
 
-    CMD="/home/user/nimbus-eth2/build/nimbus_validator_client --non-interactive --beacon-node=$CC_API_ENDPOINT --data-dir=/ethclient/nimbus_vc --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --suggested-fee-recipient=$(cat /validators/nimbus/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    CMD="/home/user/nimbus-eth2/build/nimbus_validator_client --non-interactive --beacon-node=$CC_API_ENDPOINT --data-dir=/ethclient/nimbus_vc --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$VC_METRICS_PORT"

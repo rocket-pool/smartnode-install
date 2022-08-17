@@ -105,8 +105,9 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     fi
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
-        CMD="$CMD --payload-builder-enable --payload-builder-url=$MEV_BOOST_URL"
+        CMD="$CMD --payload-builder-url=$MEV_BOOST_URL"
     fi
+    # --payload-builder-enable
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
         CMD="$CMD --max-peers=$BN_MAX_PEERS"
@@ -119,6 +120,8 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     if [ ! -z "$EXTERNAL_IP" ]; then
         CMD="$CMD --nat=extip:$EXTERNAL_IP"
     fi
+
+    exec ${CMD}
 
 fi
 
