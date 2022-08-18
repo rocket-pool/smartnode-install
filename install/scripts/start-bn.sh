@@ -1,20 +1,6 @@
 #!/bin/sh
 # This script launches ETH2 beacon clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
-# Only show client identifier if version string is under 9 characters
-version_length=`echo -n $ROCKET_POOL_VERSION | wc -c`
-if [ $version_length -lt 8 ]; then
-    EC_INITIAL=`echo -n $EC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
-    CC_INITIAL=`echo -n $CC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
-    IDENTIFIER="-${EC_INITIAL}${CC_INITIAL}"
-fi
-
-# Get graffiti text
-GRAFFITI="RP$IDENTIFIER $ROCKET_POOL_VERSION"
-if [ ! -z "$CUSTOM_GRAFFITI" ]; then
-    GRAFFITI="$GRAFFITI ($CUSTOM_GRAFFITI)"
-fi
-
 # Performance tuning for ARM systems
 UNAME_VAL=$(uname -m)
 if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
