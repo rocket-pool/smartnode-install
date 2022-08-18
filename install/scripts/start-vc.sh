@@ -84,12 +84,12 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     mkdir -p /validators/nimbus/validators
     mkdir -p /validators/nimbus/secrets
 
-    # Copy the default fee recipient file from the template
-    if [ ! -f "/validators/nimbus/$FEE_RECIPIENT_FILE" ]; then
-        cp "/fr-default/nimbus" "/validators/nimbus/$FEE_RECIPIENT_FILE"
+    # Set up the fallback arg
+    if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
+        FALLBACK_CC_ARG="--beacon-node=$FALLBACK_CC_API_ENDPOINT"
     fi
 
-    CMD="/home/user/nimbus-eth2/build/nimbus_validator_client --non-interactive --beacon-node=$CC_API_ENDPOINT --data-dir=/ethclient/nimbus_vc --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    CMD="/home/user/nimbus-eth2/build/nimbus_validator_client --non-interactive --beacon-node=$CC_API_ENDPOINT $FALLBACK_CC_ARG --data-dir=/ethclient/nimbus_vc --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$VC_METRICS_PORT"
