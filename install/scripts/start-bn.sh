@@ -10,23 +10,27 @@ fi
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
     LH_NETWORK="mainnet"
+    LODESTAR_NETWORK="mainnet"
     NIMBUS_NETWORK="mainnet"
     PRYSM_NETWORK="--mainnet"
     TEKU_NETWORK="mainnet"
     PRYSM_GENESIS_STATE=""
 elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
+    LODESTAR_NETWORK="prater"
     NIMBUS_NETWORK="prater"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
     PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-prater.ssz"
 elif [ "$NETWORK" = "kiln" ]; then
     LH_NETWORK="kiln"
+    LODESTAR_NETWORK="kiln"
     NIMBUS_NETWORK=""
     PRYSM_NETWORK=""
     TEKU_NETWORK="kiln"
 elif [ "$NETWORK" = "ropsten" ]; then
     LH_NETWORK="ropsten"
+    LODESTAR_NETWORK="ropsten"
     NIMBUS_NETWORK="ropsten"
     PRYSM_NETWORK="--ropsten"
     TEKU_NETWORK="ropsten"
@@ -81,6 +85,34 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
 fi
 
+# Lodestar startup
+if [ "$CC_CLIENT" = "lodestar" ]; then
+
+    CMD="$PERF_PREFIX /usr/app/node_modules/.bin/lodestar beacon --network $LODESTAR_NETWORK --rootDir /ethclient/lodestar --port $BN_P2P_PORT --execution.urls $EC_ENGINE_ENDPOINT --api.rest.enabled --api.rest.address 0.0.0.0 --api.rest.port ${BN_API_PORT:-5052} --jwt-secret /secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
+
+    if [ "$NETWORK" = "mainnet" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    fi
+
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+        CMD="$CMD --builder.enabled --builder.urls $MEV_BOOST_URL"
+    fi
+
+    if [ ! -z "$BN_MAX_PEERS" ]; then
+        CMD="$CMD --network.targetPeers $BN_MAX_PEERS --network.maxPeers $BN_MAX_PEERS"
+    fi
+
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $BN_METRICS_PORT"
+    fi
+
+    if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
+        CMD="$CMD --weakSubjectivityServerUrl $CHECKPOINT_SYNC_URL --weakSubjectivitySyncLatest"
+    fi
+
+    exec ${CMD}
+
+fi
 
 # Nimbus startup
 if [ "$CC_CLIENT" = "nimbus" ]; then
@@ -128,7 +160,6 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
 
 fi
 
-
 # Prysm startup
 if [ "$CC_CLIENT" = "prysm" ]; then
 
@@ -172,7 +203,6 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     exec ${CMD}
 
 fi
-
 
 # Teku startup
 if [ "$CC_CLIENT" = "teku" ]; then

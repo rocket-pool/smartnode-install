@@ -6,18 +6,22 @@ GWW_GRAFFITI_FILE="/addons/gww/graffiti.txt"
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
     LH_NETWORK="mainnet"
+    LODESTAR_NETWORK="mainnet"
     PRYSM_NETWORK="--mainnet"
     TEKU_NETWORK="mainnet"
 elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
+    LODESTAR_NETWORK="prater"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
 elif [ "$NETWORK" = "kiln" ]; then
     LH_NETWORK="kiln"
+    LODESTAR_NETWORK="kiln"
     PRYSM_NETWORK="--kiln"
     TEKU_NETWORK="kiln"
 elif [ "$NETWORK" = "ropsten" ]; then
     LH_NETWORK="ropsten"
+    LODESTAR_NETWORK="ropsten"
     NIMBUS_NETWORK="ropsten"
     PRYSM_NETWORK="--ropsten"
     TEKU_NETWORK="ropsten"
@@ -63,6 +67,30 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         exec ${CMD} --graffiti-file $GWW_GRAFFITI_FILE
     else
         exec ${CMD} --graffiti "$GRAFFITI"
+    fi
+
+fi
+
+# Lodestar startup
+if [ "$CC_CLIENT" = "lodestar" ]; then
+
+    # Set up the CC + fallback string
+    if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
+        FALLBACK_CC_STRING="--server $FALLBACK_CC_API_ENDPOINT"
+    fi
+
+    CMD="/usr/app/node_modules/.bin/lodestar validator --network $LODESTAR_NETWORK --rootDir /validators/lodestar --server $CC_API_ENDPOINT $FALLBACK_CC_STRING --defaultFeeRecipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+
+    if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
+        CMD="$CMD --doppelgangerProtectionEnabled"
+    fi
+
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+        CMD="$CMD --builder.enabled"
+    fi
+
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $BN_METRICS_PORT"
     fi
 
 fi
