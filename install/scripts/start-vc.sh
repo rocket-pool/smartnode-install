@@ -90,7 +90,7 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $BN_METRICS_PORT"
+        CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $VC_METRICS_PORT"
     fi
 
     exec ${CMD} --graffiti "$GRAFFITI"
