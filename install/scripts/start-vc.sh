@@ -93,6 +93,8 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $BN_METRICS_PORT"
     fi
 
+    exec ${CMD} --graffiti "$GRAFFITI"
+
 fi
 
 
