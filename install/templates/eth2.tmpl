@@ -51,6 +51,7 @@ services:
       - RETH_ADDRESS=${RETH_ADDRESS}
       - GRAFFITI=${GRAFFITI}
       - ADDON_GWW_ENABLED=${ADDON_GWW_ENABLED}
+      - TTD_OVERRIDE=${TTD_OVERRIDE}
     entrypoint: sh
     command: "/setup/start-bn.sh"
     cap_drop:
