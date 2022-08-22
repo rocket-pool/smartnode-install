@@ -53,8 +53,8 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --execution-jwt=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    if [ ! -z "$TTD_OVERRIDE" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
@@ -104,7 +104,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+        CMD="$CMD --terminal-total-difficulty-override=58750000000000000000000"
     fi
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
@@ -146,7 +146,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret --api-timeout 600 $BN_ADDITIONAL_FLAGS"
 
     if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override 115792089237316195423570985008687907853269984665640564039457584007913129638912"
+        CMD="$CMD --terminal-total-difficulty-override 58750000000000000000000"
     fi
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
