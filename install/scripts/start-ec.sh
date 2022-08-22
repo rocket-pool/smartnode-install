@@ -68,8 +68,8 @@ if [ "$CLIENT" = "geth" ]; then
 
         CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3 --http.corsdomain=* --ws --ws.addr 0.0.0.0 --ws.port ${EC_WS_PORT:-8546} --ws.api eth,net,personal,web3 --authrpc.addr 0.0.0.0 --authrpc.port ${EC_ENGINE_PORT:-8551} --authrpc.jwtsecret /secrets/jwtsecret --authrpc.vhosts=* --pprof $EC_ADDITIONAL_FLAGS"
 
-        if [ "$NETWORK" = "mainnet" ]; then
-            CMD="$CMD --override.terminaltotaldifficulty 58750000000000000000000"
+        if [ ! -z "$TTD_OVERRIDE" ]; then
+            CMD="$CMD --override.terminaltotaldifficulty $TTD_OVERRIDE"
         fi
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
