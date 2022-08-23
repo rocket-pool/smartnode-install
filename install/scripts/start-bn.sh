@@ -57,7 +57,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --builder $MEV_BOOST_URL"
     fi
 
@@ -107,7 +107,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --payload-builder-enable --payload-builder-url=$MEV_BOOST_URL"
     fi
 
@@ -143,16 +143,14 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         fi
     fi
 
-    CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret --api-timeout 600 $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret --api-timeout 600 $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$TTD_OVERRIDE" ]; then
         CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
-        CMD="$CMD --execution-endpoint $EC_ENGINE_ENDPOINT --http-mev-relay $MEV_BOOST_URL"
-    else
-        CMD="$CMD --http-web3provider $EC_ENGINE_ENDPOINT"
+    if [ ! -z "$MEV_BOOST_URL" ]; then
+        CMD="$CMD --http-mev-relay $MEV_BOOST_URL"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
@@ -183,8 +181,8 @@ if [ "$CC_CLIENT" = "teku" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=$TTD_OVERRIDE"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
-        CMD="$CMD --builder-endpoint=${MEV_BOOST_URL}"
+    if [ ! -z "$MEV_BOOST_URL" ]; then
+        CMD="$CMD --builder-endpoint=$MEV_BOOST_URL"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then

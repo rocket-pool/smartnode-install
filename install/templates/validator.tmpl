@@ -41,6 +41,7 @@ services:
       - BITFLY_NODE_METRICS_MACHINE_NAME=${BITFLY_NODE_METRICS_MACHINE_NAME}
       - GRAFFITI=${GRAFFITI}
       - ADDON_GWW_ENABLED=${ADDON_GWW_ENABLED}
+      - MEV_BOOST_URL=${MEV_BOOST_URL}
     entrypoint: sh
     command: "/setup/start-vc.sh"
     cap_drop:
