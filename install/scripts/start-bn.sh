@@ -103,8 +103,8 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
 
     CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=58750000000000000000000"
+    if [ ! -z "$TTD_OVERRIDE" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
@@ -145,8 +145,8 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret --api-timeout 600 $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override 58750000000000000000000"
+    if [ ! -z "$TTD_OVERRIDE" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
     if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
