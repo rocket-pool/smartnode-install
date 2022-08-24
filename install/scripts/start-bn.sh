@@ -108,7 +108,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
-        CMD="$CMD --payload-builder-enable --payload-builder-url=$MEV_BOOST_URL"
+        CMD="$CMD --payload-builder --payload-builder-url=$MEV_BOOST_URL"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
