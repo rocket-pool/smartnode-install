@@ -139,7 +139,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
         CC_URL_STRING="$CC_API_ENDPOINT,$FALLBACK_CC_API_ENDPOINT"
     fi
 
-    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoints=$CC_URL_STRING --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoints=$CC_URL_STRING --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
