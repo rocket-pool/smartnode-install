@@ -32,9 +32,6 @@ if [ ! -f "/validators/$FEE_RECIPIENT_FILE" ]; then
     exit 1
 fi
 
-# Set up the Graffiti file with the proper permissions
-chmod 666 $GWW_GRAFFITI_FILE
-
 
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
