@@ -300,13 +300,13 @@ progress 6 "Creating Rocket Pool user data directory..."
 
 # Download and extract package files
 progress 7 "Downloading Rocket Pool package files..."
-{ curl -L "$PACKAGE_URL" | tar -xpJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."; } >&2
+{ curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."; } >&2
 { test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool package files."; } >&2
 
 
 # Copy package files
 progress 8 "Copying package files to Rocket Pool user data directory..."
-{ cp -a "$PACKAGE_FILES_PATH/addons" "$RP_PATH" || fail "Could not copy addons folder to the Rocket Pool user data directory."; } >&2
+{ cp -r "$PACKAGE_FILES_PATH/addons" "$RP_PATH" || fail "Could not copy addons folder to the Rocket Pool user data directory."; } >&2
 { cp -r -n "$PACKAGE_FILES_PATH/override" "$RP_PATH" || fail "Could not copy new override files to the Rocket Pool user data directory."; } >&2
 { cp -r "$PACKAGE_FILES_PATH/scripts" "$RP_PATH" || fail "Could not copy scripts folder to the Rocket Pool user data directory."; } >&2
 { cp -r "$PACKAGE_FILES_PATH/templates" "$RP_PATH" || fail "Could not copy templates folder to the Rocket Pool user data directory."; } >&2
