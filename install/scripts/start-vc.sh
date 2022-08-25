@@ -32,6 +32,10 @@ if [ ! -f "/validators/$FEE_RECIPIENT_FILE" ]; then
     exit 1
 fi
 
+# Set up the Graffiti file with the proper permissions
+chmod 666 $GWW_GRAFFITI_FILE
+
+
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
 
@@ -60,7 +64,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
     fi
 
     if [ "$ADDON_GWW_ENABLED" = "true" ]; then
-        chmod 666 $GWW_GRAFFITI_FILE
+        echo "default: $GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Lighthouse
         exec ${CMD} --graffiti-file $GWW_GRAFFITI_FILE
     else
         exec ${CMD} --graffiti "$GRAFFITI"
@@ -116,8 +120,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     fi
 
     if [ "$ADDON_GWW_ENABLED" = "true" ]; then
-        chmod 666 $GWW_GRAFFITI_FILE
-        exec ${CMD} --graffiti-file=$GWW_GRAFFITI_FILE
+        echo -e "ordered: \n  - $GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Prysm
     else
         exec ${CMD} --graffiti "$GRAFFITI"
     fi
@@ -156,7 +159,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
     fi
 
     if [ "$ADDON_GWW_ENABLED" = "true" ]; then
-        chmod 666 $GWW_GRAFFITI_FILE
+        echo "$GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Teku
         exec ${CMD} --validators-graffiti-file=$GWW_GRAFFITI_FILE
     else
         exec ${CMD} --validators-graffiti="$GRAFFITI"
