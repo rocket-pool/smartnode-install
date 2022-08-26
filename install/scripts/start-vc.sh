@@ -87,8 +87,8 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         CMD="$CMD --doppelgangerProtectionEnabled"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
-        CMD="$CMD --builder.enabled"
+    if [ ! -z "$MEV_BOOST_URL" ]; then
+        CMD="$CMD --builder"
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then

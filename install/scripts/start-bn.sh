@@ -98,8 +98,8 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
-        CMD="$CMD --builder.enabled --builder.urls $MEV_BOOST_URL"
+    if [ ! -z "$MEV_BOOST_URL" ]; then
+        CMD="$CMD --builder --builder.urls $MEV_BOOST_URL"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
