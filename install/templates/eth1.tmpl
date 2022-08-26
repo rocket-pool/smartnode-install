@@ -39,6 +39,7 @@ services:
       - EXTERNAL_IP=${EXTERNAL_IP}
       - ENABLE_METRICS=${ENABLE_METRICS}
       - EC_METRICS_PORT=${EC_METRICS_PORT}
+      - TTD_OVERRIDE=${TTD_OVERRIDE}
     entrypoint: sh
     command: "/setup/start-ec.sh"
     cap_drop:

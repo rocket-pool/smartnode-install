@@ -21,7 +21,7 @@ services:
       - --input_url=${ADDON_GWW_INPUT_URL}
       - --consensus_client=${CC_CLIENT}
       - --nimbus_url=http://${CC_HOSTNAME:-eth2}:${BN_API_PORT:-5052}
-      - --graffiti_prefix=${GRAFFITI}
+      - --graffiti_prefix=${GRAFFITI_PREFIX}
       - --network=${NETWORK}
       - --update_wall_time=${ADDON_GWW_UPDATE_WALL_TIME}
       - --update_input_time=${ADDON_GWW_UPDATE_INPUT_TIME}

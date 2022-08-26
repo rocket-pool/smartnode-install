@@ -48,7 +48,7 @@ fi
 
 
 # The total number of steps in the installation process
-TOTAL_STEPS="9"
+TOTAL_STEPS="10"
 # The Rocket Pool user data path
 RP_PATH="$HOME/.rocketpool"
 # The default smart node package version to download
@@ -300,13 +300,13 @@ progress 6 "Creating Rocket Pool user data directory..."
 
 # Download and extract package files
 progress 7 "Downloading Rocket Pool package files..."
-{ curl -L "$PACKAGE_URL" | tar -xpJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."; } >&2
+{ curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool package files."; } >&2
 { test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool package files."; } >&2
 
 
 # Copy package files
 progress 8 "Copying package files to Rocket Pool user data directory..."
-{ cp -a "$PACKAGE_FILES_PATH/addons" "$RP_PATH" || fail "Could not copy addons folder to the Rocket Pool user data directory."; } >&2
+{ cp -r "$PACKAGE_FILES_PATH/addons" "$RP_PATH" || fail "Could not copy addons folder to the Rocket Pool user data directory."; } >&2
 { cp -r -n "$PACKAGE_FILES_PATH/override" "$RP_PATH" || fail "Could not copy new override files to the Rocket Pool user data directory."; } >&2
 { cp -r "$PACKAGE_FILES_PATH/scripts" "$RP_PATH" || fail "Could not copy scripts folder to the Rocket Pool user data directory."; } >&2
 { cp -r "$PACKAGE_FILES_PATH/templates" "$RP_PATH" || fail "Could not copy templates folder to the Rocket Pool user data directory."; } >&2
@@ -314,8 +314,12 @@ progress 8 "Copying package files to Rocket Pool user data directory..."
 { find "$RP_PATH/scripts" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 { touch -a "$RP_PATH/.firstrun" || fail "Could not create the first-run flag file."; } >&2
 
+# Set file permissions
+progress 9 "Setting file permissions..."
+{ chown 10000:10000 "$RP_PATH/addons/gww/graffiti.txt" || fail "Could not change owner of the GWW addon's graffiti file."; } >&2
+
 # Clean up unnecessary files from old installations
-progress 9 "Cleaning up obsolete files from previous installs..."
+progress 10 "Cleaning up obsolete files from previous installs..."
 { rm -rf "$DATA_PATH/fr-default" || echo "NOTE: Could not remove '$DATA_PATH/fr-default' which is no longer needed."; } >&2
 
 }

@@ -36,6 +36,7 @@ if [ ! -f "/validators/$FEE_RECIPIENT_FILE" ]; then
     exit 1
 fi
 
+
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
 
@@ -51,7 +52,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --private-tx-proposals"
     fi
 
@@ -64,6 +65,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
     fi
 
     if [ "$ADDON_GWW_ENABLED" = "true" ]; then
+        echo "default: $GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Lighthouse
         exec ${CMD} --graffiti-file $GWW_GRAFFITI_FILE
     else
         exec ${CMD} --graffiti "$GRAFFITI"
@@ -130,7 +132,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --suggested-fee-recipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --enable-builder"
     fi
 
@@ -145,7 +147,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     fi
 
     if [ "$ADDON_GWW_ENABLED" = "true" ]; then
-        exec ${CMD} --graffiti-file=$GWW_GRAFFITI_FILE
+        echo -e "ordered: \n  - $GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Prysm
     else
         exec ${CMD} --graffiti "$GRAFFITI"
     fi
@@ -163,9 +165,15 @@ if [ "$CC_CLIENT" = "teku" ]; then
     # Remove any lock files that were left over accidentally after an unclean shutdown
     rm -f /validators/teku/keys/*.lock
 
-    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    # Set up the CC + fallback string
+    CC_URL_STRING=$CC_API_ENDPOINT
+    if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
+        CC_URL_STRING="$CC_API_ENDPOINT,$FALLBACK_CC_API_ENDPOINT"
+    fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoints=$CC_URL_STRING --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
     fi
 
@@ -178,6 +186,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
     fi
 
     if [ "$ADDON_GWW_ENABLED" = "true" ]; then
+        echo "$GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Teku
         exec ${CMD} --validators-graffiti-file=$GWW_GRAFFITI_FILE
     else
         exec ${CMD} --validators-graffiti="$GRAFFITI"
