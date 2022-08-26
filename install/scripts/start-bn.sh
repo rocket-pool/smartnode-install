@@ -1,7 +1,10 @@
 #!/bin/sh
 # This script launches ETH2 beacon clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> lodestar
 # Performance tuning for ARM systems
 UNAME_VAL=$(uname -m)
 if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
@@ -11,23 +14,27 @@ fi
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
     LH_NETWORK="mainnet"
+    LODESTAR_NETWORK="mainnet"
     NIMBUS_NETWORK="mainnet"
     PRYSM_NETWORK="--mainnet"
     TEKU_NETWORK="mainnet"
     PRYSM_GENESIS_STATE=""
 elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
+    LODESTAR_NETWORK="prater"
     NIMBUS_NETWORK="prater"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
     PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-prater.ssz"
 elif [ "$NETWORK" = "kiln" ]; then
     LH_NETWORK="kiln"
+    LODESTAR_NETWORK="kiln"
     NIMBUS_NETWORK=""
     PRYSM_NETWORK=""
     TEKU_NETWORK="kiln"
 elif [ "$NETWORK" = "ropsten" ]; then
     LH_NETWORK="ropsten"
+    LODESTAR_NETWORK="ropsten"
     NIMBUS_NETWORK="ropsten"
     PRYSM_NETWORK="--ropsten"
     TEKU_NETWORK="ropsten"
@@ -54,11 +61,11 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --execution-jwt=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    if [ ! -z "$TTD_OVERRIDE" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --builder $MEV_BOOST_URL"
     fi
 
@@ -82,6 +89,34 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
 fi
 
+# Lodestar startup
+if [ "$CC_CLIENT" = "lodestar" ]; then
+
+    CMD="$PERF_PREFIX /usr/app/node_modules/.bin/lodestar beacon --network $LODESTAR_NETWORK --rootDir /ethclient/lodestar --port $BN_P2P_PORT --execution.urls $EC_ENGINE_ENDPOINT --api.rest.enabled --api.rest.address 0.0.0.0 --api.rest.port ${BN_API_PORT:-5052} --jwt-secret /secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
+
+    if [ "$NETWORK" = "mainnet" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    fi
+
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+        CMD="$CMD --builder.enabled --builder.urls $MEV_BOOST_URL"
+    fi
+
+    if [ ! -z "$BN_MAX_PEERS" ]; then
+        CMD="$CMD --network.targetPeers $BN_MAX_PEERS --network.maxPeers $BN_MAX_PEERS"
+    fi
+
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $BN_METRICS_PORT"
+    fi
+
+    if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
+        CMD="$CMD --weakSubjectivityServerUrl $CHECKPOINT_SYNC_URL --weakSubjectivitySyncLatest"
+    fi
+
+    exec ${CMD}
+
+fi
 
 # Nimbus startup
 if [ "$CC_CLIENT" = "nimbus" ]; then
@@ -100,11 +135,11 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
 
     CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    if [ ! -z "$TTD_OVERRIDE" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --payload-builder --payload-builder-url=$MEV_BOOST_URL"
     fi
 
@@ -124,7 +159,6 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
 
 fi
 
-
 # Prysm startup
 if [ "$CC_CLIENT" = "prysm" ]; then
 
@@ -139,16 +173,14 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         fi
     fi
 
-    CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret --api-timeout 600 $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret --api-timeout 600 $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override 115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    if [ ! -z "$TTD_OVERRIDE" ]; then
+        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
-        CMD="$CMD --execution-endpoint $EC_ENGINE_ENDPOINT --http-mev-relay $MEV_BOOST_URL"
-    else
-        CMD="$CMD --http-web3provider $EC_ENGINE_ENDPOINT"
+    if [ ! -z "$MEV_BOOST_URL" ]; then
+        CMD="$CMD --http-mev-relay $MEV_BOOST_URL"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
@@ -169,18 +201,17 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
 fi
 
-
 # Teku startup
 if [ "$CC_CLIENT" = "teku" ]; then
 
-    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret --validators-proposer-default-fee-recipient=$RETH_ADDRESS $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --data-storage-mode=archive --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret --validators-proposer-default-fee-recipient=$RETH_ADDRESS $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    if [ ! -z "$TTD_OVERRIDE" ]; then
+        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=$TTD_OVERRIDE"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
-        CMD="$CMD --builder-endpoint=${MEV_BOOST_URL}"
+    if [ ! -z "$MEV_BOOST_URL" ]; then
+        CMD="$CMD --builder-endpoint=$MEV_BOOST_URL"
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then

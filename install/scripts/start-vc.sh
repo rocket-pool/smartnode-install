@@ -1,36 +1,27 @@
 #!/bin/sh
 # This script launches ETH2 validator clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
-
-# only show client identifier if version string is under 9 characters
-version_length=`echo -n $ROCKET_POOL_VERSION | wc -c`
-if [ $version_length -lt 8 ]; then
-    EC_INITIAL=`echo -n $EC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
-    CC_INITIAL=`echo -n $CC_CLIENT | head -c 1 | tr [a-z] [A-Z]`
-    IDENTIFIER="-${EC_INITIAL}${CC_INITIAL}"
-fi
-
-# Get graffiti text
-GRAFFITI="RP$IDENTIFIER $ROCKET_POOL_VERSION"
-if [ ! -z "$CUSTOM_GRAFFITI" ]; then
-    GRAFFITI="$GRAFFITI ($CUSTOM_GRAFFITI)"
-fi
+GWW_GRAFFITI_FILE="/addons/gww/graffiti.txt"
 
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
     LH_NETWORK="mainnet"
+    LODESTAR_NETWORK="mainnet"
     PRYSM_NETWORK="--mainnet"
     TEKU_NETWORK="mainnet"
 elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
+    LODESTAR_NETWORK="prater"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
 elif [ "$NETWORK" = "kiln" ]; then
     LH_NETWORK="kiln"
+    LODESTAR_NETWORK="kiln"
     PRYSM_NETWORK="--kiln"
     TEKU_NETWORK="kiln"
 elif [ "$NETWORK" = "ropsten" ]; then
     LH_NETWORK="ropsten"
+    LODESTAR_NETWORK="ropsten"
     NIMBUS_NETWORK="ropsten"
     PRYSM_NETWORK="--ropsten"
     TEKU_NETWORK="ropsten"
@@ -44,6 +35,7 @@ if [ ! -f "/validators/$FEE_RECIPIENT_FILE" ]; then
     echo "Fee recipient file not found, please wait for the rocketpool_node process to create one."
     exit 1
 fi
+
 
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
@@ -60,7 +52,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --private-tx-proposals"
     fi
 
@@ -70,6 +62,37 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
         CMD="$CMD --monitoring-endpoint $BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
+    fi
+
+    if [ "$ADDON_GWW_ENABLED" = "true" ]; then
+        echo "default: $GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Lighthouse
+        exec ${CMD} --graffiti-file $GWW_GRAFFITI_FILE
+    else
+        exec ${CMD} --graffiti "$GRAFFITI"
+    fi
+
+fi
+
+# Lodestar startup
+if [ "$CC_CLIENT" = "lodestar" ]; then
+
+    # Set up the CC + fallback string
+    if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
+        FALLBACK_CC_STRING="--server $FALLBACK_CC_API_ENDPOINT"
+    fi
+
+    CMD="/usr/app/node_modules/.bin/lodestar validator --network $LODESTAR_NETWORK --rootDir /validators/lodestar --server $CC_API_ENDPOINT $FALLBACK_CC_STRING --keystoresDir /validators/lodestar/validators --secretsDir /validators/lodestar/secrets --defaultFeeRecipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+
+    if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
+        CMD="$CMD --doppelgangerProtectionEnabled"
+    fi
+
+    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+        CMD="$CMD --builder.enabled"
+    fi
+
+    if [ "$ENABLE_METRICS" = "true" ]; then
+        CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $VC_METRICS_PORT"
     fi
 
     exec ${CMD} --graffiti "$GRAFFITI"
@@ -121,7 +144,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --suggested-fee-recipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --enable-builder"
     fi
 
@@ -135,7 +158,11 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         CMD="$CMD --disable-account-metrics"
     fi
 
-    exec ${CMD} --graffiti "$GRAFFITI"
+    if [ "$ADDON_GWW_ENABLED" = "true" ]; then
+        echo -e "ordered: \n  - $GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Prysm
+    else
+        exec ${CMD} --graffiti "$GRAFFITI"
+    fi
 
 fi
 
@@ -150,9 +177,15 @@ if [ "$CC_CLIENT" = "teku" ]; then
     # Remove any lock files that were left over accidentally after an unclean shutdown
     rm -f /validators/teku/keys/*.lock
 
-    CMD="/opt/teku/bin/teku validator-client --network=auto --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoint=$CC_API_ENDPOINT --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    # Set up the CC + fallback string
+    CC_URL_STRING=$CC_API_ENDPOINT
+    if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
+        CC_URL_STRING="$CC_API_ENDPOINT,$FALLBACK_CC_API_ENDPOINT"
+    fi
 
-    if [ "$NETWORK" = "ropsten" -o "$NETWORK" = "kiln" -o "$NETWORK" = "prater" ]; then
+    CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoints=$CC_URL_STRING --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+
+    if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
     fi
 
@@ -164,7 +197,12 @@ if [ "$CC_CLIENT" = "teku" ]; then
         CMD="$CMD --metrics-publish-endpoint=$BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
     fi
 
-    exec ${CMD} --validators-graffiti="$GRAFFITI"
+    if [ "$ADDON_GWW_ENABLED" = "true" ]; then
+        echo "$GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Teku
+        exec ${CMD} --validators-graffiti-file=$GWW_GRAFFITI_FILE
+    else
+        exec ${CMD} --validators-graffiti="$GRAFFITI"
+    fi
 
 fi
 

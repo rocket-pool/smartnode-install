@@ -49,6 +49,9 @@ services:
       - TEKU_JVM_HEAP_SIZE=${TEKU_JVM_HEAP_SIZE}
       - MEV_BOOST_URL=${MEV_BOOST_URL}
       - RETH_ADDRESS=${RETH_ADDRESS}
+      - GRAFFITI=${GRAFFITI}
+      - ADDON_GWW_ENABLED=${ADDON_GWW_ENABLED}
+      - TTD_OVERRIDE=${TTD_OVERRIDE}
     entrypoint: sh
     command: "/setup/start-bn.sh"
     cap_drop:
