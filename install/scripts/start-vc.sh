@@ -11,7 +11,7 @@ if [ "$NETWORK" = "mainnet" ]; then
     TEKU_NETWORK="mainnet"
 elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
-    LODESTAR_NETWORK="prater"
+    LODESTAR_NETWORK="goerli"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
 elif [ "$NETWORK" = "kiln" ]; then
@@ -81,7 +81,7 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         FALLBACK_CC_STRING="--server $FALLBACK_CC_API_ENDPOINT"
     fi
 
-    CMD="/usr/app/node_modules/.bin/lodestar validator --network $LODESTAR_NETWORK --rootDir /validators/lodestar --server $CC_API_ENDPOINT $FALLBACK_CC_STRING --keystoresDir /validators/lodestar/validators --secretsDir /validators/lodestar/secrets --defaultFeeRecipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    CMD="/usr/app/node_modules/.bin/lodestar validator --network $LODESTAR_NETWORK --dataDir /validators/lodestar --server $CC_API_ENDPOINT $FALLBACK_CC_STRING --keystoresDir /validators/lodestar/validators --secretsDir /validators/lodestar/secrets --suggestedFeeRecipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --doppelgangerProtectionEnabled"
@@ -92,7 +92,7 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $VC_METRICS_PORT"
+        CMD="$CMD --metrics --metrics.address 0.0.0.0 --metrics.port $VC_METRICS_PORT"
     fi
 
     exec ${CMD} --graffiti "$GRAFFITI"

@@ -1,10 +1,6 @@
 #!/bin/sh
 # This script launches ETH2 beacon clients for Rocket Pool's docker stack; only edit if you know what you're doing ;)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> lodestar
 # Performance tuning for ARM systems
 UNAME_VAL=$(uname -m)
 if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
@@ -21,7 +17,7 @@ if [ "$NETWORK" = "mainnet" ]; then
     PRYSM_GENESIS_STATE=""
 elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
-    LODESTAR_NETWORK="prater"
+    LODESTAR_NETWORK="goerli"
     NIMBUS_NETWORK="prater"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
@@ -92,10 +88,10 @@ fi
 # Lodestar startup
 if [ "$CC_CLIENT" = "lodestar" ]; then
 
-    CMD="$PERF_PREFIX /usr/app/node_modules/.bin/lodestar beacon --network $LODESTAR_NETWORK --rootDir /ethclient/lodestar --port $BN_P2P_PORT --execution.urls $EC_ENGINE_ENDPOINT --api.rest.enabled --api.rest.address 0.0.0.0 --api.rest.port ${BN_API_PORT:-5052} --jwt-secret /secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /usr/app/node_modules/.bin/lodestar beacon --network $LODESTAR_NETWORK --dataDir /ethclient/lodestar --port $BN_P2P_PORT --execution.urls $EC_ENGINE_ENDPOINT --rest --rest.address 0.0.0.0 --rest.port ${BN_API_PORT:-5052} --jwt-secret /secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ "$NETWORK" = "mainnet" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=115792089237316195423570985008687907853269984665640564039457584007913129638912"
+    if [ ! -z "$TTD_OVERRIDE" ]; then
+        CMD="$CMD --terminal-total-difficulty-override $TTD_OVERRIDE"
     fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
@@ -103,15 +99,15 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
     fi
 
     if [ ! -z "$BN_MAX_PEERS" ]; then
-        CMD="$CMD --network.targetPeers $BN_MAX_PEERS --network.maxPeers $BN_MAX_PEERS"
+        CMD="$CMD --targetPeers $BN_MAX_PEERS"
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --metrics.enabled --metrics.address 0.0.0.0 --metrics.port $BN_METRICS_PORT"
+        CMD="$CMD --metrics --metrics.address 0.0.0.0 --metrics.port $BN_METRICS_PORT"
     fi
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
-        CMD="$CMD --weakSubjectivityServerUrl $CHECKPOINT_SYNC_URL --weakSubjectivitySyncLatest"
+        CMD="$CMD --checkpointSyncUrl $CHECKPOINT_SYNC_URL"
     fi
 
     exec ${CMD}
