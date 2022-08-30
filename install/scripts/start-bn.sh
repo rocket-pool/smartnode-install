@@ -175,7 +175,11 @@ fi
 # Teku startup
 if [ "$CC_CLIENT" = "teku" ]; then
 
-    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --data-storage-mode=archive --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret --validators-proposer-default-fee-recipient=$RETH_ADDRESS $BN_ADDITIONAL_FLAGS"
+    CMD="$PERF_PREFIX /opt/teku/bin/teku --network=$TEKU_NETWORK --data-path=/ethclient/teku --p2p-port=$BN_P2P_PORT --ee-endpoint=$EC_ENGINE_ENDPOINT --rest-api-enabled --rest-api-interface=0.0.0.0 --rest-api-port=${BN_API_PORT:-5052} --rest-api-host-allowlist=* --eth1-deposit-contract-max-request-size=150 --log-destination=CONSOLE --ee-jwt-secret-file=/secrets/jwtsecret --validators-proposer-default-fee-recipient=$RETH_ADDRESS $BN_ADDITIONAL_FLAGS"
+
+    if [ "$TEKU_ARCHIVE_MODE" = "true" ]; then
+        CMD="$CMD --data-storage-mode=archive"
+    fi
 
     if [ ! -z "$TTD_OVERRIDE" ]; then
         CMD="$CMD --Xnetwork-total-terminal-difficulty-override=$TTD_OVERRIDE"
