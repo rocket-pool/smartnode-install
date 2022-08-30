@@ -117,7 +117,8 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     fi
 
     if [ "$ADDON_GWW_ENABLED" = "true" ]; then
-        echo -e "ordered: \n  - $GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Prysm
+        echo "ordered:\n  - $GRAFFITI" > $GWW_GRAFFITI_FILE # Default graffiti value for Prysm
+        exec ${CMD} --graffiti-file=$GWW_GRAFFITI_FILE
     else
         exec ${CMD} --graffiti "$GRAFFITI"
     fi
