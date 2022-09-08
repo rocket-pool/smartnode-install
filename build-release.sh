@@ -24,18 +24,14 @@ fail() {
 
 # Builds all of the CLI binaries
 build_cli() {
-    cd smartnode/rocketpool-cli || fail "Directory ${PWD}/smartnode/rocketpool-cli does not exist or you don't have permissions to access it."
-    rm -f rocketpool-cli-*
+    cd smartnode || fail "Directory ${PWD}/smartnode/rocketpool-cli does not exist or you don't have permissions to access it."
 
     echo -n "Building CLI binaries... "
-    ./build.sh || fail "Error building CLI binaries."
-    mv rocketpool-cli-linux-amd64 ../../$VERSION
-    mv rocketpool-cli-darwin-amd64 ../../$VERSION
-    mv rocketpool-cli-linux-arm64 ../../$VERSION
-    mv rocketpool-cli-darwin-arm64 ../../$VERSION
+    docker run --rm -v $PWD:/smartnode rocketpool/smartnode-builder:latest /smartnode/rocketpool-cli/build.sh || fail "Error building CLI binaries."
+    mv rocketpool-cli/rocketpool-cli-* ../$VERSION
     echo "done!"
 
-    cd ../..
+    cd ..
 }
 
 
@@ -174,7 +170,7 @@ esac
 # Parse arguments
 while getopts "acpdnlrfv:" FLAG; do
     case "$FLAG" in
-        a) CLI=true PACKAGES=true DAEMON=true DAEMON=true MANIFEST=true LATEST_MANIFEST=true ;;
+        a) CLI=true PACKAGES=true DAEMON=true MANIFEST=true LATEST_MANIFEST=true ;;
         c) CLI=true ;;
         p) PACKAGES=true ;;
         d) DAEMON=true ;;
