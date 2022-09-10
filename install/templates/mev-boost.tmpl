@@ -11,6 +11,7 @@ services:
     image: ${MEV_BOOST_CONTAINER_TAG}
     container_name: ${COMPOSE_PROJECT_NAME}_mev-boost
     restart: unless-stopped
+    ports: [${MEV_BOOST_OPEN_API_PORT}]
     volumes:
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
     networks:

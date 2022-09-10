@@ -317,7 +317,10 @@ progress 8 "Copying package files to Rocket Pool user data directory..."
 # Clean up unnecessary files from old installations
 progress 9 "Cleaning up obsolete files from previous installs..."
 { rm -rf "$DATA_PATH/fr-default" || echo "NOTE: Could not remove '$DATA_PATH/fr-default' which is no longer needed."; } >&2
-
+GRAFFITI_OWNER=$(stat -c "%U" $RP_PATH/addons/gww/graffiti.txt)
+if [ "$GRAFFITI_OWNER" = "$USER" ]; then
+    { rm -f "$RP_PATH/addons/gww/graffiti.txt" || echo -e "${COLOR_YELLOW}WARNING: Could not remove '$RP_PATH/addons/gww/graffiti.txt' which was used by the Graffiti Wall Writer addon. You will need to remove this file manually if you intend to use the Graffiti Wall Writer.${COLOR_RESET}"; } >&2
+fi
 }
 
 install "$@"
