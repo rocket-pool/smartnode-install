@@ -48,7 +48,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
-    if [ ! -z "$MEV_BOOST_URL" ]; then
+    if [ "$ENABLE_MEV_BOOST" = "true" ]; then
         CMD="$CMD --builder-proposals"
     fi
 
@@ -102,7 +102,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --suggested-fee-recipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$MEV_BOOST_URL" ]; then
+    if [ "$ENABLE_MEV_BOOST" = "true" ]; then
         CMD="$CMD --enable-builder"
     fi
 
@@ -144,7 +144,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoints=$CC_URL_STRING --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$MEV_BOOST_URL" ]; then
+    if [ "$ENABLE_MEV_BOOST" = "true" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
     fi
 
