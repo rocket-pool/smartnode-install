@@ -49,7 +49,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
     fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
-        CMD="$CMD --private-tx-proposals"
+        CMD="$CMD --builder-proposals"
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
