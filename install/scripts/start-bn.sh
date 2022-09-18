@@ -53,10 +53,6 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --execution-jwt=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$TTD_OVERRIDE" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
-    fi
-
     if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --builder $MEV_BOOST_URL"
     fi
@@ -103,10 +99,6 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
 
     CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --insecure-netkey-password=true --validators-dir=/validators/nimbus/validators --secrets-dir=/validators/nimbus/secrets --doppelganger-detection=$DOPPELGANGER_DETECTION --jwt-secret=/secrets/jwtsecret --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $BN_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$TTD_OVERRIDE" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
-    fi
-
     if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --payload-builder --payload-builder-url=$MEV_BOOST_URL"
     fi
@@ -145,10 +137,6 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret --api-timeout 600 $BN_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$TTD_OVERRIDE" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
-    fi
-
     if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --http-mev-relay $MEV_BOOST_URL"
     fi
@@ -179,10 +167,6 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     if [ "$TEKU_ARCHIVE_MODE" = "true" ]; then
         CMD="$CMD --data-storage-mode=archive"
-    fi
-
-    if [ ! -z "$TTD_OVERRIDE" ]; then
-        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=$TTD_OVERRIDE"
     fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
