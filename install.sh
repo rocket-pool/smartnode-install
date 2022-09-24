@@ -160,6 +160,7 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
+        { dpkg-query -W -f='${Status}' sudo | grep -q -P '^install ok installed$' || fail "Please install the sudo command before running this script."; } >&2
         { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
         { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common chrony || fail "Could not install OS packages."; } >&2
 
