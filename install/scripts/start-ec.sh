@@ -142,7 +142,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT"
+        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT --Metrics.PushGatewayUrl=\"\""
     fi
 
     if [ ! -z "$EC_P2P_PORT" ]; then
