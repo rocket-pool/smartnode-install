@@ -277,9 +277,13 @@ else
             fi
 
         ;;
-fi
 
-case "$PLATFORM" in
+        # Everything else
+        *)
+        ;;
+
+    esac
+fi
 
 
 # Check for existing installation
