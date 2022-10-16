@@ -55,8 +55,6 @@ RP_PATH="$HOME/.rocketpool"
 PACKAGE_VERSION="latest"
 # The default network to run Rocket Pool on
 NETWORK="mainnet"
-# The version of docker-compose to install
-DOCKER_COMPOSE_VERSION="1.29.2"
 
 
 ##
@@ -73,28 +71,6 @@ progress() {
 
 
 # Docker installation steps
-install_docker_compose() {
-    if [ $ARCH = "amd64" ]; then
-        sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || fail "Could not download docker-compose."
-        sudo chmod a+x /usr/local/bin/docker-compose || fail "Could not set executable permissions on docker-compose."
-    elif [ $ARCH = "arm64" ]; then
-        if command -v apt &> /dev/null ; then
-            sudo apt install -y libffi-dev libssl-dev
-            sudo apt install -y python3 python3-pip
-            sudo apt remove -y python-configparser
-            pip3 install --upgrade docker-compose==$DOCKER_COMPOSE_VERSION
-        else
-            echo ""
-            echo -e "${COLOR_RED}**ERROR**"
-            echo "Automatic installation of docker-compose for the $PLATFORM operating system on ARM64 is not currently supported."
-            echo "Please install docker-compose manually, then try this again with the '-d' flag to skip OS dependency installation."
-            echo "Be sure to add yourself to the docker group (e.g. 'sudo usermod -aG docker $USER') after installing docker."
-            echo "Log out and back in, or restart your system after you run this command."
-            echo -e "${COLOR_RESET}"
-            exit 1
-        fi
-    fi
-}
 add_user_docker() {
     sudo usermod -aG docker $USER || fail "Could not add user to docker group."
 }
@@ -162,21 +138,25 @@ case "$PLATFORM" in
         progress 1 "Installing OS dependencies..."
         { dpkg-query -W -f='${Status}' sudo | grep -q -P '^install ok installed$' || fail "Please make sure the sudo command is available before running this script."; } >&2
         { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
-        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common chrony || fail "Could not install OS packages."; } >&2
+        { sudo apt-get -y install apt-transport-https ca-certificates curl gnupg gnupg-agent lsb-release software-properties-common chrony || fail "Could not install OS packages."; } >&2
 
-        # Install docker
-        progress 2 "Installing docker..."
-        { curl -fsSL "https://download.docker.com/linux/$PLATFORM_NAME/gpg" | sudo apt-key add - || fail "Could not add docker repository key."; } >&2
-        { sudo add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable" || fail "Could not add docker repository."; } >&2
-        { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
-        { sudo apt-get -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
-
-        # Install docker-compose
-        progress 3 "Installing docker-compose..."
-        >&2 install_docker_compose
+        # Check for existing Docker installation
+        progress 2 "Checking if Docker is installed..."
+        dpkg-query -W -f='${Status}' docker-ce 2>&1 | grep -q -P '^install ok installed$' > /dev/null
+        if [ $? != "0" ]; then
+            echo "Installing Docker..."
+            if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
+                # Install the Docker repo
+                { sudo mkdir -p /etc/apt/keyrings || fail "Could not create APT keyrings directory."; } >&2
+                { curl -fsSL "https://download.docker.com/linux/$PLATFORM_NAME/gpg" | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || fail "Could not add docker repository key."; } >&2
+                { echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || fail "Could not add docker repository."; } >&2
+            fi
+            { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
+            { sudo apt-get -y install docker-ce docker-ce-cli docker-compose-plugin containerd.io || fail "Could not install Docker packages."; } >&2
+        fi
 
         # Add user to docker group
-        progress 4 "Adding user to docker group..."
+        progress 3 "Adding user to docker group..."
         >&2 add_user_docker
 
     ;;
@@ -192,15 +172,11 @@ case "$PLATFORM" in
         # Install docker
         progress 2 "Installing docker..."
         { sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || fail "Could not add docker repository."; } >&2
-        { sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
+        { sudo yum install -y --nobest docker-ce docker-ce-cli docker-compose-plugin containerd.io || fail "Could not install docker packages."; } >&2
         { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
 
-        # Install docker-compose
-        progress 3 "Installing docker-compose..."
-        >&2 install_docker_compose
-
         # Add user to docker group
-        progress 4 "Adding user to docker group..."
+        progress 3 "Adding user to docker group..."
         >&2 add_user_docker
 
     ;;
@@ -216,16 +192,12 @@ case "$PLATFORM" in
         # Install docker
         progress 2 "Installing docker..."
         { sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo || fail "Could not add docker repository."; } >&2
-        { sudo dnf -y install docker-ce docker-ce-cli containerd.io || fail "Could not install docker packages."; } >&2
+        { sudo dnf -y install docker-ce docker-ce-cli docker-compose-plugin containerd.io || fail "Could not install docker packages."; } >&2
         { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
         { sudo systemctl enable docker || fail "Could not set docker daemon to auto-start on boot."; } >&2
 
-        # Install docker-compose
-        progress 3 "Installing docker-compose..."
-        >&2 install_docker_compose
-
         # Add user to docker group
-        progress 4 "Adding user to docker group..."
+        progress 3 "Adding user to docker group..."
         >&2 add_user_docker
 
     ;;
@@ -236,7 +208,7 @@ case "$PLATFORM" in
         echo ""
         echo -e "${RED}**ERROR**"
         echo "Automatic dependency installation for the $PLATFORM operating system is not supported."
-        echo "Please install docker and docker-compose manually, then try again with the '-d' flag to skip OS dependency installation."
+        echo "Please install docker and docker-compose-plugin manually, then try again with the '-d' flag to skip OS dependency installation."
         echo "Be sure to add yourself to the docker group with 'sudo usermod -aG docker $USER' after installing docker."
         echo "Log out and back in, or restart your system after you run this command."
         exit 1
@@ -244,8 +216,70 @@ case "$PLATFORM" in
 
 esac
 else
-    echo "Skipping steps 1 - 4 (OS dependencies & docker)"
+    echo "Skipping steps 1 - 2 (OS dependencies & docker)"
+    case "$PLATFORM" in
+        # Ubuntu / Debian / Raspbian
+        Ubuntu|Debian|Raspbian)
+
+            # Get platform name
+            PLATFORM_NAME=$(echo "$PLATFORM" | tr '[:upper:]' '[:lower:]')
+
+            # Check for existing docker-compose-plugin installation
+            progress 3 "Checking if docker-compose-plugin is installed..."
+            dpkg-query -W -f='${Status}' docker-compose-plugin 2>&1 | grep -q -P '^install ok installed$' > /dev/null
+            if [ $? != "0" ]; then
+                echo "Installing docker-compose-plugin..."
+                if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
+                    # Install the Docker repo
+                    { sudo mkdir -p /etc/apt/keyrings || fail "Could not create APT keyrings directory."; } >&2
+                    { curl -fsSL "https://download.docker.com/linux/$PLATFORM_NAME/gpg" | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || fail "Could not add docker repository key."; } >&2
+                    { echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || fail "Could not add Docker repository."; } >&2
+                fi
+                { sudo apt-get -y update || fail "Could not update OS package definitions."; } >&2
+                { sudo apt-get -y install docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
+                { sudo systemctl restart docker || fail "Could not restart docker daemon."; } >&2
+            else
+                echo "Already installed."
+            fi
+
+        ;;
+
+        # Centos
+        CentOS)
+
+            # Check for existing docker-compose-plugin installation
+            progress 3 "Checking if docker-compose-plugin is installed..."
+            yum -q list installed docker-compose-plugin 2>/dev/null 1>/dev/null
+            if [ $? != "0" ]; then
+                echo "Installing docker-compose-plugin..."
+                { sudo yum install -y --nobest docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
+                { sudo systemctl restart docker || fail "Could not restart docker daemon."; } >&2
+                
+            else
+                echo "Already installed."
+            fi
+
+        ;;
+
+        # Fedora
+        Fedora)
+
+            # Check for existing docker-compose-plugin installation
+            progress 3 "Checking if docker-compose-plugin is installed..."
+            dnf -q list installed docker-compose-plugin 2>/dev/null 1>/dev/null
+            if [ $? != "0" ]; then
+                echo "Installing docker-compose-plugin..."
+                { sudo dnf install -y --nobest docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
+                { sudo systemctl restart docker || fail "Could not restart docker daemon."; } >&2
+                
+            else
+                echo "Already installed."
+            fi
+
+        ;;
 fi
+
+case "$PLATFORM" in
 
 
 # Check for existing installation
