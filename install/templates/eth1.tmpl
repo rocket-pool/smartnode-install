@@ -13,7 +13,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_eth1
     restart: unless-stopped
     stop_signal: ${EC_STOP_SIGNAL}
-    stop_grace_period: 3m
+    stop_grace_period: 15m
     ports: [ "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/udp", "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/tcp"${EC_OPEN_API_PORTS} ]
     volumes:
       - eth1clientdata:/ethclient
