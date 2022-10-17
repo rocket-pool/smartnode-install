@@ -172,8 +172,9 @@ case "$PLATFORM" in
         # Install docker
         progress 2 "Installing docker..."
         { sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || fail "Could not add docker repository."; } >&2
-        { sudo yum install -y --nobest docker-ce docker-ce-cli docker-compose-plugin containerd.io || fail "Could not install docker packages."; } >&2
+        { sudo yum install -y docker-ce docker-ce-cli docker-compose-plugin containerd.io || fail "Could not install docker packages."; } >&2
         { sudo systemctl start docker || fail "Could not start docker daemon."; } >&2
+        { sudo systemctl enable docker || fail "Could not set docker daemon to auto-start on boot."; } >&2
 
         # Add user to docker group
         progress 3 "Adding user to docker group..."
@@ -252,7 +253,7 @@ else
             yum -q list installed docker-compose-plugin 2>/dev/null 1>/dev/null
             if [ $? != "0" ]; then
                 echo "Installing docker-compose-plugin..."
-                { sudo yum install -y --nobest docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
+                { sudo yum install -y docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
                 { sudo systemctl restart docker || fail "Could not restart docker daemon."; } >&2
                 
             else
@@ -269,7 +270,7 @@ else
             dnf -q list installed docker-compose-plugin 2>/dev/null 1>/dev/null
             if [ $? != "0" ]; then
                 echo "Installing docker-compose-plugin..."
-                { sudo dnf install -y --nobest docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
+                { sudo dnf install -y docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
                 { sudo systemctl restart docker || fail "Could not restart docker daemon."; } >&2
                 
             else
