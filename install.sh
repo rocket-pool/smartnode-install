@@ -231,7 +231,8 @@ else
             if [ $? != "0" ]; then
                 echo "Installing docker-compose-plugin..."
                 if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
-                    # Install the Docker repo
+                    # Install the Docker repo, removing the legacy one if it exists
+                    { sudo add-apt-repository --remove "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable"; } 2>/dev/null
                     { sudo mkdir -p /etc/apt/keyrings || fail "Could not create APT keyrings directory."; } >&2
                     { curl -fsSL "https://download.docker.com/linux/$PLATFORM_NAME/gpg" | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || fail "Could not add docker repository key."; } >&2
                     { echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$PLATFORM_NAME $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || fail "Could not add Docker repository."; } >&2
