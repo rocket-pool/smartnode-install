@@ -53,6 +53,12 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --execution-jwt=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
+    # Performance tuning for ARM systems
+    UNAME_VAL=$(uname -m)
+    if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
+        CMD="$CMD --execution-timeout-multiplier 2"
+    fi
+
     if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --builder $MEV_BOOST_URL"
     fi
