@@ -56,7 +56,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
     # Performance tuning for ARM systems
     UNAME_VAL=$(uname -m)
     if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
-        CMD="$CMD --execution-timeout-multiplier 2"
+        CMD="$CMD --execution-timeout-multiplier 2 --disable-lock-timeouts"
     fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
