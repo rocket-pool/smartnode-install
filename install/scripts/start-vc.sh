@@ -12,15 +12,10 @@ elif [ "$NETWORK" = "prater" ]; then
     LH_NETWORK="prater"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
-elif [ "$NETWORK" = "kiln" ]; then
-    LH_NETWORK="kiln"
-    PRYSM_NETWORK="--kiln"
-    TEKU_NETWORK="kiln"
-elif [ "$NETWORK" = "ropsten" ]; then
-    LH_NETWORK="ropsten"
-    NIMBUS_NETWORK="ropsten"
-    PRYSM_NETWORK="--ropsten"
-    TEKU_NETWORK="ropsten"
+elif [ "$NETWORK" = "devnet" ]; then
+    LH_NETWORK="prater"
+    PRYSM_NETWORK="--prater"
+    TEKU_NETWORK="prater"
 else
     echo "Unknown network [$NETWORK]"
     exit 1

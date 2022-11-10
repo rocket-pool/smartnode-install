@@ -5,10 +5,8 @@ if [ "$NETWORK" = "mainnet" ]; then
     MEV_NETWORK="mainnet"
 elif [ "$NETWORK" = "prater" ]; then
     MEV_NETWORK="goerli"
-elif [ "$NETWORK" = "kiln" ]; then
-    MEV_NETWORK="kiln"
-elif [ "$NETWORK" = "ropsten" ]; then
-    MEV_NETWORK="ropsten"
+elif [ "$NETWORK" = "devnet" ]; then
+    MEV_NETWORK="goerli"
 else
     echo "Unknown network [$NETWORK]"
     exit 1

@@ -20,17 +20,12 @@ elif [ "$NETWORK" = "prater" ]; then
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
     PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-prater.ssz"
-elif [ "$NETWORK" = "kiln" ]; then
-    LH_NETWORK="kiln"
-    NIMBUS_NETWORK=""
-    PRYSM_NETWORK=""
-    TEKU_NETWORK="kiln"
-elif [ "$NETWORK" = "ropsten" ]; then
-    LH_NETWORK="ropsten"
-    NIMBUS_NETWORK="ropsten"
-    PRYSM_NETWORK="--ropsten"
-    TEKU_NETWORK="ropsten"
-    PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-ropsten.ssz"
+elif [ "$NETWORK" = "devnet" ]; then
+    LH_NETWORK="prater"
+    NIMBUS_NETWORK="prater"
+    PRYSM_NETWORK="--prater"
+    TEKU_NETWORK="prater"
+    PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-prater.ssz"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -131,13 +126,9 @@ fi
 if [ "$CC_CLIENT" = "prysm" ]; then
 
     # Get Prater SSZ if necessary
-    if [ "$NETWORK" = "prater" ]; then
+    if [ "$NETWORK" = "prater" -o "$NETWORK" = "devnet" ]; then
         if [ ! -f "/validators/genesis-prater.ssz" ]; then
             wget "https://github.com/eth-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis-prater.ssz"
-        fi
-    elif [ "$NETWORK" = "ropsten" ]; then
-        if [ ! -f "/validators/genesis-ropsten.ssz" ]; then
-            wget "https://github.com/eth-clients/merge-testnets/raw/main/ropsten-beacon-chain/genesis.ssz" -O "/validators/genesis-ropsten.ssz"
         fi
     fi
 

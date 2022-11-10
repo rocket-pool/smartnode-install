@@ -29,14 +29,10 @@ elif [ "$NETWORK" = "prater" ]; then
     GETH_NETWORK="--goerli"
     NETHERMIND_NETWORK="goerli"
     BESU_NETWORK="goerli"
-elif [ "$NETWORK" = "kiln" ]; then
-    GETH_NETWORK="--kiln"
-    NETHERMIND_NETWORK=""
-    BESU_NETWORK=""
-elif [ "$NETWORK" = "ropsten" ]; then
-    GETH_NETWORK="--ropsten"
-    NETHERMIND_NETWORK="ropsten"
-    BESU_NETWORK="ropsten"
+elif [ "$NETWORK" = "devnet" ]; then
+    GETH_NETWORK="--goerli"
+    NETHERMIND_NETWORK="goerli"
+    BESU_NETWORK="goerli"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
