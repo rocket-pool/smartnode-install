@@ -42,6 +42,7 @@ services:
       - GRAFFITI=${GRAFFITI}
       - ADDON_GWW_ENABLED=${ADDON_GWW_ENABLED}
       - MEV_BOOST_URL=${MEV_BOOST_URL}
+      - ENABLE_MEV_BOOST=${ENABLE_MEV_BOOST}
     entrypoint: sh
     command: "/setup/start-vc.sh"
     cap_drop:

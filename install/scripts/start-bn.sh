@@ -22,19 +22,13 @@ elif [ "$NETWORK" = "prater" ]; then
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
     PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-prater.ssz"
-elif [ "$NETWORK" = "kiln" ]; then
-    LH_NETWORK="kiln"
-    LODESTAR_NETWORK="kiln"
-    NIMBUS_NETWORK=""
-    PRYSM_NETWORK=""
-    TEKU_NETWORK="kiln"
-elif [ "$NETWORK" = "ropsten" ]; then
-    LH_NETWORK="ropsten"
-    LODESTAR_NETWORK="ropsten"
-    NIMBUS_NETWORK="ropsten"
-    PRYSM_NETWORK="--ropsten"
-    TEKU_NETWORK="ropsten"
-    PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-ropsten.ssz"
+elif [ "$NETWORK" = "devnet" ]; then
+    LH_NETWORK="prater"
+    LODESTAR_NETWORK="goerli"
+    NIMBUS_NETWORK="prater"
+    PRYSM_NETWORK="--prater"
+    TEKU_NETWORK="prater"
+    PRYSM_GENESIS_STATE="--genesis-state=/validators/genesis-prater.ssz"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -57,8 +51,10 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
 
     CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon --network $LH_NETWORK --datadir /ethclient/lighthouse --port $BN_P2P_PORT --discovery-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --http --http-address 0.0.0.0 --http-port ${BN_API_PORT:-5052} --eth1-blocks-per-log-query 150 --disable-upnp --staking --http-allow-sync-stalled --execution-jwt=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$TTD_OVERRIDE" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
+    # Performance tuning for ARM systems
+    UNAME_VAL=$(uname -m)
+    if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
+        CMD="$CMD --execution-timeout-multiplier 2 --disable-lock-timeouts"
     fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
@@ -131,10 +127,6 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
 
     CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node --non-interactive --enr-auto-update --network=$NIMBUS_NETWORK --data-dir=/ethclient/nimbus --tcp-port=$BN_P2P_PORT --udp-port=$BN_P2P_PORT --web3-url=$EC_ENGINE_ENDPOINT --rest --rest-address=0.0.0.0 --rest-port=${BN_API_PORT:-5052} --jwt-secret=/secrets/jwtsecret $BN_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$TTD_OVERRIDE" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
-    fi
-
     if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --payload-builder --payload-builder-url=$MEV_BOOST_URL"
     fi
@@ -159,21 +151,13 @@ fi
 if [ "$CC_CLIENT" = "prysm" ]; then
 
     # Get Prater SSZ if necessary
-    if [ "$NETWORK" = "prater" ]; then
+    if [ "$NETWORK" = "prater" -o "$NETWORK" = "devnet" ]; then
         if [ ! -f "/validators/genesis-prater.ssz" ]; then
             wget "https://github.com/eth-clients/eth2-networks/raw/master/shared/prater/genesis.ssz" -O "/validators/genesis-prater.ssz"
-        fi
-    elif [ "$NETWORK" = "ropsten" ]; then
-        if [ ! -f "/validators/genesis-ropsten.ssz" ]; then
-            wget "https://github.com/eth-clients/merge-testnets/raw/main/ropsten-beacon-chain/genesis.ssz" -O "/validators/genesis-ropsten.ssz"
         fi
     fi
 
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain --accept-terms-of-use $PRYSM_NETWORK $PRYSM_GENESIS_STATE --datadir /ethclient/prysm --p2p-tcp-port $BN_P2P_PORT --p2p-udp-port $BN_P2P_PORT --execution-endpoint $EC_ENGINE_ENDPOINT --rpc-host 0.0.0.0 --rpc-port ${BN_RPC_PORT:-5053} --grpc-gateway-host 0.0.0.0 --grpc-gateway-port ${BN_API_PORT:-5052} --eth1-header-req-limit 150 --jwt-secret=/secrets/jwtsecret --api-timeout 600 $BN_ADDITIONAL_FLAGS"
-
-    if [ ! -z "$TTD_OVERRIDE" ]; then
-        CMD="$CMD --terminal-total-difficulty-override=$TTD_OVERRIDE"
-    fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --http-mev-relay $MEV_BOOST_URL"
@@ -204,10 +188,6 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     if [ "$TEKU_ARCHIVE_MODE" = "true" ]; then
         CMD="$CMD --data-storage-mode=archive"
-    fi
-
-    if [ ! -z "$TTD_OVERRIDE" ]; then
-        CMD="$CMD --Xnetwork-total-terminal-difficulty-override=$TTD_OVERRIDE"
     fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then

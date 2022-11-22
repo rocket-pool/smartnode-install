@@ -14,17 +14,11 @@ elif [ "$NETWORK" = "prater" ]; then
     LODESTAR_NETWORK="goerli"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
-elif [ "$NETWORK" = "kiln" ]; then
-    LH_NETWORK="kiln"
-    LODESTAR_NETWORK="kiln"
-    PRYSM_NETWORK="--kiln"
-    TEKU_NETWORK="kiln"
-elif [ "$NETWORK" = "ropsten" ]; then
-    LH_NETWORK="ropsten"
-    LODESTAR_NETWORK="ropsten"
-    NIMBUS_NETWORK="ropsten"
-    PRYSM_NETWORK="--ropsten"
-    TEKU_NETWORK="ropsten"
+elif [ "$NETWORK" = "devnet" ]; then
+    LH_NETWORK="prater"
+    LODESTAR_NETWORK="goerli"
+    PRYSM_NETWORK="--prater"
+    TEKU_NETWORK="prater"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -52,8 +46,8 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         CMD="$CMD --enable-doppelganger-protection"
     fi
 
-    if [ ! -z "$MEV_BOOST_URL" ]; then
-        CMD="$CMD --private-tx-proposals"
+    if [ "$ENABLE_MEV_BOOST" = "true" ]; then
+        CMD="$CMD --builder-proposals"
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
@@ -144,7 +138,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     CMD="/app/cmd/validator/validator --accept-terms-of-use $PRYSM_NETWORK --wallet-dir /validators/prysm-non-hd --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret --beacon-rpc-provider $CC_URL_STRING --suggested-fee-recipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$MEV_BOOST_URL" ]; then
+    if [ "$ENABLE_MEV_BOOST" = "true" ]; then
         CMD="$CMD --enable-builder"
     fi
 
@@ -186,7 +180,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
 
     CMD="/opt/teku/bin/teku validator-client --network=$TEKU_NETWORK --data-path=/validators/teku --validator-keys=/validators/teku/keys:/validators/teku/passwords --beacon-node-api-endpoints=$CC_URL_STRING --validators-keystore-locking-enabled=false --log-destination=CONSOLE --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
 
-    if [ ! -z "$MEV_BOOST_URL" ]; then
+    if [ "$ENABLE_MEV_BOOST" = "true" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
     fi
 

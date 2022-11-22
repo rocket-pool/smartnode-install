@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# This script is used to restart a custom eth2 validator service.
-# It is run in custom (non-docker) Rocket Pool setups only, after the node daemon launches a minipool which is waiting to stake.
+# This script is used to restart your Validator Client service.
+# It is run in Native Mode only when the Smartnode needs to restart your Validator Client (for example, to load new minipool keys).
 # It is not used in standard (docker-based) Rocket Pool setups.
 
 # The command below is an example only.
-# Replace it with your own commands to restart your custom validator service.
+# Replace it with your own commands to restart your Validator Client service.
 
-#systemctl restart lighthouse-validator
+#sudo systemctl restart lighthouse-validator
