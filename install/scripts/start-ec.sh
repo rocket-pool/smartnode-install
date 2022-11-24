@@ -123,21 +123,8 @@ if [ "$CLIENT" = "nethermind" ]; then
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
+    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnginePort ${EC_ENGINE_PORT:-8551} --JsonRpc.EngineHost 0.0.0.0 --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --Merge.Enabled true --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
-      --config $NETHERMIND_NETWORK \
-      --datadir /ethclient/nethermind \
-      --JsonRpc.Enabled true \
-      --JsonRpc.Host 0.0.0.0 \
-      --JsonRpc.Port ${EC_HTTP_PORT:-8545} \
-      --JsonRpc.EnginePort ${EC_ENGINE_PORT:-8551} \
-      --JsonRpc.EngineHost 0.0.0.0 \
-      --Sync.AncientBodiesBarrier 1 \
-      --Sync.AncientReceiptsBarrier 1 \
-      --Sync.SnapSync true \
-      --Merge.Enabled true \
-      --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
-      $EC_ADDITIONAL_FLAGS"
 
     if [ ! "$CMD" =~ "JsonRpc\.EnabledModules" ]; then
       CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3"
