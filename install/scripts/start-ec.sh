@@ -126,11 +126,11 @@ if [ "$CLIENT" = "nethermind" ]; then
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnginePort ${EC_ENGINE_PORT:-8551} --JsonRpc.EngineHost 0.0.0.0 --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --Merge.Enabled true --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
 
 
-    if [ ! "$CMD" =~ "JsonRpc\.EnabledModules" ]; then
+    if [ ! -z "${CMD##*JsonRpc.EnabledModules*}" ]; then
       CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3"
     fi
 
-    if [ ! "$CMD" =~ "JsonRpc\.AdditionalRpcUrls" ]; then
+    if [ ! -z "${CMD##*JsonRpc.AdditionalRpcUrls*}" ]; then
       CMD="$CMD --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"]"
     fi
 
