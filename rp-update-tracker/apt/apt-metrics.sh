@@ -7,7 +7,7 @@ if [ -f /usr/lib/update-notifier/apt-check ]; then
     SECURITY=$(echo "$APT_CHECK" | cut -d ';' -f 2)
 else
     # For Debian systems
-    UPDATES=$(LANG=C apt dist-upgrade -s | grep -P '^\d+ upgraded'| cut -d" " -f1)
+    UPDATES=$(LANG=C apt-get dist-upgrade -s | grep -P '^\d+ upgraded'| cut -d" " -f1)
     SECURITY=0
 fi
 

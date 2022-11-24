@@ -13,11 +13,12 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_eth1
     restart: unless-stopped
     stop_signal: ${EC_STOP_SIGNAL}
-    stop_grace_period: 3m
+    stop_grace_period: 15m
     ports: [ "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/udp", "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/tcp"${EC_OPEN_API_PORTS} ]
     volumes:
       - eth1clientdata:/ethclient
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
+      - ${ROCKETPOOL_DATA_FOLDER}/secrets:/secrets
     networks:
       - net
     environment:
@@ -25,20 +26,20 @@ services:
       - CLIENT=${EC_CLIENT}
       - ETHSTATS_LABEL=${ETHSTATS_LABEL}
       - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
-      - INFURA_PROJECT_ID=${INFURA_PROJECT_ID}
-      - POCKET_GATEWAY_ID=${POCKET_GATEWAY_ID}
       - EC_CACHE_SIZE=${EC_CACHE_SIZE}
       - EC_MAX_PEERS=${EC_MAX_PEERS}
       - EC_P2P_PORT=${EC_P2P_PORT}
       - EC_ADDITIONAL_FLAGS=${EC_ADDITIONAL_FLAGS}
       - EC_HTTP_PORT=${EC_HTTP_PORT}
       - EC_WS_PORT=${EC_WS_PORT}
+      - EC_ENGINE_PORT=${EC_ENGINE_PORT}
       - NETHERMIND_PRUNE_MEM_SIZE=${NETHERMIND_PRUNE_MEM_SIZE}
       - BESU_MAX_BACK_LAYERS=${BESU_MAX_BACK_LAYERS}
       - BESU_JVM_HEAP_SIZE=${BESU_JVM_HEAP_SIZE}
       - EXTERNAL_IP=${EXTERNAL_IP}
       - ENABLE_METRICS=${ENABLE_METRICS}
       - EC_METRICS_PORT=${EC_METRICS_PORT}
+      - TTD_OVERRIDE=${TTD_OVERRIDE}
     entrypoint: sh
     command: "/setup/start-ec.sh"
     cap_drop:

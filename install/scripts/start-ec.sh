@@ -25,14 +25,14 @@ if [ "$NETWORK" = "mainnet" ]; then
     GETH_NETWORK=""
     NETHERMIND_NETWORK="mainnet"
     BESU_NETWORK="mainnet"
-    INFURA_NETWORK="mainnet"
-    POCKET_NETWORK="eth-mainnet"
 elif [ "$NETWORK" = "prater" ]; then
     GETH_NETWORK="--goerli"
     NETHERMIND_NETWORK="goerli"
     BESU_NETWORK="goerli"
-    INFURA_NETWORK="goerli"
-    POCKET_NETWORK="eth-goerli"
+elif [ "$NETWORK" = "devnet" ]; then
+    GETH_NETWORK="--goerli"
+    NETHERMIND_NETWORK="goerli"
+    BESU_NETWORK="goerli"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -60,9 +60,9 @@ if [ "$CLIENT" = "geth" ]; then
         $PERF_PREFIX /usr/local/bin/geth snapshot prune-state $GETH_NETWORK --datadir /ethclient/geth ; rm /ethclient/prune.lock
 
     # Run Geth normally
-    else 
+    else
 
-        CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3 --ws --ws.addr 0.0.0.0 --ws.port ${EC_WS_PORT:-8546} --ws.api eth,net,personal,web3 $EC_ADDITIONAL_FLAGS"
+        CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK --datadir /ethclient/geth --http --http.addr 0.0.0.0 --http.port ${EC_HTTP_PORT:-8545} --http.api eth,net,personal,web3 --http.corsdomain=* --ws --ws.addr 0.0.0.0 --ws.port ${EC_WS_PORT:-8546} --ws.api eth,net,personal,web3 --authrpc.addr 0.0.0.0 --authrpc.port ${EC_ENGINE_PORT:-8551} --authrpc.jwtsecret /secrets/jwtsecret --authrpc.vhosts=* --pprof $EC_ADDITIONAL_FLAGS"
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
             CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
@@ -103,6 +103,11 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     fi
 
+    # Create the JWT secret
+    if [ ! -f "/secrets/jwtsecret" ]; then
+        openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
+    fi
+
     # Check for the prune flag
     if [ -f "/ethclient/prune.lock" ]; then
         NETHERMIND_PRUNE=1
@@ -113,12 +118,34 @@ if [ "$CLIENT" = "nethermind" ]; then
     LOG_LINE=$(awk '/<logger name=\"\*\" minlevel=\"Off\" writeTo=\"seq\" \/>/{print NR}' /nethermind/NLog.config)
     sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" final=\"true\"/>\\n" -i /nethermind/NLog.config
     sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" minlevel=\"Warn\" writeTo=\"auto-colored-console-async\" final=\"true\"/>" -i /nethermind/NLog.config
-    sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" minlevel=\"Warn\" writeTo=\"file-async\" final=\"true\"\/>" -i /nethermind/NLog.config
+    sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" minlevel=\"Warn\" writeTo=\"file-async\" final=\"true\"/>" -i /nethermind/NLog.config
 
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3 --Init.WebSocketsEnabled true --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"] --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true $EC_ADDITIONAL_FLAGS"
+
+    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
+      --config $NETHERMIND_NETWORK \
+      --datadir /ethclient/nethermind \
+      --JsonRpc.Enabled true \
+      --JsonRpc.Host 0.0.0.0 \
+      --JsonRpc.Port ${EC_HTTP_PORT:-8545} \
+      --JsonRpc.EnginePort ${EC_ENGINE_PORT:-8551} \
+      --JsonRpc.EngineHost 0.0.0.0 \
+      --Sync.AncientBodiesBarrier 1 \
+      --Sync.AncientReceiptsBarrier 1 \
+      --Sync.SnapSync true \
+      --Merge.Enabled true \
+      --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
+      $EC_ADDITIONAL_FLAGS"
+
+    if [ ! "$CMD" =~ "JsonRpc\.EnabledModules" ]; then
+      CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3"
+    fi
+
+    if [ ! "$CMD" =~ "JsonRpc\.AdditionalRpcUrls" ]; then
+      CMD="$CMD --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"]"
+    fi
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
@@ -133,7 +160,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT"
+        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT --Metrics.PushGatewayUrl=\"\""
     fi
 
     if [ ! -z "$EC_P2P_PORT" ]; then
@@ -141,8 +168,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     fi
 
     if [ ! -z "$NETHERMIND_PRUNE" ]; then
-        # --Pruning.FullPruningCompletionBehavior AlwaysShutdown
-        CMD="$CMD --Pruning.Mode Full"
+        CMD="$CMD --Pruning.Mode Full --Pruning.FullPruningCompletionBehavior AlwaysShutdown"
     else
         CMD="$CMD --Pruning.Mode Memory"
     fi
@@ -168,7 +194,12 @@ if [ "$CLIENT" = "besu" ]; then
 
     fi
 
-    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP --nat-method=docker --p2p-host=$EXTERNAL_IP $EC_ADDITIONAL_FLAGS"
+    # Create the JWT secret
+    if [ ! -f "/secrets/jwtsecret" ]; then
+        openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
+    fi
+
+    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --host-allowlist=* --rpc-http-max-active-connections=1024 --data-storage-format=bonsai --sync-mode=X_CHECKPOINT --fast-sync-min-peers=3 --nat-method=docker --p2p-host=$EXTERNAL_IP --engine-rpc-enabled --engine-rpc-port=${EC_ENGINE_PORT:-8551} --engine-host-allowlist=* --engine-jwt-secret=/secrets/jwtsecret --Xbonsai-use-snapshots=true $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
@@ -197,20 +228,3 @@ if [ "$CLIENT" = "besu" ]; then
     exec ${CMD}
 
 fi
-
-
-# Infura startup
-if [ "$CLIENT" = "infura" ]; then
-
-    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --wsPort ${EC_WS_PORT:-8546} --network $INFURA_NETWORK --projectId $INFURA_PROJECT_ID --providerType infura $EC_ADDITIONAL_FLAGS
-
-fi
-
-
-# Pocket startup
-if [ "$CLIENT" = "pocket" ]; then
-
-    exec /go/bin/rocketpool-pow-proxy --httpPort ${EC_HTTP_PORT:-8545} --network $POCKET_NETWORK --projectId $POCKET_GATEWAY_ID --providerType pocket $EC_ADDITIONAL_FLAGS
-
-fi
-
