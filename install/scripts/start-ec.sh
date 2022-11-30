@@ -62,23 +62,22 @@ if [ "$CLIENT" = "geth" ]; then
     # Run Geth normally
     else
 
-
-      CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
-        --config $NETHERMIND_NETWORK \
-        --datadir /ethclient/nethermind \
-        --JsonRpc.Enabled true \
-        --JsonRpc.Host 0.0.0.0 \
-        --JsonRpc.Port ${EC_HTTP_PORT:-8545} \
-        --JsonRpc.EnabledModules Eth,Net,Personal,Web3 \
-        --JsonRpc.EnginePort ${EC_ENGINE_PORT:-8551} \
-        --JsonRpc.EngineHost 0.0.0.0 \
-        --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"] \
-        --Sync.AncientBodiesBarrier 1 \
-        --Sync.AncientReceiptsBarrier 1 \
-        --Sync.SnapSync true \
-        --Merge.Enabled true \
-        --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
-        $EC_ADDITIONAL_FLAGS"
+        CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK \
+          --datadir /ethclient/geth \
+          --http \
+          --http.addr 0.0.0.0 \
+          --http.port ${EC_HTTP_PORT:-8545} \
+          --http.api eth,net,personal,web3 \
+          --http.corsdomain=* \
+          --ws \
+          --ws.addr 0.0.0.0 \
+          --ws.port ${EC_WS_PORT:-8546} \
+          --ws.api eth,net,personal,web3 \
+          --authrpc.addr 0.0.0.0 \
+          --authrpc.port ${EC_ENGINE_PORT:-8551} \
+          --authrpc.jwtsecret /secrets/jwtsecret \
+          --authrpc.vhosts=* \
+          --pprof $EC_ADDITIONAL_FLAGS"
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
             CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
@@ -139,9 +138,9 @@ if [ "$CLIENT" = "nethermind" ]; then
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
+    CMD="$PERF_PREFIX \nethermind\Nethermind.Runner \
       --config $NETHERMIND_NETWORK \
-      --datadir /ethclient/nethermind \
+      --datadir \ethclient\nethermind \
       --JsonRpc.Enabled true \
       --JsonRpc.Host 0.0.0.0 \
       --JsonRpc.Port ${EC_HTTP_PORT:-8545} \
@@ -151,8 +150,19 @@ if [ "$CLIENT" = "nethermind" ]; then
       --Sync.AncientReceiptsBarrier 1 \
       --Sync.SnapSync true \
       --Merge.Enabled true \
-      --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
-      $EC_ADDITIONAL_FLAGS"
+      --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
+
+    # Add optional supplemental primary JSON-RPC modules
+    if [ ! -z "$NETHERMIND_ADDITIONAL_MODULES" ]; then
+        NETHERMIND_ADDITIONAL_MODULES=",${NETHERMIND_ADDITIONAL_MODULES}"
+    fi
+    CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3$NETHERMIND_ADDITIONAL_MODULES"
+
+    # Add optional supplemental JSON-RPC URLs
+    if [ ! -z "$NETHERMIND_ADDITIONAL_URLS" ]; then
+        NETHERMIND_ADDITIONAL_URLS=",${NETHERMIND_ADDITIONAL_URLS}"
+    fi
+    CMD="$CMD --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"$NETHERMIND_ADDITIONAL_URLS]"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
@@ -201,7 +211,6 @@ if [ "$CLIENT" = "besu" ]; then
 
     fi
 
-<<<<<<< HEAD
     # Create the JWT secret
     if [ ! -f "/secrets/jwtsecret" ]; then
         openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
@@ -227,18 +236,7 @@ if [ "$CLIENT" = "besu" ]; then
       --engine-rpc-port=${EC_ENGINE_PORT:-8551} \
       --engine-host-allowlist=* \
       --engine-jwt-secret=/secrets/jwtsecret \
-      --Xbonsai-use-snapshots=true \
-      $EC_ADDITIONAL_FLAGS"
-||||||| 99a3e21
-    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --host-allowlist=* --revert-reason-enabled --rpc-http-max-active-connections=65536 --data-storage-format=bonsai --sync-mode=X_SNAP --nat-method=docker --p2p-host=$EXTERNAL_IP $EC_ADDITIONAL_FLAGS"
-=======
-    # Create the JWT secret
-    if [ ! -f "/secrets/jwtsecret" ]; then
-        openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
-    fi
-
-    CMD="$PERF_PREFIX /opt/besu/bin/besu --network=$BESU_NETWORK --data-path=/ethclient/besu --rpc-http-enabled --rpc-http-host=0.0.0.0 --rpc-http-port=${EC_HTTP_PORT:-8545} --rpc-ws-enabled --rpc-ws-host=0.0.0.0 --rpc-ws-port=${EC_WS_PORT:-8546} --host-allowlist=* --rpc-http-max-active-connections=1024 --data-storage-format=bonsai --sync-mode=X_CHECKPOINT --fast-sync-min-peers=3 --nat-method=docker --p2p-host=$EXTERNAL_IP --engine-rpc-enabled --engine-rpc-port=${EC_ENGINE_PORT:-8551} --engine-host-allowlist=* --engine-jwt-secret=/secrets/jwtsecret --Xbonsai-use-snapshots=true $EC_ADDITIONAL_FLAGS"
->>>>>>> upstream/master
+      --Xbonsai-use-snapshots=true $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
