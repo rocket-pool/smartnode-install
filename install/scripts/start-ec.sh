@@ -139,8 +139,6 @@ if [ "$CLIENT" = "nethermind" ]; then
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-<<<<<<< HEAD
-
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
       --config $NETHERMIND_NETWORK \
       --datadir /ethclient/nethermind \
@@ -155,11 +153,6 @@ if [ "$CLIENT" = "nethermind" ]; then
       --Merge.Enabled true \
       --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
       $EC_ADDITIONAL_FLAGS"
-||||||| 99a3e21
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3 --Init.WebSocketsEnabled true --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"] --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true $EC_ADDITIONAL_FLAGS"
-=======
-    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner --config $NETHERMIND_NETWORK --datadir /ethclient/nethermind --JsonRpc.Enabled true --JsonRpc.Host 0.0.0.0 --JsonRpc.Port ${EC_HTTP_PORT:-8545} --JsonRpc.EnabledModules Eth,Net,Personal,Web3 --JsonRpc.EnginePort ${EC_ENGINE_PORT:-8551} --JsonRpc.EngineHost 0.0.0.0 --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"] --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1 --Sync.SnapSync true --Merge.Enabled true --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
->>>>>>> upstream/master
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
