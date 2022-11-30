@@ -119,3 +119,11 @@ The following options apply to both automatic and manual installation unless spe
 Once the smart node service has been installed, you may need to start a new shell session if working locally.
 This is required for updated user permissions to take effect (for interacting with docker engine).
 
+### Update Instructions
+
+A complete guide to updating Rocketpool can be found here: https://docs.rocketpool.net/guides/node/updates.html
+
+### Running and Using Rocketpool
+
+Documentation about running and using Rocketpool can be found here: https://docs.rocketpool.net/guides/
+
