@@ -140,7 +140,7 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     CMD="$PERF_PREFIX \nethermind\Nethermind.Runner \
       --config $NETHERMIND_NETWORK \
-      --datadir \ethclient\nethermind \
+      --datadir /ethclient/nethermind \
       --JsonRpc.Enabled true \
       --JsonRpc.Host 0.0.0.0 \
       --JsonRpc.Port ${EC_HTTP_PORT:-8545} \
