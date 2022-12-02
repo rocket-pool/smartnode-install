@@ -77,7 +77,8 @@ if [ "$CLIENT" = "geth" ]; then
           --authrpc.port ${EC_ENGINE_PORT:-8551} \
           --authrpc.jwtsecret /secrets/jwtsecret \
           --authrpc.vhosts=* \
-          --pprof $EC_ADDITIONAL_FLAGS"
+          --pprof \
+          $EC_ADDITIONAL_FLAGS"
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
             CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
@@ -150,7 +151,8 @@ if [ "$CLIENT" = "nethermind" ]; then
       --Sync.AncientReceiptsBarrier 1 \
       --Sync.SnapSync true \
       --Merge.Enabled true \
-      --JsonRpc.JwtSecretFile=/secrets/jwtsecret $EC_ADDITIONAL_FLAGS"
+      --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
+      $EC_ADDITIONAL_FLAGS"
 
     # Add optional supplemental primary JSON-RPC modules
     if [ ! -z "$NETHERMIND_ADDITIONAL_MODULES" ]; then
@@ -236,7 +238,7 @@ if [ "$CLIENT" = "besu" ]; then
       --engine-rpc-port=${EC_ENGINE_PORT:-8551} \
       --engine-host-allowlist=* \
       --engine-jwt-secret=/secrets/jwtsecret \
-      --Xbonsai-use-snapshots=true $EC_ADDITIONAL_FLAGS"
+      $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
