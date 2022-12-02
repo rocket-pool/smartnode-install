@@ -139,7 +139,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     # Uncomment peer report logging restrictions in the log config XML
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-    CMD="$PERF_PREFIX \nethermind\Nethermind.Runner \
+    CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
         --config $NETHERMIND_NETWORK \
         --datadir /ethclient/nethermind \
         --JsonRpc.Enabled true \
