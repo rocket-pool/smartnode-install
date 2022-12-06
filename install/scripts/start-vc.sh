@@ -123,6 +123,10 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) \
         $VC_ADDITIONAL_FLAGS"
 
+    if [ "$ENABLE_MEV_BOOST" = "true" ]; then
+        CMD="$CMD --payload-builder"
+    fi
+
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$VC_METRICS_PORT"
     fi
