@@ -77,6 +77,9 @@ fi
 # Lodestar startup
 if [ "$CC_CLIENT" = "lodestar" ]; then
 
+    # Remove any lock files that were left over accidentally after an unclean shutdown
+    find /validators/lodestar/validators -name voting-keystore.json.lock -delete
+
     # Set up the CC + fallback string
     if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
         FALLBACK_CC_STRING="--server $FALLBACK_CC_API_ENDPOINT"
