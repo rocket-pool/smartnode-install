@@ -9,46 +9,7 @@
       "pluginName": "Prometheus"
     }
   ],
-  "__elements": {
-    "U6pdXPcVz": {
-      "name": "Governance pane",
-      "uid": "U6pdXPcVz",
-      "kind": 1,
-      "model": {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
-        },
-        "description": "",
-        "libraryPanel": {
-          "name": "Governance pane",
-          "uid": ""
-        },
-        "options": {
-          "code": {
-            "language": "plaintext",
-            "showLineNumbers": false,
-            "showMiniMap": false
-          },
-          "content": "",
-          "mode": "markdown"
-        },
-        "pluginVersion": "9.3.1",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "PBFA97CFB590B2093"
-            },
-            "refId": "A"
-          }
-        ],
-        "title": "Governance",
-        "transparent": true,
-        "type": "text"
-      }
-    }
-  },
+  "__elements": {},
   "__requires": [
     {
       "type": "panel",
@@ -127,10 +88,10 @@
       }
     ]
   },
-  "description": "This is the standard dashboard for Rocket Pool node operators that use Lighthouse",
+  "description": "This is the standard dashboard for Rocket Pool node operators that use Nimbus.",
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": 14883,
+  "gnetId": 14884,
   "graphTooltip": 0,
   "id": null,
   "links": [],
@@ -211,7 +172,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "A count of how long Lighthouse's Beacon Chain client has been running. If you don't restart it, this is about the same as your total system uptime.",
+      "description": "A count of how long Nimbus has been running. If you don't restart it, this is about the same as your total system uptime.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -518,7 +479,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "Tracks the activity of all of your validators on the Beacon Chain. This is a cumulative count; it starts at 0 when Lighthouse first starts up, and then continuously increments as it goes.",
+      "description": "Tracks the activity of all of your validators on the Beacon Chain. This is a cumulative count; it starts at 0 when Nimbus first starts up, and then continuously increments as it goes.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -580,7 +541,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(vc_signed_attestations_total{job=\"validator\", status=\"success\"} or vector(0))",
+          "expr": "sum(beacon_attestations_sent_total{job=\"eth2\"}) OR on() vector(0)",
           "hide": false,
           "interval": "",
           "legendFormat": "Attestations",
@@ -592,7 +553,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"} or vector(0))",
+          "expr": "sum(beacon_blocks_proposed_total{job=\"eth2\"}) OR on() vector(0)",
           "interval": "",
           "legendFormat": "Proposals",
           "refId": "A"
@@ -686,7 +647,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(rate(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"}[$__rate_interval]) or vector(0)) * 45",
+          "expr": "sum(rate(beacon_blocks_proposed_total{job=\"eth2\"}[$__rate_interval])) * 45 OR on() vector(0)",
           "hide": false,
           "interval": "",
           "legendFormat": "Proposal",
@@ -698,7 +659,8 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(rate(vc_signed_attestations_total{job=\"validator\", status=\"success\"}[$__rate_interval]) or vector(0)) * 45",
+          "expr": "sum(rate(beacon_attestations_sent_total{job=\"eth2\"}[$__rate_interval])) * 45 OR on() vector(0)",
+          "hide": false,
           "interval": "",
           "legendFormat": "Attestation",
           "refId": "B"
@@ -712,7 +674,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The total CPU usage of Lighthouse's Beacon Chain and Validator clients combined, with respect to all cores on your CPU.",
+      "description": "The total CPU usage of Nimbus with respect to all cores on your CPU.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -776,13 +738,13 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "(sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) + sum(avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval])))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
+          "expr": "sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Lighthouse CPU",
+      "title": "Nimbus CPU",
       "type": "stat"
     },
     {
@@ -893,7 +855,7 @@
       "id": 82,
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -928,7 +890,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The amount of RAM that the Lighthouse Beacon Chain and Validator clients are using together.",
+      "description": "The amount of RAM that Nimbus is using.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -990,13 +952,13 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(process_resident_memory_bytes{job=\"eth2\"}) + sum(process_resident_memory_bytes{job=\"validator\"})",
+          "expr": "sum(process_resident_memory_bytes{job=\"eth2\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Lighthouse RAM",
+      "title": "Nimbus RAM",
       "type": "stat"
     },
     {
@@ -1227,7 +1189,7 @@
         "x": 15,
         "y": 5
       },
-      "id": 233,
+      "id": 229,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1275,7 +1237,7 @@
       "cards": {},
       "color": {
         "cardColor": "#b4ff00",
-        "colorScale": "sqrt",
+        "colorScale": "linear",
         "colorScheme": "interpolateOranges",
         "exponent": 0.5,
         "mode": "opacity"
@@ -1285,7 +1247,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "This tracks the delay between when you sent an attestation and your peers on the Beacon Chain network reported receiving it. Ideally, you want most of them to report that they received it within 4 seconds - otherwise you may be penalized for being late.",
+      "description": "This tracks how long it took for your attestations to be sent to the Beacon Chain. Anything below 0 seconds (down to -4) is good; anything over means it took longer than the 4-second window, and your attestation may have a larger inclusion distance which could result in lower overall rewards for that attestation.",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1308,7 +1270,7 @@
         "y": 6
       },
       "heatmap": {},
-      "hideZeroBuckets": false,
+      "hideZeroBuckets": true,
       "highlightCards": true,
       "id": 26,
       "interval": "",
@@ -1349,7 +1311,7 @@
         "yAxis": {
           "axisPlacement": "left",
           "reverse": true,
-          "unit": "s"
+          "unit": "short"
         }
       },
       "pluginVersion": "9.3.1",
@@ -1361,7 +1323,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(rate(validator_monitor_attestation_in_aggregate_delay_seconds_bucket{job=\"eth2\", src=\"gossip\"}[$__rate_interval])) without (validator)",
+          "expr": "rate(beacon_attestation_sent_delay_bucket{job=\"eth2\"}[$__rate_interval])",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1375,13 +1337,37 @@
         "show": true,
         "showHistogram": false
       },
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "-0.05",
+                "-0.1",
+                "-0.5",
+                "-1.0",
+                "-2.0",
+                "-4.0",
+                "0.05",
+                "0.1",
+                "0.5",
+                "1.0",
+                "2.0",
+                "4.0",
+                "8.0",
+                "Time"
+              ]
+            }
+          }
+        }
+      ],
       "type": "heatmap",
       "xAxis": {
         "show": true
       },
       "yAxis": {
-        "format": "s",
+        "format": "short",
         "logBase": 1,
         "show": true
       },
@@ -1467,7 +1453,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Lighthouse"
+              "options": "Nimbus"
             },
             "properties": [
               {
@@ -1520,10 +1506,10 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "(sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) + sum(avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval])))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
+          "expr": "avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval])) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
           "instant": false,
           "interval": "",
-          "legendFormat": "Lighthouse",
+          "legendFormat": "Nimbus",
           "refId": "A"
         },
         {
@@ -1618,7 +1604,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Lighthouse"
+              "options": "Nimbus"
             },
             "properties": [
               {
@@ -1690,10 +1676,10 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(process_resident_memory_bytes{job=\"eth2\"}) + sum(process_resident_memory_bytes{job=\"validator\"})",
+          "expr": "sum(process_resident_memory_bytes{job=\"eth2\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "Lighthouse",
+          "legendFormat": "Nimbus",
           "refId": "C"
         }
       ],
@@ -1705,7 +1691,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The time until your next attestation.\n\n**NOTE: Lighthouse does not currently expose this metric, so this is a placeholder until its developers add it.**",
+      "description": "The time until your next attestation.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1714,14 +1700,13 @@
           "mappings": [
             {
               "options": {
-                "match": "null",
-                "result": {
+                "0": {
                   "color": "text",
                   "index": 0,
-                  "text": "Not Implemented"
+                  "text": "None Scheduled"
                 }
               },
-              "type": "special"
+              "type": "value"
             }
           ],
           "thresholds": {
@@ -1733,7 +1718,7 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "s"
         },
         "overrides": []
       },
@@ -1767,7 +1752,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "",
+          "expr": "next_action_wait{job=\"eth2\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1806,7 +1791,7 @@
         "x": 15,
         "y": 8
       },
-      "id": 229,
+      "id": 233,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -1849,7 +1834,7 @@
         "x": 13,
         "y": 11
       },
-      "id": 245,
+      "id": 234,
       "options": {
         "code": {
           "language": "plaintext",
@@ -1895,8 +1880,8 @@
               "type": "special"
             }
           ],
-          "max": 50,
-          "min": 0,
+          "max": 160,
+          "min": -2,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1924,7 +1909,7 @@
         "x": 13,
         "y": 12
       },
-      "id": 244,
+      "id": 237,
       "links": [],
       "maxDataPoints": 100,
       "options": {
@@ -1956,7 +1941,7 @@
           "refId": "A"
         }
       ],
-      "title": "EC Peers",
+      "title": "CC Peers",
       "type": "gauge"
     },
     {
@@ -1964,7 +1949,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "How many peers Lighthouse is currently connected to on the Beacon Chain.",
+      "description": "How many peers Nimbus is currently connected to on the Beacon Chain.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1981,8 +1966,8 @@
               "type": "special"
             }
           ],
-          "max": 50,
-          "min": 0,
+          "max": 160,
+          "min": -2,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2034,13 +2019,13 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"})",
+          "expr": "nbc_peers{job=\"eth2\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "LH Peers",
+      "title": "Nimbus Peers",
       "type": "gauge"
     },
     {
@@ -2048,7 +2033,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "How many peers Lighthouse is currently connected to for Beacon Chain traffic.",
+      "description": "How many peers Nimbus and your EC are currently connected to for Beacon Chain traffic.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2127,7 +2112,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"})",
+          "expr": "nbc_peers{job=\"eth2\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "B"
@@ -2138,11 +2123,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "exemplar": true,
           "expr": "p2p_peers or ethereum_peer_count",
           "hide": false,
-          "interval": "",
-          "legendFormat": "EC peers",
+          "legendFormat": "CC Peers",
           "range": true,
           "refId": "A"
         }
@@ -3278,13 +3261,14 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "",
       "gridPos": {
         "h": 1,
         "w": 12,
         "x": 0,
         "y": 25
       },
-      "id": 170,
+      "id": 158,
       "options": {
         "code": {
           "language": "plaintext",
@@ -3304,6 +3288,7 @@
           "refId": "A"
         }
       ],
+      "title": "Rocket Pool Network Stats (Updates Every 5 Minutes)",
       "transparent": true,
       "type": "text"
     },
@@ -3440,42 +3425,6 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "",
-      "gridPos": {
-        "h": 1,
-        "w": 12,
-        "x": 0,
-        "y": 26
-      },
-      "id": 158,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "",
-        "mode": "markdown"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Rocket Pool Network Stats (Updates Every 5 Minutes)",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
       "description": "The total amount of ETH locked on the Rocket Pool network, including staked RPL (but not including Beacon Chain rewards).",
       "fieldConfig": {
         "defaults": {
@@ -3501,7 +3450,7 @@
         "h": 5,
         "w": 4,
         "x": 0,
-        "y": 27
+        "y": 26
       },
       "id": 156,
       "options": {
@@ -3566,7 +3515,7 @@
         "h": 5,
         "w": 4,
         "x": 4,
-        "y": 27
+        "y": 26
       },
       "id": 214,
       "options": {
@@ -3631,7 +3580,7 @@
         "h": 5,
         "w": 4,
         "x": 8,
-        "y": 27
+        "y": 26
       },
       "id": 182,
       "options": {
@@ -3893,7 +3842,7 @@
         "h": 4,
         "w": 3,
         "x": 0,
-        "y": 32
+        "y": 31
       },
       "id": 178,
       "options": {
@@ -3957,7 +3906,7 @@
         "h": 4,
         "w": 3,
         "x": 3,
-        "y": 32
+        "y": 31
       },
       "id": 180,
       "options": {
@@ -4026,7 +3975,7 @@
         "h": 5,
         "w": 3,
         "x": 6,
-        "y": 32
+        "y": 31
       },
       "id": 160,
       "options": {
@@ -4095,7 +4044,7 @@
         "h": 5,
         "w": 3,
         "x": 9,
-        "y": 32
+        "y": 31
       },
       "id": 208,
       "options": {
@@ -4271,71 +4220,6 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The total amount of RPL you've earned from RPL rewards for the entire life of your node.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              }
-            ]
-          },
-          "unit": "RPL"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 13,
-        "y": 35
-      },
-      "id": 192,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_node_cumulative_rpl_rewards",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total RPL Rewards Earned",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
       "description": "The total number of nodes that have registered on the Rocket Pool network.",
       "fieldConfig": {
         "defaults": {
@@ -4359,7 +4243,7 @@
         "h": 3,
         "w": 2,
         "x": 0,
-        "y": 36
+        "y": 35
       },
       "id": 172,
       "options": {
@@ -4511,7 +4395,7 @@
         "h": 6,
         "w": 4,
         "x": 2,
-        "y": 36
+        "y": 35
       },
       "id": 176,
       "options": {
@@ -4553,6 +4437,71 @@
       ],
       "title": "Minipools by Status",
       "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "The total amount of RPL you've earned from RPL rewards for the entire life of your node.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          },
+          "unit": "RPL"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 13,
+        "y": 35
+      },
+      "id": 192,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "rocketpool_node_cumulative_rpl_rewards",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Total RPL Rewards Earned",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -4605,7 +4554,7 @@
         "h": 5,
         "w": 3,
         "x": 6,
-        "y": 37
+        "y": 36
       },
       "id": 168,
       "options": {
@@ -4678,7 +4627,7 @@
         "h": 5,
         "w": 3,
         "x": 9,
-        "y": 37
+        "y": 36
       },
       "id": 225,
       "options": {
@@ -4710,6 +4659,69 @@
       ],
       "title": "Avg. RPL Collateral",
       "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "The total number of Rocket Pool minipools (validators) that are active (not exited and withdrawn from the Beacon Chain).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 0,
+        "y": 38
+      },
+      "id": 174,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "rocketpool_supply_active_minipools{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Active Minipools",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -4757,7 +4769,8 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "9.3.1",
       "targets": [
@@ -4782,8 +4795,6 @@
           "options": {
             "excludeByName": {
               "Time": true,
-              "Token": false,
-              "Value": false,
               "__name__": true,
               "instance": true,
               "job": true
@@ -4791,7 +4802,7 @@
             "indexByName": {},
             "renameByName": {
               "Value #A": "Value",
-              "instance": ""
+              "job": ""
             }
           }
         }
@@ -4803,46 +4814,22 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The total number of Rocket Pool minipools (validators) that are active (not exited and withdrawn from the Beacon Chain).",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
+      "description": "",
       "gridPos": {
-        "h": 3,
-        "w": 2,
+        "h": 1,
+        "w": 12,
         "x": 0,
-        "y": 39
+        "y": 41
       },
-      "id": 174,
+      "id": 238,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
         },
-        "text": {},
-        "textMode": "auto"
+        "content": "",
+        "mode": "markdown"
       },
       "pluginVersion": "9.3.1",
       "targets": [
@@ -4851,28 +4838,12 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "exemplar": true,
-          "expr": "rocketpool_supply_active_minipools{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Active Minipools",
-      "type": "stat"
-    },
-    {
-      "gridPos": {
-        "h": 1,
-        "w": 12,
-        "x": 0,
-        "y": 42
-      },
-      "id": 234,
-      "libraryPanel": {
-        "uid": "U6pdXPcVz",
-        "name": "Governance pane"
-      }
+      "title": "Governance",
+      "transparent": true,
+      "type": "text"
     },
     {
       "datasource": {
@@ -4890,8 +4861,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
-                "value": null
+                "color": "transparent"
               },
               {
                 "color": "red",
@@ -4906,7 +4876,7 @@
         "h": 4,
         "w": 3,
         "x": 0,
-        "y": 43
+        "y": 42
       },
       "id": 235,
       "options": {
@@ -4972,8 +4942,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
-                "value": null
+                "color": "transparent"
               }
             ]
           }
@@ -4984,7 +4953,7 @@
         "h": 4,
         "w": 3,
         "x": 3,
-        "y": 43
+        "y": 42
       },
       "id": 236,
       "options": {
@@ -5062,9 +5031,9 @@
         "h": 4,
         "w": 3,
         "x": 6,
-        "y": 43
+        "y": 42
       },
-      "id": 237,
+      "id": 240,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -5126,9 +5095,9 @@
         "h": 4,
         "w": 3,
         "x": 9,
-        "y": 43
+        "y": 42
       },
-      "id": 238,
+      "id": 242,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -5173,7 +5142,7 @@
         "x": 12,
         "y": 43
       },
-      "id": 239,
+      "id": 244,
       "options": {
         "code": {
           "language": "plaintext",
@@ -5229,7 +5198,7 @@
         "x": 13,
         "y": 44
       },
-      "id": 240,
+      "id": 246,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -5296,7 +5265,7 @@
         "x": 15,
         "y": 44
       },
-      "id": 241,
+      "id": 248,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -5363,7 +5332,7 @@
         "x": 17,
         "y": 44
       },
-      "id": 242,
+      "id": 252,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -5430,7 +5399,7 @@
         "x": 19,
         "y": 44
       },
-      "id": 243,
+      "id": 250,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -5492,8 +5461,8 @@
     ]
   },
   "timezone": "",
-  "title": "Rocket Pool Dashboard v1.2.0 for Lighthouse",
-  "uid": "Ur22GG77zLH120",
-  "version": 10,
+  "title": "Rocket Pool Dashboard v1.2.0 for Nimbus",
+  "uid": "Ur22GG77zNM120",
+  "version": 4,
   "weekStart": ""
 }
