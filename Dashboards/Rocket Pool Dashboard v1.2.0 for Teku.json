@@ -1779,6 +1779,42 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "",
+      "gridPos": {
+        "h": 1,
+        "w": 9,
+        "x": 13,
+        "y": 11
+      },
+      "id": 184,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<br/>s",
+        "mode": "html"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Connectivity",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "How many peers your EC is currently connected to.",
       "fieldConfig": {
         "defaults": {
@@ -1802,7 +1838,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red"
+                "color": "red",
+                "value": null
               },
               {
                 "color": "#EAB839",
@@ -1819,10 +1856,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 2,
         "x": 13,
-        "y": 11
+        "y": 12
       },
       "id": 244,
       "links": [],
@@ -1905,10 +1942,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 2,
         "x": 15,
-        "y": 11
+        "y": 12
       },
       "id": 12,
       "links": [],
@@ -1991,7 +2028,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -2000,10 +2038,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 5,
         "x": 17,
-        "y": 11
+        "y": 12
       },
       "id": 51,
       "options": {
@@ -2011,7 +2049,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -2025,10 +2063,12 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"})",
+          "expr": "beacon_peer_count{job=\"eth2\"}",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Teku",
+          "range": true,
           "refId": "B"
         },
         {
@@ -2041,7 +2081,7 @@
           "expr": "p2p_peers or ethereum_peer_count",
           "hide": false,
           "interval": "",
-          "legendFormat": "EC peers",
+          "legendFormat": "EC",
           "range": true,
           "refId": "A"
         }
@@ -2289,46 +2329,11 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "",
       "gridPos": {
         "h": 1,
         "w": 9,
         "x": 13,
-        "y": 15
-      },
-      "id": 184,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "<br/>s",
-        "mode": "html"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A"
-        }
-      ],
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 9,
-        "x": 13,
-        "y": 16
+        "y": 17
       },
       "id": 212,
       "options": {
@@ -2384,7 +2389,7 @@
         "h": 3,
         "w": 2,
         "x": 13,
-        "y": 17
+        "y": 18
       },
       "id": 72,
       "options": {
@@ -2453,7 +2458,7 @@
         "h": 6,
         "w": 3,
         "x": 15,
-        "y": 17
+        "y": 18
       },
       "id": 204,
       "options": {
@@ -2536,7 +2541,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 17
+        "y": 18
       },
       "id": 152,
       "links": [],
@@ -2622,7 +2627,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 17
+        "y": 18
       },
       "id": 226,
       "links": [],
@@ -2972,7 +2977,7 @@
         "h": 3,
         "w": 2,
         "x": 13,
-        "y": 20
+        "y": 21
       },
       "id": 210,
       "options": {
@@ -3037,7 +3042,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 20
+        "y": 21
       },
       "id": 206,
       "options": {
@@ -3102,7 +3107,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 20
+        "y": 21
       },
       "id": 227,
       "options": {
@@ -3146,7 +3151,7 @@
         "h": 1,
         "w": 9,
         "x": 13,
-        "y": 23
+        "y": 24
       },
       "id": 186,
       "options": {
@@ -3169,6 +3174,40 @@
         }
       ],
       "title": "RPL Rewards (Updates Every 5 Minutes)",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 12,
+        "x": 0,
+        "y": 25
+      },
+      "id": 170,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
@@ -3201,7 +3240,7 @@
         "h": 4,
         "w": 5,
         "x": 13,
-        "y": 24
+        "y": 25
       },
       "id": 218,
       "options": {
@@ -3265,7 +3304,7 @@
         "h": 4,
         "w": 4,
         "x": 18,
-        "y": 24
+        "y": 25
       },
       "id": 216,
       "options": {
@@ -3299,40 +3338,6 @@
       ],
       "title": "Next RPL Rewards Checkpoint",
       "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 12,
-        "x": 0,
-        "y": 25
-      },
-      "id": 170,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "",
-        "mode": "markdown"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A"
-        }
-      ],
-      "transparent": true,
-      "type": "text"
     },
     {
       "datasource": {
@@ -3595,7 +3600,7 @@
         "h": 3,
         "w": 4,
         "x": 13,
-        "y": 28
+        "y": 29
       },
       "id": 198,
       "options": {
@@ -3660,7 +3665,7 @@
         "h": 3,
         "w": 3,
         "x": 17,
-        "y": 28
+        "y": 29
       },
       "id": 190,
       "options": {
@@ -3728,7 +3733,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 28
+        "y": 29
       },
       "id": 222,
       "options": {
@@ -3762,144 +3767,6 @@
       ],
       "title": "Unclaimed RPL",
       "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The APR for your RPL stake, based on the rewards you will receive at the next checkpoint.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 13,
-        "y": 31
-      },
-      "id": 194,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_node_rpl_apr{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "APR for Next RPL Checkpoint",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Your total staked RPL collateral. At 10%, you have 1.6 ETH worth of RPL per minipool; at 150% you have 24 ETH worth of RPL per minipool.\n\nIf you fall below 10% you won't be able to claim your rewards at the next checkpoint until you get back to 10%. If you go over 150%, you'll only be rewarded for the first 150% of your stake.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "max": 1.5,
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 0.1
-              },
-              {
-                "color": "red",
-                "value": 1.5
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 5,
-        "x": 17,
-        "y": 31
-      },
-      "id": 196,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "text": {}
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_node_total_staked_rpl{job=\"rocketpool\"} * rocketpool_rpl_rpl_price{job=\"rocketpool\"} / rocketpool_node_deposited_eth{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "RPL Collateral",
-      "type": "gauge"
     },
     {
       "datasource": {
@@ -4170,6 +4037,144 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "The APR for your RPL stake, based on the rewards you will receive at the next checkpoint.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 13,
+        "y": 32
+      },
+      "id": 194,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "rocketpool_node_rpl_apr{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "APR for Next RPL Checkpoint",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Your total staked RPL collateral. At 10%, you have 1.6 ETH worth of RPL per minipool; at 150% you have 24 ETH worth of RPL per minipool.\n\nIf you fall below 10% you won't be able to claim your rewards at the next checkpoint until you get back to 10%. If you go over 150%, you'll only be rewarded for the first 150% of your stake.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 1.5,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0.1
+              },
+              {
+                "color": "red",
+                "value": 1.5
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 17,
+        "y": 32
+      },
+      "id": 196,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "rocketpool_node_total_staked_rpl{job=\"rocketpool\"} * rocketpool_rpl_rpl_price{job=\"rocketpool\"} / rocketpool_node_deposited_eth{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "RPL Collateral",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "The total amount of RPL you've earned from RPL rewards for the entire life of your node.",
       "fieldConfig": {
         "defaults": {
@@ -4195,7 +4200,7 @@
         "h": 3,
         "w": 4,
         "x": 13,
-        "y": 34
+        "y": 35
       },
       "id": 192,
       "options": {
@@ -4645,7 +4650,7 @@
         "h": 5,
         "w": 9,
         "x": 13,
-        "y": 37
+        "y": 38
       },
       "id": 200,
       "options": {
@@ -4763,12 +4768,46 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "",
       "gridPos": {
         "h": 1,
         "w": 12,
         "x": 0,
         "y": 42
+      },
+      "id": 264,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "gridPos": {
+        "h": 1,
+        "w": 12,
+        "x": 0,
+        "y": 43
       },
       "id": 245,
       "options": {
@@ -4803,7 +4842,7 @@
         "h": 1,
         "w": 12,
         "x": 12,
-        "y": 42
+        "y": 43
       },
       "id": 255,
       "options": {
@@ -4861,7 +4900,7 @@
         "h": 4,
         "w": 3,
         "x": 0,
-        "y": 43
+        "y": 44
       },
       "id": 247,
       "options": {
@@ -4939,7 +4978,7 @@
         "h": 4,
         "w": 3,
         "x": 3,
-        "y": 43
+        "y": 44
       },
       "id": 249,
       "options": {
@@ -5017,7 +5056,7 @@
         "h": 4,
         "w": 3,
         "x": 6,
-        "y": 43
+        "y": 44
       },
       "id": 251,
       "options": {
@@ -5081,7 +5120,7 @@
         "h": 4,
         "w": 3,
         "x": 9,
-        "y": 43
+        "y": 44
       },
       "id": 253,
       "options": {
@@ -5147,7 +5186,7 @@
         "h": 4,
         "w": 2,
         "x": 13,
-        "y": 43
+        "y": 44
       },
       "id": 257,
       "options": {
@@ -5214,7 +5253,7 @@
         "h": 4,
         "w": 2,
         "x": 15,
-        "y": 43
+        "y": 44
       },
       "id": 259,
       "options": {
@@ -5281,7 +5320,7 @@
         "h": 4,
         "w": 2,
         "x": 17,
-        "y": 43
+        "y": 44
       },
       "id": 261,
       "options": {
@@ -5348,7 +5387,7 @@
         "h": 4,
         "w": 3,
         "x": 19,
-        "y": 43
+        "y": 44
       },
       "id": 263,
       "options": {
@@ -5414,6 +5453,6 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.2.0 for Teku",
   "uid": "Ur22GG77zTK120",
-  "version": 3,
+  "version": 6,
   "weekStart": ""
 }

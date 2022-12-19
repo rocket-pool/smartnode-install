@@ -1904,7 +1904,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 2,
         "x": 13,
         "y": 12
@@ -1990,7 +1990,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 2,
         "x": 15,
         "y": 12
@@ -2086,7 +2086,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 5,
         "x": 17,
         "y": 12
@@ -2097,7 +2097,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -2111,10 +2111,12 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "nbc_peers{job=\"eth2\"}",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Nimbus",
+          "range": true,
           "refId": "B"
         },
         {
@@ -2125,7 +2127,7 @@
           "editorMode": "code",
           "expr": "p2p_peers or ethereum_peer_count",
           "hide": false,
-          "legendFormat": "CC Peers",
+          "legendFormat": "EC",
           "range": true,
           "refId": "A"
         }
@@ -2367,41 +2369,6 @@
       ],
       "title": "Disk 2 Space Used",
       "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "",
-      "gridPos": {
-        "h": 1,
-        "w": 9,
-        "x": 13,
-        "y": 16
-      },
-      "id": 184,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "<br/>s",
-        "mode": "html"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A"
-        }
-      ],
-      "transparent": true,
-      "type": "text"
     },
     {
       "datasource": {
@@ -3265,10 +3232,10 @@
       "gridPos": {
         "h": 1,
         "w": 12,
-        "x": 0,
+        "x": 1,
         "y": 25
       },
-      "id": 158,
+      "id": 254,
       "options": {
         "code": {
           "language": "plaintext",
@@ -3288,7 +3255,6 @@
           "refId": "A"
         }
       ],
-      "title": "Rocket Pool Network Stats (Updates Every 5 Minutes)",
       "transparent": true,
       "type": "text"
     },
@@ -3425,6 +3391,42 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "",
+      "gridPos": {
+        "h": 1,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "id": 158,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Rocket Pool Network Stats (Updates Every 5 Minutes)",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "The total amount of ETH locked on the Rocket Pool network, including staked RPL (but not including Beacon Chain rewards).",
       "fieldConfig": {
         "defaults": {
@@ -3450,7 +3452,7 @@
         "h": 5,
         "w": 4,
         "x": 0,
-        "y": 26
+        "y": 27
       },
       "id": 156,
       "options": {
@@ -3515,7 +3517,7 @@
         "h": 5,
         "w": 4,
         "x": 4,
-        "y": 26
+        "y": 27
       },
       "id": 214,
       "options": {
@@ -3580,7 +3582,7 @@
         "h": 5,
         "w": 4,
         "x": 8,
-        "y": 26
+        "y": 27
       },
       "id": 182,
       "options": {
@@ -3842,7 +3844,7 @@
         "h": 4,
         "w": 3,
         "x": 0,
-        "y": 31
+        "y": 32
       },
       "id": 178,
       "options": {
@@ -3906,7 +3908,7 @@
         "h": 4,
         "w": 3,
         "x": 3,
-        "y": 31
+        "y": 32
       },
       "id": 180,
       "options": {
@@ -3975,7 +3977,7 @@
         "h": 5,
         "w": 3,
         "x": 6,
-        "y": 31
+        "y": 32
       },
       "id": 160,
       "options": {
@@ -4044,7 +4046,7 @@
         "h": 5,
         "w": 3,
         "x": 9,
-        "y": 31
+        "y": 32
       },
       "id": 208,
       "options": {
@@ -4220,6 +4222,71 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "The total amount of RPL you've earned from RPL rewards for the entire life of your node.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          },
+          "unit": "RPL"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 13,
+        "y": 35
+      },
+      "id": 192,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "rocketpool_node_cumulative_rpl_rewards",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Total RPL Rewards Earned",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "The total number of nodes that have registered on the Rocket Pool network.",
       "fieldConfig": {
         "defaults": {
@@ -4243,7 +4310,7 @@
         "h": 3,
         "w": 2,
         "x": 0,
-        "y": 35
+        "y": 36
       },
       "id": 172,
       "options": {
@@ -4395,7 +4462,7 @@
         "h": 6,
         "w": 4,
         "x": 2,
-        "y": 35
+        "y": 36
       },
       "id": 176,
       "options": {
@@ -4437,71 +4504,6 @@
       ],
       "title": "Minipools by Status",
       "type": "piechart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The total amount of RPL you've earned from RPL rewards for the entire life of your node.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              }
-            ]
-          },
-          "unit": "RPL"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 13,
-        "y": 35
-      },
-      "id": 192,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_node_cumulative_rpl_rewards",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total RPL Rewards Earned",
-      "type": "stat"
     },
     {
       "datasource": {
@@ -4554,7 +4556,7 @@
         "h": 5,
         "w": 3,
         "x": 6,
-        "y": 36
+        "y": 37
       },
       "id": 168,
       "options": {
@@ -4627,7 +4629,7 @@
         "h": 5,
         "w": 3,
         "x": 9,
-        "y": 36
+        "y": 37
       },
       "id": 225,
       "options": {
@@ -4659,69 +4661,6 @@
       ],
       "title": "Avg. RPL Collateral",
       "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The total number of Rocket Pool minipools (validators) that are active (not exited and withdrawn from the Beacon Chain).",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 0,
-        "y": 38
-      },
-      "id": 174,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_supply_active_minipools{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Active Minipools",
-      "type": "stat"
     },
     {
       "datasource": {
@@ -4814,12 +4753,110 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "The total number of Rocket Pool minipools (validators) that are active (not exited and withdrawn from the Beacon Chain).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 0,
+        "y": 39
+      },
+      "id": 174,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "rocketpool_supply_active_minipools{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Active Minipools",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "",
       "gridPos": {
         "h": 1,
         "w": 12,
         "x": 0,
-        "y": 41
+        "y": 42
+      },
+      "id": 253,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "gridPos": {
+        "h": 1,
+        "w": 12,
+        "x": 0,
+        "y": 43
       },
       "id": 238,
       "options": {
@@ -4850,6 +4887,41 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "gridPos": {
+        "h": 1,
+        "w": 12,
+        "x": 12,
+        "y": 43
+      },
+      "id": 244,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Smoothing Pool Rewards",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "The number of active proposals you or your delegate have voted on.",
       "fieldConfig": {
         "defaults": {
@@ -4861,7 +4933,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "transparent",
+                "value": null
               },
               {
                 "color": "red",
@@ -4876,7 +4949,7 @@
         "h": 4,
         "w": 3,
         "x": 0,
-        "y": 42
+        "y": 44
       },
       "id": 235,
       "options": {
@@ -4942,7 +5015,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "transparent",
+                "value": null
               }
             ]
           }
@@ -4953,7 +5027,7 @@
         "h": 4,
         "w": 3,
         "x": 3,
-        "y": 42
+        "y": 44
       },
       "id": 236,
       "options": {
@@ -5031,7 +5105,7 @@
         "h": 4,
         "w": 3,
         "x": 6,
-        "y": 42
+        "y": 44
       },
       "id": 240,
       "options": {
@@ -5095,7 +5169,7 @@
         "h": 4,
         "w": 3,
         "x": 9,
-        "y": 42
+        "y": 44
       },
       "id": 242,
       "options": {
@@ -5130,41 +5204,6 @@
       ],
       "title": "Delegate Voting Power",
       "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 12,
-        "x": 12,
-        "y": 43
-      },
-      "id": 244,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "",
-        "mode": "markdown"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Smoothing Pool Rewards",
-      "transparent": true,
-      "type": "text"
     },
     {
       "datasource": {
@@ -5463,6 +5502,6 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.2.0 for Nimbus",
   "uid": "Ur22GG77zNM120",
-  "version": 4,
+  "version": 6,
   "weekStart": ""
 }

@@ -1919,7 +1919,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 2,
         "x": 13,
         "y": 12
@@ -2005,7 +2005,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 2,
         "x": 15,
         "y": 12
@@ -2101,7 +2101,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 5,
         "x": 17,
         "y": 12
@@ -2112,7 +2112,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -2126,10 +2126,12 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"})",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "LH ",
+          "range": true,
           "refId": "B"
         },
         {
@@ -2142,7 +2144,7 @@
           "expr": "p2p_peers or ethereum_peer_count",
           "hide": false,
           "interval": "",
-          "legendFormat": "EC peers",
+          "legendFormat": "EC",
           "range": true,
           "refId": "A"
         }
@@ -2384,41 +2386,6 @@
       ],
       "title": "Disk 2 Space Used",
       "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "",
-      "gridPos": {
-        "h": 1,
-        "w": 9,
-        "x": 13,
-        "y": 16
-      },
-      "id": 184,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "<br/>s",
-        "mode": "html"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A"
-        }
-      ],
-      "transparent": true,
-      "type": "text"
     },
     {
       "datasource": {
@@ -4862,17 +4829,86 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "gridPos": {
         "h": 1,
         "w": 12,
         "x": 0,
         "y": 42
       },
+      "id": 246,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 12,
+        "x": 0,
+        "y": 43
+      },
       "id": 234,
       "libraryPanel": {
         "uid": "U6pdXPcVz",
         "name": "Governance pane"
       }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 12,
+        "x": 12,
+        "y": 43
+      },
+      "id": 239,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Smoothing Pool Rewards",
+      "transparent": true,
+      "type": "text"
     },
     {
       "datasource": {
@@ -4906,7 +4942,7 @@
         "h": 4,
         "w": 3,
         "x": 0,
-        "y": 43
+        "y": 44
       },
       "id": 235,
       "options": {
@@ -4984,7 +5020,7 @@
         "h": 4,
         "w": 3,
         "x": 3,
-        "y": 43
+        "y": 44
       },
       "id": 236,
       "options": {
@@ -5062,7 +5098,7 @@
         "h": 4,
         "w": 3,
         "x": 6,
-        "y": 43
+        "y": 44
       },
       "id": 237,
       "options": {
@@ -5126,7 +5162,7 @@
         "h": 4,
         "w": 3,
         "x": 9,
-        "y": 43
+        "y": 44
       },
       "id": 238,
       "options": {
@@ -5161,41 +5197,6 @@
       ],
       "title": "Delegate Voting Power",
       "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 12,
-        "x": 12,
-        "y": 43
-      },
-      "id": 239,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "",
-        "mode": "markdown"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Smoothing Pool Rewards",
-      "transparent": true,
-      "type": "text"
     },
     {
       "datasource": {
@@ -5494,6 +5495,6 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.2.0 for Lighthouse",
   "uid": "Ur22GG77zLH120",
-  "version": 10,
+  "version": 12,
   "weekStart": ""
 }
