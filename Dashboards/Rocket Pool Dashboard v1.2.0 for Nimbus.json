@@ -1941,7 +1941,7 @@
           "refId": "A"
         }
       ],
-      "title": "CC Peers",
+      "title": "EC Peers",
       "type": "gauge"
     },
     {
