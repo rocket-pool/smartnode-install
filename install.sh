@@ -41,6 +41,15 @@ if [ "$PLATFORM" = "Linux" ]; then
     fi
 fi
 
+# Detect installed privilege escalation programs
+if type sudo > /dev/null 2>&1; then
+    SUDO_CMD="sudo"
+elif type doas > /dev/null 2>&1; then
+    echo "NOTE: sudo not found, using doas instead"
+    SUDO_CMD="doas"
+else
+    fail "Please make sure a privilege escalation command such as \"sudo\" is installed and available before installing Rocket Pool."
+fi
 
 ##
 # Config
@@ -72,18 +81,6 @@ progress() {
 # Docker installation steps
 add_user_docker() {
     $SUDO_CMD usermod -aG docker $USER || fail "Could not add user to docker group."
-}
-
-# Detect installed privilege escalation programs
-detect_sudo_command() {
-    if type sudo > /dev/null 2>&1; then
-        SUDO_CMD="sudo"
-    elif type doas > /dev/null 2>&1; then
-        echo "NOTE: sudo not found, using doas instead"
-        SUDO_CMD="doas"
-    else
-        fail "Please make sure a privilege escalation command such as \"sudo\" is installed and available before installing Rocket Pool."
-    fi
 }
 
 # Install
@@ -146,7 +143,6 @@ case "$PLATFORM" in
 
         # Install OS dependencies
         progress 1 "Installing OS dependencies..."
-        detect_sudo_command >&2
         { $SUDO_CMD apt-get -y update || fail "Could not update OS package definitions."; } >&2
         { $SUDO_CMD apt-get -y install apt-transport-https ca-certificates curl gnupg gnupg-agent lsb-release software-properties-common chrony || fail "Could not install OS packages."; } >&2
 
