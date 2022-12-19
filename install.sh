@@ -76,11 +76,14 @@ add_user_docker() {
 
 # Detect installed privilege escalation programs
 detect_sudo_command() {
-    for cmd in sudo doas; do
-        type $cmd >/dev/null && \
-            export SUDO_CMD="$cmd"
-    done 2>/dev/null
-    [ -z ${SUDO_CMD+nil} ] && fail "Please make sure the sudo command is available before running this script."
+    if type sudo > /dev/null 2>&1; then
+        SUDO_CMD="sudo"
+    elif type doas > /dev/null 2>&1; then
+        echo "NOTE: sudo not found, using doas instead"
+        SUDO_CMD="doas"
+    else
+        fail "Please make sure a privilege escalation command such as \"sudo\" is installed and available before installing Rocket Pool."
+    fi
 }
 
 # Install
