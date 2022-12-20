@@ -4,7 +4,17 @@
 # Performance tuning for ARM systems
 UNAME_VAL=$(uname -m)
 if [ "$UNAME_VAL" = "arm64" ] || [ "$UNAME_VAL" = "aarch64" ]; then
-    PERF_PREFIX="ionice -c 2 -n 0"
+    # Get the number of available cores
+    CORE_COUNT=$(nproc)
+
+    # Don't do performance tweaks on systems with 6+ cores
+    if [ "$CORE_COUNT" -gt "5" ]; then
+        echo "$CORE_COUNT cores detected, skipping performance tuning"
+    else
+        echo "$CORE_COUNT cores detected, activating performance tuning"
+        PERF_PREFIX="ionice -c 2 -n 0"
+        echo "Performance tuning: $PERF_PREFIX"
+    fi
 fi
 
 # Set up the network-based flags
