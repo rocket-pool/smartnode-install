@@ -116,7 +116,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         FALLBACK_CC_ARG="--beacon-node=$FALLBACK_CC_API_ENDPOINT"
     fi
 
-    CMD="/home/user/nimbus-eth2/build/nimbus_validator_client \
+    CMD="/home/user/nimbus_validator_client \
         --non-interactive \
         --beacon-node=$CC_API_ENDPOINT $FALLBACK_CC_ARG \
         --data-dir=/ethclient/nimbus_vc \
