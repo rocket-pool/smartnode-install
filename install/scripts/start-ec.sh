@@ -4,7 +4,15 @@
 # Performance tuning for ARM systems
 define_perf_prefix() {
     # Get the number of available cores
-    CORE_COUNT=$(grep -c ^processor /proc/cpuinfo)
+    CORE_COUNT=$(nproc)
+
+    # Don't do performance tweaks on systems with 6+ cores
+    if [ "$CORE_COUNT" -gt "5" ]; then
+        echo "$CORE_COUNT cores detected, skipping performance tuning"
+        return 0
+    else
+        echo "$CORE_COUNT cores detected, activating performance tuning"
+    fi
 
     # Give the EC access to the last core
     CURRENT_CORE=$((CORE_COUNT - 1))
@@ -18,6 +26,7 @@ define_perf_prefix() {
     done
 
     PERF_PREFIX="taskset -c $CORE_STRING ionice -c 3"
+    echo "Performance tuning: $PERF_PREFIX"
 }
 
 # Set up the network-based flags
