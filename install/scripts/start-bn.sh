@@ -122,7 +122,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         fi
     fi
 
-    CMD="$PERF_PREFIX /home/user/nimbus_beacon_node \
+    CMD="$PERF_PREFIX /home/user/nimbus-eth2/build/nimbus_beacon_node \
         --non-interactive \
         --enr-auto-update \
         --network=$NIMBUS_NETWORK \
