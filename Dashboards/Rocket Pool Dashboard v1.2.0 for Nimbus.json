@@ -1,71 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "panel",
-      "id": "gauge",
-      "name": "Gauge",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "9.3.1"
-    },
-    {
-      "type": "panel",
-      "id": "heatmap",
-      "name": "Heatmap",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "piechart",
-      "name": "Pie chart",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "text",
-      "name": "Text",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -93,14 +26,14 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 14884,
   "graphTooltip": 0,
-  "id": null,
+  "id": 6,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "gridPos": {
         "h": 1,
@@ -123,7 +56,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
@@ -135,7 +68,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "gridPos": {
         "h": 1,
@@ -158,7 +91,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
@@ -170,7 +103,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "A count of how long Nimbus has been running. If you don't restart it, this is about the same as your total system uptime.",
       "fieldConfig": {
@@ -231,7 +164,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "time() - process_start_time_seconds{job=\"eth2\"}",
@@ -246,7 +179,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "This will turn red when your system needs to be rebooted because of security updates.\n\nSetting this up is Operating System specific, so it doesn't come ready out of the box; see the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
@@ -310,7 +243,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "os_reboot_required{job=\"node\"}",
@@ -325,7 +258,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Tracks any updates that are available for your OS or for Rocket Pool but haven't been applied yet. When one of these numbers is higher than 0, it means you should update your system or Rocket Pool accordingly.\n\nSetting this up is Operating System specific, so it doesn't come ready out of the box; see the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
@@ -377,7 +310,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "max(os_upgrades_pending{job=\"node\"})",
@@ -388,7 +321,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "max(rocketpool_version_update{job=\"node\"})",
@@ -404,7 +337,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "How much of your total swap space you're currently using. If you have swap space enabled, you want this to be as low as possible - otherwise, your system is running out of free RAM.",
       "fieldConfig": {
@@ -462,7 +395,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "((node_memory_SwapTotal_bytes{job=\"node\"} - node_memory_SwapFree_bytes{job=\"node\"}) / node_memory_SwapTotal_bytes{job=\"node\"})",
@@ -477,7 +410,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The temperature of your CPU (you can set this to Tctl or Tdie, whichever you prefer to monitor).\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
@@ -534,7 +467,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
@@ -549,7 +482,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Tracks the activity of all of your validators on the Beacon Chain. This is a cumulative count; it starts at 0 when Nimbus first starts up, and then continuously increments as it goes.",
       "fieldConfig": {
@@ -610,7 +543,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "sum(beacon_attestations_sent_total{job=\"eth2\"}) OR on() vector(0)",
@@ -622,7 +555,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "sum(beacon_blocks_proposed_total{job=\"eth2\"}) OR on() vector(0)",
@@ -637,7 +570,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Tracks the activity of all of your validators on the Beacon Chain.",
       "fieldConfig": {
@@ -716,7 +649,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "sum(rate(beacon_blocks_proposed_total{job=\"eth2\"}[$__rate_interval])) * 45 OR on() vector(0)",
@@ -728,7 +661,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "sum(rate(beacon_attestations_sent_total{job=\"eth2\"}[$__rate_interval])) * 45 OR on() vector(0)",
@@ -744,7 +677,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total CPU usage of Nimbus with respect to all cores on your CPU.",
       "fieldConfig": {
@@ -807,7 +740,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
@@ -822,7 +755,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total CPU usage of your machine, with respect to all cores.",
       "fieldConfig": {
@@ -873,7 +806,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "1 - avg (irate(node_cpu_seconds_total{job=\"node\", mode=\"idle\"}[$__rate_interval]))",
@@ -888,7 +821,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The amount of RAM that Nimbus is using.",
       "fieldConfig": {
@@ -949,7 +882,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "sum(process_resident_memory_bytes{job=\"eth2\"})",
@@ -964,7 +897,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The amount of RAM that the Lighthouse Beacon Chain and Validator clients are using together.",
       "fieldConfig": {
@@ -1025,7 +958,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -1042,7 +975,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total amount of RAM that your system is currently using.",
       "fieldConfig": {
@@ -1091,7 +1024,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "node_memory_MemTotal_bytes{job=\"node\"} - node_memory_MemAvailable_bytes{job=\"node\"}",
@@ -1106,7 +1039,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total amount of RAM that your system has installed.",
       "fieldConfig": {
@@ -1155,7 +1088,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "node_memory_MemTotal_bytes{job=\"node\"}",
@@ -1170,7 +1103,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The number of block proposals you have coming up in the next few minutes. If you were planning on taking your node down for maintenance, you should wait until after the proposals because they're worth a lot of ETH!",
       "fieldConfig": {
@@ -1221,7 +1154,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_beacon_upcoming_proposals",
@@ -1236,7 +1169,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The number of [sync committees](https://blockdaemon.com/blog/ethereum-altair-hard-folk-light-clients-sync-committees/) that you're about to be a part of, and that you're currently a part of.\n\nIf you were planning on doing maintenance to your node, **you should wait until the sync committee is over**. Not only are they worth an **extremely** large amount of ETH, but if you miss attestations during a sync committee, you **lose an extremely large amount of ETH** instead!\n\nYou should be online as long as possible while you are in a sync committee.",
       "fieldConfig": {
@@ -1287,7 +1220,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_beacon_upcoming_sync_committee",
@@ -1298,7 +1231,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_beacon_active_sync_committee",
@@ -1323,7 +1256,7 @@
       "dataFormat": "tsbuckets",
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "This tracks how long it took for your attestations to be sent to the Beacon Chain. Anything below 0 seconds (down to -4) is good; anything over means it took longer than the 4-second window, and your attestation may have a larger inclusion distance which could result in lower overall rewards for that attestation.",
       "fieldConfig": {
@@ -1356,13 +1289,24 @@
         "show": false
       },
       "options": {
-        "calculate": false,
-        "calculation": {},
+        "calculate": true,
+        "calculation": {
+          "xBuckets": {
+            "mode": "count",
+            "value": "500"
+          },
+          "yBuckets": {
+            "mode": "count",
+            "value": "10"
+          }
+        },
         "cellGap": 2,
         "cellValues": {},
         "color": {
-          "exponent": 0.5,
+          "exponent": 1,
           "fill": "#b4ff00",
+          "max": 10,
+          "min": 0,
           "mode": "opacity",
           "reverse": false,
           "scale": "exponential",
@@ -1388,7 +1332,7 @@
         },
         "yAxis": {
           "axisPlacement": "left",
-          "reverse": true,
+          "reverse": false,
           "unit": "short"
         }
       },
@@ -1398,7 +1342,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rate(beacon_attestation_sent_delay_bucket{job=\"eth2\"}[$__rate_interval])",
@@ -1454,7 +1398,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Tracks the amount of CPU consumption for the eth2 client and the total system. 100% means all of your CPU core are being used at their full capacity. The yellow line indicates how much CPU a single core can provide in your system.",
       "fieldConfig": {
@@ -1569,7 +1513,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "(1 - avg by (instance) (irate(node_cpu_seconds_total{job=\"node\", mode=\"idle\"}[$__rate_interval]))) * 100",
@@ -1581,7 +1525,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval])) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
@@ -1593,7 +1537,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
@@ -1611,7 +1555,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Tracks the amount of CPU consumption for the eth2 client and the total system. 100% means all of your CPU core are being used at their full capacity. The yellow line indicates how much CPU a single core can provide in your system.",
       "fieldConfig": {
@@ -1726,7 +1670,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "expr": "system_cpu_procload{job=\"geth\"} OR irate(process_cpu_seconds_total{instance=\"eth1\"}[$__rate_interval])",
@@ -1742,7 +1686,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Tracks the total amount of RAM usage by the eth2 client and the entire system, versus how much is available.",
       "fieldConfig": {
@@ -1859,7 +1803,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "node_memory_MemTotal_bytes{job=\"node\"} - node_memory_MemAvailable_bytes{job=\"node\"}",
@@ -1870,7 +1814,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "node_memory_MemTotal_bytes{job=\"node\"}",
@@ -1882,7 +1826,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "sum(process_resident_memory_bytes{job=\"eth2\"})",
@@ -1894,7 +1838,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "expr": "system_memory_used{job=\"geth\"} or (jvm_memory_bytes_used{instance=~\"$system\", area=\"heap\"} + ignoring(area) jvm_memory_bytes_used{instance=~\"$system\", area=\"nonheap\"})",
@@ -1910,7 +1854,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The time until your next attestation.",
       "fieldConfig": {
@@ -1970,7 +1914,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "next_action_wait{job=\"eth2\"}",
@@ -1985,7 +1929,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "How many minipools you currently have running on your node.",
       "fieldConfig": {
@@ -2032,7 +1976,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_active_minipool_count",
@@ -2047,7 +1991,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "",
       "gridPos": {
@@ -2071,7 +2015,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
@@ -2082,7 +2026,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "gridPos": {
         "h": 1,
@@ -2105,7 +2049,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
@@ -2117,7 +2061,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "How many peers your EC is currently connected to.",
       "fieldConfig": {
@@ -2186,7 +2130,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -2203,7 +2147,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "How many peers Nimbus is currently connected to on the Beacon Chain.",
       "fieldConfig": {
@@ -2272,7 +2216,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "nbc_peers{job=\"eth2\"}",
@@ -2287,7 +2231,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "How many peers Nimbus and your EC are currently connected to for Beacon Chain traffic.",
       "fieldConfig": {
@@ -2365,7 +2309,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -2378,7 +2322,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "expr": "p2p_peers or ethereum_peer_count",
@@ -2394,7 +2338,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "This tracks how long it takes between one of your processes trying to read from / write to your SSD, and when that operation is actually performed. Think of this like \"how long SSD reads and writes have to wait in a queue before completing\". The longer this time, the longer it takes for your node to perform its Beacon Chain duties.",
       "fieldConfig": {
@@ -2470,7 +2414,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "irate(node_pressure_io_waiting_seconds_total{job=\"node\"}[$__rate_interval])",
@@ -2485,7 +2429,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The disk space used by your primary (Operating System) hard drive. Change the `device` option in this query to be your machine's hard drive.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
@@ -2542,7 +2486,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "(node_filesystem_size_bytes{job=\"node\", mountpoint=\"/\"} - node_filesystem_avail_bytes{job=\"node\", mountpoint=\"/\"}) / node_filesystem_size_bytes{job=\"node\", mountpoint=\"/\"}",
@@ -2557,7 +2501,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "An optional space monitor for a second disk or partition on your system. If you store your chain data on a separate drive or partition from your OS (such as with a Raspberry Pi), you can configure this to track that disk. Just modify the `device` setting in the query with your storage partition's path.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
@@ -2614,7 +2558,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "(node_filesystem_size_bytes{job=\"node\", device=\"\"} - node_filesystem_avail_bytes{job=\"node\", device=\"\"}) / node_filesystem_size_bytes{job=\"node\", device=\"\"}",
@@ -2629,7 +2573,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "",
       "gridPos": {
@@ -2653,7 +2597,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
@@ -2664,7 +2608,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The average read/write latency of your SSD. The lower it is, the faster your machine can process and respond to Beacon Chain activities like attesting. Change the `device` setting in the queries to be the SSD you want to track (typically the one with your chain data on it).\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
@@ -2740,7 +2684,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "irate(node_disk_write_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_writes_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
@@ -2752,7 +2696,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "irate(node_disk_read_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_reads_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
@@ -2767,7 +2711,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "A chart showing the network I/O used by your main network adapter over time. To make it work, change the `device` setting in the queries to match the name of the network adapter you want to track (you can use `ifconfig` to get a list of network adapters and find the right one). \n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
@@ -2843,7 +2787,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "irate(node_network_transmit_bytes_total{job=\"node\", device=\"\"}[$__rate_interval])",
@@ -2855,7 +2799,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "irate(node_network_receive_bytes_total{job=\"node\", device=\"\"}[$__rate_interval])",
@@ -2870,7 +2814,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total network I/O that has gone through your main network adapter. To make it work, change the `device` setting in the queries to match the name of the network adapter you want to track (you can use `ifconfig` to get a list of network adapters and find the right one). \n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
@@ -2919,7 +2863,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "node_network_transmit_bytes_total{job=\"node\", device=\"\"}",
@@ -2931,7 +2875,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "node_network_receive_bytes_total{job=\"node\", device=\"\"}",
@@ -2946,7 +2890,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "gridPos": {
         "h": 1,
@@ -2969,7 +2913,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
@@ -2981,7 +2925,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total ETH balance of all of your Rocket Pool validators on the Beacon Chain.",
       "fieldConfig": {
@@ -3031,7 +2975,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_beacon_balance{job=\"rocketpool\"}",
@@ -3046,7 +2990,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total amount of ETH you've earned on the Beacon Chain by running a Rocket Pool node. This is equal to your total share of the rewards, minus the 16 ETH you deposited for each minipool.",
       "fieldConfig": {
@@ -3100,7 +3044,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_beacon_share{job=\"rocketpool\"} - rocketpool_node_deposited_eth{job=\"rocketpool\"}",
@@ -3115,7 +3059,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The raw APR from the Beacon Chain across all of your validators. This is what you would get if you were solo staking all of your validators.\n\nCalculated by comparing today's balance with yesterday's balance, so this is your average APR over the last 24 hours.",
       "fieldConfig": {
@@ -3185,7 +3129,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "((rocketpool_node_beacon_balance{job=\"rocketpool\"}) - (rocketpool_node_beacon_balance{job=\"rocketpool\"} offset 1d != 0)) / 32 / rocketpool_node_active_minipool_count{job=\"rocketpool\"} * 365",
@@ -3201,7 +3145,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The raw APR from the Beacon Chain across all of your validators. This is what you would get if you were solo staking all of your validators.\n\nCalculated by comparing today's balance with the balance from 7 days ago, so this is your average APR over the last week.",
       "fieldConfig": {
@@ -3271,7 +3215,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "((rocketpool_node_beacon_balance{job=\"rocketpool\"}) - (rocketpool_node_beacon_balance{job=\"rocketpool\"} offset 7d != 0)) / 32 / rocketpool_node_active_minipool_count{job=\"rocketpool\"} * (365/7)",
@@ -3287,7 +3231,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "This is how much ETH you will receive if you exit all of your validators on the Beacon Chain; it's your share of the total balance for each Rocket Pool minipool.",
       "fieldConfig": {
@@ -3337,7 +3281,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_beacon_share{job=\"rocketpool\"}",
@@ -3352,7 +3296,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Your APR from Beacon Chain rewards, which includes the your minipool's commission.\n\nCalculated by comparing today's balance with yesterday's balance, so this is your average APR over the last 24 hours.",
       "fieldConfig": {
@@ -3402,7 +3346,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "((rocketpool_node_beacon_share{job=\"rocketpool\"}) - (rocketpool_node_beacon_share{job=\"rocketpool\"} offset 1d != 0)) / rocketpool_node_deposited_eth{job=\"rocketpool\"} * 365",
@@ -3417,7 +3361,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Your APR from Beacon Chain rewards, which includes the your minipool's commission.\n\nCalculated by comparing today's balance with the balance from 7 days ago, so this is your average APR over the last week.",
       "fieldConfig": {
@@ -3467,7 +3411,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "((rocketpool_node_beacon_share{job=\"rocketpool\"}) - (rocketpool_node_beacon_share{job=\"rocketpool\"} offset 7d != 0)) / rocketpool_node_deposited_eth{job=\"rocketpool\"} * (365/7)",
@@ -3482,7 +3426,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "",
       "gridPos": {
@@ -3506,7 +3450,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
@@ -3518,7 +3462,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total amount of ETH locked on the Rocket Pool network, including staked RPL (but not including Beacon Chain rewards).",
       "fieldConfig": {
@@ -3568,7 +3512,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_demand_deposit_pool_balance{job=\"rocketpool\"} + rocketpool_demand_total_minipool_capacity{job=\"rocketpool\"} + rocketpool_supply_active_minipools{job=\"rocketpool\"} * 32 + rocketpool_rpl_total_value_staked{job=\"rocketpool\"} * rocketpool_rpl_rpl_price{job=\"rocketpool\"}",
@@ -3583,7 +3527,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total amount of RPL staked across all node operators in the Rocket Pool network.",
       "fieldConfig": {
@@ -3633,7 +3577,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_rpl_total_value_staked{job=\"rocketpool\"}",
@@ -3648,7 +3592,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total *effective* RPL stake across all node operators on the Rocket Pool network. This accounts for the 150% collateral cap per minipool. If this number is lower than the Total RPL Staked, then some node operators have gone above 150%.",
       "fieldConfig": {
@@ -3698,7 +3642,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_rpl_total_effective_staked{job=\"rocketpool\"}",
@@ -3713,7 +3657,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The Smoothing Pool Balance",
       "fieldConfig": {
@@ -3763,7 +3707,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -3780,7 +3724,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "gridPos": {
         "h": 1,
@@ -3803,7 +3747,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
@@ -3815,7 +3759,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The time of the next RPL rewards checkpoint. If you have an effective RPL stake greater than zero, you should receive rewards here (unless it's your first checkpoint, in which case you'll need to wait a bit longer).",
       "fieldConfig": {
@@ -3864,7 +3808,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_rpl_checkpoint_time{job=\"rocketpool\"}",
@@ -3879,7 +3823,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "This tracks how long you have until the next RPL rewards checkpoint.",
       "fieldConfig": {
@@ -3928,7 +3872,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_rpl_checkpoint_time{job=\"rocketpool\"}",
@@ -3943,7 +3887,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The amount of ETH that 1 rETH is worth.",
       "fieldConfig": {
@@ -3992,7 +3936,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_performance_eth_reth_exchange_rate{job=\"rocketpool\"}",
@@ -4007,7 +3951,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The amount of ETH that 1 RPL is worth, as reported by the Oracle DAO. This updates somewhat infrequently, so it's expected if it falls out of sync with other price watchers.",
       "fieldConfig": {
@@ -4056,7 +4000,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_rpl_rpl_price{job=\"rocketpool\"}",
@@ -4071,7 +4015,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The amount of ETH currently in the staking pool, waiting to be used by node operators to create new minipools.",
       "fieldConfig": {
@@ -4123,7 +4067,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_demand_deposit_pool_balance{job=\"rocketpool\"}",
@@ -4138,7 +4082,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The current commission for new minipools. If you created a minipool right now, this is the commission it would be assigned for its entire lifespan.",
       "fieldConfig": {
@@ -4192,7 +4136,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_supply_node_fee{job=\"rocketpool\"}",
@@ -4207,7 +4151,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The approximate amount of RPL you'll receive at the next checkpoint, based on your current effective stake and how much RPL is staked on the entire network.",
       "fieldConfig": {
@@ -4257,7 +4201,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_expected_rpl_rewards{job=\"rocketpool\"}",
@@ -4272,7 +4216,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "How much \"effective\" RPL you have staked (capped at 150% per minipool).",
       "fieldConfig": {
@@ -4322,7 +4266,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_effective_staked_rpl{job=\"rocketpool\"}",
@@ -4337,7 +4281,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The amount of RPL you were rewarded that you haven't claimed yet. Normally your node checks for these every 5 minutes and claims them automatically, so if this number persists for a long time then something may be wrong.\n\nPlease see https://docs.rocketpool.net/guides/node/rewards.html for more info on claiming rewards.",
       "fieldConfig": {
@@ -4390,7 +4334,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -4403,7 +4347,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "expr": "rocketpool_node_unclaimed_eth_rewards",
@@ -4419,7 +4363,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The APR for your RPL stake, based on the rewards you will receive at the next checkpoint.",
       "fieldConfig": {
@@ -4469,7 +4413,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_rpl_apr{job=\"rocketpool\"}",
@@ -4484,7 +4428,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Your total staked RPL collateral. At 10%, you have 1.6 ETH worth of RPL per minipool; at 150% you have 24 ETH worth of RPL per minipool.\n\nIf you fall below 10% you won't be able to claim your rewards at the next checkpoint until you get back to 10%. If you go over 150%, you'll only be rewarded for the first 150% of your stake.",
       "fieldConfig": {
@@ -4542,7 +4486,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_total_staked_rpl{job=\"rocketpool\"} * rocketpool_rpl_rpl_price{job=\"rocketpool\"} / rocketpool_node_deposited_eth{job=\"rocketpool\"}",
@@ -4557,7 +4501,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total number of nodes that have registered on the Rocket Pool network.",
       "fieldConfig": {
@@ -4605,7 +4549,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_supply_node_count{job=\"rocketpool\"}",
@@ -4620,7 +4564,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "A breakdown of the counts of each minipool on the Rocket Pool network by status:\n\n- **Initialized**: waiting for a deposit still\n- **Prelaunch:** deposits are done, waiting to be staked by the node operator's `rocketpool_node` container \n- **Staking:** deposited, validator created, and active (or pending) on the Beacon Chain\n- **Dissolved:** staking failed, funds returned to the node operator and staking pool\n- **Withdrawable:** exited from the Beacon Chain, waiting for rewards to be withdrawn to the minipool\n- **Finalized:** exited, withdrawn from, and essentially closed (inactive)",
       "fieldConfig": {
@@ -4763,7 +4707,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_supply_minipool_count{job=\"rocketpool\"}",
@@ -4780,7 +4724,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The relative amount of ETH that was deposited into the staking pool by rETH stakers, which was then used by node operators to create new minipools with validators on the Beacon Chain. The closer this number is to 100%, the more efficiently the Rocket Pool network is operating and the faster rETH's price grows.",
       "fieldConfig": {
@@ -4849,7 +4793,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_performance_eth_utilization_rate{job=\"rocketpool\"}",
@@ -4864,7 +4808,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The average collateralisation rate for node operators across the network.",
       "fieldConfig": {
@@ -4922,7 +4866,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_rpl_total_effective_staked{} / ignoring(status) rocketpool_supply_minipool_count{status=\"staking\"} * rocketpool_rpl_rpl_price / 16",
@@ -4937,7 +4881,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total amount of RPL you've earned from RPL rewards for the entire life of your node.",
       "fieldConfig": {
@@ -4987,7 +4931,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_node_cumulative_rpl_rewards",
@@ -5002,7 +4946,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Your claimed ETH from the Smoothing Pool",
       "fieldConfig": {
@@ -5052,7 +4996,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -5069,7 +5013,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The total number of Rocket Pool minipools (validators) that are active (not exited and withdrawn from the Beacon Chain).",
       "fieldConfig": {
@@ -5117,7 +5061,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
           "expr": "rocketpool_supply_active_minipools{job=\"rocketpool\"}",
@@ -5132,7 +5076,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The balances of your node wallet (only tracks Rocket Pool tokens). Keep an eye on how much ETH you have; if it falls too low, your node won't be able to pay for gas during automatic RPL reward claims or other transactions.",
       "fieldConfig": {
@@ -5183,7 +5127,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "exemplar": false,
           "expr": "rocketpool_node_balance{job=\"rocketpool\"}",
@@ -5218,7 +5162,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "",
       "gridPos": {
@@ -5242,19 +5186,19 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "refId": "A"
         }
       ],
-      "title": "Governance",
+      "title": "Governance (Updates Every 6 Hours)",
       "transparent": true,
       "type": "text"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The number of active proposals you or your delegate have voted on.",
       "fieldConfig": {
@@ -5305,7 +5249,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -5318,7 +5262,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -5336,7 +5280,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "Shows the number of closed votes you or your delegate has voted or missed.",
       "fieldConfig": {
@@ -5383,7 +5327,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -5396,7 +5340,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -5414,7 +5358,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The node voting power on Snapshot.",
       "fieldConfig": {
@@ -5461,7 +5405,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -5478,7 +5422,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "PBFA97CFB590B2093"
       },
       "description": "The voting power of the delegate you have chosen.",
       "fieldConfig": {
@@ -5525,7 +5469,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -5568,6 +5512,6 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.2.0 for Nimbus",
   "uid": "Ur22GG77zNM120",
-  "version": 12,
+  "version": 14,
   "weekStart": ""
 }
