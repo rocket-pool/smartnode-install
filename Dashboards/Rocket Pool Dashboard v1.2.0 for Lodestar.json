@@ -88,7 +88,7 @@
       }
     ]
   },
-  "description": "This is the standard dashboard for Rocket Pool node operators that use Lighthouse",
+  "description": "This is the standard dashboard for Rocket Pool node operators that use Lodestar",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 14883,
@@ -172,7 +172,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "A count of how long Lighthouse's Beacon Chain client has been running. If you don't restart it, this is about the same as your total system uptime.",
+      "description": "A count of how long Lodestar's Beacon Chain client has been running. If you don't restart it, this is about the same as your total system uptime.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -551,7 +551,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "Tracks the activity of all of your validators on the Beacon Chain. This is a cumulative count; it starts at 0 when Lighthouse first starts up, and then continuously increments as it goes.",
+      "description": "Tracks the activity of all of your validators on the Beacon Chain. This is a cumulative count; it starts at 0 when Lodestar first starts up, and then continuously increments as it goes.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -897,7 +897,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The amount of RAM that the Lighthouse Beacon Chain and Validator clients are using together.",
+      "description": "The amount of RAM that the Lodestar Beacon Chain and Validator clients are using together.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -965,7 +965,7 @@
           "refId": "A"
         }
       ],
-      "title": "Lighthouse RAM",
+      "title": "Lodestar RAM",
       "type": "stat"
     },
     {
@@ -973,7 +973,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The amount of RAM that the Lighthouse Beacon Chain and Validator clients are using together.",
+      "description": "The amount of RAM that the Lodestar Beacon Chain and Validator clients are using together.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1525,7 +1525,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Lighthouse"
+              "options": "Lodestar"
             },
             "properties": [
               {
@@ -1695,7 +1695,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Lighthouse"
+              "options": "Lodestar"
             },
             "properties": [
               {
@@ -1820,7 +1820,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Lighthouse"
+              "options": "Lodestar"
             },
             "properties": [
               {
@@ -1921,7 +1921,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The time until your next attestation.\n\n**NOTE: Lighthouse does not currently expose this metric, so this is a placeholder until its developers add it.**",
+      "description": "The time until your next attestation.\n\n**NOTE: Lodestar does not currently expose this metric, so this is a placeholder until its developers add it.**",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2300,7 +2300,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "How many peers Lighthouse is currently connected to for Beacon Chain traffic.",
+      "description": "How many peers Lodestar is currently connected to for Beacon Chain traffic.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5614,6 +5614,6 @@
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.2.0 for Lodestar",
   "uid": "Ur22GG77zLS120",
-  "version": 8,
+  "version": 9,
   "weekStart": ""
 }
