@@ -41,16 +41,6 @@ if [ "$PLATFORM" = "Linux" ]; then
     fi
 fi
 
-# Detect installed privilege escalation programs
-if type sudo > /dev/null 2>&1; then
-    SUDO_CMD="sudo"
-elif type doas > /dev/null 2>&1; then
-    echo "NOTE: sudo not found, using doas instead"
-    SUDO_CMD="doas"
-else
-    fail "Please make sure a privilege escalation command such as \"sudo\" is installed and available before installing Rocket Pool."
-fi
-
 ##
 # Config
 ##
@@ -81,6 +71,19 @@ progress() {
 # Docker installation steps
 add_user_docker() {
     $SUDO_CMD usermod -aG docker $USER || fail "Could not add user to docker group."
+}
+
+
+# Detect installed privilege escalation programs
+get_escalation_cmd() {
+    if type sudo > /dev/null 2>&1; then
+        SUDO_CMD="sudo"
+    elif type doas > /dev/null 2>&1; then
+        echo "NOTE: sudo not found, using doas instead"
+        SUDO_CMD="doas"
+    else
+        fail "Please make sure a privilege escalation command such as \"sudo\" is installed and available before installing Rocket Pool."
+    fi
 }
 
 # Install
@@ -133,6 +136,9 @@ PACKAGE_FILES_PATH="$TEMPDIR/install"
 
 # OS dependencies
 if [ -z "$NO_DEPS" ]; then
+
+>&2 get_escalation_cmd
+
 case "$PLATFORM" in
 
     # Ubuntu / Debian / Raspbian
@@ -277,6 +283,7 @@ else
             progress 3 "Checking if docker-compose-plugin is installed..."
             dpkg-query -W -f='${Status}' docker-compose-plugin 2>&1 | grep -q -P '^install ok installed$' > /dev/null
             if [ $? != "0" ]; then
+                >&2 get_escalation_cmd
                 echo "Installing docker-compose-plugin..."
                 if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
                     # Install the Docker repo, removing the legacy one if it exists
@@ -301,6 +308,7 @@ else
             progress 3 "Checking if docker-compose-plugin is installed..."
             yum -q list installed docker-compose-plugin 2>/dev/null 1>/dev/null
             if [ $? != "0" ]; then
+                >&2 get_escalation_cmd
                 echo "Installing docker-compose-plugin..."
                 { $SUDO_CMD yum install -y docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
                 { $SUDO_CMD systemctl restart docker || fail "Could not restart docker daemon."; } >&2
@@ -317,6 +325,7 @@ else
             progress 3 "Checking if docker-compose-plugin is installed..."
             dnf -q list installed docker-compose-plugin 2>/dev/null 1>/dev/null
             if [ $? != "0" ]; then
+                >&2 get_escalation_cmd
                 echo "Installing docker-compose-plugin..."
                 { $SUDO_CMD dnf install -y docker-compose-plugin || fail "Could not install docker-compose-plugin."; } >&2
                 { $SUDO_CMD systemctl restart docker || fail "Could not restart docker daemon."; } >&2
