@@ -157,6 +157,10 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         CMD="$CMD --nat=extip:$EXTERNAL_IP"
     fi
 
+    if [ ! -z "$NIMBUS_PRUNING_MODE" ]; then
+        CMD="$CMD --history=$NIMBUS_PRUNING_MODE"
+    fi
+
     # Graffiti breaks if it's in the CMD string instead of here because of spaces
     exec ${CMD} --graffiti="$GRAFFITI"
 
