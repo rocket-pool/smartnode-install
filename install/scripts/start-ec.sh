@@ -164,16 +164,16 @@ if [ "$CLIENT" = "nethermind" ]; then
         $EC_ADDITIONAL_FLAGS"
 
     # Add optional supplemental primary JSON-RPC modules
-    if [ ! -z "$NETHERMIND_ADDITIONAL_MODULES" ]; then
-        NETHERMIND_ADDITIONAL_MODULES=",${NETHERMIND_ADDITIONAL_MODULES}"
+    if [ ! -z "$RP_NETHERMIND_ADDITIONAL_MODULES" ]; then
+        RP_NETHERMIND_ADDITIONAL_MODULES=",${RP_NETHERMIND_ADDITIONAL_MODULES}"
     fi
-    CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3$NETHERMIND_ADDITIONAL_MODULES"
+    CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3$RP_NETHERMIND_ADDITIONAL_MODULES"
 
     # Add optional supplemental JSON-RPC URLs
-    if [ ! -z "$NETHERMIND_ADDITIONAL_URLS" ]; then
-        NETHERMIND_ADDITIONAL_URLS=",${NETHERMIND_ADDITIONAL_URLS}"
+    if [ ! -z "$RP_NETHERMIND_ADDITIONAL_URLS" ]; then
+        RP_NETHERMIND_ADDITIONAL_URLS=",${RP_NETHERMIND_ADDITIONAL_URLS}"
     fi
-    CMD="$CMD --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"$NETHERMIND_ADDITIONAL_URLS]"
+    CMD="$CMD --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"$RP_NETHERMIND_ADDITIONAL_URLS]"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
@@ -188,21 +188,21 @@ if [ "$CLIENT" = "nethermind" ]; then
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT --Metrics.PushGatewayUrl=\"\""
+        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT"
     fi
 
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
     fi
 
-    if [ ! -z "$NETHERMIND_PRUNE" ]; then
+    if [ ! -z "$RP_NETHERMIND_PRUNE" ]; then
         CMD="$CMD --Pruning.Mode Full --Pruning.FullPruningCompletionBehavior AlwaysShutdown"
     else
         CMD="$CMD --Pruning.Mode Memory"
     fi
 
-    if [ ! -z "$NETHERMIND_PRUNE_MEM_SIZE" ]; then
-        CMD="$CMD --Pruning.CacheMb $NETHERMIND_PRUNE_MEM_SIZE"
+    if [ ! -z "$RP_NETHERMIND_PRUNE_MEM_SIZE" ]; then
+        CMD="$CMD --Pruning.CacheMb $RP_NETHERMIND_PRUNE_MEM_SIZE"
     fi
 
     exec ${CMD}
