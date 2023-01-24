@@ -32,15 +32,15 @@ define_perf_prefix() {
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
     GETH_NETWORK=""
-    NETHERMIND_NETWORK="mainnet"
+    RP_NETHERMIND_NETWORK="mainnet"
     BESU_NETWORK="mainnet"
 elif [ "$NETWORK" = "prater" ]; then
     GETH_NETWORK="--goerli"
-    NETHERMIND_NETWORK="goerli"
+    RP_NETHERMIND_NETWORK="goerli"
     BESU_NETWORK="goerli"
 elif [ "$NETWORK" = "devnet" ]; then
     GETH_NETWORK="--goerli"
-    NETHERMIND_NETWORK="goerli"
+    RP_NETHERMIND_NETWORK="goerli"
     BESU_NETWORK="goerli"
 else
     echo "Unknown network [$NETWORK]"
@@ -135,7 +135,7 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     # Check for the prune flag
     if [ -f "/ethclient/prune.lock" ]; then
-        NETHERMIND_PRUNE=1
+        RP_NETHERMIND_PRUNE=1
         rm /ethclient/prune.lock
     fi
 
@@ -150,7 +150,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
-        --config $NETHERMIND_NETWORK \
+        --config $RP_NETHERMIND_NETWORK \
         --datadir /ethclient/nethermind \
         --JsonRpc.Enabled true \
         --JsonRpc.Host 0.0.0.0 \
