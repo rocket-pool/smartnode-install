@@ -19,6 +19,11 @@ elif [ "$NETWORK" = "devnet" ]; then
     LODESTAR_NETWORK="goerli"
     PRYSM_NETWORK="--prater"
     TEKU_NETWORK="prater"
+elif [ "$NETWORK" = "zhejiang" ]; then
+    LH_NETWORK=""
+    LODESTAR_NETWORK=""
+    PRYSM_NETWORK="--chain-config-file=/zhejiang/config.yaml"
+    TEKU_NETWORK="/zhejiang/config.yaml"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -34,6 +39,12 @@ fi
 # Lighthouse startup
 if [ "$CC_CLIENT" = "lighthouse" ]; then
 
+    if [ "$NETWORK" = "zhejiang" ]; then
+        LH_NETWORK_ARG="--testnet-dir=/zhejiang"
+    else
+        LH_NETWORK_ARG="--network $LH_NETWORK" 
+    fi
+
     # Set up the CC + fallback string
     CC_URL_STRING=$CC_API_ENDPOINT
     if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
@@ -41,7 +52,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
     fi
 
     CMD="/usr/local/bin/lighthouse validator \
-        --network $LH_NETWORK \
+        $LH_NETWORK_ARG \
         --datadir /validators/lighthouse \
         --init-slashing-protection \
         --logfile-max-number 0 \
@@ -77,6 +88,12 @@ fi
 # Lodestar startup
 if [ "$CC_CLIENT" = "lodestar" ]; then
 
+    if [ "$NETWORK" = "zhejiang" ]; then
+        LODESTAR_NETWORK_ARG="--paramsFile=/zhejiang/config.yaml --genesisStateFile=/zhejiang/genesis.ssz"
+    else
+        LODESTAR_NETWORK_ARG="--network $LODESTAR_NETWORK" 
+    fi
+
     # Remove any lock files that were left over accidentally after an unclean shutdown
     find /validators/lodestar/validators -name voting-keystore.json.lock -delete
 
@@ -85,7 +102,15 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         FALLBACK_CC_STRING="--server $FALLBACK_CC_API_ENDPOINT"
     fi
 
-    CMD="/usr/app/node_modules/.bin/lodestar validator --network $LODESTAR_NETWORK --dataDir /validators/lodestar --server $CC_API_ENDPOINT $FALLBACK_CC_STRING --keystoresDir /validators/lodestar/validators --secretsDir /validators/lodestar/secrets --suggestedFeeRecipient $(cat /validators/$FEE_RECIPIENT_FILE) $VC_ADDITIONAL_FLAGS"
+    CMD="/usr/app/node_modules/.bin/lodestar validator \
+        $LODESTAR_NETWORK_ARG \
+        --dataDir /validators/lodestar \
+        --server $CC_API_ENDPOINT \
+        $FALLBACK_CC_STRING \
+        --keystoresDir /validators/lodestar/validators \
+        --secretsDir /validators/lodestar/secrets \
+        --suggestedFeeRecipient $(cat /validators/$FEE_RECIPIENT_FILE) \
+        $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --doppelgangerProtectionEnabled"
@@ -159,7 +184,8 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     fi
 
     CMD="/app/cmd/validator/validator \
-        --accept-terms-of-use $PRYSM_NETWORK \
+        --accept-terms-of-use \
+        $PRYSM_NETWORK \
         --wallet-dir /validators/prysm-non-hd \
         --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret \
         --beacon-rpc-provider $CC_URL_STRING \

@@ -132,15 +132,15 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
     fi
 
     CMD="$PERF_PREFIX /usr/app/node_modules/.bin/lodestar beacon \
-    $LODESTAR_NETWORK_ARG \
-    --dataDir /ethclient/lodestar \
-    --port $BN_P2P_PORT \
-    --execution.urls $EC_ENGINE_ENDPOINT \
-    --rest \
-    --rest.address 0.0.0.0 \
-    --rest.port ${BN_API_PORT:-5052} \
-    --jwt-secret /secrets/jwtsecret \
-    $BN_ADDITIONAL_FLAGS"
+        $LODESTAR_NETWORK_ARG \
+        --dataDir /ethclient/lodestar \
+        --port $BN_P2P_PORT \
+        --execution.urls $EC_ENGINE_ENDPOINT \
+        --rest \
+        --rest.address 0.0.0.0 \
+        --rest.port ${BN_API_PORT:-5052} \
+        --jwt-secret /secrets/jwtsecret \
+        $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$TTD_OVERRIDE" ]; then
         CMD="$CMD --terminal-total-difficulty-override $TTD_OVERRIDE"
