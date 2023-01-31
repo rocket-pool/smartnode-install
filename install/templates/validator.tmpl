@@ -17,6 +17,7 @@ services:
       - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
       - ${ROCKETPOOL_FOLDER}/addons:/addons
+      - ${ROCKETPOOL_FOLDER}/zhejiang:/zhejiang
     networks:
       - net
     environment:
