@@ -54,6 +54,7 @@ services:
       - ADDON_GWW_ENABLED=${ADDON_GWW_ENABLED}
       - TTD_OVERRIDE=${TTD_OVERRIDE}
       - TEKU_ARCHIVE_MODE=${TEKU_ARCHIVE_MODE}
+      - NIMBUS_PRUNING_MODE=${NIMBUS_PRUNING_MODE}
     entrypoint: sh
     command: "/setup/start-bn.sh"
     cap_drop:

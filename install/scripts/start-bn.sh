@@ -179,6 +179,10 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         CMD="$CMD --nat=extip:$EXTERNAL_IP"
     fi
 
+    if [ ! -z "$NIMBUS_PRUNING_MODE" ]; then
+        CMD="$CMD --history=$NIMBUS_PRUNING_MODE"
+    fi
+
     exec ${CMD}
 
 fi

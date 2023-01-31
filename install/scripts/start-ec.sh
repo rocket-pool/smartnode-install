@@ -32,15 +32,15 @@ define_perf_prefix() {
 # Set up the network-based flags
 if [ "$NETWORK" = "mainnet" ]; then
     GETH_NETWORK=""
-    NETHERMIND_NETWORK="mainnet"
+    RP_NETHERMIND_NETWORK="mainnet"
     BESU_NETWORK="mainnet"
 elif [ "$NETWORK" = "prater" ]; then
     GETH_NETWORK="--goerli"
-    NETHERMIND_NETWORK="goerli"
+    RP_NETHERMIND_NETWORK="goerli"
     BESU_NETWORK="goerli"
 elif [ "$NETWORK" = "devnet" ]; then
     GETH_NETWORK="--goerli"
-    NETHERMIND_NETWORK="goerli"
+    RP_NETHERMIND_NETWORK="goerli"
     BESU_NETWORK="goerli"
 else
     echo "Unknown network [$NETWORK]"
@@ -135,7 +135,7 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     # Check for the prune flag
     if [ -f "/ethclient/prune.lock" ]; then
-        NETHERMIND_PRUNE=1
+        RP_NETHERMIND_PRUNE=1
         rm /ethclient/prune.lock
     fi
 
@@ -145,11 +145,12 @@ if [ "$CLIENT" = "nethermind" ]; then
     sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" minlevel=\"Warn\" writeTo=\"auto-colored-console-async\" final=\"true\"/>" -i /nethermind/NLog.config
     sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" minlevel=\"Warn\" writeTo=\"file-async\" final=\"true\"/>" -i /nethermind/NLog.config
 
-    # Uncomment peer report logging restrictions in the log config XML
+    # Remove the sync peers report but leave error messages
+    sed -e "${LOG_LINE} i \    <logger name=\"Synchronization.Peers.SyncPeersReport\" maxlevel=\"Info\" final=\"true\"/>" -i /nethermind/NLog.config
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
-        --config $NETHERMIND_NETWORK \
+        --config $RP_NETHERMIND_NETWORK \
         --datadir /ethclient/nethermind \
         --JsonRpc.Enabled true \
         --JsonRpc.Host 0.0.0.0 \
@@ -164,16 +165,16 @@ if [ "$CLIENT" = "nethermind" ]; then
         $EC_ADDITIONAL_FLAGS"
 
     # Add optional supplemental primary JSON-RPC modules
-    if [ ! -z "$NETHERMIND_ADDITIONAL_MODULES" ]; then
-        NETHERMIND_ADDITIONAL_MODULES=",${NETHERMIND_ADDITIONAL_MODULES}"
+    if [ ! -z "$RP_NETHERMIND_ADDITIONAL_MODULES" ]; then
+        RP_NETHERMIND_ADDITIONAL_MODULES=",${RP_NETHERMIND_ADDITIONAL_MODULES}"
     fi
-    CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3$NETHERMIND_ADDITIONAL_MODULES"
+    CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3$RP_NETHERMIND_ADDITIONAL_MODULES"
 
     # Add optional supplemental JSON-RPC URLs
-    if [ ! -z "$NETHERMIND_ADDITIONAL_URLS" ]; then
-        NETHERMIND_ADDITIONAL_URLS=",${NETHERMIND_ADDITIONAL_URLS}"
+    if [ ! -z "$RP_NETHERMIND_ADDITIONAL_URLS" ]; then
+        RP_NETHERMIND_ADDITIONAL_URLS=",${RP_NETHERMIND_ADDITIONAL_URLS}"
     fi
-    CMD="$CMD --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"$NETHERMIND_ADDITIONAL_URLS]"
+    CMD="$CMD --JsonRpc.AdditionalRpcUrls [\"http://127.0.0.1:7434|http|admin\"$RP_NETHERMIND_ADDITIONAL_URLS]"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --EthStats.Enabled true --EthStats.Name $ETHSTATS_LABEL --EthStats.Secret $(echo $ETHSTATS_LOGIN | cut -d "@" -f1) --EthStats.Server $(echo $ETHSTATS_LOGIN | cut -d "@" -f2)"
@@ -188,21 +189,21 @@ if [ "$CLIENT" = "nethermind" ]; then
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT --Metrics.PushGatewayUrl=\"\""
+        CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT"
     fi
 
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
     fi
 
-    if [ ! -z "$NETHERMIND_PRUNE" ]; then
+    if [ ! -z "$RP_NETHERMIND_PRUNE" ]; then
         CMD="$CMD --Pruning.Mode Full --Pruning.FullPruningCompletionBehavior AlwaysShutdown"
     else
         CMD="$CMD --Pruning.Mode Memory"
     fi
 
-    if [ ! -z "$NETHERMIND_PRUNE_MEM_SIZE" ]; then
-        CMD="$CMD --Pruning.CacheMb $NETHERMIND_PRUNE_MEM_SIZE"
+    if [ ! -z "$RP_NETHERMIND_PRUNE_MEM_SIZE" ]; then
+        CMD="$CMD --Pruning.CacheMb $RP_NETHERMIND_PRUNE_MEM_SIZE"
     fi
 
     exec ${CMD}
