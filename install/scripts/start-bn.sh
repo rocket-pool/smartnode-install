@@ -42,7 +42,7 @@ elif [ "$NETWORK" = "devnet" ]; then
 elif [ "$NETWORK" = "zhejiang" ]; then
     LH_NETWORK=""
     LODESTAR_NETWORK=""
-    NIMBUS_NETWORK="1337803"
+    NIMBUS_NETWORK="/zhejiang"
     PRYSM_NETWORK="--chain-config-file=/zhejiang/config.yaml"
     TEKU_NETWORK="/zhejiang/config.yaml"
     PRYSM_GENESIS_STATE="--genesis-state=/zhejiang/genesis.ssz"
@@ -69,7 +69,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
     if [ "$NETWORK" = "zhejiang" ]; then
         LH_NETWORK_ARG="--testnet-dir=/zhejiang"
     else
-        LH_NETWORK_ARG="--network $LH_NETWORK" 
+        LH_NETWORK_ARG="--network $LH_NETWORK"
     fi
 
     CMD="$PERF_PREFIX /usr/local/bin/lighthouse beacon \
@@ -176,7 +176,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
     # Handle checkpoint syncing
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
         # Ignore it if a DB already exists
-        if [ -f "/ethclient/nimbus/db/nbc.sqlite3" ]; then 
+        if [ -f "/ethclient/nimbus/db/nbc.sqlite3" ]; then
             echo "Nimbus database already exists, ignoring checkpoint sync."
         else 
             echo "Starting checkpoint sync for Nimbus..."

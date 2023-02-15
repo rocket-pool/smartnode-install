@@ -89,7 +89,7 @@ fi
 if [ "$CC_CLIENT" = "lodestar" ]; then
 
     if [ "$NETWORK" = "zhejiang" ]; then
-        LODESTAR_NETWORK_ARG="--paramsFile=/zhejiang/config.yaml --genesisStateFile=/zhejiang/genesis.ssz"
+        LODESTAR_NETWORK_ARG="--paramsFile=/zhejiang/config.yaml"
     else
         LODESTAR_NETWORK_ARG="--network $LODESTAR_NETWORK" 
     fi
