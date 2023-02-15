@@ -88,7 +88,7 @@
       }
     ]
   },
-  "description": "This is the standard dashboard for Rocket Pool node operators that use Nimbus.",
+  "description": "This is the standard dashboard for Rocket Pool node operators.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 14884,
@@ -849,7 +849,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "(system_cpu_procload{job=\"geth\"} / scalar(count without(cpu, mode) (node_cpu_seconds_total{mode=\"idle\"}))) OR # Geth\n irate(process_cpu_seconds_total{instance=\"eth1\"}[$__rate_interval]) # Besu",
+          "expr": "(system_cpu_procload{job=\"geth\"} / scalar(count without(cpu, mode) (node_cpu_seconds_total{mode=\"idle\"}))) OR # Geth\nirate(process_cpu_seconds_total{job=\"eth1\"}[$__rate_interval]) * 100 / scalar(count without(cpu, mode) (node_cpu_seconds_total{mode=\"idle\"})) # Besu, Nethermind",
           "hide": false,
           "legendFormat": "EC",
           "range": true,
@@ -862,7 +862,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "(sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) + sum(avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval])))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
+          "expr": "(sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) + (sum(avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval]))) or vector(0))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
           "interval": "",
           "legendFormat": "BN+VC",
           "range": true,
@@ -983,7 +983,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nsum(jvm_memory_bytes_used{job=\"eth1\"}) # Besu",
+          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nsum(jvm_memory_bytes_used{job=\"eth1\"}) OR # Besu\ndotnet_total_memory_bytes{job=\"eth1\"} # Nethermind",
           "interval": "",
           "legendFormat": "EC",
           "range": true,
@@ -995,7 +995,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(process_resident_memory_bytes{job=\"eth2\"}) + sum(process_resident_memory_bytes{job=\"validator\"})",
+          "expr": "sum(process_resident_memory_bytes{job=\"eth2\"}) + (sum(process_resident_memory_bytes{job=\"validator\"}) or vector(0))",
           "hide": false,
           "legendFormat": "BN+VC",
           "range": true,
@@ -1232,39 +1232,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "rate(beacon_attestation_production_seconds_bucket{job=\"eth2\", le!=\"+Inf\"}[$__rate_interval]) # Lighthouse",
+          "expr": "rate(beacon_attestation_production_seconds_bucket{job=\"eth2\", le!=\"+Inf\"}[$__rate_interval]) OR # Lighthouse\nrate(validator_monitor_prev_epoch_on_chain_inclusion_distance_bucket{job=\"eth2\",le!=\"+Inf\"}[$__rate_interval]) OR # Lodestar\nrate(validator_monitor_unaggregated_attestation_delay_seconds_bucket{src=\"api\", validator=\"total\", le!=\"+Inf\"}[$__rate_interval]) OR # Nimbus\nrate(attestation_inclusion_delay_slots_bucket{job=\"validator\", le!=\"+Inf\"}[$__rate_interval]) # Prysm",
           "hide": false,
           "legendFormat": "{{le}}",
           "range": true,
           "refId": "D"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "rate(validator_monitor_unaggregated_attestation_delay_seconds_bucket{src=\"api\", validator=\"total\", le!=\"+Inf\"}[$__rate_interval]) # Nimbus",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{le}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "rate(attestation_inclusion_delay_slots_bucket{job=\"validator\", le!=\"+Inf\"}[$__rate_interval]) # Prysm",
-          "hide": false,
-          "legendFormat": "{{le}}",
-          "range": true,
-          "refId": "C"
         },
         {
           "datasource": {
@@ -1277,18 +1249,6 @@
           "legendFormat": "{{interval}}",
           "range": true,
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "rate(validator_monitor_prev_epoch_on_chain_inclusion_distance_bucket{job=\"eth2\",le!=\"+Inf\"}[$__rate_interval])",
-          "hide": false,
-          "legendFormat": "{{le}}",
-          "range": true,
-          "refId": "E"
         }
       ],
       "title": "Attestation Delay",
@@ -1444,11 +1404,13 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "(1 - avg by (instance) (irate(node_cpu_seconds_total{job=\"node\", mode=\"idle\"}[$__rate_interval]))) * 100",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
+          "range": true,
           "refId": "B"
         },
         {
@@ -1458,7 +1420,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval])) + avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval]))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
+          "expr": "(sum(avg (irate(process_cpu_seconds_total{job=\"eth2\"}[$__rate_interval]))) + (sum(avg (irate(process_cpu_seconds_total{job=\"validator\"}[$__rate_interval]))) or vector(0))) * 100 / (count (node_cpu_seconds_total{job=\"node\", mode=\"idle\"}))",
           "instant": false,
           "interval": "",
           "legendFormat": "BN+VC",
@@ -1470,7 +1432,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "(system_cpu_procload{job=\"geth\"} / scalar(count without(cpu, mode) (node_cpu_seconds_total{mode=\"idle\"}))) OR # Geth\n irate(process_cpu_seconds_total{instance=\"eth1\"}[$__rate_interval]) # Besu",
+          "expr": "(system_cpu_procload{job=\"geth\"} / scalar(count without(cpu, mode) (node_cpu_seconds_total{mode=\"idle\"}))) OR # Geth\nirate(process_cpu_seconds_total{job=\"eth1\"}[$__rate_interval]) * 100 / scalar(count without(cpu, mode) (node_cpu_seconds_total{mode=\"idle\"})) # Besu, Nethermind",
           "hide": false,
           "legendFormat": "EC (Stacked)",
           "range": true,
@@ -1684,7 +1646,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(process_resident_memory_bytes{job=\"eth2\"}) + sum(process_resident_memory_bytes{job=\"validator\"})",
+          "expr": "sum(process_resident_memory_bytes{job=\"eth2\"}) + (sum(process_resident_memory_bytes{job=\"validator\"}) or vector(0))",
           "hide": false,
           "interval": "",
           "legendFormat": "BN+VC",
@@ -1697,7 +1659,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nsum(jvm_memory_bytes_used{job=\"eth1\"}) # Besu",
+          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nsum(jvm_memory_bytes_used{job=\"eth1\"}) OR # Besu\ndotnet_total_memory_bytes{job=\"eth1\"} # Nethermind",
           "hide": false,
           "legendFormat": "EC (Stacked)",
           "range": true,
@@ -1726,7 +1688,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "This provides information about your upcoming attestation duties. It's client-specific.\n- For **Nimbus** and **Prysm**: this shows the time until your next attestation duty.\n- For **Teku**: this prints the number of upcoming attestations you have scheduled.\n- **Lighthouse** does not provide this information.",
+      "description": "This provides information about your upcoming attestation duties. It's client-specific.\n- For **Nimbus** and **Prysm**: this shows the time until your next attestation duty.\n- For **Teku**: this prints the number of upcoming attestations you have scheduled.\n- **Lighthouse** and **Lodestar** do not provide this information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1928,8 +1890,8 @@
               "type": "special"
             }
           ],
-          "max": 160,
-          "min": -2,
+          "max": 49,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1939,11 +1901,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 20
+                "value": 12
               },
               {
                 "color": "green",
-                "value": 40
+                "value": 20
               }
             ]
           },
@@ -1982,7 +1944,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "p2p_peers OR # Geth\nethereum_peer_count OR # Besu\non() vector(0)",
+          "expr": "p2p_peers{job=\"geth\"} OR # Geth\nnethermind_sync_peers{job=\"eth1\"} OR # Nethermind\nethereum_peer_count{job=\"eth1\"} # Besu",
           "interval": "",
           "legendFormat": "",
           "range": true,
@@ -2068,7 +2030,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"}) OR # Lighthouse\nlodestar_peers_sync_count OR # Lodestar\nnbc_peers{job=\"eth2\"} OR # Nimbus\np2p_peer_count{job=\"eth2\", state=\"Connected\"} OR # Prysm\nbeacon_peer_count{job=\"eth2\"} OR # Teku\non() vector(0)",
+          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"}) OR # Lighthouse\nlodestar_peers_sync_count{job=\"eth2\"} OR # Lodestar\nnbc_peers{job=\"eth2\"} OR # Nimbus\np2p_peer_count{job=\"eth2\", state=\"Connected\"} OR # Prysm\nbeacon_peer_count{job=\"eth2\"} # Teku",
           "interval": "",
           "legendFormat": "",
           "range": true,
@@ -2163,7 +2125,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"}) OR # Lighthouse\nlodestar_peers_sync_count OR # Lodestar\nnbc_peers{job=\"eth2\"} OR # Nimbus\np2p_peer_count{job=\"eth2\", state=\"Connected\"} OR # Prysm\nbeacon_peer_count{job=\"eth2\"} OR # Teku\non() vector(0)",
+          "expr": "sum(sync_peers_per_status{job=\"eth2\", sync_status=~\"Synced|Advanced\"}) OR # Lighthouse\nlodestar_peers_sync_count{job=\"eth2\"} OR # Lodestar\nnbc_peers{job=\"eth2\"} OR # Nimbus\np2p_peer_count{job=\"eth2\", state=\"Connected\"} OR # Prysm\nbeacon_peer_count{job=\"eth2\"} # Teku",
           "interval": "",
           "legendFormat": "BN",
           "range": true,
@@ -2175,7 +2137,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "p2p_peers OR # Geth\nethereum_peer_count OR # Besu\non() vector(0)",
+          "expr": "p2p_peers{job=\"geth\"} OR # Geth\nnethermind_sync_peers{job=\"eth1\"} OR # Nethermind\nethereum_peer_count{job=\"eth1\"} # Besu",
           "hide": false,
           "legendFormat": "EC",
           "range": true,
@@ -4082,7 +4044,7 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "max": 2000,
+          "max": 18000,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -4093,7 +4055,7 @@
               },
               {
                 "color": "red",
-                "value": 1800
+                "value": 18000
               }
             ]
           }
@@ -5391,8 +5353,8 @@
     ]
   },
   "timezone": "",
-  "title": "Rocket Pool Dashboard v1.2.0",
-  "uid": "Ur22GG77z120",
-  "version": 48,
+  "title": "Rocket Pool Dashboard v1.2.0-RC1",
+  "uid": "Ur22GG77z120rc1",
+  "version": 61,
   "weekStart": ""
 }
