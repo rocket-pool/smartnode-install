@@ -42,6 +42,7 @@ services:
       - TTD_OVERRIDE=${TTD_OVERRIDE}
       - RP_NETHERMIND_ADDITIONAL_MODULES=${NETHERMIND_ADDITIONAL_MODULES}
       - RP_NETHERMIND_ADDITIONAL_URLS=${NETHERMIND_ADDITIONAL_URLS}
+      - GETH_USE_PEBBLE=${GETH_USE_PEBBLE}
     entrypoint: sh
     command: "/setup/start-ec.sh"
     cap_drop:

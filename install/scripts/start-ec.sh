@@ -109,6 +109,10 @@ if [ "$CLIENT" = "geth" ]; then
             CMD="$CMD --port $EC_P2P_PORT"
         fi
 
+        if [ ! -z "$GETH_USE_PEBBLE" ]; then
+            CMD="$CMD --db.engine=pebble"
+        fi
+
         exec ${CMD} --http.vhosts '*'
 
     fi
