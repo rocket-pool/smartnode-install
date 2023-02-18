@@ -76,12 +76,12 @@ if [ "$CLIENT" = "geth" ]; then
             --http \
             --http.addr 0.0.0.0 \
             --http.port ${EC_HTTP_PORT:-8545} \
-            --http.api eth,net,personal,web3 \
+            --http.api eth,net,web3 \
             --http.corsdomain=* \
             --ws \
             --ws.addr 0.0.0.0 \
             --ws.port ${EC_WS_PORT:-8546} \
-            --ws.api eth,net,personal,web3 \
+            --ws.api eth,net,web3 \
             --authrpc.addr 0.0.0.0 \
             --authrpc.port ${EC_ENGINE_PORT:-8551} \
             --authrpc.jwtsecret /secrets/jwtsecret \
@@ -172,7 +172,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     if [ ! -z "$RP_NETHERMIND_ADDITIONAL_MODULES" ]; then
         RP_NETHERMIND_ADDITIONAL_MODULES=",${RP_NETHERMIND_ADDITIONAL_MODULES}"
     fi
-    CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Personal,Web3$RP_NETHERMIND_ADDITIONAL_MODULES"
+    CMD="$CMD --JsonRpc.EnabledModules Eth,Net,Web3$RP_NETHERMIND_ADDITIONAL_MODULES"
 
     # Add optional supplemental JSON-RPC URLs
     if [ ! -z "$RP_NETHERMIND_ADDITIONAL_URLS" ]; then
