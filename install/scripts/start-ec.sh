@@ -67,10 +67,15 @@ if [ "$CLIENT" = "geth" ]; then
 
     fi
 
+
+    if [ "$GETH_USE_PEBBLE" = "true" ]; then
+        DB_ENGINE="--db.engine=pebble"
+    fi
+
     # Init the zhejiang data if necessary
     if [ "$NETWORK" = "zhejiang" ]; then
         if [ ! -f "/ethclient/zhejiang.init" ]; then
-            $PERF_PREFIX /usr/local/bin/geth --datadir /ethclient/geth init /zhejiang/genesis.json
+            $PERF_PREFIX /usr/local/bin/geth $DB_ENGINE --datadir /ethclient/geth init /zhejiang/genesis.json
             touch /ethclient/zhejiang.init
         fi
     fi
@@ -84,6 +89,7 @@ if [ "$CLIENT" = "geth" ]; then
     else
 
         CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK \
+            ${DB_ENGINE} \
             --datadir /ethclient/geth \
             --http \
             --http.addr 0.0.0.0 \
@@ -119,10 +125,6 @@ if [ "$CLIENT" = "geth" ]; then
 
         if [ ! -z "$EC_P2P_PORT" ]; then
             CMD="$CMD --port $EC_P2P_PORT"
-        fi
-
-        if [ "$GETH_USE_PEBBLE" = "true" ]; then
-            CMD="$CMD --db.engine=pebble"
         fi
 
         if [ "$NETWORK" = "zhejiang" ]; then
