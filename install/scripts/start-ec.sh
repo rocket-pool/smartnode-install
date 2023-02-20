@@ -63,15 +63,20 @@ if [ "$CLIENT" = "geth" ]; then
 
     fi
 
+    if [ "$GETH_USE_PEBBLE" = "true" ]; then
+        DB_ENGINE="--db.engine=pebble"
+    fi
+
     # Check for the prune flag and run that first if requested
     if [ -f "/ethclient/prune.lock" ]; then
 
-        $PERF_PREFIX /usr/local/bin/geth snapshot prune-state $GETH_NETWORK --datadir /ethclient/geth ; rm /ethclient/prune.lock
+        $PERF_PREFIX /usr/local/bin/geth $DB_ENGINE snapshot prune-state $GETH_NETWORK --datadir /ethclient/geth ; rm /ethclient/prune.lock
 
     # Run Geth normally
     else
 
         CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK \
+            ${DB_ENGINE} \
             --datadir /ethclient/geth \
             --http \
             --http.addr 0.0.0.0 \
@@ -107,10 +112,6 @@ if [ "$CLIENT" = "geth" ]; then
 
         if [ ! -z "$EC_P2P_PORT" ]; then
             CMD="$CMD --port $EC_P2P_PORT"
-        fi
-
-        if [ "$GETH_USE_PEBBLE" = "true" ]; then
-            CMD="$CMD --db.engine=pebble"
         fi
 
         exec ${CMD} --http.vhosts '*'
