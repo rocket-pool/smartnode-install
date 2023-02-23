@@ -98,14 +98,15 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
     find /validators/lodestar/validators -name voting-keystore.json.lock -delete
 
     # Set up the CC + fallback string
+    CC_URL_STRING=$CC_API_ENDPOINT
     if [ ! -z "$FALLBACK_CC_API_ENDPOINT" ]; then
-        FALLBACK_CC_STRING="--server $FALLBACK_CC_API_ENDPOINT"
+        CC_URL_STRING="$CC_API_ENDPOINT,$FALLBACK_CC_API_ENDPOINT"
     fi
 
     CMD="/usr/app/node_modules/.bin/lodestar validator \
         $LODESTAR_NETWORK_ARG \
         --dataDir /validators/lodestar \
-        --server $CC_API_ENDPOINT \
+        --beacon-nodes $CC_URL_STRING \
         $FALLBACK_CC_STRING \
         --keystoresDir /validators/lodestar/validators \
         --secretsDir /validators/lodestar/secrets \
