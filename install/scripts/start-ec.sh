@@ -67,7 +67,7 @@ if [ "$CLIENT" = "geth" ]; then
 
     fi
 
-
+    # Use Pebble if requested
     if [ "$GETH_USE_PEBBLE" = "true" ]; then
         DB_ENGINE="--db.engine=pebble"
     fi
@@ -83,7 +83,7 @@ if [ "$CLIENT" = "geth" ]; then
     # Check for the prune flag and run that first if requested
     if [ -f "/ethclient/prune.lock" ]; then
 
-        $PERF_PREFIX /usr/local/bin/geth snapshot prune-state $GETH_NETWORK --datadir /ethclient/geth ; rm /ethclient/prune.lock
+        $PERF_PREFIX /usr/local/bin/geth $DB_ENGINE snapshot prune-state $GETH_NETWORK --datadir /ethclient/geth ; rm /ethclient/prune.lock
 
     # Run Geth normally
     else
