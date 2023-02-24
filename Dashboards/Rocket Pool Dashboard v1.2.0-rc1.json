@@ -25,12 +25,6 @@
     },
     {
       "type": "panel",
-      "id": "heatmap",
-      "name": "Heatmap",
-      "version": ""
-    },
-    {
-      "type": "panel",
       "id": "piechart",
       "name": "Pie chart",
       "version": ""
@@ -248,6 +242,78 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "The temperature of your CPU (you can set this to Tctl or Tdie, whichever you prefer to monitor).\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 65
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 2,
+        "y": 1
+      },
+      "id": 82,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.6",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Temp",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "This will turn red when your system needs to be rebooted because of security updates.\n\nSetting this up is Operating System specific, so it doesn't come ready out of the box; see the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
@@ -286,7 +352,7 @@
       "gridPos": {
         "h": 4,
         "w": 2,
-        "x": 2,
+        "x": 5,
         "y": 1
       },
       "id": 224,
@@ -353,7 +419,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 4,
+        "x": 7,
         "y": 1
       },
       "id": 94,
@@ -439,8 +505,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 7,
+        "w": 2,
+        "x": 10,
         "y": 1
       },
       "id": 92,
@@ -473,78 +539,6 @@
       ],
       "title": "Swap Space Usage",
       "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The temperature of your CPU (you can set this to Tctl or Tdie, whichever you prefer to monitor).\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 50
-              },
-              {
-                "color": "red",
-                "value": 65
-              }
-            ]
-          },
-          "unit": "celsius"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 2,
-        "x": 10,
-        "y": 1
-      },
-      "id": 82,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "CPU Temp",
-      "type": "stat"
     },
     {
       "datasource": {
@@ -983,7 +977,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nsum(jvm_memory_bytes_used{job=\"eth1\"}) OR # Besu\ndotnet_total_memory_bytes{job=\"eth1\"} # Nethermind",
+          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nprocess_resident_memory_bytes{job=\"eth1\"} OR # Besu\nprocess_private_memory_bytes{job=\"eth1\"} # Nethermind",
           "interval": "",
           "legendFormat": "EC",
           "range": true,
@@ -1166,19 +1160,55 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "This graph depends on your Beacon Client.\n- For **Lighthouse**, **Nimbus**,  and **Teku**: this shows how long it took to produce your attestation. The lower the time (the higher up on the chart), the better.\n- For **Prysm**: this shows the inclusion distance for your attestations. 0 is ideal; the higher the distance, the lower your reward.\n\n- For **Lodestar**: this shows the inclusion distance for your attestations. 1 is ideal; the higher the distance, the lower your reward.",
+      "description": "This chart shows the overall performance of your total attestations on the Beacon Chain, broken down by the individual attestation components - correct head, correct source, and correct target. If any of these are below 100%, you lost some rewards for submitting a late, partially incorrect, or fully incorrect attestation. For a detailed explanation of each component, take a look at Ben Edgington's explainer: https://eth2book.info/bellatrix/annotated-spec/\n\nThis is updated once per epoch, once your Beacon Node can see how well your node did during the previous epoch.\n\nNOTE: **Lighthouse** and **Teku** currently do not provide source correctness information, only head and target.",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
-          }
+          },
+          "mappings": [],
+          "max": 1.05,
+          "min": -0.05,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
         },
         "overrides": []
       },
@@ -1191,37 +1221,15 @@
       "id": 26,
       "interval": "",
       "options": {
-        "calculate": false,
-        "cellGap": 1,
-        "color": {
-          "exponent": 0.5,
-          "fill": "dark-orange",
-          "mode": "scheme",
-          "reverse": false,
-          "scale": "exponential",
-          "scheme": "RdYlGn",
-          "steps": 64
-        },
-        "exemplars": {
-          "color": "rgba(255,0,255,0.7)"
-        },
-        "filterValues": {
-          "le": 1e-9
-        },
         "legend": {
-          "show": false
-        },
-        "rowsFrame": {
-          "layout": "unknown"
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
-          "show": true,
-          "yHistogram": false
-        },
-        "yAxis": {
-          "axisPlacement": "left",
-          "reverse": true,
-          "unit": "s"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "9.3.6",
@@ -1232,11 +1240,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "rate(beacon_attestation_production_seconds_bucket{job=\"eth2\", le!=\"+Inf\"}[$__rate_interval]) OR # Lighthouse\nrate(validator_monitor_prev_epoch_on_chain_inclusion_distance_bucket{job=\"eth2\",le!=\"+Inf\"}[$__rate_interval]) OR # Lodestar\nrate(validator_monitor_unaggregated_attestation_delay_seconds_bucket{src=\"api\", validator=\"total\", le!=\"+Inf\"}[$__rate_interval]) OR # Nimbus\nrate(attestation_inclusion_delay_slots_bucket{job=\"validator\", le!=\"+Inf\"}[$__rate_interval]) # Prysm",
+          "expr": "(irate(validator_monitor_prev_epoch_on_chain_target_attester_hit{job=\"eth2\", validator=\"total\"}[$__rate_interval]) / (irate(validator_monitor_prev_epoch_on_chain_target_attester_hit{job=\"eth2\", validator=\"total\"}[$__rate_interval]) + irate(validator_monitor_prev_epoch_on_chain_target_attester_miss{job=\"eth2\", validator=\"total\"}[$__rate_interval]))) OR # Lighthouse\n(irate(validator_monitor_prev_epoch_on_chain_target_attester_hit_total{job=\"eth2\"}[$__rate_interval]) / (irate(validator_monitor_prev_epoch_on_chain_target_attester_hit_total{job=\"eth2\"}[$__rate_interval]) + irate(validator_monitor_prev_epoch_on_chain_target_attester_miss_total{job=\"eth2\"}[$__rate_interval]))) OR # Nimbus and Lodestar\n(sum(validator_correctly_voted_target{job=\"validator\"}) / count(validator_correctly_voted_target{job=\"validator\"})) OR # Prysm\n(validator_performance_correct_target_count{job=\"eth2\"} / validator_performance_expected_attestations{job=\"eth2\"}) # Teku",
           "hide": false,
-          "legendFormat": "{{le}}",
+          "legendFormat": "Target",
           "range": true,
-          "refId": "D"
+          "refId": "B"
         },
         {
           "datasource": {
@@ -1244,16 +1252,28 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "rate(validator_attestation_publication_delay{job=\"eth2\"}[$__rate_interval]) # Teku",
+          "expr": "irate(validator_monitor_prev_epoch_on_chain_source_attester_hit_total{job=\"eth2\"}[$__rate_interval]) / (irate(validator_monitor_prev_epoch_on_chain_source_attester_hit_total{job=\"eth2\"}[$__rate_interval]) + irate(validator_monitor_prev_epoch_on_chain_source_attester_miss_total{job=\"eth2\"}[$__rate_interval])) OR # Nimbus and Lodestar\n(sum(validator_correctly_voted_source{job=\"validator\"}) / count(validator_correctly_voted_source{job=\"validator\"})) # Prysm",
           "hide": false,
-          "legendFormat": "{{interval}}",
+          "legendFormat": "Source",
           "range": true,
-          "refId": "B"
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "irate(validator_monitor_prev_epoch_on_chain_head_attester_hit{job=\"eth2\", validator=\"total\"}[$__rate_interval]) / (irate(validator_monitor_prev_epoch_on_chain_head_attester_hit{job=\"eth2\", validator=\"total\"}[$__rate_interval]) + irate(validator_monitor_prev_epoch_on_chain_head_attester_miss{job=\"eth2\", validator=\"total\"}[$__rate_interval])) OR # Lighthouse\nirate(validator_monitor_prev_epoch_on_chain_head_attester_hit_total{job=\"eth2\"}[$__rate_interval]) / (irate(validator_monitor_prev_epoch_on_chain_head_attester_hit_total{job=\"eth2\"}[$__rate_interval]) + irate(validator_monitor_prev_epoch_on_chain_head_attester_miss_total{job=\"eth2\"}[$__rate_interval])) OR # Nimbus and Lodestar\n(sum(validator_correctly_voted_head{job=\"validator\"}) / count(validator_correctly_voted_head{job=\"validator\"})) OR # Prysm\n(validator_performance_correct_head_block_count{job=\"eth2\"} / validator_performance_expected_attestations{job=\"eth2\"}) # Teku",
+          "hide": false,
+          "legendFormat": "Head",
+          "range": true,
+          "refId": "E"
         }
       ],
-      "title": "Attestation Delay",
+      "title": "Attestation Accuracy",
       "transformations": [],
-      "type": "heatmap"
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -1659,7 +1679,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nsum(jvm_memory_bytes_used{job=\"eth1\"}) OR # Besu\ndotnet_total_memory_bytes{job=\"eth1\"} # Nethermind",
+          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nprocess_resident_memory_bytes{job=\"eth1\"} OR # Besu\nprocess_private_memory_bytes{job=\"eth1\"} # Nethermind",
           "hide": false,
           "legendFormat": "EC (Stacked)",
           "range": true,
@@ -1688,7 +1708,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "This provides information about your upcoming attestation duties. It's client-specific.\n- For **Nimbus** and **Prysm**: this shows the time until your next attestation duty.\n- For **Teku**: this prints the number of upcoming attestations you have scheduled.\n- **Lighthouse** and **Lodestar** do not provide this information.",
+      "description": "This tells you when your next attestation duty will arrive. Use it to find an optimal time to take your clients down for maintenance so you're back up and running before it hits.\n\n- NOTE: **Lodestar** and **Teku** do not provide this information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1761,14 +1781,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "next_action_wait{job=\"eth2\"} OR # Nimbus\n(min((validator_next_attestation_slot{job=\"validator\"} - scalar(beacon_slot{job=\"eth2\"})) > 0 - 1) * 12) OR # Prysm\n(validator_scheduled_attestation_duties_current{job=\"validator\"}) OR # Teku\non() vector(0)",
+          "expr": "((min(vc_attestation_duty_slot{job=\"validator\"}) - scalar(beacon_head_slot{job=\"eth2\"})) * 12) OR # Lighthouse\nmax(next_action_wait{job=\"eth2\"} OR # Nimbus\n(min((validator_next_attestation_slot{job=\"validator\"} - scalar(beacon_slot{job=\"eth2\"})) > 0 - 1) * 12) OR # Prysm\non() vector(0))",
           "interval": "",
           "legendFormat": "",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Attestation Info",
+      "title": "Next Attestation",
       "type": "stat"
     },
     {
@@ -5354,7 +5374,7 @@
   },
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.2.0-RC1",
-  "uid": "Ur22GG77z120rc1",
-  "version": 61,
+  "uid": "Ur22GG77zNM120rc1",
+  "version": 85,
   "weekStart": ""
 }
