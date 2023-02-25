@@ -279,7 +279,7 @@
       "id": 82,
       "options": {
         "colorMode": "value",
-        "graphMode": "none",
+        "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -5374,7 +5374,7 @@
   },
   "timezone": "",
   "title": "Rocket Pool Dashboard v1.2.0-RC1",
-  "uid": "Ur22GG77zNM120rc1",
-  "version": 85,
+  "uid": "Ur22GG77z120rc1",
+  "version": 87,
   "weekStart": ""
 }
