@@ -86,7 +86,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         --staking \
         --http-allow-sync-stalled \
         --execution-jwt=/secrets/jwtsecret \
-        --always_prefer_builder_payload \
+        --always-prefer-builder-payload \
         $BN_ADDITIONAL_FLAGS"
 
     # Performance tuning for ARM systems
