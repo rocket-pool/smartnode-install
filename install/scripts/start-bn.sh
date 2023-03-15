@@ -129,10 +129,10 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
     if [ "$NETWORK" = "zhejiang" ]; then
         LODESTAR_NETWORK_ARG="--paramsFile=/zhejiang/config.yaml --genesisStateFile=/zhejiang/genesis.ssz"
     else
-        LODESTAR_NETWORK_ARG="--network $LODESTAR_NETWORK" 
+        LODESTAR_NETWORK_ARG="--network $LODESTAR_NETWORK"
     fi
 
-    CMD="$PERF_PREFIX /usr/app/node_modules/.bin/lodestar beacon \
+    CMD="$PERF_PREFIX /usr/local/bin/node --max-http-header-size=65536 /usr/app/packages/cli/bin/lodestar beacon \
         $LODESTAR_NETWORK_ARG \
         --dataDir /ethclient/lodestar \
         --port $BN_P2P_PORT \
