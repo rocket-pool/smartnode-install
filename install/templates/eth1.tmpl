@@ -19,7 +19,6 @@ services:
       - eth1clientdata:/ethclient
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
       - ${ROCKETPOOL_DATA_FOLDER}/secrets:/secrets
-      - ${ROCKETPOOL_FOLDER}/zhejiang:/zhejiang
     networks:
       - net
     environment:

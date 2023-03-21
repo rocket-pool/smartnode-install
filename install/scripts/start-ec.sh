@@ -42,10 +42,6 @@ elif [ "$NETWORK" = "devnet" ]; then
     GETH_NETWORK="--goerli"
     RP_NETHERMIND_NETWORK="goerli"
     BESU_NETWORK="--network=goerli"
-elif [ "$NETWORK" = "zhejiang" ]; then
-    GETH_NETWORK="--networkid=1337803"
-    RP_NETHERMIND_NETWORK="/zhejiang/nethermind.json"
-    BESU_NETWORK="--network-id=1337803"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -70,14 +66,6 @@ if [ "$CLIENT" = "geth" ]; then
     # Use Pebble if requested
     if [ "$GETH_USE_PEBBLE" = "true" ]; then
         DB_ENGINE="--db.engine=pebble"
-    fi
-
-    # Init the zhejiang data if necessary
-    if [ "$NETWORK" = "zhejiang" ]; then
-        if [ ! -f "/ethclient/zhejiang.init" ]; then
-            $PERF_PREFIX /usr/local/bin/geth $DB_ENGINE --datadir /ethclient/geth init /zhejiang/genesis.json
-            touch /ethclient/zhejiang.init
-        fi
     fi
 
     # Check for the prune flag and run that first if requested
@@ -127,10 +115,6 @@ if [ "$CLIENT" = "geth" ]; then
             CMD="$CMD --port $EC_P2P_PORT"
         fi
 
-        if [ "$NETWORK" = "zhejiang" ]; then
-            CMD="$CMD --syncmode=full --bootnodes enode://691c66d0ce351633b2ef8b4e4ef7db9966915ca0937415bd2b408df22923f274873b4d4438929e029a13a680140223dcf701cabe22df7d8870044321022dfefa@64.225.78.1:30303,enode://89347b9461727ee1849256d78e84d5c86cc3b4c6c5347650093982b726d71f3d08027e280b399b7b6604ceeda863283dcfe1a01e93728b4883114e9f8c7cc8ef@146.190.238.212:30303,enode://c2892072efe247f21ed7ebea6637ade38512a0ae7c5cffa1bf0786d5e3be1e7f40ff71252a21b36aa9de54e49edbcfc6962a98032adadfa29c8524262e484ad3@165.232.84.160:30303,enode://71e862580d3177a99e9837bd9e9c13c83bde63d3dba1d5cea18e89eb2a17786bbd47a8e7ae690e4d29763b55c205af13965efcaf6105d58e118a5a8ed2b0f6d0@68.183.13.170:30303,enode://2f6cf7f774e4507e7c1b70815f9c0ccd6515ee1170c991ce3137002c6ba9c671af38920f5b8ab8a215b62b3b50388030548f1d826cb6c2b30c0f59472804a045@161.35.147.98:30303"
-        fi
-
         exec ${CMD} --http.vhosts '*'
 
     fi
@@ -173,6 +157,7 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
         --config $RP_NETHERMIND_NETWORK \
+        --Sync.SnapSync true \
         --datadir /ethclient/nethermind \
         --JsonRpc.Enabled true \
         --JsonRpc.Host 0.0.0.0 \
@@ -230,12 +215,6 @@ if [ "$CLIENT" = "nethermind" ]; then
         CMD="$CMD --Pruning.CacheMb $RP_NETHERMIND_PRUNE_MEM_SIZE"
     fi
 
-    if [ "$NETWORK" = "zhejiang" ]; then
-        CMD="$CMD --Sync.SnapSync false"
-    else
-        CMD="$CMD --Sync.SnapSync true"
-    fi
-
     exec ${CMD}
 
 fi
@@ -261,6 +240,8 @@ if [ "$CLIENT" = "besu" ]; then
     CMD="$PERF_PREFIX /opt/besu/bin/besu \
         $BESU_NETWORK \
         --data-path=/ethclient/besu \
+        --fast-sync-min-peers=3 \
+        --sync-mode=X_CHECKPOINT \
         --rpc-http-enabled \
         --rpc-http-host=0.0.0.0 \
         --rpc-http-port=${EC_HTTP_PORT:-8545} \
@@ -296,12 +277,6 @@ if [ "$CLIENT" = "besu" ]; then
 
     if [ ! -z "$BESU_MAX_BACK_LAYERS" ]; then
         CMD="$CMD --bonsai-maximum-back-layers-to-load=$BESU_MAX_BACK_LAYERS"
-    fi
-
-    if [ "$NETWORK" = "zhejiang" ]; then
-        CMD="$CMD --genesis-file=/zhejiang/besu.json --bootnodes=enode://691c66d0ce351633b2ef8b4e4ef7db9966915ca0937415bd2b408df22923f274873b4d4438929e029a13a680140223dcf701cabe22df7d8870044321022dfefa@64.225.78.1:30303,enode://89347b9461727ee1849256d78e84d5c86cc3b4c6c5347650093982b726d71f3d08027e280b399b7b6604ceeda863283dcfe1a01e93728b4883114e9f8c7cc8ef@146.190.238.212:30303,enode://c2892072efe247f21ed7ebea6637ade38512a0ae7c5cffa1bf0786d5e3be1e7f40ff71252a21b36aa9de54e49edbcfc6962a98032adadfa29c8524262e484ad3@165.232.84.160:30303,enode://71e862580d3177a99e9837bd9e9c13c83bde63d3dba1d5cea18e89eb2a17786bbd47a8e7ae690e4d29763b55c205af13965efcaf6105d58e118a5a8ed2b0f6d0@68.183.13.170:30303,enode://2f6cf7f774e4507e7c1b70815f9c0ccd6515ee1170c991ce3137002c6ba9c671af38920f5b8ab8a215b62b3b50388030548f1d826cb6c2b30c0f59472804a045@161.35.147.98:30303"
-    else
-        CMD="$CMD --fast-sync-min-peers=3 --sync-mode=X_CHECKPOINT"
     fi
 
     if [ "$BESU_JVM_HEAP_SIZE" -gt "0" ]; then
