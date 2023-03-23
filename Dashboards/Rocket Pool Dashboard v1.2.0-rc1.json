@@ -2263,7 +2263,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The disk space used by your primary (Operating System) hard drive. Change the `device` option in this query to be your machine's hard drive.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "The disk space used by your primary (Operating System) hard drive and an optional secondary hard drive. Change the `device` option in the second query to be your machine's secondary hard drive to track if you have one.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2295,7 +2295,7 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 3,
+        "w": 4,
         "x": 6,
         "y": 15
       },
@@ -2323,11 +2323,25 @@
           "exemplar": true,
           "expr": "(node_filesystem_size_bytes{job=\"node\", mountpoint=\"/\"} - node_filesystem_avail_bytes{job=\"node\", mountpoint=\"/\"}) / node_filesystem_size_bytes{job=\"node\", mountpoint=\"/\"}",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "OS",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "(node_filesystem_size_bytes{job=\"node\", device=\"\"} - node_filesystem_avail_bytes{job=\"node\", device=\"\"}) / node_filesystem_size_bytes{job=\"node\", device=\"\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Disk 2",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "OS Disk Space Used",
+      "title": "Disk Space Used",
       "type": "gauge"
     },
     {
@@ -2335,15 +2349,13 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "An optional space monitor for a second disk or partition on your system. If you store your chain data on a separate drive or partition from your OS (such as with a Raspberry Pi), you can configure this to track that disk. Just modify the `device` setting in the query with your storage partition's path.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "The temperature of your primary (and optionally secondary) SSDs.\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "mappings": [],
-          "max": 1,
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2353,26 +2365,29 @@
               },
               {
                 "color": "#EAB839",
-                "value": 0.75
+                "value": 50
               },
               {
                 "color": "red",
-                "value": 0.9
+                "value": 65
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "celsius"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 5,
-        "w": 3,
-        "x": 9,
+        "w": 2,
+        "x": 10,
         "y": 15
       },
-      "id": 90,
+      "id": 263,
       "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -2381,9 +2396,8 @@
           "fields": "",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "text": {}
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "9.3.6",
       "targets": [
@@ -2393,14 +2407,29 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "(node_filesystem_size_bytes{job=\"node\", device=\"\"} - node_filesystem_avail_bytes{job=\"node\", device=\"\"}) / node_filesystem_size_bytes{job=\"node\", device=\"\"}",
+          "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
+          "format": "time_series",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "OS",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Disk 2",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "Disk 2 Space Used",
-      "type": "gauge"
+      "title": "Disk Temp",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -2477,7 +2506,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The average read/write latency of your SSD. The lower it is, the faster your machine can process and respond to Beacon Chain activities like attesting. Change the `device` setting in the queries to be the SSD you want to track (typically the one with your chain data on it).\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "The average read/write latency of your primary (and optionally secondary) SSDs. The lower it is, the faster your machine can process and respond to Beacon Chain activities like attesting. Change the `device` setting in the queries to be the SSD(s) you want to track (typically the one with your chain data on it).\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2557,8 +2586,9 @@
           "expr": "irate(node_disk_write_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_writes_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
           "hide": false,
           "interval": "",
-          "legendFormat": "Write",
-          "refId": "B"
+          "legendFormat": "OS Write",
+          "range": true,
+          "refId": "A"
         },
         {
           "datasource": {
@@ -2568,8 +2598,35 @@
           "exemplar": true,
           "expr": "irate(node_disk_read_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_reads_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "Read",
-          "refId": "A"
+          "legendFormat": "OS Read",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "irate(node_disk_write_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_writes_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Disk 2 Write",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "irate(node_disk_read_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_reads_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Disk 2 Read",
+          "range": true,
+          "refId": "D"
         }
       ],
       "title": "SSD Latency",
@@ -5373,8 +5430,8 @@
     ]
   },
   "timezone": "",
-  "title": "Rocket Pool Dashboard v1.2.0-RC1",
-  "uid": "Ur22GG77z120rc1",
-  "version": 87,
+  "title": "Rocket Pool Dashboard v1.2.0-RC2",
+  "uid": "Ur22GG77z120rc2",
+  "version": 88,
   "weekStart": ""
 }
