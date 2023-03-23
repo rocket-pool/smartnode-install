@@ -2263,7 +2263,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The disk space used by your primary (Operating System) hard drive. Change the `device` option in this query to be your machine's hard drive.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "The disk space used by your primary (Operating System) hard drive and an optional secondary hard drive. Change the `device` option in the second query to be your machine's secondary hard drive to track if you have one.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2349,7 +2349,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The temperature of your SSD.\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "The temperature of your primary (and optionally secondary) SSDs.\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5430,8 +5430,8 @@
     ]
   },
   "timezone": "",
-  "title": "Rocket Pool Dashboard v1.2.0-RC1",
-  "uid": "Ur22GG77z120rc1",
+  "title": "Rocket Pool Dashboard v1.2.0-RC2",
+  "uid": "Ur22GG77z120rc2",
   "version": 88,
   "weekStart": ""
 }
