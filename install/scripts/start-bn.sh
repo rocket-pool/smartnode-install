@@ -138,6 +138,10 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         CMD="$CMD --checkpointSyncUrl $CHECKPOINT_SYNC_URL"
     fi
 
+    if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
+        CMD="$CMD --monitoring.endpoint $BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
+    fi
+
     exec ${CMD}
 
 fi
