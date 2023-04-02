@@ -164,6 +164,8 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.Port ${EC_HTTP_PORT:-8545} \
         --JsonRpc.EnginePort ${EC_ENGINE_PORT:-8551} \
         --JsonRpc.EngineHost 0.0.0.0 \
+        --Init.WebSocketsEnabled true \
+        --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} \
         --Sync.AncientBodiesBarrier 1 \
         --Sync.AncientReceiptsBarrier 1 \
         --Merge.Enabled true \
