@@ -183,7 +183,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         CMD="$CMD --metrics --metrics-address=0.0.0.0 --metrics-port=$BN_METRICS_PORT"
     fi
 
-    if [ ! -z "$EXTERNAL_IP" ]; then
+    if [ ! -z "$EXTERNAL_IP" ] && [ "$EXTERNAL_IP" != "''" ]; then
         CMD="$CMD --nat=extip:$EXTERNAL_IP"
     fi
 
