@@ -38,3 +38,9 @@ scrape_configs:
     scrape_timeout: 5m
     static_configs:
       - targets: ['node:${NODE_METRICS_PORT:-9102}']
+
+  - job_name: 'watchtower'
+    scrape_interval: 5m
+    scrape_timeout: 5m
+    static_configs:
+      - targets: ['watchtower:${WATCHTOWER_METRICS_PORT:-9104}']
