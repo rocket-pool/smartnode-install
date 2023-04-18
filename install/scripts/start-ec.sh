@@ -158,6 +158,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     CMD="$PERF_PREFIX /nethermind/Nethermind.Runner \
         --config $RP_NETHERMIND_NETWORK \
         --Sync.SnapSync true \
+        --Sync.FastSync true \
         --datadir /ethclient/nethermind \
         --JsonRpc.Enabled true \
         --JsonRpc.Host 0.0.0.0 \
@@ -166,8 +167,8 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.EngineHost 0.0.0.0 \
         --Init.WebSocketsEnabled true \
         --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} \
-        --Sync.AncientBodiesBarrier 1 \
-        --Sync.AncientReceiptsBarrier 1 \
+        --Sync.AncientBodiesBarrier 11052984 \
+        --Sync.AncientReceiptsBarrier 11052984 \
         --Merge.Enabled true \
         --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
         $EC_ADDITIONAL_FLAGS"
@@ -198,7 +199,7 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT"
-        if [ "$NETWORK" == "prater" ]; then
+        if [ "$NETWORK" = "prater" ]; then
             CMD="$CMD --Metrics.PushGatewayUrl=\"\""
         fi
     fi
