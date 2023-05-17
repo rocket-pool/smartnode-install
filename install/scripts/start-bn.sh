@@ -223,6 +223,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         --eth1-header-req-limit 150 \
         --jwt-secret=/secrets/jwtsecret \
         --api-timeout 600 \
+        --build-block-parallel \
         $BN_ADDITIONAL_FLAGS"
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
