@@ -134,8 +134,18 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         CMD="$CMD --metrics --metrics.address 0.0.0.0 --metrics.port $BN_METRICS_PORT"
     fi
 
+    if [ ! -z "$EXTERNAL_IP" ]; then
+        CMD="$CMD --enr.ip $EXTERNAL_IP --nat"
+    fi
+
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
-        CMD="$CMD --checkpointSyncUrl $CHECKPOINT_SYNC_URL"
+        # Ignore it if a DB already exists
+        if [ -d "/ethclient/lodestar/chain-db" ]; then
+            echo "Lodestar database already exists, ignoring checkpoint sync."
+        else
+            echo "No database detected, enabling checkpoint sync."
+            CMD="$CMD --checkpointSyncUrl $CHECKPOINT_SYNC_URL"
+        fi
     fi
 
     exec ${CMD}
