@@ -21,7 +21,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.3.6"
+      "version": "9.4.10"
     },
     {
       "type": "panel",
@@ -85,7 +85,7 @@
   "description": "This is the standard dashboard for Rocket Pool node operators.",
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": 14884,
+  "gnetId": 18391,
   "graphTooltip": 0,
   "id": null,
   "links": [],
@@ -112,7 +112,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -147,7 +147,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -220,7 +220,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -292,17 +292,19 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
           "interval": "",
           "legendFormat": "",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -371,7 +373,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -438,7 +440,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -523,7 +525,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -599,7 +601,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -622,7 +624,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"}) OR # Lighthouse\nsum(vc_block_published_total{job=\"validator\"}) OR # Lodestar\nsum(beacon_blocks_proposed_total{job=\"validator\"}) OR # Nimbus\nsum(validator_successful_proposals{job=\"validator\"}) OR # Prysm\nvalidator_duties_performed{job=\"validator\", type=\"block\", result=\"success\"} OR # Teku\non() vector(0)",
+          "expr": "sum(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"}) OR # Lighthouse\nsum(vc_block_published_total{job=\"validator\"}) OR # Lodestar\nsum(beacon_blocks_sent_total{job=\"validator\"}) OR # Nimbus\nsum(validator_successful_proposals{job=\"validator\"}) OR # Prysm\nvalidator_duties_performed{job=\"validator\", type=\"block\", result=\"success\"} OR # Teku\non() vector(0)",
           "interval": "",
           "legendFormat": "Proposals",
           "range": true,
@@ -718,7 +720,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "(sum(rate(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"}[$__rate_interval])) OR # Lighthouse\nsum(rate(vc_block_published_total{job=\"validator\"}[$__rate_interval])) OR # Lodestar\nsum(rate(beacon_blocks_proposed_total{job=\"validator\"}[$__rate_interval])) OR # Nimbus\nsum(rate(validator_successful_proposals{job=\"validator\"}[$__rate_interval])) OR # Prysm\nrate(validator_duties_performed{job=\"validator\", type=\"block\", result=\"success\"}[$__rate_interval]) OR # Teku\non() vector(0)) * 45",
+          "expr": "(sum(rate(vc_signed_beacon_blocks_total{job=\"validator\", status=\"success\"}[$__rate_interval])) OR # Lighthouse\nsum(rate(vc_block_published_total{job=\"validator\"}[$__rate_interval])) OR # Lodestar\nsum(rate(beacon_blocks_sent_total{job=\"validator\"}[$__rate_interval])) OR # Nimbus\nsum(rate(validator_successful_proposals{job=\"validator\"}[$__rate_interval])) OR # Prysm\nrate(validator_duties_performed{job=\"validator\", type=\"block\", result=\"success\"}[$__rate_interval]) OR # Teku\non() vector(0)) * 45",
           "hide": false,
           "interval": "",
           "legendFormat": "Proposal",
@@ -835,7 +837,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -968,7 +970,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -977,7 +979,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nprocess_resident_memory_bytes{job=\"eth1\"} OR # Besu\nprocess_private_memory_bytes{job=\"eth1\"} # Nethermind",
+          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nprocess_resident_memory_bytes{job=\"eth1\"} OR # Besu\nprocess_working_set_bytes{job=\"eth1\"} # Nethermind",
           "interval": "",
           "legendFormat": "EC",
           "range": true,
@@ -1060,7 +1062,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -1126,7 +1128,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -1679,7 +1681,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nprocess_resident_memory_bytes{job=\"eth1\"} OR # Besu\nprocess_private_memory_bytes{job=\"eth1\"} # Nethermind",
+          "expr": "system_memory_used{job=\"geth\"} OR # Geth\nprocess_resident_memory_bytes{job=\"eth1\"} OR # Besu\nprocess_working_set_bytes{job=\"eth1\"} # Nethermind",
           "hide": false,
           "legendFormat": "EC (Stacked)",
           "range": true,
@@ -1772,7 +1774,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -1836,7 +1838,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -1874,7 +1876,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -1955,7 +1957,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -2041,7 +2043,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -2263,7 +2265,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The disk space used by your primary (Operating System) hard drive and an optional secondary hard drive. Change the `device` option in the second query to be your machine's secondary hard drive to track if you have one.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "The disk space used by your primary (Operating System) hard drive. Change the `device` option in this query to be your machine's hard drive.\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2313,13 +2315,14 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "(node_filesystem_size_bytes{job=\"node\", mountpoint=\"/\"} - node_filesystem_avail_bytes{job=\"node\", mountpoint=\"/\"}) / node_filesystem_size_bytes{job=\"node\", mountpoint=\"/\"}",
           "interval": "",
@@ -2332,6 +2335,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "(node_filesystem_size_bytes{job=\"node\", device=\"\"} - node_filesystem_avail_bytes{job=\"node\", device=\"\"}) / node_filesystem_size_bytes{job=\"node\", device=\"\"}",
           "hide": false,
@@ -2349,7 +2353,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The temperature of your primary (and optionally secondary) SSDs.\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "The temperature of your SSD.\n\nTo get the correct chip and sensor ID, you'll want to run `sensors` from the `lm-sensors` package. See the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2399,13 +2403,14 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
           "format": "time_series",
@@ -2419,6 +2424,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "node_hwmon_temp_celsius{job=\"node\", chip=\"\", sensor=\"\"}",
           "hide": false,
@@ -2453,7 +2459,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -2487,7 +2493,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -2506,7 +2512,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The average read/write latency of your primary (and optionally secondary) SSDs. The lower it is, the faster your machine can process and respond to Beacon Chain activities like attesting. Change the `device` setting in the queries to be the SSD(s) you want to track (typically the one with your chain data on it).\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
+      "description": "The average read/write latency of your SSD. The lower it is, the faster your machine can process and respond to Beacon Chain activities like attesting. Change the `device` setting in the queries to be the SSD you want to track (typically the one with your chain data on it).\n\nSee the documentation at https://docs.rocketpool.net/guides/node/grafana.html for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2582,6 +2588,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "irate(node_disk_write_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_writes_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
           "hide": false,
@@ -2595,6 +2602,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "irate(node_disk_read_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_reads_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
           "interval": "",
@@ -2607,6 +2615,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "irate(node_disk_write_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_writes_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
           "hide": false,
@@ -2620,6 +2629,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "irate(node_disk_read_time_seconds_total{job=\"node\", device=\"\"}[$__rate_interval]) / irate(node_disk_reads_completed_total{job=\"node\", device=\"\"}[$__rate_interval])",
           "hide": false,
@@ -2713,11 +2723,13 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "irate(node_network_transmit_bytes_total{job=\"node\", device=\"\"}[$__rate_interval])",
           "hide": false,
           "interval": "",
           "legendFormat": "Tx",
+          "range": true,
           "refId": "B"
         },
         {
@@ -2725,10 +2737,12 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "irate(node_network_receive_bytes_total{job=\"node\", device=\"\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "Rx",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -2782,18 +2796,20 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "node_network_transmit_bytes_total{job=\"node\", device=\"\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "Tx",
+          "range": true,
           "refId": "B"
         },
         {
@@ -2801,10 +2817,12 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "node_network_receive_bytes_total{job=\"node\", device=\"\"}",
           "interval": "",
           "legendFormat": "Rx",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -2816,7 +2834,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The total ETH balance of all of your Rocket Pool validators on the Beacon Chain.",
+      "description": "The total ETH balance of all of your Rocket Pool validators on the Beacon Chain. This includes both ETH belonging to you and ETH belonging to the pool stakers you used to make your minipools.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2839,7 +2857,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
+        "w": 4,
         "x": 13,
         "y": 20
       },
@@ -2859,7 +2877,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -2881,7 +2899,252 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The total amount of ETH you've earned on the Beacon Chain by running a Rocket Pool node. This is equal to your total share of the rewards, minus the 16 ETH you deposited for each minipool.",
+      "description": "This is how much ETH is currently available for distribution in each of your minipool contracts (on the execution layer). Note that if any of them have a refund, this shows the total balance **minus** that refund amount - in other words, it shows whatever's left over after your refund.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "ETH"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 17,
+        "y": 20
+      },
+      "id": 210,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.4.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rocketpool_node_minipool_balance{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Minipool Balance (EL)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "A collection of other ETH rewards you can claim (or have claimed).\n\n- **Unclaimed ETH (SP)**: ETH you've earned from the Smoothing Pool that you haven't claimed yet.\n- **Claimed ETH (SP)**: ETH from the Smoothing Pool you've already claimed in the past.\n- **Total Refund**: ETH that belongs to you from special operations like bond reduction or solo staker migration. When you claim this, it goes directly to you - it isn't split with the pool stakers.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0.00001
+              }
+            ]
+          },
+          "unit": "ETH"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Claimed ETH (SP)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "transparent",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 2,
+        "x": 20,
+        "y": 20
+      },
+      "id": 256,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "9.4.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rocketpool_node_unclaimed_eth_rewards{job=\"rocketpool\"}",
+          "hide": false,
+          "legendFormat": "Unclaimed ETH (SP)",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rocketpool_node_claimed_eth_rewards{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "Claimed ETH (SP)",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rocketpool_node_refund_balance{job=\"rocketpool\"}",
+          "hide": false,
+          "legendFormat": "Total Refund",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Other ETH Rewards",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "This is how much ETH you will receive if you exit all of your validators on the Beacon Chain; it's your share of the total balance for each Rocket Pool minipool.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 4,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "ETH"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 4,
+        "x": 13,
+        "y": 23
+      },
+      "id": 204,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.4.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rocketpool_node_beacon_share{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Your Beacon Chain Share",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "The total amount of ETH that belongs to you across the EL balances of all of your minipool contracts (minus any refunds you may have waiting).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2905,10 +3168,12 @@
       "gridPos": {
         "h": 6,
         "w": 3,
-        "x": 15,
-        "y": 20
+        "x": 17,
+        "y": 23
       },
-      "id": 204,
+      "id": 152,
+      "links": [],
+      "maxDataPoints": 100,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -2921,391 +3186,26 @@
           "fields": "",
           "values": false
         },
-        "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "rocketpool_node_beacon_share{job=\"rocketpool\"} - rocketpool_node_deposited_eth{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Your Beacon Chain Earnings",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The raw APR from the Beacon Chain across all of your validators. This is what you would get if you were solo staking all of your validators.\n\nCalculated by comparing today's balance with yesterday's balance, so this is your average APR over the last 24 hours.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#F2495C",
-                "value": null
-              },
-              {
-                "color": "#FADE2A",
-                "value": 0
-              },
-              {
-                "color": "blue",
-                "value": 0.0001
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 18,
-        "y": 20
-      },
-      "id": 152,
-      "links": [],
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "((rocketpool_node_beacon_balance{job=\"rocketpool\"}) - (rocketpool_node_beacon_balance{job=\"rocketpool\"} offset 1d != 0)) / 32 / rocketpool_node_active_minipool_count{job=\"rocketpool\"} * 365",
+          "expr": "rocketpool_node_minipool_share{job=\"rocketpool\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "annualized daily return",
+          "range": true,
           "refId": "B"
         }
       ],
-      "title": "Solo APR (1D)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The raw APR from the Beacon Chain across all of your validators. This is what you would get if you were solo staking all of your validators.\n\nCalculated by comparing today's balance with the balance from 7 days ago, so this is your average APR over the last week.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#F2495C",
-                "value": null
-              },
-              {
-                "color": "#FADE2A",
-                "value": 0
-              },
-              {
-                "color": "blue",
-                "value": 0.0001
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 20,
-        "y": 20
-      },
-      "id": 226,
-      "links": [],
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "((rocketpool_node_beacon_balance{job=\"rocketpool\"}) - (rocketpool_node_beacon_balance{job=\"rocketpool\"} offset 7d != 0)) / 32 / rocketpool_node_active_minipool_count{job=\"rocketpool\"} * (365/7)",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "annualized daily return",
-          "refId": "B"
-        }
-      ],
-      "title": "Solo APR (7D)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "This is how much ETH you will receive if you exit all of your validators on the Beacon Chain; it's your share of the total balance for each Rocket Pool minipool.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "ETH"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 13,
-        "y": 23
-      },
-      "id": 210,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_node_beacon_share{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Your Share",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Your APR from Beacon Chain rewards, which includes the your minipool's commission.\n\nCalculated by comparing today's balance with yesterday's balance, so this is your average APR over the last 24 hours.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 18,
-        "y": 23
-      },
-      "id": 206,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "((rocketpool_node_beacon_share{job=\"rocketpool\"}) - (rocketpool_node_beacon_share{job=\"rocketpool\"} offset 1d != 0)) / rocketpool_node_deposited_eth{job=\"rocketpool\"} * 365",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Your APR (1D)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Your APR from Beacon Chain rewards, which includes the your minipool's commission.\n\nCalculated by comparing today's balance with the balance from 7 days ago, so this is your average APR over the last week.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 20,
-        "y": 23
-      },
-      "id": 227,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "((rocketpool_node_beacon_share{job=\"rocketpool\"}) - (rocketpool_node_beacon_share{job=\"rocketpool\"} offset 7d != 0)) / rocketpool_node_deposited_eth{job=\"rocketpool\"} * (365/7)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Your APR (7D)",
+      "title": "Your Minipool (EL) Share",
       "type": "stat"
     },
     {
@@ -3330,7 +3230,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -3341,41 +3241,6 @@
         }
       ],
       "title": "Rocket Pool Network Stats (Updates Every 5 Minutes)",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 9,
-        "x": 13,
-        "y": 26
-      },
-      "id": 186,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "",
-        "mode": "markdown"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "RPL Rewards (Updates Every 5 Minutes)",
       "transparent": true,
       "type": "text"
     },
@@ -3427,7 +3292,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -3492,7 +3357,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -3557,7 +3422,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -3579,7 +3444,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The Smoothing Pool Balance",
+      "description": "The current balance of the Smoothing Pool. This is what will get distributed to each node operator opted into the Smoothing Pool at the end of each rewards interval.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3622,7 +3487,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -3640,6 +3505,41 @@
       ],
       "title": "Smoothing Pool Balance",
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 9,
+        "x": 13,
+        "y": 29
+      },
+      "id": 186,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.4.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "RPL Rewards (Updates Every 5 Minutes)",
+      "transparent": true,
+      "type": "text"
     },
     {
       "datasource": {
@@ -3670,7 +3570,7 @@
         "h": 4,
         "w": 5,
         "x": 13,
-        "y": 27
+        "y": 30
       },
       "id": 218,
       "options": {
@@ -3688,7 +3588,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -3734,7 +3634,7 @@
         "h": 4,
         "w": 4,
         "x": 18,
-        "y": 27
+        "y": 30
       },
       "id": 216,
       "options": {
@@ -3752,7 +3652,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -3767,218 +3667,6 @@
         }
       ],
       "title": "Next RPL Rewards Checkpoint",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The approximate amount of RPL you'll receive at the next checkpoint, based on your current effective stake and how much RPL is staked on the entire network.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              }
-            ]
-          },
-          "unit": "RPL"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 13,
-        "y": 31
-      },
-      "id": 198,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_node_expected_rpl_rewards{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Approx. Rewards from Next Checkpoint",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "How much \"effective\" RPL you have staked (capped at 150% per minipool).",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              }
-            ]
-          },
-          "unit": "RPL"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 17,
-        "y": 31
-      },
-      "id": 190,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_node_effective_staked_rpl{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Effective RPL Staked",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The amount of RPL you were rewarded that you haven't claimed yet. Normally your node checks for these every 5 minutes and claims them automatically, so if this number persists for a long time then something may be wrong.\n\nPlease see https://docs.rocketpool.net/guides/node/rewards.html for more info on claiming rewards.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 0.001
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 2,
-        "x": 20,
-        "y": 31
-      },
-      "id": 256,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value_and_name"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "rocketpool_node_unclaimed_rewards{job=\"rocketpool\"}",
-          "interval": "",
-          "legendFormat": "RPL",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "rocketpool_node_unclaimed_eth_rewards",
-          "hide": false,
-          "legendFormat": "ETH",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Unclaimed Rewards",
       "type": "stat"
     },
     {
@@ -4028,7 +3716,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -4092,7 +3780,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -4159,7 +3847,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -4181,30 +3869,23 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The current commission for new minipools. If you created a minipool right now, this is the commission it would be assigned for its entire lifespan.",
+      "description": "The number of minipools that are currently in the queue, waiting for ETH to be assigned to them from the staking pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "decimals": 2,
           "mappings": [],
-          "max": 0.2,
-          "min": 0.05,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "blue",
                 "value": null
-              },
-              {
-                "color": "green",
-                "value": 0.1
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "none"
         },
         "overrides": []
       },
@@ -4216,6 +3897,9 @@
       },
       "id": 208,
       "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -4224,33 +3908,33 @@
           "fields": "",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "text": {}
+        "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "rocketpool_supply_node_fee{job=\"rocketpool\"}",
+          "expr": "rocketpool_demand_queue_length{job=\"rocketpool\"}",
           "interval": "",
           "legendFormat": "",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "New Minipool Commission",
-      "type": "gauge"
+      "title": "Minipools in Queue",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The APR for your RPL stake, based on the rewards you will receive at the next checkpoint.",
+      "description": "This shows various levels of RPL stake you have:\n\n- **Total**: the total amount of RPL you have staked.\n- **Effective**: the amount of your staked RPL that is being put to use, accounting for the 10% borrowed minimum and 150% bonded maximum limits.\n- **Rewardable**: the effective amount of RPL that is eligible for earning RPL rewards at the end of each rewards period. This is based on the status of your validators on the Beacon Chain; validators that haven't been activated yet or validators that have been exited are not eligible for rewards.\n\n**Note**: this takes any *pending bond reductions* you may have into account.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4267,22 +3951,22 @@
               }
             ]
           },
-          "unit": "percent"
+          "unit": "RPL"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
-        "w": 4,
+        "h": 13,
+        "w": 3,
         "x": 13,
         "y": 34
       },
-      "id": 194,
+      "id": 190,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -4293,21 +3977,47 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "rocketpool_node_rpl_apr{job=\"rocketpool\"}",
+          "expr": "rocketpool_node_total_staked_rpl{job=\"rocketpool\"}",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Total",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rocketpool_node_effective_staked_rpl{job=\"rocketpool\"}",
+          "hide": false,
+          "legendFormat": "Effective",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rocketpool_node_rewardable_staked_rpl{job=\"rocketpool\"}",
+          "hide": false,
+          "legendFormat": "Rewardable",
+          "range": true,
+          "refId": "C"
         }
       ],
-      "title": "APR for Next RPL Checkpoint",
+      "title": "RPL Staked",
       "type": "stat"
     },
     {
@@ -4315,7 +4025,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "Your total staked RPL collateral. At 10%, you have 1.6 ETH worth of RPL per minipool; at 150% you have 24 ETH worth of RPL per minipool.\n\nIf you fall below 10% you won't be able to claim your rewards at the next checkpoint until you get back to 10%. If you go over 150%, you'll only be rewarded for the first 150% of your stake.",
+      "description": "Your total staked RPL collateral levels. This shows your collateral relative to the amount of ETH you have *borrowed* from the staking pool to complete your validators, and the amount of ETH you have *bonded* with your own funds.\n\nIf you fall below 10% of the *borrowed* ETH, you won't be able to claim your rewards at the next checkpoint until you get back to 10%.\n\nIf you go over 150% of the *bonded* ETH, you'll only be rewarded for the first 150% of your stake.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4347,9 +4057,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 3,
-        "x": 17,
+        "h": 7,
+        "w": 6,
+        "x": 16,
         "y": 34
       },
       "id": 196,
@@ -4366,18 +4076,32 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "rocketpool_node_total_staked_rpl{job=\"rocketpool\"} * rocketpool_rpl_rpl_price{job=\"rocketpool\"} / rocketpool_node_deposited_eth{job=\"rocketpool\"}",
+          "expr": "rocketpool_node_borrowed_collateral_ratio{job=\"rocketpool\"}",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Borrowed",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rocketpool_node_bonded_collateral_ratio{job=\"rocketpool\"}",
+          "hide": false,
+          "legendFormat": "Bonded",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "RPL Collateral",
@@ -4429,7 +4153,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -4673,7 +4397,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -4695,152 +4419,17 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The average collateralisation rate for node operators across the network.",
+      "description": "The total amount of ETH needed to be added to the staking pool in order to clear the minipool queue completely.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "blue",
+            "mode": "fixed"
           },
           "decimals": 2,
           "mappings": [],
-          "max": 1.5,
+          "max": 0,
           "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 0.1
-              },
-              {
-                "color": "red",
-                "value": 1.5
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 9,
-        "y": 37
-      },
-      "id": 225,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "text": {}
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_rpl_total_effective_staked{} / ignoring(status) rocketpool_supply_minipool_count{status=\"staking\"} * rocketpool_rpl_rpl_price / 16",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Avg. RPL Collateral",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "The total amount of RPL you've earned from RPL rewards for the entire life of your node.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              }
-            ]
-          },
-          "unit": "RPL"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 13,
-        "y": 37
-      },
-      "id": 192,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "exemplar": true,
-          "expr": "rocketpool_node_cumulative_rpl_rewards",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total RPL Rewards Earned",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Your claimed ETH from the Smoothing Pool",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -4855,15 +4444,15 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 20,
+        "h": 5,
+        "w": 3,
+        "x": 9,
         "y": 37
       },
-      "id": 248,
+      "id": 225,
       "options": {
         "colorMode": "value",
-        "graphMode": "none",
+        "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -4873,10 +4462,9 @@
           "fields": "",
           "values": false
         },
-        "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -4885,14 +4473,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "rocketpool_node_claimed_eth_rewards",
+          "expr": "rocketpool_demand_total_minipool_capacity",
           "interval": "",
           "legendFormat": "",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Claimed ETH (SP)",
+      "title": "ETH Capacity of Queue",
       "type": "stat"
     },
     {
@@ -4941,7 +4529,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -4963,121 +4551,177 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "",
-      "gridPos": {
-        "h": 1,
-        "w": 9,
-        "x": 13,
-        "y": 40
-      },
-      "id": 261,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
+      "description": "The approximate amount of RPL you'll receive at the next checkpoint, based on your current rewardable stake and how much RPL is staked on the entire network.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          },
+          "unit": "RPL"
         },
-        "content": "",
-        "mode": "markdown"
+        "overrides": []
       },
-      "pluginVersion": "9.3.6",
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 16,
+        "y": 41
+      },
+      "id": 198,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "exemplar": true,
+          "expr": "rocketpool_node_expected_rpl_rewards{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "transparent": true,
-      "type": "text"
+      "title": "Approx. Rewards from Next Checkpoint",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The balances of your node wallet (only tracks Rocket Pool tokens). Keep an eye on how much ETH you have; if it falls too low, your node won't be able to pay for gas during automatic RPL reward claims or other transactions.",
+      "description": "The amount of RPL you've claimed over the life of your node, and the amount you still have yet to claim.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "transparent",
+            "mode": "fixed"
           },
-          "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "filterable": false,
-            "inspect": false
-          },
-          "decimals": 6,
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "transparent",
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "RPL"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Unclaimed"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "transparent",
+                      "value": null
+                    },
+                    {
+                      "color": "green",
+                      "value": 0.00001
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,
-        "w": 9,
-        "x": 13,
+        "w": 2,
+        "x": 20,
         "y": 41
       },
-      "id": 200,
+      "id": 192,
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
           ],
-          "show": false
+          "fields": "",
+          "values": false
         },
-        "showHeader": true,
-        "sortBy": []
+        "text": {},
+        "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "exemplar": false,
-          "expr": "rocketpool_node_balance{job=\"rocketpool\"}",
-          "format": "table",
-          "instant": true,
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "rocketpool_node_unclaimed_rewards{job=\"rocketpool\"}",
           "interval": "",
-          "legendFormat": "{{Token}}",
+          "legendFormat": "Unclaimed",
+          "range": true,
           "refId": "A"
-        }
-      ],
-      "title": "Node Wallet Balances",
-      "transformations": [
+        },
         {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "__name__": true,
-              "instance": true,
-              "job": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "Value #A": "Value",
-              "job": ""
-            }
-          }
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "rocketpool_node_cumulative_rpl_rewards{job=\"rocketpool\"}",
+          "hide": false,
+          "legendFormat": "Claimed",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "type": "table"
+      "title": "RPL Rewards",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -5101,7 +4745,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -5141,7 +4785,32 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Voted"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "transparent",
+                      "value": null
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -5164,7 +4833,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -5242,7 +4911,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -5320,7 +4989,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -5384,7 +5053,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.6",
+      "pluginVersion": "9.4.10",
       "targets": [
         {
           "datasource": {
@@ -5402,10 +5071,200 @@
       ],
       "title": "Delegate Voting Power",
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "The approximate APR for your RPL stake, based on the rewards you will receive at the next checkpoint.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 16,
+        "y": 44
+      },
+      "id": 194,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.4.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": true,
+          "expr": "rocketpool_node_rpl_apr{job=\"rocketpool\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Your RPL APR for the Next Checkpoint",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "",
+      "gridPos": {
+        "h": 1,
+        "w": 9,
+        "x": 13,
+        "y": 47
+      },
+      "id": 261,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.4.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A"
+        }
+      ],
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "The balances of your node wallet (only tracks Rocket Pool tokens). Keep an eye on how much ETH you have; if it falls too low, your node won't be able to pay for gas during automatic RPL reward claims or other transactions.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "decimals": 6,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 9,
+        "x": 13,
+        "y": 48
+      },
+      "id": 200,
+      "options": {
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "9.4.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
+          "expr": "rocketpool_node_balance{job=\"rocketpool\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{Token}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Node Wallet Balances",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Value #A": "Value",
+              "job": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 37,
+  "revision": 1,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -5430,8 +5289,8 @@
     ]
   },
   "timezone": "",
-  "title": "Rocket Pool Dashboard v1.2.0-RC2",
-  "uid": "Ur22GG77z120rc2",
-  "version": 88,
+  "title": "Rocket Pool Dashboard v1.3.0",
+  "uid": "Ur22GG77z130",
+  "version": 19,
   "weekStart": ""
 }
