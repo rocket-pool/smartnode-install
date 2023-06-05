@@ -195,9 +195,6 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --Metrics.Enabled true --Metrics.ExposePort $EC_METRICS_PORT"
-        if [ "$NETWORK" = "prater" ]; then
-            CMD="$CMD --Metrics.PushGatewayUrl=\"\""
-        fi
     fi
 
     if [ ! -z "$EC_P2P_PORT" ]; then
