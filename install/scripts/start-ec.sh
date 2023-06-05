@@ -63,21 +63,15 @@ if [ "$CLIENT" = "geth" ]; then
 
     fi
 
-    # Use Pebble if requested
-    if [ "$GETH_USE_PEBBLE" = "true" ]; then
-        DB_ENGINE="--db.engine=pebble"
-    fi
-
     # Check for the prune flag and run that first if requested
     if [ -f "/ethclient/prune.lock" ]; then
 
-        $PERF_PREFIX /usr/local/bin/geth $DB_ENGINE snapshot prune-state $GETH_NETWORK --datadir /ethclient/geth ; rm /ethclient/prune.lock
+        $PERF_PREFIX /usr/local/bin/geth snapshot prune-state $GETH_NETWORK --datadir /ethclient/geth ; rm /ethclient/prune.lock
 
     # Run Geth normally
     else
 
         CMD="$PERF_PREFIX /usr/local/bin/geth $GETH_NETWORK \
-            ${DB_ENGINE} \
             --datadir /ethclient/geth \
             --http \
             --http.addr 0.0.0.0 \
@@ -166,11 +160,14 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.EngineHost 0.0.0.0 \
         --Init.WebSocketsEnabled true \
         --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} \
-        --Sync.AncientBodiesBarrier 1 \
-        --Sync.AncientReceiptsBarrier 1 \
         --Merge.Enabled true \
         --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
         $EC_ADDITIONAL_FLAGS"
+
+    # Add sync barriers
+    if [ "$RP_NETHERMIND_COMPLETE_HISTORY" = "true" ]; then
+        CMD="$CMD --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1"
+    fi
 
     # Add optional supplemental primary JSON-RPC modules
     if [ ! -z "$RP_NETHERMIND_ADDITIONAL_MODULES" ]; then
