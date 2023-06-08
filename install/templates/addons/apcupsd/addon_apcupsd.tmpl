@@ -16,7 +16,7 @@ services:
     stop_signal: SIGKILL
     stop_grace_period: 1s
     devices: ["${ADDON_APCUPSD_MOUNT_POINT}"]
-    volumes: ["/var/lib/node_exporter/textfile_collector:/root/textfile_collector:ro"${EXPORTER_ROOTFS_VOLUME} ]
+    volumes: ["/var/lib/node_exporter/textfile_collector:/root/textfile_collector:rw"]
     network_mode: host
 networks:
   net:
