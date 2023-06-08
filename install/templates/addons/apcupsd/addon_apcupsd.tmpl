@@ -19,9 +19,9 @@ services:
     volumes: ["/var/lib/node_exporter/textfile_collector:/root/textfile_collector:rw"]
     network_mode: host
     environment:
-      APCUPSD_OUTPUT_FILEPATH: "${ADDON_APCUPSD_OUTPUT_FILEPATH}"
-      APCUPSD_DEBUG: "${APCUPSD_DEBUG}"
-      APCUPSD_POLL_CRON: "${ADDON_APCUPSD_POLL_CRON}"
-      APCUPSD_TIMEOUT: "${ADDON_APCUPSD_TIMEOUT}"
+      APCUPSD_OUTPUT_FILEPATH: ${ADDON_APCUPSD_OUTPUT_FILEPATH}
+      APCUPSD_DEBUG: ${APCUPSD_DEBUG}
+      APCUPSD_POLL_CRON: ${ADDON_APCUPSD_POLL_CRON}
+      APCUPSD_TIMEOUT: ${ADDON_APCUPSD_TIMEOUT}
 networks:
   net:
