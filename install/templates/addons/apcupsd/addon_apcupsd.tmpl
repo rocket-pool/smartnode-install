@@ -8,8 +8,8 @@
 version: "3.7"
 services:
   addon_apcupsd:
-    image: ${ADDON_APCUPSD_IMAGE}
-    container_name: ${COMPOSE_PROJECT_NAME}_apcupsd
+    image: ${ADDON_APCUPSD_CONTAINER_TAG}
+    container_name: ${COMPOSE_PROJECT_NAME}_addon_apcupsd
     cap_drop:
       - ALL
     restart: unless-stopped
