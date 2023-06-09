@@ -422,6 +422,7 @@ progress 8 "Copying package files to Rocket Pool user data directory..."
 { cp -r "$PACKAGE_FILES_PATH/scripts" "$RP_PATH" || fail "Could not copy scripts folder to the Rocket Pool user data directory."; } >&2
 { cp -r "$PACKAGE_FILES_PATH/templates" "$RP_PATH" || fail "Could not copy templates folder to the Rocket Pool user data directory."; } >&2
 { cp "$PACKAGE_FILES_PATH/grafana-prometheus-datasource.yml" "$PACKAGE_FILES_PATH/prometheus.tmpl" "$RP_PATH" || fail "Could not copy base files to the Rocket Pool user data directory."; } >&2
+# TODO: Confirm this is a good way of bootstrapping a config file to be overwritten by the CLI
 { cp "$PACKAGE_FILES_PATH/addon_apcupsd.conf" "$PACKAGE_FILES_PATH/addon_apcupsd.conf" "$RP_PATH" || fail "Could not copy base files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/scripts" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 { touch -a "$RP_PATH/.firstrun" || fail "Could not create the first-run flag file."; } >&2
