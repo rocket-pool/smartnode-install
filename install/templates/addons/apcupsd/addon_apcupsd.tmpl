@@ -16,9 +16,22 @@ services:
     stop_signal: SIGKILL
     stop_grace_period: 1s
     devices: ["${ADDON_APCUPSD_MOUNT_POINT}"]
+    network_mode: host
+    ports:
+      - 3551:3551
+  addon_apcupsd_exporter:
+    image: ${ADDON_APCUPSD_EXPORTER_CONTAINER_TAG}
+    container_name: ${COMPOSE_PROJECT_NAME}_addon_apcupsd_exporter
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+    stop_signal: SIGKILL
+    stop_grace_period: 1s
     volumes: ["/var/lib/node_exporter/textfile_collector:/root/textfile_collector:rw"]
     network_mode: host
     environment:
+      APCUPSD_HOST: "addon_apcupsd"
+      APCUPSD_PORT: "3551"
       APCUPSD_OUTPUT_FILEPATH: "${ADDON_APCUPSD_OUTPUT_FILEPATH}"
       APCUPSD_DEBUG: ${ADDON_APCUPSD_DEBUG}
       APCUPSD_POLL_CRON: "${ADDON_APCUPSD_POLL_CRON}"
