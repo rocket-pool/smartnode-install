@@ -28,13 +28,8 @@ services:
     restart: unless-stopped
     stop_signal: SIGKILL
     stop_grace_period: 1s
-    volumes: ["/var/lib/node_exporter/textfile_collector:/root/textfile_collector:rw"]
-    environment:
-      APCUPSD_HOST: "addon_apcupsd"
-      APCUPSD_PORT: "3551"
-      APCUPSD_OUTPUT_FILEPATH: "${ADDON_APCUPSD_OUTPUT_FILEPATH}"
-      APCUPSD_DEBUG: ${ADDON_APCUPSD_DEBUG}
-      APCUPSD_POLL_CRON: "${ADDON_APCUPSD_POLL_CRON}"
-      APCUPSD_TIMEOUT: ${ADDON_APCUPSD_TIMEOUT}
+    command: "-apcupsd.addr addon_apcupsd:3551 -apcupsd.network tcp -telemetry.addr 0.0.0.0:9162 -telemetry.path /metrics"
+    ports:
+      - "9162:9162"
 networks:
   net:
