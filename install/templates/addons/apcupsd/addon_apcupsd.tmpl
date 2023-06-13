@@ -31,6 +31,8 @@ services:
     stop_signal: SIGKILL
     stop_grace_period: 1s
     command: "-apcupsd.addr addon_apcupsd:3551 -apcupsd.network tcp -telemetry.addr 0.0.0.0:9162 -telemetry.path /metrics"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - net
     ports:
