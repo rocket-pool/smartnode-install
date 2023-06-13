@@ -18,6 +18,8 @@ services:
     devices: ["${ADDON_APCUPSD_MOUNT_POINT}"]
     volumes:
       - ${ROCKETPOOL_FOLDER}/addon_apcupsd.conf:/etc/apcupsd/apcupsd.conf
+    networks:
+      - net
     ports:
       - 3551:3551
   addon_apcupsd_exporter:
