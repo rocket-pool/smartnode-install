@@ -47,4 +47,4 @@ scrape_configs:
 
   - job_name: 'apcupsd'
     static_configs:
-      - targets: ['addon_apcupsd:${ADDON_APCUPSD_METRICS_PORT:-9162}']
+      - targets: ['addon_apcupsd_exporter:${ADDON_APCUPSD_METRICS_PORT:-9162}']
