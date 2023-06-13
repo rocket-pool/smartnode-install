@@ -20,8 +20,6 @@ services:
       - ${ROCKETPOOL_FOLDER}/addon_apcupsd.conf:/etc/apcupsd/apcupsd.conf
     networks:
       - net
-    ports:
-      - 3551:3551
   addon_apcupsd_exporter:
     image: ${ADDON_APCUPSD_EXPORTER_CONTAINER_TAG}
     container_name: ${COMPOSE_PROJECT_NAME}_addon_apcupsd_exporter
@@ -35,7 +33,5 @@ services:
       - "host.docker.internal:host-gateway"
     networks:
       - net
-    ports:
-      - "9162:9162"
 networks:
   net:
