@@ -140,13 +140,7 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
     fi
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
-        # Ignore it if a DB already exists
-        if [ -d "/ethclient/lodestar/chain-db" ]; then
-            echo "Lodestar database already exists, ignoring checkpoint sync."
-        else
-            echo "No database detected, enabling checkpoint sync."
-            CMD="$CMD --checkpointSyncUrl $CHECKPOINT_SYNC_URL"
-        fi
+        CMD="$CMD --checkpointSyncUrl $CHECKPOINT_SYNC_URL"
     fi
 
     exec ${CMD}
