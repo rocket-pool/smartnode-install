@@ -108,6 +108,10 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         CMD="$CMD --metrics --metrics.address 0.0.0.0 --metrics.port $VC_METRICS_PORT"
     fi
 
+    if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
+        CMD="$CMD --monitoring.endpoint $BITFLY_NODE_METRICS_ENDPOINT?apikey=$BITFLY_NODE_METRICS_SECRET&machine=$BITFLY_NODE_METRICS_MACHINE_NAME"
+    fi
+
     exec ${CMD} --graffiti "$GRAFFITI"
 
 fi
