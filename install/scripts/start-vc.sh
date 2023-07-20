@@ -137,6 +137,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         --secrets-dir=/validators/nimbus/secrets \
         --doppelganger-detection=$DOPPELGANGER_DETECTION \
         --suggested-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) \
+        --block-monitor-type=event \
         $VC_ADDITIONAL_FLAGS"
 
     if [ "$ENABLE_MEV_BOOST" = "true" ]; then
