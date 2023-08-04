@@ -97,7 +97,7 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         $VC_ADDITIONAL_FLAGS"
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
-        CMD="$CMD --doppelgangerProtectionEnabled"
+        CMD="$CMD --doppelgangerProtection"
     fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
