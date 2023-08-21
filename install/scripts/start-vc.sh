@@ -100,7 +100,7 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         CMD="$CMD --doppelgangerProtection"
     fi
 
-    if [ ! -z "$MEV_BOOST_URL" ]; then
+    if [ "$ENABLE_MEV_BOOST" = "true" ]; then
         CMD="$CMD --builder"
     fi
 
