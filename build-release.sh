@@ -158,15 +158,6 @@ usage() {
 # === Main Body ===
 # =================
 
-# Get CPU architecture
-UNAME_VAL=$(uname -m)
-ARCH=""
-case $UNAME_VAL in
-    x86_64)  ARCH="amd64" ;;
-    aarch64) ARCH="arm64" ;;
-    *)       fail "CPU architecture not supported: $UNAME_VAL" ;;
-esac
-
 # Parse arguments
 while getopts "acpdnlrfv:" FLAG; do
     case "$FLAG" in
