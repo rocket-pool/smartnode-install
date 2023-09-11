@@ -20,7 +20,7 @@ build_images() {
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/beacon-chain-$VERSION-modern-linux-amd64 -O ./beacon-chain || fail "Error downloading amd64-modern beacon-client."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/validator-$VERSION-linux-amd64 -O ./validator || fail "Error downloading amd64-modern validator."
     chmod +x ./beacon-chain ./validator
-    docker buildx build --platform=linux/amd64 -t rocketpool/prysm:$VERSION-amd64-modern -f ../Dockerfile --load . || fail "Error building amd64 modern image."
+    docker buildx build --platform=linux/amd64 -t rocketpool/prysm:$VERSION-amd64-modern -f ../Dockerfile.prysm --load . || fail "Error building amd64 modern image."
     echo "done!"
 
     echo -n "Building x64 Portable image... "
@@ -28,14 +28,14 @@ build_images() {
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/beacon-chain-$VERSION-linux-amd64 -O ./beacon-chain || fail "Error downloading amd64-portable beacon-client."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/validator-$VERSION-linux-amd64 -O ./validator || fail "Error downloading amd64-portable validator."
     chmod +x ./beacon-chain ./validator
-    docker buildx build --platform=linux/amd64 -t rocketpool/prysm:$VERSION-amd64-portable -f ../Dockerfile --load . || fail "Error building amd64 portable image."
+    docker buildx build --platform=linux/amd64 -t rocketpool/prysm:$VERSION-amd64-portable -f ../Dockerfile.prysm --load . || fail "Error building amd64 portable image."
 
     echo -n "Building arm64 image... "
     cd ../arm64 || fail "Directory ${PWD}/arm64 does not exist or you don't have permissions to access it."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/beacon-chain-$VERSION-linux-arm64 -O ./beacon-chain || fail "Error downloading arm64 beacon-client."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/validator-$VERSION-linux-arm64 -O ./validator || fail "Error downloading arm64 validator."
     chmod +x ./beacon-chain ./validator
-    docker buildx build --platform=linux/arm64 -t rocketpool/prysm:$VERSION-arm64 -f ../Dockerfile --load . || fail "Error building arm64 image."
+    docker buildx build --platform=linux/arm64 -t rocketpool/prysm:$VERSION-arm64 -f ../Dockerfile.prysm --load . || fail "Error building arm64 image."
     echo "done!"
 
     echo -n "Pushing to Docker Hub... "
@@ -71,7 +71,7 @@ build_docker_manifests() {
 # =================
 
 # Parse arguments
-while getopts "acpdnlrfv:" FLAG; do
+while getopts "ainv:" FLAG; do
     case "$FLAG" in
         a) IMAGE=true MANIFEST=true ;;
         i) IMAGE=true ;;

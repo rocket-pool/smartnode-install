@@ -1,0 +1,6 @@
+FROM debian:bullseye-slim
+
+COPY beacon-chain /app/cmd/beacon-chain/beacon-chain
+COPY validator /app/cmd/validator/validator
+
+RUN apt-get update && apt-get install -y wget ca-certificates && rm -rf /var/lib/apt/lists/*
