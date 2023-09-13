@@ -44,3 +44,7 @@ scrape_configs:
     scrape_timeout: 5m
     static_configs:
       - targets: ['watchtower:${WATCHTOWER_METRICS_PORT:-9104}']
+
+  - job_name: 'apcupsd'
+    static_configs:
+      - targets: ['addon_apcupsd_exporter:${ADDON_APCUPSD_METRICS_PORT:-9162}']
