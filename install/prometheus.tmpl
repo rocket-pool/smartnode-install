@@ -44,3 +44,8 @@ scrape_configs:
     scrape_timeout: 5m
     static_configs:
       - targets: ['watchtower:${WATCHTOWER_METRICS_PORT:-9104}']
+
+  - job_name: 'dummy' # Mandatory field, but will be ignored.
+    file_sd_configs:
+      - files:
+        - /extra_scrape_jobs/*.yml

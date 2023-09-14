@@ -15,6 +15,7 @@ services:
     ports: [${PROMETHEUS_OPEN_PORTS}]
     volumes:
       - "${ROCKETPOOL_FOLDER}/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "${ROCKETPOOL_FOLDER}/extra_scrape_jobs:/extra_scrape_jobs"
       - "prometheus-data:/prometheus"
     networks:
       - net
