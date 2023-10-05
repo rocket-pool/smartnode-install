@@ -262,8 +262,7 @@ case "$INSTALLER" in
         progress 1 "Installing dependencies..."
         { sudo pacman -Sy; } >&2
         # arch-audit checks for security updates
-        { sudo pacman -S --noconfirm arch-audit || true; } >&2
-        { sudo pacman -S --noconfirm moreutils || fail "Could not install OS dependencies.";  } >&2
+        { sudo pacman -S --noconfirm arch-audit moreutils || fail "Could not install OS dependencies.";  } >&2
 
         # Download and extract package files
         progress 2 "Downloading Rocket Pool update tracker package files..."
