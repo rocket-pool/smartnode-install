@@ -22,7 +22,7 @@ elif [ "$NETWORK" = "devnet" ]; then
 elif [ "$NETWORK" = "holesky" ]; then
     LH_NETWORK="holesky"
     LODESTAR_NETWORK="holesky"
-    PRYSM_NETWORK="--prater"
+    PRYSM_NETWORK="--holesky"
     TEKU_NETWORK="holesky"
 else
     echo "Unknown network [$NETWORK]"
