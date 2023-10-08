@@ -153,7 +153,17 @@ if [ "$CLIENT" = "nethermind" ]; then
     sed -e "${LOG_LINE} i \    <logger name=\"Synchronization.Peers.SyncPeersReport\" maxlevel=\"Info\" final=\"true\"/>" -i /nethermind/NLog.config
     sed -i 's/<!-- \(<logger name=\"Synchronization\.Peers\.SyncPeersReport\".*\/>\).*-->/\1/g' /nethermind/NLog.config
 
-    CMD="$PERF_PREFIX /nethermind/nethermind \
+    # Get the binary name (changed with v1.21, required for backwards compatibility)
+    if [ -f "/nethermind/Nethermind.Runner" ]; then
+        NETHERMIND_BINARY=/nethermind/Nethermind.Runner
+    elif [ -f "/nethermind/nethermind" ]; then
+        NETHERMIND_BINARY=/nethermind/nethermind
+    else
+        echo "Nethermind binary not found, cannot start Execution Client."
+        exit 1
+    fi
+
+    CMD="$PERF_PREFIX $NETHERMIND_BINARY \
         --config $RP_NETHERMIND_NETWORK \
         --Sync.SnapSync true \
         --datadir /ethclient/nethermind \
