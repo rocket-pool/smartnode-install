@@ -407,7 +407,7 @@ progress 6 "Creating Rocket Pool user data directory..."
 { mkdir -p "$RP_PATH/runtime" || fail "Could not create the Rocket Pool runtime directory."; } >&2
 { mkdir -p "$DATA_PATH/secrets" || fail "Could not create the Rocket Pool secrets directory."; } >&2
 { mkdir -p "$DATA_PATH/rewards-trees" || fail "Could not create the Rocket Pool rewards trees directory."; } >&2
-{ mkdir -p "$RP_PATH/extra_scrape_jobs" || fail "Could not create the Prometheus extra scrape jobs directory."; } >&2
+{ mkdir -p "$RP_PATH/extra-scrape-jobs" || fail "Could not create the Prometheus extra scrape jobs directory."; } >&2
 
 
 # Download and extract package files
