@@ -57,6 +57,7 @@ build_install_packages() {
 
 
 # Builds the daemon binaries and Docker Smartnode images, and pushes them to Docker Hub
+# NOTE: You must install qemu first; e.g. sudo apt-get install -y qemu qemu-user-static
 build_daemon() {
     cd smartnode || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
 
@@ -75,7 +76,7 @@ build_daemon() {
     docker push rocketpool/smartnode:$VERSION-arm64 || fail "Error pushing arm Docker Smartnode image to Docker Hub."
     rm -f rocketpool/rocketpool-daemon-*
     echo "done!"
-    
+
     cd ..
 }
 
@@ -93,7 +94,7 @@ build_docker_prune_provision() {
     docker push rocketpool/eth1-prune-provision:$VERSION-amd64 || fail "Error pushing amd64 Docker Prune Provision image to Docker Hub."
     docker push rocketpool/eth1-prune-provision:$VERSION-arm64 || fail "Error pushing arm Docker Prune Provision image to Docker Hub."
     echo "done!"
-    
+
     cd ..
 }
 
