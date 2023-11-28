@@ -44,6 +44,7 @@ download_binaries() {
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/beacon-chain-$VERSION-linux-arm64 -O ./beacon-chain || fail "Error downloading arm64 beacon-client."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/validator-$VERSION-linux-arm64 -O ./validator || fail "Error downloading arm64 validator."
     echo "done!"
+    cd ..
 }
 
 # Builds the Docker images and pushes them to Docker Hub
@@ -52,13 +53,13 @@ build_images() {
     echo -n "Building x64 image... "
     cd amd64 || fail "Directory ${PWD}/amd64 does not exist or you don't have permissions to access it."
     chmod +x ./beacon-chain ./validator
-    docker buildx build --platform=linux/amd64 -t rocketpool/prysm:$VERSION-amd64 -f ../Dockerfile --load . || fail "Error building amd64 image."
+    docker buildx build --platform=linux/amd64 -t rocketpool/prysm:$VERSION-amd64 -f ../Dockerfile.prysm --load . || fail "Error building amd64 image."
     echo "done!"
 
     echo -n "Building arm64 image... "
     cd ../arm64 || fail "Directory ${PWD}/arm64 does not exist or you don't have permissions to access it."
     chmod +x ./beacon-chain ./validator
-    docker buildx build --platform=linux/arm64 -t rocketpool/prysm:$VERSION-arm64 -f ../Dockerfile --load . || fail "Error building arm64 image."
+    docker buildx build --platform=linux/arm64 -t rocketpool/prysm:$VERSION-arm64 -f ../Dockerfile.prysm --load . || fail "Error building arm64 image."
     echo "done!"
 
     echo -n "Pushing to Docker Hub... "
