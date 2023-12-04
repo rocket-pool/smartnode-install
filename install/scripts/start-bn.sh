@@ -303,7 +303,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
     fi
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then
-        CMD="$CMD --initial-state=$CHECKPOINT_SYNC_URL/eth/v2/debug/beacon/states/finalized"
+        CMD="$CMD --checkpoint-sync-url=$CHECKPOINT_SYNC_URL/eth/v2/debug/beacon/states/finalized"
     fi
 
     if [ "$ENABLE_BITFLY_NODE_METRICS" = "true" ]; then
