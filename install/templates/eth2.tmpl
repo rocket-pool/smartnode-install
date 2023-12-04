@@ -13,7 +13,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_eth2
     restart: unless-stopped
     stop_grace_period: 3m
-    ports: [ "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/tcp", "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/udp"${BN_OPEN_PORTS} ]
+    ports: [ "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/tcp", "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/udp"${BN_OPEN_PORTS}, "${BN_P2P_QUIC_PORT:-9002}:${BN_P2P_QUIC_PORT:-9002}/udp"]
     volumes:
       - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
       - ${ROCKETPOOL_DATA_FOLDER}/secrets:/secrets:ro
@@ -34,6 +34,7 @@ services:
       - BN_P2P_PORT=${BN_P2P_PORT}
       - BN_API_PORT=${BN_API_PORT}
       - BN_RPC_PORT=${BN_RPC_PORT}
+      - BN_P2P_QUIC_PORT=${BN_P2P_QUIC_PORT}
       - BN_MAX_PEERS=${BN_MAX_PEERS}
       - ENABLE_METRICS=${ENABLE_METRICS}
       - BN_METRICS_PORT=${BN_METRICS_PORT}

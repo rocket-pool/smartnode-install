@@ -78,7 +78,8 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         --http-allow-sync-stalled \
         --execution-jwt=/secrets/jwtsecret \
         --always-prefer-builder-payload \
-        --historic-state-cache-size 2 \
+        --historic-state-cache-size 2 \ 
+        --quic-port ${BN_P2P_QUIC_PORT:-9002}
         $BN_ADDITIONAL_FLAGS"
 
     # Performance tuning for ARM systems
