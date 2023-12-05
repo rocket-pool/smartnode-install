@@ -13,7 +13,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_eth2
     restart: unless-stopped
     stop_grace_period: 3m
-    ports: [ "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/tcp", "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/udp"${BN_OPEN_PORTS}, "${BN_P2P_QUIC_PORT:-9002}:${BN_P2P_QUIC_PORT:-9002}/udp"]
+    ports: [ "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/tcp", "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/udp"${BN_OPEN_PORTS}, "${BN_P2P_QUIC_PORT:-8001}:${BN_P2P_QUIC_PORT:-8001}/udp"]
     volumes:
       - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
       - ${ROCKETPOOL_DATA_FOLDER}/secrets:/secrets:ro
