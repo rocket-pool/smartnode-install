@@ -16,14 +16,12 @@ scrape_configs:
       # We have to use 'hosts.docker.internal' to refer to it due to this configuration
       - targets: ['host.docker.internal:{{or .ExporterMetricsPort.Value "9103"}}']
 
-  - job_name: 'geth'
+  - job_name: '{{if (eq .ExecutionClient.Value "geth")}}geth{{else}}eth1{{end}}'
     static_configs:
       - targets: ['{{.GetExecutionHostname}}:{{or .EcMetricsPort.Value "9105"}}']
+    {{- if (eq .ExecutionClient.Value "geth")}}
     metrics_path: /debug/metrics/prometheus
-
-  - job_name: 'eth1'
-    static_configs:
-      - targets: ['{{.GetExecutionHostname}}:{{or .EcMetricsPort.Value "9105"}}']
+    {{- end}}
 
   - job_name: 'eth2'
     static_configs:
