@@ -284,6 +284,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
         --eth1-deposit-contract-max-request-size=150 \
         --log-destination=CONSOLE \
         --ee-jwt-secret-file=/secrets/jwtsecret \
+        --beacon-liveness-tracking-enabled \
         --validators-proposer-default-fee-recipient=$RETH_ADDRESS \
         $BN_ADDITIONAL_FLAGS"
 

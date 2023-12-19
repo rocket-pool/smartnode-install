@@ -236,6 +236,10 @@ if [ "$CC_CLIENT" = "teku" ]; then
         --validators-proposer-default-fee-recipient=$(cat /validators/$FEE_RECIPIENT_FILE) \
         $VC_ADDITIONAL_FLAGS"
 
+    if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
+        CMD="$CMD --doppelganger-detection-enabled"
+    fi
+
     if [ "$ENABLE_MEV_BOOST" = "true" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
     fi
