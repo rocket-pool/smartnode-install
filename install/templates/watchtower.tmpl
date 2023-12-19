@@ -8,15 +8,15 @@
 version: "3.7"
 services:
   watchtower:
-    image: ${SMARTNODE_IMAGE}
-    container_name: ${COMPOSE_PROJECT_NAME}_watchtower
+    image: {{.Smartnode.GetSmartnodeContainerTag}}
+    container_name: {{.Smartnode.ProjectName.Value}}_watchtower
     restart: unless-stopped
     volumes:
-      - ${ROCKETPOOL_FOLDER}:/.rocketpool
-      - ${ROCKETPOOL_DATA_FOLDER}:/.rocketpool/data
+      - {{.RocketPoolDirectory}}:/.rocketpool
+      - {{.Smartnode.DataPath.Value}}:/.rocketpool/data
     networks:
       - net
-    command: "-m 0.0.0.0 -r ${WATCHTOWER_METRICS_PORT:-9104} watchtower"
+    command: "-m 0.0.0.0 -r {{or .WatchtowerMetricsPort.Value "9104"}} watchtower"
     cap_drop:
       - all
     cap_add:

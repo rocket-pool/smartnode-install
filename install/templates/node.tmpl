@@ -8,16 +8,16 @@
 version: "3.7"
 services:
   node:
-    image: ${SMARTNODE_IMAGE}
-    container_name: ${COMPOSE_PROJECT_NAME}_node
+    image: {{.Smartnode.GetSmartnodeContainerTag}}
+    container_name: {{.Smartnode.ProjectName.Value}}_node
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${ROCKETPOOL_FOLDER}:/.rocketpool
-      - ${ROCKETPOOL_DATA_FOLDER}:/.rocketpool/data
+      - {{.RocketPoolDirectory}}:/.rocketpool
+      - {{.Smartnode.DataPath.Value}}:/.rocketpool/data
     networks:
       - net
-    command: "-m 0.0.0.0 -r ${NODE_METRICS_PORT:-9102} node"
+    command: "-m 0.0.0.0 -r {{or .NodeMetricsPort.Value "9102"}} node"
     cap_drop:
       - all
     cap_add:
