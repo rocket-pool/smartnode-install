@@ -8,13 +8,14 @@
 version: "3.7"
 services:
   eth1:
-    image: ${EC_CONTAINER_TAG}
+    image: {{.GetECContainerTag}}
     user: root
-    container_name: ${COMPOSE_PROJECT_NAME}_eth1
+    container_name: {{.Smartnode.ProjectName.Value}}_eth1
     restart: unless-stopped
-    stop_signal: ${EC_STOP_SIGNAL}
+    stop_signal: {{.GetECStopSignal}}
     stop_grace_period: 15m
-    ports: [ "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/udp", "${EC_P2P_PORT:-30303}:${EC_P2P_PORT:-30303}/tcp"${EC_OPEN_API_PORTS} ]
+    {{- $p2p := (or .ExecutionCommon.P2pPort.Value "30303")}}
+    ports: [ "{{$p2p}}:{{$p2p}}/udp", "{{$p2p}}:{{$p2p}}/tcp"{{.GetECOpenAPIPorts}} ]
     volumes:
       - eth1clientdata:/ethclient
       - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
@@ -22,28 +23,32 @@ services:
     networks:
       - net
     environment:
-      - NETWORK=${NETWORK}
-      - CLIENT=${EC_CLIENT}
-      - ETHSTATS_LABEL=${ETHSTATS_LABEL}
-      - ETHSTATS_LOGIN=${ETHSTATS_LOGIN}
-      - EC_CACHE_SIZE=${EC_CACHE_SIZE}
-      - EC_MAX_PEERS=${EC_MAX_PEERS}
-      - EC_P2P_PORT=${EC_P2P_PORT}
-      - EC_ADDITIONAL_FLAGS=${EC_ADDITIONAL_FLAGS}
-      - EC_HTTP_PORT=${EC_HTTP_PORT}
-      - EC_WS_PORT=${EC_WS_PORT}
-      - EC_ENGINE_PORT=${EC_ENGINE_PORT}
-      - RP_NETHERMIND_PRUNE_MEM_SIZE=${NETHERMIND_PRUNE_MEM_SIZE}
-      - BESU_MAX_BACK_LAYERS=${BESU_MAX_BACK_LAYERS}
-      - BESU_JVM_HEAP_SIZE=${BESU_JVM_HEAP_SIZE}
-      - EXTERNAL_IP=${EXTERNAL_IP}
-      - ENABLE_METRICS=${ENABLE_METRICS}
-      - EC_METRICS_PORT=${EC_METRICS_PORT}
-      - TTD_OVERRIDE=${TTD_OVERRIDE}
-      - RP_NETHERMIND_ADDITIONAL_MODULES=${NETHERMIND_ADDITIONAL_MODULES}
-      - RP_NETHERMIND_ADDITIONAL_URLS=${NETHERMIND_ADDITIONAL_URLS}
-      - RP_NETHERMIND_COMPLETE_HISTORY=${NETHERMIND_COMPLETE_HISTORY}
-      - RP_GETH_ENABLE_PBSS=${GETH_ENABLE_PBSS}
+      - NETWORK={{.Smartnode.Network.Value}}
+      - CLIENT={{.ExecutionClient.Value}}
+      - ETHSTATS_LABEL={{.ExecutionCommon.EthstatsLabel.Value}}
+      - ETHSTATS_LOGIN={{.ExecutionCommon.EthstatsLogin.Value}}
+      - EC_MAX_PEERS={{.GetECMaxPeers}}
+      - EC_P2P_PORT={{$p2p}}
+      - EC_ADDITIONAL_FLAGS={{.GetECAdditionalFlags}}
+      - EC_HTTP_PORT={{.ExecutionCommon.HttpPort.Value}}
+      - EC_WS_PORT={{.ExecutionCommon.WsPort.Value}}
+      - EC_ENGINE_PORT={{.ExecutionCommon.EnginePort.Value}}
+      - EXTERNAL_IP={{.GetExternalIp}}
+      - ENABLE_METRICS={{.EnableMetrics.Value}}
+      - EC_METRICS_PORT={{.EcMetricsPort.Value}}
+      {{- /* Client-specific values */}}
+      {{- if eq .ExecutionClient.Value "besu"}}
+      - BESU_MAX_BACK_LAYERS={{.Besu.MaxBackLayers.Value}}
+      - BESU_JVM_HEAP_SIZE={{.Besu.JvmHeapSize.Value}}
+      {{- else if eq .ExecutionClient.Value "nethermind"}}
+      - EC_CACHE_SIZE={{.Nethermind.CacheSize.Value}}
+      - RP_NETHERMIND_PRUNE_MEM_SIZE={{.Nethermind.PruneMemSize.Value}}
+      - RP_NETHERMIND_ADDITIONAL_MODULES={{.Nethermind.AdditionalModules.Value}}
+      - RP_NETHERMIND_ADDITIONAL_URLS={{.Nethermind.AdditionalUrls.Value}}
+      - RP_NETHERMIND_COMPLETE_HISTORY={{.Nethermind.DownloadCompleteHistory.Value}}
+      {{- else if eq .ExecutionClient.Value "geth"}}
+      - RP_GETH_ENABLE_PBSS={{.Geth.EnablePbss.Value}}
+      {{- end}}
     entrypoint: sh
     command: "/setup/start-ec.sh"
     cap_drop:
