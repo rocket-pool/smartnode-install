@@ -8,54 +8,57 @@
 version: "3.7"
 services:
   eth2:
-    image: ${BN_CONTAINER_TAG}
+    image: {{.GetBeaconContainerTag}}
     user: root
-    container_name: ${COMPOSE_PROJECT_NAME}_eth2
+    container_name: {{.Smartnode.ProjectName.Value}}_eth2
     restart: unless-stopped
     stop_grace_period: 3m
-    ports: [ "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/tcp", "${BN_P2P_PORT:-9001}:${BN_P2P_PORT:-9001}/udp"${BN_OPEN_PORTS}, "${BN_P2P_QUIC_PORT:-8001}:${BN_P2P_QUIC_PORT:-8001}/udp"]
+    {{- $p2p := (or .ConsensusCommon.P2pPort.Value "9001")}}
+    ports: [ "{{$p2p}}:{{$p2p}}/udp", "{{$p2p}}:{{$p2p}}/tcp"{{.GetBnOpenPorts}} ]
     volumes:
-      - ${ROCKETPOOL_DATA_FOLDER}/validators:/validators
-      - ${ROCKETPOOL_DATA_FOLDER}/secrets:/secrets:ro
+      - {{.Smartnode.DataPath.Value}}/validators:/validators
+      - {{.Smartnode.DataPath.Value}}/secrets:/secrets:ro
       - eth2clientdata:/ethclient
-      - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
+      - {{.RocketPoolDirectory}}/scripts:/setup:ro
     networks:
       - net
     environment:
-      - NETWORK=${NETWORK}
-      - EC_CLIENT=${EC_CLIENT}
-      - CC_CLIENT=${CC_CLIENT}
-      - EC_HTTP_ENDPOINT=${EC_HTTP_ENDPOINT}
-      - EC_WS_ENDPOINT=${EC_WS_ENDPOINT}
-      - EC_ENGINE_ENDPOINT=${EC_ENGINE_ENDPOINT}
-      - EC_ENGINE_WS_ENDPOINT=${EC_ENGINE_WS_ENDPOINT}
-      - CUSTOM_GRAFFITI=${CUSTOM_GRAFFITI}
-      - ROCKET_POOL_VERSION=${ROCKET_POOL_VERSION}
-      - BN_P2P_PORT=${BN_P2P_PORT}
-      - BN_API_PORT=${BN_API_PORT}
-      - BN_RPC_PORT=${BN_RPC_PORT}
-      - BN_P2P_QUIC_PORT=${BN_P2P_QUIC_PORT}
-      - BN_MAX_PEERS=${BN_MAX_PEERS}
-      - ENABLE_METRICS=${ENABLE_METRICS}
-      - BN_METRICS_PORT=${BN_METRICS_PORT}
-      - EXTERNAL_IP=${EXTERNAL_IP}
-      - CHECKPOINT_SYNC_URL=${CHECKPOINT_SYNC_URL}
-      - DOPPELGANGER_DETECTION=${DOPPELGANGER_DETECTION}
-      - BN_ADDITIONAL_FLAGS=${BN_ADDITIONAL_FLAGS}
-      - NODE_FEE_RECIPIENT=${NODE_FEE_RECIPIENT}
-      - FEE_RECIPIENT_FILE=${FEE_RECIPIENT_FILE}
-      - ENABLE_BITFLY_NODE_METRICS=${ENABLE_BITFLY_NODE_METRICS}
-      - BITFLY_NODE_METRICS_SECRET=${BITFLY_NODE_METRICS_SECRET}
-      - BITFLY_NODE_METRICS_ENDPOINT=${BITFLY_NODE_METRICS_ENDPOINT}
-      - BITFLY_NODE_METRICS_MACHINE_NAME=${BITFLY_NODE_METRICS_MACHINE_NAME}
-      - TEKU_JVM_HEAP_SIZE=${TEKU_JVM_HEAP_SIZE}
-      - MEV_BOOST_URL=${MEV_BOOST_URL}
-      - RETH_ADDRESS=${RETH_ADDRESS}
-      - GRAFFITI=${GRAFFITI}
-      - ADDON_GWW_ENABLED=${ADDON_GWW_ENABLED}
-      - TTD_OVERRIDE=${TTD_OVERRIDE}
-      - TEKU_ARCHIVE_MODE=${TEKU_ARCHIVE_MODE}
-      - NIMBUS_PRUNING_MODE=${NIMBUS_PRUNING_MODE}
+      - NETWORK={{.Smartnode.Network.Value}}
+      - EC_CLIENT={{if .ExecutionClientLocal}}{{.ExecutionClient.Value}}{{else}}X{{end}}
+      - CC_CLIENT={{if .ConsensusClientLocal}}{{.ConsensusClient.Value}}{{else}}{{.ExternalConsensusClient.Value}}{{end}}
+      - EC_HTTP_ENDPOINT={{.GetEcHttpEndpoint}}
+      - EC_WS_ENDPOINT={{.GetEcWsEndpoint}}
+      - EC_ENGINE_ENDPOINT=http://{{.GetExecutionHostname}}:{{.ExecutionCommon.EnginePort.Value}}
+      - EC_ENGINE_WS_ENDPOINT=ws://{{.GetExecutionHostname}}:{{.ExecutionCommon.EnginePort.Value}}
+      - CUSTOM_GRAFFITI={{.CustomGraffiti}}
+      - ROCKET_POOL_VERSION=v{{.RocketPoolVersion}}
+      - BN_P2P_PORT={{$p2p}}
+      - BN_API_PORT={{.ConsensusCommon.ApiPort.Value}}
+      - BN_MAX_PEERS={{.GetBNMaxPeers}}
+      - ENABLE_METRICS={{.EnableMetrics.Value}}
+      - BN_METRICS_PORT={{.BnMetricsPort.Value}}
+      - EXTERNAL_IP={{.GetExternalIp}}
+      - CHECKPOINT_SYNC_URL={{.ConsensusCommon.CheckpointSyncProvider.Value}}
+      - DOPPELGANGER_DETECTION={{.IsDoppelgangerEnabled}}
+      - BN_ADDITIONAL_FLAGS={{.GetBNAdditionalFlags}}
+      - FEE_RECIPIENT_FILE={{.FeeRecipientFile}}
+      - ENABLE_BITFLY_NODE_METRICS={{.EnableBitflyNodeMetrics.Value}}
+      - BITFLY_NODE_METRICS_SECRET={{.BitflyNodeMetrics.Secret.Value}}
+      - BITFLY_NODE_METRICS_ENDPOINT={{.BitflyNodeMetrics.Endpoint.Value}}
+      - BITFLY_NODE_METRICS_MACHINE_NAME={{.BitflyNodeMetrics.MachineName.Value}}
+      - MEV_BOOST_URL={{.MevBoostUrl}}
+      - RETH_ADDRESS={{.Smartnode.GetRethAddress.Hex}}
+      - GRAFFITI={{.Graffiti}}
+      - ADDON_GWW_ENABLED={{.GraffitiWallWriter.GetEnabledParameter.Value}}
+      {{- /* Client-specific values */}}
+      {{- if eq .ConsensusClient.Value "teku"}}
+      - TEKU_JVM_HEAP_SIZE={{.Teku.JvmHeapSize.Value}}
+      - TEKU_ARCHIVE_MODE={{.Teku.ArchiveMode.Value}}
+      {{- else if eq .ConsensusClient.Value "prysm"}}
+      - BN_RPC_PORT={{.Prysm.RpcPort.Value}}
+      {{- else if eq .ConsensusClient.Value "nimbus"}}
+      - NIMBUS_PRUNING_MODE={{.Nimbus.PruningMode.Value}}
+      {{- end}}
     entrypoint: sh
     command: "/setup/start-bn.sh"
     cap_drop:
