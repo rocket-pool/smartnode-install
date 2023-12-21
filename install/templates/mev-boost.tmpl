@@ -8,18 +8,18 @@
 version: "3.7"
 services:
   mev-boost:
-    image: ${MEV_BOOST_CONTAINER_TAG}
-    container_name: ${COMPOSE_PROJECT_NAME}_mev-boost
+    image: {{.MevBoost.ContainerTag.Value}}
+    container_name: {{.Smartnode.ProjectName.Value}}_mev-boost
     restart: unless-stopped
-    ports: [${MEV_BOOST_OPEN_API_PORT}]
+    ports: [{{.GetMevBoostOpenPorts}}]
     volumes:
-      - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
+      - {{.RocketPoolDirectory}}/scripts:/setup:ro
     networks:
       - net
     environment:
-      - NETWORK=${NETWORK}
-      - MEV_BOOST_PORT=${MEV_BOOST_PORT}
-      - MEV_BOOST_RELAYS=${MEV_BOOST_RELAYS}
+      - NETWORK={{.Smartnode.Network.Value}}
+      - MEV_BOOST_PORT={{.MevBoost.Port.Value}}
+      - MEV_BOOST_RELAYS={{.MevBoost.GetRelayString}}
     entrypoint: sh
     command: "/setup/start-mev-boost.sh"
     cap_drop:
