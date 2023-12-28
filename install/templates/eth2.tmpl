@@ -14,7 +14,15 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     {{- $p2p := (or .ConsensusCommon.P2pPort.Value "9001")}}
-    ports: [ "{{$p2p}}:{{$p2p}}/udp", "{{$p2p}}:{{$p2p}}/tcp"{{.GetBnOpenPorts}} ]
+    ports:
+      - "{{$p2p}}:{{$p2p}}/udp"
+      - "{{$p2p}}:{{$p2p}}/tcp"
+      {{- if eq .ConsensusClient.Value "lighthouse"}}
+      - "{{.Lighthouse.P2pQuicPort.Value}}:{{.Lighthouse.P2pQuicPort.Value}}/udp"
+      {{- end}}
+      {{- range $entry := .GetBnOpenPorts}}
+      - "{{$entry}}"
+      {{- end}}
     volumes:
       - {{.Smartnode.DataPath.Value}}/validators:/validators
       - {{.Smartnode.DataPath.Value}}/secrets:/secrets:ro
