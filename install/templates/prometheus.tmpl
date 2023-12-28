@@ -8,8 +8,8 @@
 version: "3.7"
 services:
   prometheus:
-    image: {{.Prometheus.ContainerTag.Value}}
-    container_name: {{.Smartnode.ProjectName.Value}}_prometheus
+    image: {{.Prometheus.ContainerTag}}
+    container_name: {{.Smartnode.ProjectName}}_prometheus
     restart: unless-stopped
     command:
       - "--web.listen-address=:{{or .Prometheus.Port.Value "9091"}}"

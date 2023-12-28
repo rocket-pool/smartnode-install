@@ -8,8 +8,8 @@
 version: "3.7"
 services:
   node-exporter:
-    image: {{.Exporter.ContainerTag.Value}}
-    container_name: {{.Smartnode.ProjectName.Value}}_exporter
+    image: {{.Exporter.ContainerTag}}
+    container_name: {{.Smartnode.ProjectName}}_exporter
     cap_drop:
       - ALL
     user: "65534:65534"
@@ -19,7 +19,7 @@ services:
       - "--path.sysfs=/host/sys"
       - "--collector.textfile.directory=/host/textfile_collector"
       - "--web.listen-address=:{{or .ExporterMetricsPort.Value "9103"}}"
-      {{- if .Exporter.RootFs.Value}}
+      {{- if .Exporter.RootFs.Value }}
       - "--path.rootfs=/rootfs"
       {{- end}}
       {{- range $flag := .GetExporterAdditionalFlags}}

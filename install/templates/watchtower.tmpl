@@ -9,11 +9,11 @@ version: "3.7"
 services:
   watchtower:
     image: {{.Smartnode.GetSmartnodeContainerTag}}
-    container_name: {{.Smartnode.ProjectName.Value}}_watchtower
+    container_name: {{.Smartnode.ProjectName}}_watchtower
     restart: unless-stopped
     volumes:
       - {{.RocketPoolDirectory}}:/.rocketpool
-      - {{.Smartnode.DataPath.Value}}:/.rocketpool/data
+      - {{.Smartnode.DataPath}}:/.rocketpool/data
     networks:
       - net
     command: "-m 0.0.0.0 -r {{or .WatchtowerMetricsPort.Value "9104"}} watchtower"

@@ -8,8 +8,8 @@
 version: "3.7"
 services:
   mev-boost:
-    image: {{.MevBoost.ContainerTag.Value}}
-    container_name: {{.Smartnode.ProjectName.Value}}_mev-boost
+    image: {{.MevBoost.ContainerTag}}
+    container_name: {{.Smartnode.ProjectName}}_mev-boost
     restart: unless-stopped
     ports: [{{.GetMevBoostOpenPorts}}]
     volumes:
@@ -17,8 +17,8 @@ services:
     networks:
       - net
     environment:
-      - NETWORK={{.Smartnode.Network.Value}}
-      - MEV_BOOST_PORT={{.MevBoost.Port.Value}}
+      - NETWORK={{.Smartnode.Network}}
+      - MEV_BOOST_PORT={{.MevBoost.Port}}
       - MEV_BOOST_RELAYS={{.MevBoost.GetRelayString}}
     entrypoint: sh
     command: "/setup/start-mev-boost.sh"

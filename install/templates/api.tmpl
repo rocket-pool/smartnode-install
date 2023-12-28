@@ -9,14 +9,14 @@ version: "3.7"
 services:
   api:
     image: {{.Smartnode.GetSmartnodeContainerTag}}
-    container_name: {{.Smartnode.ProjectName.Value}}_api
+    container_name: {{.Smartnode.ProjectName}}_api
     restart: unless-stopped
     stop_signal: SIGKILL
     stop_grace_period: 1s
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - {{.RocketPoolDirectory}}:/.rocketpool
-      - {{.Smartnode.DataPath.Value}}:/.rocketpool/data
+      - {{.Smartnode.DataPath}}:/.rocketpool/data
     networks:
       - net
     entrypoint: /bin/sleep

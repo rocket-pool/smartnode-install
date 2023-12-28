@@ -9,8 +9,8 @@
 version: "3.7"
 services:
   grafana:
-    image: {{.Grafana.ContainerTag.Value}}
-    container_name: {{.Smartnode.ProjectName.Value}}_grafana
+    image: {{.Grafana.ContainerTag}}
+    container_name: {{.Smartnode.ProjectName}}_grafana
     restart: unless-stopped
     environment:
       - GF_SERVER_HTTP_PORT={{$port}}
