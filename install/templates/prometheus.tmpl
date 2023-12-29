@@ -8,14 +8,19 @@
 version: "3.7"
 services:
   prometheus:
-    image: ${PROMETHEUS_CONTAINER_TAG}
-    container_name: ${COMPOSE_PROJECT_NAME}_prometheus
+    image: {{.Prometheus.ContainerTag}}
+    container_name: {{.Smartnode.ProjectName}}_prometheus
     restart: unless-stopped
-    command: [ "--web.listen-address=:${PROMETHEUS_PORT:-9091}", "--config.file=/etc/prometheus/prometheus.yml"${PROMETHEUS_ADDITIONAL_FLAGS} ]
-    ports: [${PROMETHEUS_OPEN_PORTS}]
+    command:
+      - "--web.listen-address=:{{or .Prometheus.Port.Value "9091"}}"
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      {{- range $flag := .GetPrometheusAdditionalFlags}}
+      - "{{$flag}}"
+      {{- end}}
+    ports: [{{.GetPrometheusOpenPorts}}]
     volumes:
-      - "${ROCKETPOOL_FOLDER}/prometheus.yml:/etc/prometheus/prometheus.yml"
-      - "${ROCKETPOOL_FOLDER}/extra-scrape-jobs:/extra-scrape-jobs"
+      - "{{.RocketPoolDirectory}}/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "{{.RocketPoolDirectory}}/extra-scrape-jobs:/extra-scrape-jobs"
       - "prometheus-data:/prometheus"
     networks:
       - net

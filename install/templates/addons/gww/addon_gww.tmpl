@@ -8,25 +8,25 @@
 version: "3.7"
 services:
   addon_gww:
-    image: ${ADDON_GWW_CONTAINER_TAG}
+    image: {{.GraffitiWallWriter.GetConfig.ContainerTag}}
     user: root
-    container_name: ${COMPOSE_PROJECT_NAME}_addon_gww
+    container_name: {{.Smartnode.ProjectName}}_addon_gww
     restart: unless-stopped
     volumes:
-      - ${ROCKETPOOL_FOLDER}/addons/gww:/gww
+      - {{.RocketPoolDirectory}}/addons/gww:/gww
     networks:
       - net
     entrypoint:
       - /go/bin/drawer
       - --output_file=/gww/graffiti.txt
-      - --input_url=${ADDON_GWW_INPUT_URL}
-      - --consensus_client=${CC_CLIENT}
-      - --nimbus_url=http://${CC_HOSTNAME:-eth2}:${BN_API_PORT:-5052}
-      - --graffiti_prefix=${GRAFFITI_PREFIX}
-      - --network=${NETWORK}
-      - --update_wall_time=${ADDON_GWW_UPDATE_WALL_TIME}
-      - --update_input_time=${ADDON_GWW_UPDATE_INPUT_TIME}
-      - --update_pixel_time=${ADDON_GWW_UPDATE_PIXEL_TIME}
+      - --input_url={{.GraffitiWallWriter.GetConfig.InputURL}}
+      - --consensus_client={{if .ConsensusClientLocal}}{{.ConsensusClient}}{{else}}{{.ExternalConsensusClient}}{{end}}
+      - --nimbus_url=http://{{.GetConsensusHostname}}:{{or .ConsensusCommon.ApiPort}}
+      - --graffiti_prefix={{.GraffitiPrefix}}
+      - --network={{.Smartnode.Network}}
+      - --update_wall_time={{.GraffitiWallWriter.GetConfig.UpdateWallTime}}
+      - --update_input_time={{.GraffitiWallWriter.GetConfig.UpdateInputTime}}
+      - --update_pixel_time={{.GraffitiWallWriter.GetConfig.UpdatePixelTime}}
     cap_drop:
       - all
     security_opt:
