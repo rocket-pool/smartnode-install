@@ -18,8 +18,8 @@ services:
     ports: [ "{{$p2p}}:{{$p2p}}/udp", "{{$p2p}}:{{$p2p}}/tcp"{{.GetECOpenAPIPorts}} ]
     volumes:
       - eth1clientdata:/ethclient
-      - ${ROCKETPOOL_FOLDER}/scripts:/setup:ro
-      - ${ROCKETPOOL_DATA_FOLDER}/secrets:/secrets
+      - {{.RocketPoolDirectory}}/scripts:/setup:ro
+      - {{.Smartnode.DataPath}}/secrets:/secrets
     networks:
       - net
     environment:
