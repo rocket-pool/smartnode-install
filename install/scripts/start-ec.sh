@@ -178,11 +178,6 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
         $EC_ADDITIONAL_FLAGS"
 
-    # Add sync barriers
-    if [ "$RP_NETHERMIND_COMPLETE_HISTORY" = "true" ]; then
-        CMD="$CMD --Sync.AncientBodiesBarrier 1 --Sync.AncientReceiptsBarrier 1"
-    fi
-
     # Add optional supplemental primary JSON-RPC modules
     if [ ! -z "$RP_NETHERMIND_ADDITIONAL_MODULES" ]; then
         RP_NETHERMIND_ADDITIONAL_MODULES=",${RP_NETHERMIND_ADDITIONAL_MODULES}"
