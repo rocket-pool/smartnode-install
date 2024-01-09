@@ -67,7 +67,7 @@ services:
       {{- else if eq .ConsensusClient.String "nimbus"}}
       - NIMBUS_PRUNING_MODE={{.Nimbus.PruningMode}}
       {{- else if eq .ConsensusClient.String "lighthouse"}}
-      - BN_P2P_QUIC_PORT = {{.Lighthouse.P2pQuicPort}}
+      - BN_P2P_QUIC_PORT={{.Lighthouse.P2pQuicPort}}
       {{- end}}
     entrypoint: sh
     command: "/setup/start-bn.sh"
