@@ -45,7 +45,6 @@ services:
       - RP_NETHERMIND_PRUNE_MEM_SIZE={{.Nethermind.PruneMemSize}}
       - RP_NETHERMIND_ADDITIONAL_MODULES={{.Nethermind.AdditionalModules}}
       - RP_NETHERMIND_ADDITIONAL_URLS={{.Nethermind.AdditionalUrls}}
-      - RP_NETHERMIND_COMPLETE_HISTORY={{.Nethermind.DownloadCompleteHistory}}
       {{- else if eq .ExecutionClient.String "geth"}}
       - RP_GETH_ENABLE_PBSS={{.Geth.EnablePbss}}
       {{- end}}
