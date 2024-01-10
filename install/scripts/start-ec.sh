@@ -246,7 +246,7 @@ if [ "$CLIENT" = "besu" ]; then
         $BESU_NETWORK \
         --data-path=/ethclient/besu \
         --fast-sync-min-peers=3 \
-        --sync-mode=X_CHECKPOINT \
+        --sync-mode=X_SNAP \
         --rpc-http-enabled \
         --rpc-http-host=0.0.0.0 \
         --rpc-http-port=${EC_HTTP_PORT:-8545} \
