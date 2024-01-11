@@ -262,6 +262,7 @@ if [ "$CLIENT" = "besu" ]; then
         --engine-rpc-port=${EC_ENGINE_PORT:-8551} \
         --engine-host-allowlist=* \
         --engine-jwt-secret=/secrets/jwtsecret \
+        --Xsnapsync-synchronizer-flat-db-healing-enabled=true \
         $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
