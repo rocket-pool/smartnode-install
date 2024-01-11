@@ -19,12 +19,14 @@ build_binaries() {
     echo -n "Building x64 binaries... "
     cd prysm || fail "Directory ${PWD}/prysm does not exist or you don't have permissions to access it - this should be the Prysm source dir."
     bazel build --config=release --config=linux_amd64 //cmd/beacon-chain //cmd/validator
+    mkdir -p ../amd64
     cp bazel-bin/cmd/beacon-chain/beacon-chain_/beacon-chain ../amd64/
     cp bazel-bin/cmd/validator/validator_/validator ../amd64/
     echo "done!"
 
     echo -n "Building arm64 binaries... "
     bazel build --config=release --config=linux_arm64_docker //cmd/beacon-chain //cmd/validator
+    mkdir -p ../arm64
     cp bazel-bin/cmd/beacon-chain/beacon-chain_/beacon-chain ../arm64/
     cp bazel-bin/cmd/validator/validator_/validator ../arm64/
     echo "done!"
@@ -34,12 +36,14 @@ build_binaries() {
 # NOTE: This only works for Prysm v4.1.0 and higher since that merges the modern and portable x64 versions
 download_binaries() {
     echo -n "Downloading x64 binaries..."
+    mkdir -p amd64
     cd amd64 || fail "Directory ${PWD}/amd64 does not exist or you don't have permissions to access it."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/beacon-chain-$VERSION-linux-amd64 -O ./beacon-chain || fail "Error downloading amd64 beacon-client."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/validator-$VERSION-linux-amd64 -O ./validator || fail "Error downloading amd64 validator."
     echo "done!"
 
     echo -n "Downloading arm64 binaries..."
+    mkdir -p ../arm64
     cd ../arm64 || fail "Directory ${PWD}/arm64 does not exist or you don't have permissions to access it."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/beacon-chain-$VERSION-linux-arm64 -O ./beacon-chain || fail "Error downloading arm64 beacon-client."
     wget https://github.com/prysmaticlabs/prysm/releases/download/$VERSION/validator-$VERSION-linux-arm64 -O ./validator || fail "Error downloading arm64 validator."
