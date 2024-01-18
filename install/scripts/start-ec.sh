@@ -170,8 +170,10 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} \
         --Merge.Enabled true \
         --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
-        --Pruning.Mode Full \
-        --Pruning.FullPruningCompletionBehavior AlwaysShutdown \
+        --Pruning.Mode Hybrid \
+        --Pruning.FullPruningTrigger Manual
+        --Pruning.FullPruningCompletionBehavior None \
+        --Pruning.FullPruningMaxDegreeOfParallelism 0 \
         $EC_ADDITIONAL_FLAGS"
 
     # Add optional supplemental primary JSON-RPC modules
