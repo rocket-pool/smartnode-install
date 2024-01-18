@@ -137,12 +137,6 @@ if [ "$CLIENT" = "nethermind" ]; then
         openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
     fi
 
-    # Check for the prune flag
-    if [ -f "/ethclient/prune.lock" ]; then
-        RP_NETHERMIND_PRUNE=1
-        rm /ethclient/prune.lock
-    fi
-
     # Set the JSON RPC logging level
     LOG_LINE=$(awk '/<logger name=\"\*\" minlevel=\"Off\" writeTo=\"seq\" \/>/{print NR}' /nethermind/NLog.config)
     sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" final=\"true\"/>\\n" -i /nethermind/NLog.config
@@ -176,6 +170,8 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} \
         --Merge.Enabled true \
         --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
+        --Pruning.Mode Full \
+        --Pruning.FullPruningCompletionBehavior AlwaysShutdown \
         $EC_ADDITIONAL_FLAGS"
 
     # Add optional supplemental primary JSON-RPC modules
@@ -208,12 +204,6 @@ if [ "$CLIENT" = "nethermind" ]; then
 
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
-    fi
-
-    if [ ! -z "$RP_NETHERMIND_PRUNE" ]; then
-        CMD="$CMD --Pruning.Mode Full --Pruning.FullPruningCompletionBehavior AlwaysShutdown"
-    else
-        CMD="$CMD --Pruning.Mode Memory"
     fi
 
     if [ ! -z "$RP_NETHERMIND_PRUNE_MEM_SIZE" ]; then
