@@ -139,7 +139,7 @@ build_docker_prune_provision_manifest() {
 
 # Builds the Docker prune starter image and pushes it to Docker Hub
 build_docker_prune_starter() {
-    cd smartnode || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
+    cd NethermindPruneStarter || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
 
     echo "Building Docker Prune Starter image..."
     docker buildx build --platform=linux/amd64 -t rocketpool/nm-prune-starter:$VERSION-amd64 -f docker/rocketpool-nm-prune-starter --load . || fail "Error building amd64 Docker Prune Starter image."
