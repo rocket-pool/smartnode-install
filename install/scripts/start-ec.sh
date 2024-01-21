@@ -168,12 +168,12 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.EngineHost 0.0.0.0 \
         --Init.WebSocketsEnabled true \
         --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} \
-        --Merge.Enabled true \
         --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
-        --Pruning.Mode Hybrid \
-        --Pruning.FullPruningTrigger Manual
-        --Pruning.FullPruningCompletionBehavior None \
+        --Pruning.FullPruningTrigger=VolumeFreeSpace \
+        --Pruning.FullPruningThresholdMb=295279 \
+        --Pruning.FullPruningCompletionBehavior AlwaysShutdown \
         --Pruning.FullPruningMaxDegreeOfParallelism 0 \
+        --Pruning.FullPruningMemoryBudgetMb=$RP_NETHERMIND_FULL_PRUNE_MEMORY_BUDGET \
         $EC_ADDITIONAL_FLAGS"
 
     # Add optional supplemental primary JSON-RPC modules
