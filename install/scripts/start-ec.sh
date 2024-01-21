@@ -170,7 +170,7 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} \
         --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
         --Pruning.FullPruningTrigger=VolumeFreeSpace \
-        --Pruning.FullPruningThresholdMb=295279 \
+        --Pruning.FullPruningThresholdMb=256000 \
         --Pruning.FullPruningCompletionBehavior AlwaysShutdown \
         --Pruning.FullPruningMaxDegreeOfParallelism 0 \
         --Pruning.FullPruningMemoryBudgetMb=$RP_NETHERMIND_FULL_PRUNE_MEMORY_BUDGET \
