@@ -34,10 +34,6 @@ if [ "$NETWORK" = "mainnet" ]; then
     GETH_NETWORK=""
     RP_NETHERMIND_NETWORK="mainnet"
     BESU_NETWORK="--network=mainnet"
-elif [ "$NETWORK" = "prater" ]; then
-    GETH_NETWORK="--goerli"
-    RP_NETHERMIND_NETWORK="goerli"
-    BESU_NETWORK="--network=goerli"
 elif [ "$NETWORK" = "devnet" ]; then
     GETH_NETWORK="--holesky"
     RP_NETHERMIND_NETWORK="holesky"
