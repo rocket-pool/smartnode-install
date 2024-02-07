@@ -3,10 +3,8 @@
 # Set up the network-based flag
 if [ "$NETWORK" = "mainnet" ]; then
     MEV_NETWORK="mainnet"
-elif [ "$NETWORK" = "prater" ]; then
-    MEV_NETWORK="goerli"
 elif [ "$NETWORK" = "devnet" ]; then
-    MEV_NETWORK="goerli"
+    MEV_NETWORK="holesky"
 else
     echo "Unknown network [$NETWORK]"
     exit 1

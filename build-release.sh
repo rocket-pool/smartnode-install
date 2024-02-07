@@ -86,8 +86,8 @@ build_docker_prune_provision() {
     cd smartnode || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
 
     echo "Building Docker Prune Provisioner image..."
-    docker buildx build --platform=linux/amd64 -t rocketpool/smartnode:$VERSION-amd64 -f docker/rocketpool-prune-provision --load . || fail "Error building amd64 Docker Prune Provision  image."
-    docker buildx build --platform=linux/arm64 -t rocketpool/smartnode:$VERSION-arm64 -f docker/rocketpool-prune-provision --load . || fail "Error building arm64 Docker Prune Provision  image."
+    docker buildx build --platform=linux/amd64 -t rocketpool/eth1-prune-provision:$VERSION-amd64 -f docker/rocketpool-prune-provision --load . || fail "Error building amd64 Docker Prune Provision  image."
+    docker buildx build --platform=linux/arm64 -t rocketpool/eth1-prune-provision:$VERSION-arm64 -f docker/rocketpool-prune-provision --load . || fail "Error building arm64 Docker Prune Provision  image."
     echo "done!"
 
     echo -n "Pushing to Docker Hub... "
@@ -137,6 +137,37 @@ build_docker_prune_provision_manifest() {
     echo "done!"
 }
 
+# Builds the Docker prune starter image and pushes it to Docker Hub
+build_docker_prune_starter() {
+    cd NethermindPruneStarter || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
+
+    echo "Building Docker Prune Starter image..."
+    docker buildx build --platform=linux/amd64 -t rocketpool/nm-prune-starter:$VERSION-amd64 -f docker/rocketpool-nm-prune-starter --load . || fail "Error building amd64 Docker Prune Starter image."
+    docker buildx build --platform=linux/arm64 -t rocketpool/nm-prune-starter:$VERSION-arm64 -f docker/rocketpool-nm-prune-starter --load . || fail "Error building arm64 Docker Prune Starter image."
+    echo "done!"
+
+    echo -n "Pushing to Docker Hub... "
+    docker push rocketpool/nm-prune-starter:$VERSION-amd64 || fail "Error pushing amd64 Docker Prune Starter image to Docker Hub."
+    docker push rocketpool/nm-prune-starter:$VERSION-arm64 || fail "Error pushing arm Docker Prune Starter image to Docker Hub."
+    echo "done!"
+
+    cd ..
+}
+
+# Builds the Docker Manifest for the nm prune starter and pushes it to Docker Hub
+build_docker_prune_starter_manifest() {
+    echo -n "Building Docker Prune Starter manifest... "
+    rm -f ~/.docker/manifests/docker.io_rocketpool_nm-prune-starter-$VERSION
+    docker manifest create rocketpool/nm-prune-starter:$VERSION --amend rocketpool/nm-prune-starter:$VERSION-amd64 --amend rocketpool/nm-prune-starter:$VERSION-arm64
+    docker manifest create rocketpool/nm-prune-starter:latest --amend rocketpool/nm-prune-starter:$VERSION-amd64 --amend rocketpool/nm-prune-starter:$VERSION-arm64
+    echo "done!"
+
+    echo -n "Pushing to Docker Hub... "
+    docker manifest push --purge rocketpool/nm-prune-starter:$VERSION
+    docker manifest push --purge rocketpool/nm-prune-starter:latest
+    echo "done!"
+}
+
 
 # Print usage
 usage() {
@@ -151,6 +182,8 @@ usage() {
     echo $'\t-n\tBuild the Docker manifests (Smartnode and POW Proxy), and push them to Docker Hub'
     echo $'\t-r\tBuild the Docker Prune Provisioner image and push it to Docker Hub'
     echo $'\t-f\tBuild the Docker manifest for the Prune Provisioner and push it to Docker Hub'
+    echo $'\t-t\tBuild the Docker Prune Starter image and push it to Docker Hub'
+    echo $'\t-s\tBuild the Docker manifest for the Prune Starter and push it to Docker Hub'
     exit 0
 }
 
@@ -160,7 +193,7 @@ usage() {
 # =================
 
 # Parse arguments
-while getopts "acpdnlrfv:" FLAG; do
+while getopts "acpdnlrftsv:" FLAG; do
     case "$FLAG" in
         a) CLI=true PACKAGES=true DAEMON=true MANIFEST=true LATEST_MANIFEST=true ;;
         c) CLI=true ;;
@@ -169,6 +202,8 @@ while getopts "acpdnlrfv:" FLAG; do
         n) MANIFEST=true ;;
         l) LATEST_MANIFEST=true ;;
         r) PRUNE=true ;;
+        t) STARTER=true ;;
+        s) PRUNE_STARTER_MANIFEST=true ;;
         f) PRUNE_MANIFEST=true ;;
         v) VERSION="$OPTARG" ;;
         *) usage ;;
@@ -203,4 +238,10 @@ if [ "$PRUNE" = true ]; then
 fi
 if [ "$PRUNE_MANIFEST" = true ]; then
     build_docker_prune_provision_manifest
+fi
+if [ "$STARTER" = true ]; then
+    build_docker_prune_starter
+fi
+if [ "$PRUNE_STARTER_MANIFEST" = true ]; then
+    build_docker_prune_starter_manifest
 fi

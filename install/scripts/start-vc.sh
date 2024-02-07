@@ -9,11 +9,6 @@ if [ "$NETWORK" = "mainnet" ]; then
     LODESTAR_NETWORK="mainnet"
     PRYSM_NETWORK="--mainnet"
     TEKU_NETWORK="mainnet"
-elif [ "$NETWORK" = "prater" ]; then
-    LH_NETWORK="prater"
-    LODESTAR_NETWORK="goerli"
-    PRYSM_NETWORK="--prater"
-    TEKU_NETWORK="prater"
 elif [ "$NETWORK" = "devnet" ]; then
     LH_NETWORK="holesky"
     LODESTAR_NETWORK="holesky"
@@ -59,7 +54,7 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
     fi
 
     if [ "$ENABLE_MEV_BOOST" = "true" ]; then
-        CMD="$CMD --builder-proposals"
+        CMD="$CMD --builder-proposals --prefer-builder-proposals"
     fi
 
     if [ "$ENABLE_METRICS" = "true" ]; then
@@ -180,6 +175,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
     CMD="/app/cmd/validator/validator \
         --accept-terms-of-use \
         $PRYSM_NETWORK \
+        --datadir /validators/prysm-non-hd/direct \
         --wallet-dir /validators/prysm-non-hd \
         --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret \
         --beacon-rpc-provider $CC_URL_STRING \

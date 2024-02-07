@@ -35,10 +35,6 @@ if [ "$NETWORK" = "mainnet" ]; then
     RP_NETHERMIND_NETWORK="mainnet"
     BESU_NETWORK="--network=mainnet"
     RETH_NETWORK="--chain mainnet"
-elif [ "$NETWORK" = "prater" ]; then
-    GETH_NETWORK="--goerli"
-    RP_NETHERMIND_NETWORK="goerli"
-    BESU_NETWORK="--network=goerli"
 elif [ "$NETWORK" = "devnet" ]; then
     GETH_NETWORK="--holesky"
     RP_NETHERMIND_NETWORK="holesky"
@@ -140,12 +136,6 @@ if [ "$CLIENT" = "nethermind" ]; then
         openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
     fi
 
-    # Check for the prune flag
-    if [ -f "/ethclient/prune.lock" ]; then
-        RP_NETHERMIND_PRUNE=1
-        rm /ethclient/prune.lock
-    fi
-
     # Set the JSON RPC logging level
     LOG_LINE=$(awk '/<logger name=\"\*\" minlevel=\"Off\" writeTo=\"seq\" \/>/{print NR}' /nethermind/NLog.config)
     sed -e "${LOG_LINE} i \    <logger name=\"JsonRpc\.\*\" final=\"true\"/>\\n" -i /nethermind/NLog.config
@@ -177,8 +167,12 @@ if [ "$CLIENT" = "nethermind" ]; then
         --JsonRpc.EngineHost 0.0.0.0 \
         --Init.WebSocketsEnabled true \
         --JsonRpc.WebSocketsPort ${EC_WS_PORT:-8546} \
-        --Merge.Enabled true \
         --JsonRpc.JwtSecretFile=/secrets/jwtsecret \
+        --Pruning.FullPruningTrigger=VolumeFreeSpace \
+        --Pruning.FullPruningThresholdMb=307200 \
+        --Pruning.FullPruningCompletionBehavior AlwaysShutdown \
+        --Pruning.FullPruningMaxDegreeOfParallelism 0 \
+        --Pruning.FullPruningMemoryBudgetMb=$RP_NETHERMIND_FULL_PRUNE_MEMORY_BUDGET \
         $EC_ADDITIONAL_FLAGS"
 
     # Add optional supplemental primary JSON-RPC modules
@@ -213,12 +207,6 @@ if [ "$CLIENT" = "nethermind" ]; then
         CMD="$CMD --Network.DiscoveryPort $EC_P2P_PORT --Network.P2PPort $EC_P2P_PORT"
     fi
 
-    if [ ! -z "$RP_NETHERMIND_PRUNE" ]; then
-        CMD="$CMD --Pruning.Mode Full --Pruning.FullPruningCompletionBehavior AlwaysShutdown"
-    else
-        CMD="$CMD --Pruning.Mode Memory"
-    fi
-
     if [ ! -z "$RP_NETHERMIND_PRUNE_MEM_SIZE" ]; then
         CMD="$CMD --Pruning.CacheMb $RP_NETHERMIND_PRUNE_MEM_SIZE"
     fi
@@ -249,7 +237,7 @@ if [ "$CLIENT" = "besu" ]; then
         $BESU_NETWORK \
         --data-path=/ethclient/besu \
         --fast-sync-min-peers=3 \
-        --sync-mode=X_CHECKPOINT \
+        --sync-mode=X_SNAP \
         --rpc-http-enabled \
         --rpc-http-host=0.0.0.0 \
         --rpc-http-port=${EC_HTTP_PORT:-8545} \
@@ -265,6 +253,7 @@ if [ "$CLIENT" = "besu" ]; then
         --engine-rpc-port=${EC_ENGINE_PORT:-8551} \
         --engine-host-allowlist=* \
         --engine-jwt-secret=/secrets/jwtsecret \
+        --Xsnapsync-synchronizer-flat-db-healing-enabled=true \
         $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
