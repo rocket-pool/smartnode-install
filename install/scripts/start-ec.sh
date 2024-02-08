@@ -254,6 +254,7 @@ if [ "$CLIENT" = "besu" ]; then
         --engine-host-allowlist=* \
         --engine-jwt-secret=/secrets/jwtsecret \
         --Xsnapsync-synchronizer-flat-db-healing-enabled=true \
+        --Xbonsai-trie-log-pruning-enabled=true \
         $EC_ADDITIONAL_FLAGS"
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
