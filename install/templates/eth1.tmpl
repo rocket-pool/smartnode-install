@@ -46,6 +46,7 @@ services:
       - RP_NETHERMIND_ADDITIONAL_MODULES={{.Nethermind.AdditionalModules}}
       - RP_NETHERMIND_ADDITIONAL_URLS={{.Nethermind.AdditionalUrls}}
       - RP_NETHERMIND_FULL_PRUNE_MEMORY_BUDGET={{.Nethermind.FullPruneMemoryBudget}}
+      - RP_NETHERMIND_FULL_PRUNING_THRESHOLD_MB={{.Nethermind.FullPruningThresholdMb}}
       {{- else if eq .ExecutionClient.String "geth"}}
       - RP_GETH_ENABLE_PBSS={{.Geth.EnablePbss}}
       {{- end}}
