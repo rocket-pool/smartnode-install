@@ -9,41 +9,65 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:{{or .Prometheus.Port.Value "9091"}}']
+        labels:
+          network: {{.Smartnode.Network}}
+          project_name: {{.Smartnode.ProjectName}}
 
   - job_name: 'node'
     static_configs:
       # node-exporter is on the host network so it can get access to the actual machine's network info
       # We have to use 'hosts.docker.internal' to refer to it due to this configuration
       - targets: ['host.docker.internal:{{or .ExporterMetricsPort.Value "9103"}}']
+        labels:
+          network: {{.Smartnode.Network}}
+          project_name: {{.Smartnode.ProjectName}}
 
   - job_name: 'geth'
     static_configs:
       - targets: ['{{.GetExecutionHostname}}:{{or .EcMetricsPort.Value "9105"}}']
+        labels:
+          network: {{.Smartnode.Network}}
+          project_name: {{.Smartnode.ProjectName}}
     metrics_path: /debug/metrics/prometheus
 
   - job_name: 'eth1'
     static_configs:
       - targets: ['{{.GetExecutionHostname}}:{{or .EcMetricsPort.Value "9105"}}']
+        labels:
+          network: {{.Smartnode.Network}}
+          project_name: {{.Smartnode.ProjectName}}
 
   - job_name: 'eth2'
     static_configs:
       - targets: ['{{.GetConsensusHostname}}:{{or .BnMetricsPort.Value "9100"}}']
+        labels:
+          network: {{.Smartnode.Network}}
+          project_name: {{.Smartnode.ProjectName}}
 
   - job_name: 'validator'
     static_configs:
       - targets: ['validator:{{or .VcMetricsPort.Value "9101"}}']
+        labels:
+          network: {{.Smartnode.Network}}
+          project_name: {{.Smartnode.ProjectName}}
 
   - job_name: 'rocketpool'
     scrape_interval: 5m
     scrape_timeout: 5m
     static_configs:
       - targets: ['node:{{or .NodeMetricsPort.Value "9102"}}']
+        labels:
+          network: {{.Smartnode.Network}}
+          project_name: {{.Smartnode.ProjectName}}
 
   - job_name: 'watchtower'
     scrape_interval: 5m
     scrape_timeout: 5m
     static_configs:
       - targets: ['watchtower:{{or .WatchtowerMetricsPort.Value "9104"}}']
+        labels:
+          network: {{.Smartnode.Network}}
+          project_name: {{.Smartnode.ProjectName}}
 
   - job_name: 'custom_jobs' # Mandatory field, but will be ignored.
     file_sd_configs:
