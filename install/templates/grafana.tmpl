@@ -20,8 +20,8 @@ services:
       - "{{.RocketPoolDirectory}}/grafana-prometheus-datasource.yml:/etc/grafana/provisioning/datasources/prometheus.yml"
       - "grafana-storage:/var/lib/grafana"
     networks:
-      - net
+      - monitor-net
 networks:
-  net:
+  monitor-net:
 volumes:
   grafana-storage:
