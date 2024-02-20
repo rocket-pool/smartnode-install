@@ -237,7 +237,6 @@ if [ "$CLIENT" = "besu" ]; then
         $BESU_NETWORK \
         --data-path=/ethclient/besu \
         --fast-sync-min-peers=3 \
-        --sync-mode=X_SNAP \
         --rpc-http-enabled \
         --rpc-http-host=0.0.0.0 \
         --rpc-http-port=${EC_HTTP_PORT:-8545} \
@@ -254,8 +253,13 @@ if [ "$CLIENT" = "besu" ]; then
         --engine-host-allowlist=* \
         --engine-jwt-secret=/secrets/jwtsecret \
         --Xsnapsync-synchronizer-flat-db-healing-enabled=true \
-        --Xbonsai-trie-log-pruning-enabled=true \
         $EC_ADDITIONAL_FLAGS"
+
+    if [ "$BESU_ARCHIVE_MODE" = "true" ]; then
+        CMD="$CMD --sync-mode=FULL"
+    else 
+        CMD="$CMD --sync-mode=X_SNAP --Xbonsai-trie-log-pruning-enabled=true"
+    fi
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
         CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"

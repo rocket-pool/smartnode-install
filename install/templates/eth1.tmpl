@@ -40,6 +40,7 @@ services:
       {{- if eq .ExecutionClient.String "besu"}}
       - BESU_MAX_BACK_LAYERS={{.Besu.MaxBackLayers}}
       - BESU_JVM_HEAP_SIZE={{.Besu.JvmHeapSize}}
+      - BESU_ARCHIVE_MODE={{.Besu.ArchiveMode}}
       {{- else if eq .ExecutionClient.String "nethermind"}}
       - EC_CACHE_SIZE={{.Nethermind.CacheSize}}
       - RP_NETHERMIND_PRUNE_MEM_SIZE={{.Nethermind.PruneMemSize}}
