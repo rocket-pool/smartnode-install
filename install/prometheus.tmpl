@@ -54,7 +54,7 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-            - alertmanager:9093
+            - alertmanager:{{or .Alertmanager.Port.Value "9093"}}
 
 rule_files:
   - /alerting/rules/*.yml
