@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    container_name: rocketpool_alertmanager
+    restart: unless-stopped
+    command:
+      # https://prometheus.io/docs/alerting/latest/configuration/
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+    ports: ["9093:9093/tcp"]
+    volumes:
+      - "{{.RocketPoolDirectory}}/alerting/alertmanager.yml:/etc/alertmanager/alertmanager.yml"
+      - "alertmanager-data:/alertmanager"
+    networks:
+      - net
+networks:
+  net:
+volumes:
+  alertmanager-data:
