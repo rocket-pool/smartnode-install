@@ -24,7 +24,7 @@ route:
 receivers:
   - name: "node_operator"
     discord_configs:
-      - webhook_url: {{or .DiscordWebhookURL.Value ""}}
+      - webhook_url: "{{ .DiscordWebhookURL.Value }}"
 
 inhibit_rules:
   # Inhibit rules mute a new alert (target) that matches an existing alert (source).
