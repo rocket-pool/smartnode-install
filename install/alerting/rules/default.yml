@@ -3,17 +3,19 @@ groups:
     rules:
       - alert: ClientSyncStatusBeacon
         expr: rocketpool_node_sync_progress{client="beacon"} < 1.0
+        for: 5m
         labels:
           severity: critical
         annotations:
-          summary: "The beacon client is not synced."
+          summary: "The beacon client is not synced"
 
       - alert: ClientSyncStatusExecution
         expr: rocketpool_node_sync_progress{client="execution"} < 1.0
+        for: 5m
         labels:
           severity: critical
         annotations:
-          summary: "The execution client is not synced."
+          summary: "The execution client is not synced"
 
       - alert: UpcomingSyncCommittee
         expr: rocketpool_beacon_upcoming_sync_committee > 0
@@ -21,7 +23,7 @@ groups:
           severity: warning
           job: validator
         annotations:
-          summary: "Your Rocket Pool node is about to become part of a sync committee."
+          summary: "Your Rocket Pool node is about to become part of a sync committee"
           description: |
             If you were planning on doing maintenance to your node, **you should wait until the sync committee is over**. Not only are they worth an **extremely** large amount of ETH, but if you miss attestations during a sync committee, you **lose an extremely large amount of ETH** instead!
             You should be online as long as possible while you are in a sync committee.
@@ -32,7 +34,7 @@ groups:
           severity: warning
           job: validator
         annotations:
-          summary: "Your Rocket Pool node is part of a sync committee."
+          summary: "Your Rocket Pool node is part of a sync committee"
           description: |
             If you were planning on doing maintenance to your node, **you should wait until the sync committee is over**. Not only are they worth an **extremely** large amount of ETH, but if you miss attestations during a sync committee, you **lose an extremely large amount of ETH** instead!
             You should be online as long as possible while you are in a sync committee.
@@ -43,7 +45,7 @@ groups:
           severity: warning
           job: validator
         annotations:
-          summary: "Your Rocket Pool node is about to propose a block."
+          summary: "Your Rocket Pool node is about to propose a block"
           description: |
             You have {{ $value }} block proposals coming up in the next few minutes. If you were planning on taking your node down for maintenance, you should wait until after the proposals because they're worth a lot of ETH!
 
@@ -53,7 +55,7 @@ groups:
           severity: warning
           job: node
         annotations:
-          summary: "Device {{ $labels.device }} on instance {{ $labels.instance }} is getting low on disk space."
+          summary: "Device {{ $labels.device }} on instance {{ $labels.instance }} is getting low on disk space"
           description: "{{ $labels.instance }} has low disk space. Currently has {{ humanize $value }} free."
 
       - alert: LowDiskSpaceCritical
@@ -63,7 +65,7 @@ groups:
           severity: critical
           job: node
         annotations:
-          summary: "Device {{ $labels.device }} on instance {{ $labels.instance }} has critically low disk space."
+          summary: "Device {{ $labels.device }} on instance {{ $labels.instance }} has critically low disk space"
           description: "{{ $labels.instance }} has critically low disk space. Currently has {{ humanize $value }} free."
 
       - alert: OSUpdatesAvailable
@@ -72,7 +74,7 @@ groups:
           severity: warning
           job: node
         annotations:
-          summary: "Rocket Pool OS Updates Available."
+          summary: "Rocket Pool OS Updates Available"
           description: |
             There are updates available for your OS that haven't been applied yet. You should update your OS.
             For more information on updating see the documentation at https://docs.rocketpool.net/guides/node/updates#updating-your-operating-system
@@ -83,7 +85,7 @@ groups:
           severity: warning
           job: node
         annotations:
-          summary: "Rocket Pool Smartnode Update Available."
+          summary: "Rocket Pool Smartnode Update Available"
           description: |
             There are updates available for the Rocket Pool Smartnode that haven't been applied yet. You should update the smartnode stack.
             For more information on updating see the documentation at https://docs.rocketpool.net/guides/node/updates#updating-the-smartnode-stack
