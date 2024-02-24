@@ -18,13 +18,29 @@ route:
   group_interval: 5m
   # How long to wait before sending a notification again if it has already been sent successfully for an alert.
   repeat_interval: 4h
+  routes:
+    # severity=info: Don't send the follow-up resolved notification.
+    - match:
+        severity: info
+      continue: false
+      # The notification destination
+      receiver: "node_operator_no_resolved"
+    # all other alerts get sent notifications for the initial firing _and_ resolved notifications.
+    - receiver: "node_operator_default"
+      #match: We want this to match all alerts (severity=info is frist though so it will stop)
+
   # The notification destination
-  receiver: "node_operator"
+  receiver: "node_operator_default"
 
 receivers:
-  - name: "node_operator"
+  - name: "node_operator_default"
     discord_configs:
       - webhook_url: "{{ .DiscordWebhookURL.Value }}"
+  
+  - name: "node_operator_no_resolved"
+    discord_configs:
+      - webhook_url: "{{ .DiscordWebhookURL.Value }}"
+        send_resolved: false
 
 inhibit_rules:
   # Inhibit rules mute a new alert (target) that matches an existing alert (source).
@@ -34,5 +50,5 @@ inhibit_rules:
     target_match:
       # and the new alert (target) is severity=warning
       severity: "warning"
-      # and the alertname, dev, and instance labels have the same value
+      # and the alertname, job, and instance labels have the same value
     equal: ["alertname", "job", "instance"]
