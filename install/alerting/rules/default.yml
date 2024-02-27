@@ -49,6 +49,18 @@ groups:
           description: |
             You have {{ $value }} block proposals coming up in the next few minutes. If you were planning on taking your node down for maintenance, you should wait until after the proposals because they're worth a lot of ETH!
 
+      - alert: RecentProposal
+        expr: rocketpool_beacon_recent_proposals > 0
+        # note: 384s = 12s slot time * 32 slots per epoch: This should prevent the alert from refiring during a single epoch
+        for: 384s
+        labels:
+          severity: info
+          job: validator
+        annotations:
+          summary: "Your Rocket Pool node proposed a block"
+          description: |
+            Your node proposed {{ $value }} blocks a recent epoch.
+
       - alert: LowDiskSpaceWarning
         expr: node_filesystem_avail_bytes{job="node", mountpoint="/"} / 1024^3 < 200
         labels:
