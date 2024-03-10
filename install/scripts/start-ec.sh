@@ -256,9 +256,9 @@ if [ "$CLIENT" = "besu" ]; then
         $EC_ADDITIONAL_FLAGS"
 
     if [ "$BESU_ARCHIVE_MODE" = "true" ]; then
-        CMD="$CMD --sync-mode=FULL"
+        CMD="$CMD --sync-mode=FULL --data-storage-format=FOREST"
     else 
-        CMD="$CMD --sync-mode=X_SNAP --Xbonsai-trie-log-pruning-enabled=true"
+        CMD="$CMD --sync-mode=SNAP --data-storage-format=BONSAI --Xbonsai-limit-trie-logs-enabled=true"
     fi
 
     if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
