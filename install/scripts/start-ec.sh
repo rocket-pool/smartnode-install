@@ -233,60 +233,67 @@ if [ "$CLIENT" = "besu" ]; then
         openssl rand -hex 32 | tr -d "\n" > /secrets/jwtsecret
     fi
 
-    CMD="$PERF_PREFIX /opt/besu/bin/besu \
-        $BESU_NETWORK \
-        --data-path=/ethclient/besu \
-        --fast-sync-min-peers=3 \
-        --rpc-http-enabled \
-        --rpc-http-host=0.0.0.0 \
-        --rpc-http-port=${EC_HTTP_PORT:-8545} \
-        --rpc-ws-enabled \
-        --rpc-ws-host=0.0.0.0 \
-        --rpc-ws-port=${EC_WS_PORT:-8546} \
-        --host-allowlist=* \
-        --rpc-http-max-active-connections=1024 \
-        --data-storage-format=bonsai \
-        --nat-method=docker \
-        --p2p-host=$EXTERNAL_IP \
-        --engine-rpc-enabled \
-        --engine-rpc-port=${EC_ENGINE_PORT:-8551} \
-        --engine-host-allowlist=* \
-        --engine-jwt-secret=/secrets/jwtsecret \
-        --Xsnapsync-synchronizer-flat-db-healing-enabled=true \
-        $EC_ADDITIONAL_FLAGS"
+    # Check for the prune flag and run that first if requested
+    if [ -f "/ethclient/prune.lock" ]; then
 
-    if [ "$BESU_ARCHIVE_MODE" = "true" ]; then
-        CMD="$CMD --sync-mode=FULL --data-storage-format=FOREST"
-    else 
-        CMD="$CMD --sync-mode=SNAP --data-storage-format=BONSAI --Xbonsai-limit-trie-logs-enabled=true"
+        $PERF_PREFIX /opt/besu/bin/besu storage x-trie-log prune $BESU_NETWORK --datapath /ethclient/besu ; rm /ethclient/prune.lock
+
+    # Run Besu normally
+    else
+
+        CMD="$PERF_PREFIX /opt/besu/bin/besu \
+            $BESU_NETWORK \
+            --data-path=/ethclient/besu \
+            --fast-sync-min-peers=3 \
+            --rpc-http-enabled \
+            --rpc-http-host=0.0.0.0 \
+            --rpc-http-port=${EC_HTTP_PORT:-8545} \
+            --rpc-ws-enabled \
+            --rpc-ws-host=0.0.0.0 \
+            --rpc-ws-port=${EC_WS_PORT:-8546} \
+            --host-allowlist=* \
+            --rpc-http-max-active-connections=1024 \
+            --nat-method=docker \
+            --p2p-host=$EXTERNAL_IP \
+            --engine-rpc-enabled \
+            --engine-rpc-port=${EC_ENGINE_PORT:-8551} \
+            --engine-host-allowlist=* \
+            --engine-jwt-secret=/secrets/jwtsecret \
+            --Xsnapsync-synchronizer-flat-db-healing-enabled=true \
+            $EC_ADDITIONAL_FLAGS"
+
+        if [ "$BESU_ARCHIVE_MODE" = "true" ]; then
+            CMD="$CMD --sync-mode=FULL --data-storage-format=FOREST"
+        else 
+            CMD="$CMD --sync-mode=SNAP --data-storage-format=BONSAI --Xbonsai-limit-trie-logs-enabled=true"
+        fi
+
+        if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
+            CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
+        fi
+
+        if [ ! -z "$EC_MAX_PEERS" ]; then
+            CMD="$CMD --max-peers=$EC_MAX_PEERS"
+        fi
+
+        if [ "$ENABLE_METRICS" = "true" ]; then
+            CMD="$CMD --metrics-enabled --metrics-host=0.0.0.0 --metrics-port=$EC_METRICS_PORT"
+        fi
+
+        if [ ! -z "$EC_P2P_PORT" ]; then
+            CMD="$CMD --p2p-port=$EC_P2P_PORT"
+        fi
+
+        if [ ! -z "$BESU_MAX_BACK_LAYERS" ]; then
+            CMD="$CMD --bonsai-maximum-back-layers-to-load=$BESU_MAX_BACK_LAYERS"
+        fi
+
+        if [ "$BESU_JVM_HEAP_SIZE" -gt "0" ]; then
+            CMD="env JAVA_OPTS=\"-Xmx${BESU_JVM_HEAP_SIZE}m\" $CMD"
+        fi
+
+        exec ${CMD}
     fi
-
-    if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
-        CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
-    fi
-
-    if [ ! -z "$EC_MAX_PEERS" ]; then
-        CMD="$CMD --max-peers=$EC_MAX_PEERS"
-    fi
-
-    if [ "$ENABLE_METRICS" = "true" ]; then
-        CMD="$CMD --metrics-enabled --metrics-host=0.0.0.0 --metrics-port=$EC_METRICS_PORT"
-    fi
-
-    if [ ! -z "$EC_P2P_PORT" ]; then
-        CMD="$CMD --p2p-port=$EC_P2P_PORT"
-    fi
-
-    if [ ! -z "$BESU_MAX_BACK_LAYERS" ]; then
-        CMD="$CMD --bonsai-maximum-back-layers-to-load=$BESU_MAX_BACK_LAYERS"
-    fi
-
-    if [ "$BESU_JVM_HEAP_SIZE" -gt "0" ]; then
-        CMD="env JAVA_OPTS=\"-Xmx${BESU_JVM_HEAP_SIZE}m\" $CMD"
-    fi
-
-    exec ${CMD}
-
 fi
 
 # Reth startup
