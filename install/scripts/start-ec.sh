@@ -236,7 +236,7 @@ if [ "$CLIENT" = "besu" ]; then
     # Check for the prune flag and run that first if requested
     if [ -f "/ethclient/prune.lock" ]; then
 
-        $PERF_PREFIX /opt/besu/bin/besu storage x-trie-log prune $BESU_NETWORK --datapath /ethclient/besu ; rm /ethclient/prune.lock
+        $PERF_PREFIX /opt/besu/bin/besu $BESU_NETWORK --data-path=/ethclient/besu storage x-trie-log prune ; rm /ethclient/prune.lock
 
     # Run Besu normally
     else
