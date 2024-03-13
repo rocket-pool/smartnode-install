@@ -89,7 +89,7 @@ groups:
           job: node
         annotations:
           summary: "Device {{ $labels.device }} on instance {{ $labels.instance }} is getting low on disk space"
-          description: "{{ $labels.instance }} has low disk space. Currently has {{ humanize $value }} free."
+          description: "{{ $labels.instance }} has low disk space. Currently has {{ humanize $value }} GB free."
       {{{- end }}}
 
       {{{- if .AlertEnabled_LowDiskSpaceCritical.Value }}}
@@ -101,7 +101,7 @@ groups:
           job: node
         annotations:
           summary: "Device {{ $labels.device }} on instance {{ $labels.instance }} has critically low disk space"
-          description: "{{ $labels.instance }} has critically low disk space. Currently has {{ humanize $value }} free."
+          description: "{{ $labels.instance }} has critically low disk space. Currently has {{ humanize $value }} GB free."
       {{{- end }}}
 
       {{{- if .AlertEnabled_OSUpdatesAvailable.Value }}}
