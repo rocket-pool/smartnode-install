@@ -49,3 +49,12 @@ scrape_configs:
     file_sd_configs:
       - files:
         - /extra-scrape-jobs/*.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:{{or .Alertmanager.Port.Value "9093"}}
+
+rule_files:
+  - /alerting/rules/*.yml

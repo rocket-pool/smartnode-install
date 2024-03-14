@@ -21,6 +21,7 @@ services:
     volumes:
       - "{{.RocketPoolDirectory}}/prometheus.yml:/etc/prometheus/prometheus.yml"
       - "{{.RocketPoolDirectory}}/extra-scrape-jobs:/extra-scrape-jobs"
+      - "{{.RocketPoolDirectory}}/alerting/rules:/alerting/rules"
       - "prometheus-data:/prometheus"
     networks:
       - net

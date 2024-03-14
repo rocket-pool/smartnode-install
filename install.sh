@@ -408,6 +408,7 @@ progress 6 "Creating Rocket Pool user data directory..."
 { mkdir -p "$DATA_PATH/secrets" || fail "Could not create the Rocket Pool secrets directory."; } >&2
 { mkdir -p "$DATA_PATH/rewards-trees" || fail "Could not create the Rocket Pool rewards trees directory."; } >&2
 { mkdir -p "$RP_PATH/extra-scrape-jobs" || fail "Could not create the Prometheus extra scrape jobs directory."; } >&2
+{ mkdir -p "$RP_PATH/alerting/rules" || fail "Could not create the alerting rules directory."; } >&2
 
 
 # Download and extract package files
@@ -422,6 +423,7 @@ progress 8 "Copying package files to Rocket Pool user data directory..."
 { cp -r -n "$PACKAGE_FILES_PATH/override" "$RP_PATH" || rsync -r --ignore-existing "$PACKAGE_FILES_PATH/override" "$RP_PATH" || fail "Could not copy new override files to the Rocket Pool user data directory."; } >&2
 { cp -r "$PACKAGE_FILES_PATH/scripts" "$RP_PATH" || fail "Could not copy scripts folder to the Rocket Pool user data directory."; } >&2
 { cp -r "$PACKAGE_FILES_PATH/templates" "$RP_PATH" || fail "Could not copy templates folder to the Rocket Pool user data directory."; } >&2
+{ cp -r "$PACKAGE_FILES_PATH/alerting" "$RP_PATH" || fail "Could not copy alerting folder to the Rocket Pool user data directory."; } >&2
 { cp "$PACKAGE_FILES_PATH/grafana-prometheus-datasource.yml" "$PACKAGE_FILES_PATH/prometheus.tmpl" "$RP_PATH" || fail "Could not copy base files to the Rocket Pool user data directory."; } >&2
 { find "$RP_PATH/scripts" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || fail "Could not set executable permissions on package files."; } >&2
 { touch -a "$RP_PATH/.firstrun" || fail "Could not create the first-run flag file."; } >&2
