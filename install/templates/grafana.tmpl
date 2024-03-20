@@ -6,7 +6,6 @@
 # for more information on overriding specific parameters of docker-compose files.
 
 {{$port := (or .Grafana.Port.Value 3100) -}}
-version: "3.7"
 services:
   grafana:
     image: {{.Grafana.ContainerTag}}
