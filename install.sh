@@ -436,6 +436,9 @@ if [ "$GRAFFITI_OWNER" = "$USER" ]; then
     { rm -f "$RP_PATH/addons/gww/graffiti.txt" || echo -e "${COLOR_YELLOW}WARNING: Could not remove '$RP_PATH/addons/gww/graffiti.txt' which was used by the Graffiti Wall Writer addon. You will need to remove this file manually if you intend to use the Graffiti Wall Writer.${COLOR_RESET}"; } >&2
 fi
 }
+# Remove deprecated version tags
+find $RP_PATH/override/ -name "*.yml"  -exec sed -i '/^version: "3\.7"$/d' {} \;
+find $RP_PATH/templates/ -name "*.tmpl"  -exec sed -i '/^version: "3\.7"$/d' {} \;
 
 install "$@"
 
