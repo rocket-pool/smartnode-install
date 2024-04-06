@@ -41,6 +41,9 @@ services:
       - ADDON_GWW_ENABLED={{.GraffitiWallWriter.GetEnabledParameter}}
       - MEV_BOOST_URL={{.MevBoostUrl}}
       - ENABLE_MEV_BOOST={{.EnableMevBoost}}
+      {{- if eq .ConsensusClient.String "teku"}}
+      - TEKU_USE_SLASHING_PROTECTION={{.Teku.UseSlashingProtection}}
+      {{- end}}
     entrypoint: sh
     command: "/setup/start-vc.sh"
     cap_drop:

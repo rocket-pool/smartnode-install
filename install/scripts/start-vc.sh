@@ -240,6 +240,10 @@ if [ "$CC_CLIENT" = "teku" ]; then
         CMD="$CMD --validators-builder-registration-default-enabled=true"
     fi
 
+    if [ "$TEKU_USE_SLASHING_PROTECTION" = "true"]; then
+        CMD="$CMD --shut-down-when-validator-slashed-enabled=true"
+    fi
+
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics-enabled=true --metrics-interface=0.0.0.0 --metrics-port=$VC_METRICS_PORT --metrics-host-allowlist=*"
     fi
