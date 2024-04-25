@@ -49,6 +49,7 @@ services:
       - RP_NETHERMIND_FULL_PRUNING_THRESHOLD_MB={{.Nethermind.FullPruningThresholdMb}}
       {{- else if eq .ExecutionClient.String "geth"}}
       - RP_GETH_ENABLE_PBSS={{.Geth.EnablePbss}}
+      - RP_GETH_EVM_TIMEOUT={{.Geth.EvmTimeout}}
       {{- end}}
     entrypoint: sh
     command: "/setup/start-ec.sh"

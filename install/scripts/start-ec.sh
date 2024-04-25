@@ -92,6 +92,10 @@ if [ "$CLIENT" = "geth" ]; then
             --pprof \
             $EC_ADDITIONAL_FLAGS"
 
+        if [ ! -z "$RP_GETH_EVM_TIMEOUT" ]; then
+            CMD="$CMD --rpc.evmtimeout ${RP_GETH_EVM_TIMEOUT}s"
+        fi
+        
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
             CMD="$CMD --ethstats $ETHSTATS_LABEL:$ETHSTATS_LOGIN"
         fi
