@@ -314,7 +314,7 @@ if [ "$CLIENT" = "reth" ]; then
         --http.addr 0.0.0.0 \
         --http.port ${EC_HTTP_PORT:-8545} \
         --http.api eth,net,web3 \
-        --http.corsdomain '*' \
+        --http.corsdomain="*" \
         --ws \
         --ws.addr 0.0.0.0 \
         --ws.port ${EC_WS_PORT:-8546} \
