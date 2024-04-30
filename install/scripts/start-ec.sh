@@ -92,8 +92,12 @@ if [ "$CLIENT" = "geth" ]; then
             --pprof \
             $EC_ADDITIONAL_FLAGS"
 
-        if [ ! -z "$RP_GETH_EVM_TIMEOUT" ]; then
-            CMD="$CMD --rpc.evmtimeout ${RP_GETH_EVM_TIMEOUT}s"
+        if [ "$GETH_ARCHIVE_MODE" = "true" ]; then
+            CMD="$CMD --syncmode=full --gcmode=archive"
+        fi
+
+        if [ ! -z "$GETH_EVM_TIMEOUT" ]; then
+            CMD="$CMD --rpc.evmtimeout ${GETH_EVM_TIMEOUT}s"
         fi
         
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
