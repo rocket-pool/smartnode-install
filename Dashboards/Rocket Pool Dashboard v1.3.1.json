@@ -1966,7 +1966,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "p2p_peers{job=\"geth\"} OR # Geth\nethereum_peer_count{job=\"eth1\"} OR # Besu\nreth_network_connected_peers{job=\"eth1\"} # Reth",
+          "expr": "p2p_peers{job=\"geth\"} OR # Geth\nethereum_peer_count{job=\"eth1\"} OR # Nethermind, Besu\nreth_network_connected_peers{job=\"eth1\"} # Reth",
           "interval": "",
           "legendFormat": "",
           "range": true,
@@ -2159,7 +2159,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "p2p_peers{job=\"geth\"} OR # Geth\nnethermind_sync_peers{job=\"eth1\"} OR # Nethermind\nethereum_peer_count{job=\"eth1\"} OR # Besu\nreth_network_connected_peers{job=\"eth1\"} # Reth",
+          "expr": "p2p_peers{job=\"geth\"} OR # Geth\nethereum_peer_count{job=\"eth1\"} OR # Nethermind, Besu\nreth_network_connected_peers{job=\"eth1\"} # Reth",
           "hide": false,
           "legendFormat": "EC",
           "range": true,
