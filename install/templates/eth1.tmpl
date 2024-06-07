@@ -50,6 +50,8 @@ services:
       {{- else if eq .ExecutionClient.String "geth"}}
       - GETH_ARCHIVE_MODE={{.Geth.ArchiveMode}}
       - GETH_EVM_TIMEOUT={{.Geth.EvmTimeout}}
+      {{- else if eq .ExecutionClient.String "reth"}}
+      - RETH_ARCHIVE_MODE={{.Reth.ArchiveMode}}
       {{- end}}
     entrypoint: sh
     command: "/setup/start-ec.sh"
