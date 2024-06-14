@@ -269,7 +269,7 @@ if [ "$CLIENT" = "besu" ]; then
         if [ "$BESU_ARCHIVE_MODE" = "true" ]; then
             CMD="$CMD --sync-mode=FULL --data-storage-format=FOREST"
         else 
-            CMD="$CMD --sync-mode=SNAP --data-storage-format=BONSAI --Xbonsai-limit-trie-logs-enabled=true"
+            CMD="$CMD --sync-mode=SNAP --data-storage-format=BONSAI"
         fi
 
         if [ ! -z "$ETHSTATS_LABEL" ] && [ ! -z "$ETHSTATS_LOGIN" ]; then
