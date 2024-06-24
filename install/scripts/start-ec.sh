@@ -329,9 +329,12 @@ if [ "$CLIENT" = "reth" ]; then
         CMD="$CMD --metrics 0.0.0.0:$EC_METRICS_PORT"
     fi
 
-    if [ "$RETH_ARCHIVE_NODE" = "false" ]; then
-        CMD="$CMD --full"
+    if [ "$RETH_ARCHIVE_MODE" = "true" ]; then
+        FULL=""
+    else
+        FULL="--full"
     fi
+    CMD="$CMD $FULL"
 
     if [ ! -z "$EC_P2P_PORT" ]; then
         CMD="$CMD --port $EC_P2P_PORT"
