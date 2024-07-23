@@ -34,6 +34,8 @@ if [ "$PLATFORM" = "Linux" ]; then
             INSTALLER="apt"
         elif [ $(echo $OS_ID | grep -c -E "fedora|rhel|centos") -gt "0" ]; then
             INSTALLER="dnf"
+        elif [ $(echo $OS_ID | grep -c -E "arch") -gt "0" ]; then
+            INSTALLER="pacman"
         fi
 
     # Fall back to `lsb_release`
@@ -50,6 +52,8 @@ if [ "$PLATFORM" = "Linux" ]; then
         INSTALLER="dnf"
     elif [ -f "/etc/fedora-release" ]; then
         INSTALLER="dnf"
+    elif [ -f "/etc/arch-release" ]; then
+        INSTALLER="pacman"
     fi
     
 fi
@@ -248,12 +252,59 @@ case "$INSTALLER" in
 
     ;;
 
+    # Arch Linux
+    pacman)
+
+        # The total number of steps in the installation process
+        TOTAL_STEPS="4"
+
+        # Install dependencies
+        progress 1 "Installing dependencies..."
+        { sudo pacman -Sy; } >&2
+        # arch-audit checks for security updates
+        { sudo pacman -S --noconfirm arch-audit moreutils || fail "Could not install OS dependencies.";  } >&2
+
+        # Download and extract package files
+        progress 2 "Downloading Rocket Pool update tracker package files..."
+        { curl -L "$PACKAGE_URL" | tar -xJ -C "$TEMPDIR" || fail "Could not download and extract the Rocket Pool update tracker package files."; } >&2
+        { test -d "$PACKAGE_FILES_PATH" || fail "Could not extract the Rocket Pool update tracker package files."; } >&2
+
+        # Install the update tracker files
+        progress 3 "Installing update tracker..."
+        { sudo mkdir -p "$TEXTFILE_COLLECTOR_PATH" || fail "Could not create textfile collector path."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/pacman/pacman-metrics.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move pacman update collector."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/rp-version-check.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move Rocket Pool update collector."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/pacman/rp-pacman-check.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move update tracker script."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/pacman/rp-update-tracker.service" "/etc/systemd/system" || fail "Could not move update tracker service."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/pacman/rp-update-tracker.timer" "/etc/systemd/system" || fail "Could not move update tracker timer."; } >&2
+        { sudo chmod +x "$UPDATE_SCRIPT_PATH/pacman-metrics.sh" || fail "Could not set permissions on pacman update collector."; } >&2
+        { sudo chmod +x "$UPDATE_SCRIPT_PATH/rp-version-check.sh" || fail "Could not set permissions on Rocket Pool update collector."; } >&2
+        { sudo chmod +x "$UPDATE_SCRIPT_PATH/rp-pacman-check.sh" || fail "Could not set permissions on Rocket Pool update tracker script."; } >&2
+
+        # Install the update checking service
+        progress 4 "Installing update tracker service..."
+        if [ "$SELINUX" = true ]; then
+            echo -e "${COLOR_YELLOW}Your system has SELinux enabled, so Rocket Pool can't automatically start the update tracker service."
+            echo "Please run the following commands manually:"
+            echo ""
+            echo -e '\tsudo restorecon /usr/share/rp-pacman-check.sh /usr/share/rp-version-check.sh /etc/systemd/system/rp-update-tracker.service /etc/systemd/system/rp-update-tracker.timer'
+            echo -e '\tsudo systemctl enable rp-update-tracker'
+            echo -e '\tsudo systemctl start rp-update-tracker'
+            echo -e "${COLOR_RESET}"
+        else
+            { sudo systemctl daemon-reload || fail "Couldn't update systemctl daemons."; } >&2
+            { sudo systemctl enable rp-update-tracker || fail "Couldn't enable update tracker service."; } >&2
+            { sudo systemctl start rp-update-tracker || fail "Couldn't start update tracker service."; } >&2
+        fi
+
+    ;;
+
     # Unsupported package manager
     *)
         RED='\033[0;31m'
         echo ""
         echo -e "${RED}**ERROR**"
-        echo "Update tracker installation is only supported for system that use the 'apt' or 'dnf' package managers."
+        echo "Update tracker installation is only supported for system that use the 'apt', 'dnf', or 'pacman' package managers."
         echo "If your operating system uses one of these and you received this message in error, please notify the Rocket Pool team."
         exit 1
     ;;
