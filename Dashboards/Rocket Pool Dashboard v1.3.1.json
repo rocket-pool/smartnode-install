@@ -1084,7 +1084,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "The number of [sync committees](https://blockdaemon.com/blog/ethereum-altair-hard-folk-light-clients-sync-committees/) that you're about to be a part of, and that you're currently a part of.\n\nIf you were planning on doing maintenance to your node, **you should wait until the sync committee is over**. Not only are they worth an **extremely** large amount of ETH, but if you miss attestations during a sync committee, you **lose an extremely large amount of ETH** instead!\n\nYou should be online as long as possible while you are in a sync committee.",
+      "description": "The number of [sync committees](https://github.com/ethereum/annotated-spec/blob/master/altair/sync-protocol.md#introduction) that you're about to be a part of, and that you're currently a part of.\n\nIf you were planning on doing maintenance to your node, **you should wait until the sync committee is over**. Not only are they worth an **extremely** large amount of ETH, but if you miss attestations during a sync committee, you **lose an extremely large amount of ETH** instead!\n\nYou should be online as long as possible while you are in a sync committee.",
       "fieldConfig": {
         "defaults": {
           "color": {
