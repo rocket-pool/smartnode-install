@@ -175,7 +175,7 @@ if [ "$CLIENT" = "nethermind" ]; then
         --Pruning.FullPruningTrigger=VolumeFreeSpace \
         --Pruning.FullPruningThresholdMb=$RP_NETHERMIND_FULL_PRUNING_THRESHOLD_MB \
         --Pruning.FullPruningCompletionBehavior AlwaysShutdown \
-        --Pruning.FullPruningMaxDegreeOfParallelism 0 \
+        --Pruning.FullPruningMaxDegreeOfParallelism=$RP_NETHERMIND_FULL_PRUNING_MAX_DEGREE_PARALLELISM \
         --Pruning.FullPruningMemoryBudgetMb=$RP_NETHERMIND_FULL_PRUNE_MEMORY_BUDGET \
         $EC_ADDITIONAL_FLAGS"
 
