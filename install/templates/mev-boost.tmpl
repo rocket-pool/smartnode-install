@@ -19,6 +19,7 @@ services:
       - NETWORK={{.Smartnode.Network}}
       - MEV_BOOST_PORT={{.MevBoost.Port}}
       - MEV_BOOST_RELAYS={{.MevBoost.GetRelayString}}
+      - MEV_BOOST_ADDITIONAL_FLAGS={{.MevBoost.AdditionalFlags}}
     entrypoint: sh
     command: "/setup/start-mev-boost.sh"
     cap_drop:
