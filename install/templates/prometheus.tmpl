@@ -24,20 +24,9 @@ services:
       - "prometheus-data:/prometheus"
     networks:
       - net
-      - monitor-net
     extra_hosts:
       - "host.docker.internal:host-gateway"
 networks:
-  # Bridge so node-exporter can get the real NIC details
-  # See https://stackoverflow.com/a/66689508 for more info
-  monitor-net:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.23.0.0/16
-          ip_range: 172.23.5.0/24
-          gateway: 172.23.5.254
   net:
 volumes:
   prometheus-data:
