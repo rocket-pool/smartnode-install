@@ -53,6 +53,7 @@ services:
       - GETH_EVM_TIMEOUT={{.Geth.EvmTimeout}}
       {{- else if eq .ExecutionClient.String "reth"}}
       - RETH_ARCHIVE_MODE={{.Reth.ArchiveMode}}
+      - RETH_MAX_INBOUND_PEERS={{.Reth.MaxInboundPeers}}
       {{- end}}
     entrypoint: sh
     command: "/setup/start-ec.sh"
