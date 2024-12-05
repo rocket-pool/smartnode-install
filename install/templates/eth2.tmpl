@@ -39,7 +39,7 @@ services:
       - EC_ENGINE_WS_ENDPOINT=ws://{{.GetExecutionHostname}}:{{.ExecutionCommon.EnginePort}}
       - CUSTOM_GRAFFITI={{.CustomGraffiti}}
       - ROCKET_POOL_VERSION=v{{.RocketPoolVersion}}
-      - BN_SUGGESTED_BLOCK_LIMIT={{.ConsensusCommon.SuggestedBlockLimit}}
+      - BN_SUGGESTED_BLOCK_GAS_LIMIT={{.ConsensusCommon.SuggestedBlockGasLimit}}
       - BN_P2P_PORT={{$p2p}}
       - BN_API_PORT={{.ConsensusCommon.ApiPort}}
       - BN_MAX_PEERS={{.GetBNMaxPeers}}

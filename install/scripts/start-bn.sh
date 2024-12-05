@@ -172,7 +172,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         --data-dir=/ethclient/nimbus \
         --tcp-port=$BN_P2P_PORT \
         --udp-port=$BN_P2P_PORT \
-        --suggested-gas-limit=$BN_SUGGESTED_BLOCK_LIMIT \
+        --suggested-gas-limit=$BN_SUGGESTED_BLOCK_GAS_LIMIT \
         --web3-url=$EC_ENGINE_ENDPOINT \
         --rest \
         --rest-address=0.0.0.0 \
@@ -270,7 +270,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
         --network=$TEKU_NETWORK \
         --data-path=/ethclient/teku \
         --p2p-port=$BN_P2P_PORT \
-        --Xvalidators-builder-registration-default-gas-limit=$BN_SUGGESTED_BLOCK_LIMIT \
+        --Xvalidators-builder-registration-default-gas-limit=$BN_SUGGESTED_BLOCK_GAS_LIMIT \
         --ee-endpoint=$EC_ENGINE_ENDPOINT \
         --rest-api-enabled \
         --rest-api-interface=0.0.0.0 \
