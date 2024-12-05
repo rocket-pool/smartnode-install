@@ -63,13 +63,13 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         --port $BN_P2P_PORT \
         --discovery-port $BN_P2P_PORT \
         --execution-endpoint $EC_ENGINE_ENDPOINT \
+        --gas-limit $BN_SUGGESTED_BLOCK_LIMIT \
         --http \
         --http-address 0.0.0.0 \
         --http-port ${BN_API_PORT:-5052} \
         --eth1-blocks-per-log-query 150 \
         --disable-upnp \
         --staking \
-        --http-allow-sync-stalled \
         --execution-jwt=/secrets/jwtsecret \
         --quic-port ${BN_P2P_QUIC_PORT:-8001} \
         --historic-state-cache-size 2 \
@@ -112,6 +112,7 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         --network $LODESTAR_NETWORK \
         --dataDir /ethclient/lodestar \
         --port $BN_P2P_PORT \
+        --defaultGasLimit $BN_SUGGESTED_BLOCK_LIMIT \
         --execution.urls $EC_ENGINE_ENDPOINT \
         --rest \
         --rest.address 0.0.0.0 \
@@ -173,6 +174,7 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         --data-dir=/ethclient/nimbus \
         --tcp-port=$BN_P2P_PORT \
         --udp-port=$BN_P2P_PORT \
+        --suggested-gas-limit=$BN_SUGGESTED_BLOCK_LIMIT \
         --web3-url=$EC_ENGINE_ENDPOINT \
         --rest \
         --rest-address=0.0.0.0 \
@@ -226,6 +228,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         --datadir /ethclient/prysm \
         --p2p-tcp-port $BN_P2P_PORT \
         --p2p-udp-port $BN_P2P_PORT \
+        --suggested-gas-limit $BN_SUGGESTED_BLOCK_LIMIT \
         --execution-endpoint $EC_ENGINE_ENDPOINT \
         --rpc-host 0.0.0.0 \
         --rpc-port ${BN_RPC_PORT:-5053} \
@@ -270,6 +273,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
         --network=$TEKU_NETWORK \
         --data-path=/ethclient/teku \
         --p2p-port=$BN_P2P_PORT \
+        --Xvalidators-builder-registration-default-gas-limit=$BN_SUGGESTED_BLOCK_LIMIT \
         --ee-endpoint=$EC_ENGINE_ENDPOINT \
         --rest-api-enabled \
         --rest-api-interface=0.0.0.0 \

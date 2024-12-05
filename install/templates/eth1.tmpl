@@ -28,6 +28,7 @@ services:
       - ETHSTATS_LOGIN={{.ExecutionCommon.EthstatsLogin}}
       - EC_MAX_PEERS={{.GetECMaxPeers}}
       - EC_P2P_PORT={{$p2p}}
+      - EC_SUGGESTED_BLOCK_LIMIT={{.ExecutionCommon.SuggestedBlockLimit}}
       - EC_ADDITIONAL_FLAGS={{.GetECAdditionalFlags}}
       - EC_HTTP_PORT={{.ExecutionCommon.HttpPort}}
       - EC_WS_PORT={{.ExecutionCommon.WsPort}}
