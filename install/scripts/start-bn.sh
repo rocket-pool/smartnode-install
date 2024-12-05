@@ -63,7 +63,6 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         --port $BN_P2P_PORT \
         --discovery-port $BN_P2P_PORT \
         --execution-endpoint $EC_ENGINE_ENDPOINT \
-        --gas-limit $BN_SUGGESTED_BLOCK_LIMIT \
         --http \
         --http-address 0.0.0.0 \
         --http-port ${BN_API_PORT:-5052} \
@@ -112,7 +111,6 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         --network $LODESTAR_NETWORK \
         --dataDir /ethclient/lodestar \
         --port $BN_P2P_PORT \
-        --defaultGasLimit $BN_SUGGESTED_BLOCK_LIMIT \
         --execution.urls $EC_ENGINE_ENDPOINT \
         --rest \
         --rest.address 0.0.0.0 \
@@ -228,7 +226,6 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         --datadir /ethclient/prysm \
         --p2p-tcp-port $BN_P2P_PORT \
         --p2p-udp-port $BN_P2P_PORT \
-        --suggested-gas-limit $BN_SUGGESTED_BLOCK_LIMIT \
         --execution-endpoint $EC_ENGINE_ENDPOINT \
         --rpc-host 0.0.0.0 \
         --rpc-port ${BN_RPC_PORT:-5053} \
