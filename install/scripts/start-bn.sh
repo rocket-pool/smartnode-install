@@ -212,7 +212,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         echo "Prysm is configured to use Holesky, genesis state required."
         if [ ! -f "/ethclient/holesky-genesis.ssz" ]; then
             echo "Downloading from Github..."
-            wget https://github.com/eth-clients/holesky/raw/main/custom_config_data/genesis.ssz -O /ethclient/holesky-genesis.ssz
+            wget https://github.com/eth-clients/holesky/blob/main/metadata/genesis.ssz -O /ethclient/holesky-genesis.ssz
             echo "Download complete."
         else
             echo "Genesis state already downloaded, continuing."
