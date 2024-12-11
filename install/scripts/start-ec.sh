@@ -318,7 +318,7 @@ if [ "$CLIENT" = "reth" ]; then
         --http.port ${EC_HTTP_PORT:-8545} \
         --http.api eth,net,web3 \
         --http.corsdomain="*" \
-        --builder.gaslimit $EC_SUGGESTED_BLOCK_LIMIT \
+        --builder.gaslimit $EC_SUGGESTED_BLOCK_GAS_LIMIT \
         --ws \
         --ws.addr 0.0.0.0 \
         --ws.port ${EC_WS_PORT:-8546} \
