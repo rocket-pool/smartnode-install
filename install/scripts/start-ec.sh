@@ -164,7 +164,7 @@ if [ "$CLIENT" = "nethermind" ]; then
     CMD="$PERF_PREFIX $NETHERMIND_BINARY \
         --config $RP_NETHERMIND_NETWORK \
         --Sync.SnapSync true \
-        --datadir /ethclient/nethermind \
+        --data-dir /ethclient/nethermind \
         --Blocks.TargetBlockGasLimit $EC_SUGGESTED_BLOCK_GAS_LIMIT \
         --JsonRpc.Enabled true \
         --JsonRpc.Host 0.0.0.0 \
