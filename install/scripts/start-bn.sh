@@ -270,7 +270,7 @@ if [ "$CC_CLIENT" = "teku" ]; then
         --network=$TEKU_NETWORK \
         --data-path=/ethclient/teku \
         --p2p-port=$BN_P2P_PORT \
-        --Xvalidators-builder-registration-default-gas-limit=$BN_SUGGESTED_BLOCK_GAS_LIMIT \
+        --validators-builder-registration-default-gas-limit=$BN_SUGGESTED_BLOCK_GAS_LIMIT \
         --ee-endpoint=$EC_ENGINE_ENDPOINT \
         --rest-api-enabled \
         --rest-api-interface=0.0.0.0 \
