@@ -18,6 +18,8 @@ services:
       - "{{$p2p}}:{{$p2p}}/tcp"
       {{- if eq .ConsensusClient.String "lighthouse"}}
       - "{{.Lighthouse.P2pQuicPort}}:{{.Lighthouse.P2pQuicPort}}/udp"
+      {{- else if eq .ConsensusClient.String "prysm"}}
+      - "{{.Prysm.P2pQuicPort}}:{{.Prysm.P2pQuicPort}}/udp"
       {{- end}}
       {{- range $entry := .GetBnOpenPorts}}
       - "{{$entry}}"
@@ -64,6 +66,7 @@ services:
       - TEKU_ARCHIVE_MODE={{.Teku.ArchiveMode}}
       {{- else if eq .ConsensusClient.String "prysm"}}
       - BN_RPC_PORT={{.Prysm.RpcPort}}
+      - BN_P2P_QUIC_PORT={{.Prysm.P2pQuicPort}}
       {{- else if eq .ConsensusClient.String "nimbus"}}
       - NIMBUS_PRUNING_MODE={{.Nimbus.PruningMode}}
       {{- else if eq .ConsensusClient.String "lighthouse"}}

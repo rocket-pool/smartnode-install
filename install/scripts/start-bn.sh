@@ -231,6 +231,7 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         --rpc-port ${BN_RPC_PORT:-5053} \
         --grpc-gateway-host 0.0.0.0 \
         --grpc-gateway-port ${BN_API_PORT:-5052} \
+        --p2p-quic-port ${BN_P2P_QUIC_PORT:-8001} \
         --eth1-header-req-limit 150 \
         --jwt-secret=/secrets/jwtsecret \
         --api-timeout 20s \
