@@ -36,10 +36,10 @@ if [ "$NETWORK" = "mainnet" ]; then
     BESU_NETWORK="--network=mainnet"
     RETH_NETWORK="--chain mainnet"
 elif [ "$NETWORK" = "devnet" ]; then
-    GETH_NETWORK="--holesky"
-    RP_NETHERMIND_NETWORK="holesky"
-    BESU_NETWORK="--network=holesky"
-    RETH_NETWORK="--chain holesky"
+    GETH_NETWORK="--hoodi"
+    RP_NETHERMIND_NETWORK="hoodi"
+    BESU_NETWORK="--network=hoodi"
+    RETH_NETWORK="--chain hoodi"
 elif [ "$NETWORK" = "holesky" ]; then
     GETH_NETWORK="--holesky"
     RP_NETHERMIND_NETWORK="holesky"

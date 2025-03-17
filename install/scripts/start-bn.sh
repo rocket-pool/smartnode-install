@@ -26,11 +26,11 @@ if [ "$NETWORK" = "mainnet" ]; then
     TEKU_NETWORK="mainnet"
     PRYSM_GENESIS_STATE=""
 elif [ "$NETWORK" = "devnet" ]; then
-    LH_NETWORK="holesky"
-    LODESTAR_NETWORK="holesky"
-    NIMBUS_NETWORK="holesky"
-    PRYSM_NETWORK="--holesky"
-    TEKU_NETWORK="holesky"
+    LH_NETWORK="hoodi"
+    LODESTAR_NETWORK="hoodi"
+    NIMBUS_NETWORK="hoodi"
+    PRYSM_NETWORK="--hoodi"
+    TEKU_NETWORK="hoodi"
 elif [ "$NETWORK" = "holesky" ]; then
     LH_NETWORK="holesky"
     LODESTAR_NETWORK="holesky"
@@ -217,6 +217,15 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         else
             echo "Genesis state already downloaded, continuing."
         fi
+    elif [ "$NETWORK" = "devnet" ]; then
+        echo "Prysm is configured to use Hoodi, genesis state required."
+        if [ ! -f "/ethclient/hoodi-genesis.ssz" ]; then
+            echo "Downloading from Github..."
+            wget https://github.com/eth-clients/hoodi/blob/main/metadata/genesis.ssz -O /ethclient/hoodi-genesis.ssz
+            echo "Download complete."
+        else
+            echo "Genesis state already downloaded, continuing."
+        fi
     fi
 
     CMD="$PERF_PREFIX /app/cmd/beacon-chain/beacon-chain \
@@ -254,6 +263,8 @@ if [ "$CC_CLIENT" = "prysm" ]; then
 
     if [ "$NETWORK" = "holesky" ]; then
         CMD="$CMD --genesis-state /ethclient/holesky-genesis.ssz"
+    elif [ "$NETWORK" = "devnet" ]; then
+        CMD="$CMD --genesis-state /ethclient/hoodi-genesis.ssz"
     fi
 
     if [ ! -z "$CHECKPOINT_SYNC_URL" ]; then

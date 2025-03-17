@@ -15,7 +15,7 @@ if [ "$NETWORK" = "mainnet" ]; then
 elif [ "$NETWORK" = "holesky" ]; then
     MEV_NETWORK="holesky"
 elif [ "$NETWORK" = "devnet" ]; then
-    MEV_NETWORK="holesky"
+    MEV_NETWORK="hoodi"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
