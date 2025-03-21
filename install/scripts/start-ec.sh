@@ -81,7 +81,6 @@ if [ "$CLIENT" = "geth" ]; then
             --http.port ${EC_HTTP_PORT:-8545} \
             --http.api eth,net,web3 \
             --http.corsdomain=* \
-            --miner.gaslimit $EC_SUGGESTED_BLOCK_GAS_LIMIT \
             --ws \
             --ws.addr 0.0.0.0 \
             --ws.port ${EC_WS_PORT:-8546} \
@@ -93,6 +92,10 @@ if [ "$CLIENT" = "geth" ]; then
             --pprof \
             $EC_ADDITIONAL_FLAGS"
 
+        if [ "$EC_SUGGESTED_BLOCK_GAS_LIMIT" -gt "0"]; then
+            CMD="$CMD --miner.gaslimit $EC_SUGGESTED_BLOCK_GAS_LIMIT"
+        fi
+        
         if [ "$GETH_ARCHIVE_MODE" = "true" ]; then
             CMD="$CMD --syncmode=full --gcmode=archive"
         fi
@@ -165,7 +168,6 @@ if [ "$CLIENT" = "nethermind" ]; then
         --config $RP_NETHERMIND_NETWORK \
         --Sync.SnapSync true \
         --data-dir /ethclient/nethermind \
-        --Blocks.TargetBlockGasLimit $EC_SUGGESTED_BLOCK_GAS_LIMIT \
         --JsonRpc.Enabled true \
         --JsonRpc.Host 0.0.0.0 \
         --JsonRpc.Port ${EC_HTTP_PORT:-8545} \
@@ -181,6 +183,10 @@ if [ "$CLIENT" = "nethermind" ]; then
         --Pruning.FullPruningMemoryBudgetMb=$RP_NETHERMIND_FULL_PRUNE_MEMORY_BUDGET \
         $EC_ADDITIONAL_FLAGS"
 
+    if [ "$EC_SUGGESTED_BLOCK_GAS_LIMIT" -gt "0"]; then
+            CMD="$CMD --Blocks.TargetBlockGasLimit $EC_SUGGESTED_BLOCK_GAS_LIMIT"
+    fi
+    
     # Add optional supplemental primary JSON-RPC modules
     if [ ! -z "$RP_NETHERMIND_ADDITIONAL_MODULES" ]; then
         RP_NETHERMIND_ADDITIONAL_MODULES=",${RP_NETHERMIND_ADDITIONAL_MODULES}"
@@ -251,7 +257,6 @@ if [ "$CLIENT" = "besu" ]; then
             $BESU_NETWORK \
             --data-path=/ethclient/besu \
             --fast-sync-min-peers=3 \
-            --target-gas-limit $EC_SUGGESTED_BLOCK_GAS_LIMIT \
             --rpc-http-enabled \
             --rpc-http-host=0.0.0.0 \
             --rpc-http-port=${EC_HTTP_PORT:-8545} \
@@ -269,6 +274,10 @@ if [ "$CLIENT" = "besu" ]; then
             --Xbonsai-full-flat-db-enabled=true \
             $EC_ADDITIONAL_FLAGS"
 
+        if [ "$EC_SUGGESTED_BLOCK_GAS_LIMIT" -gt "0"]; then
+            CMD="$CMD --target-gas-limit=$EC_SUGGESTED_BLOCK_GAS_LIMIT"
+        fi
+        
         if [ "$BESU_ARCHIVE_MODE" = "true" ]; then
             CMD="$CMD --sync-mode=FULL --data-storage-format=FOREST"
         else 
@@ -318,7 +327,6 @@ if [ "$CLIENT" = "reth" ]; then
         --http.port ${EC_HTTP_PORT:-8545} \
         --http.api eth,net,web3 \
         --http.corsdomain="*" \
-        --builder.gaslimit $EC_SUGGESTED_BLOCK_GAS_LIMIT \
         --ws \
         --ws.addr 0.0.0.0 \
         --ws.port ${EC_WS_PORT:-8546} \
@@ -329,6 +337,10 @@ if [ "$CLIENT" = "reth" ]; then
         --authrpc.jwtsecret /secrets/jwtsecret \
         $EC_ADDITIONAL_FLAGS"
 
+    if [ "$EC_SUGGESTED_BLOCK_GAS_LIMIT" -gt "0"]; then
+            CMD="$CMD --builder.gaslimit $EC_SUGGESTED_BLOCK_GAS_LIMIT"
+    fi
+    
     if [ "$ENABLE_METRICS" = "true" ]; then
         CMD="$CMD --metrics 0.0.0.0:$EC_METRICS_PORT"
     fi
