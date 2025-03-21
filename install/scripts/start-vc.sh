@@ -45,10 +45,13 @@ if [ "$CC_CLIENT" = "lighthouse" ]; then
         --datadir /validators/lighthouse \
         --init-slashing-protection \
         --logfile-max-number 0 \
-        --gas-limit $VC_SUGGESTED_BLOCK_GAS_LIMIT \
         --beacon-nodes $CC_URL_STRING \
         --suggested-fee-recipient $(cat /validators/$FEE_RECIPIENT_FILE) \
         $VC_ADDITIONAL_FLAGS"
+
+    if [ ! -z "$VC_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
+            CMD="$CMD --gas-limit $VC_SUGGESTED_BLOCK_GAS_LIMIT"
+    fi
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --enable-doppelganger-protection"
@@ -94,9 +97,12 @@ if [ "$CC_CLIENT" = "lodestar" ]; then
         $FALLBACK_CC_STRING \
         --keystoresDir /validators/lodestar/validators \
         --secretsDir /validators/lodestar/secrets \
-        --defaultGasLimit $VC_SUGGESTED_BLOCK_GAS_LIMIT \
         --suggestedFeeRecipient $(cat /validators/$FEE_RECIPIENT_FILE) \
         $VC_ADDITIONAL_FLAGS"
+
+if [ ! -z "$VC_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
+            CMD="$CMD --defaultGasLimit $VC_SUGGESTED_BLOCK_GAS_LIMIT"
+    fi
 
     if [ "$DOPPELGANGER_DETECTION" = "true" ]; then
         CMD="$CMD --doppelgangerProtection"
@@ -181,10 +187,13 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         --wallet-dir /validators/prysm-non-hd \
         --wallet-password-file /validators/prysm-non-hd/direct/accounts/secret \
         --beacon-rpc-provider $CC_URL_STRING \
-        --suggested-gas-limit $VC_SUGGESTED_BLOCK_GAS_LIMIT \
         --suggested-fee-recipient $(cat /validators/$FEE_RECIPIENT_FILE) \
         $VC_ADDITIONAL_FLAGS"
 
+    if [ ! -z "$VC_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
+        CMD="$CMD --suggested-gas-limit=$VC_SUGGESTED_BLOCK_GAS_LIMIT"
+    fi
+    
     if [ "$ENABLE_MEV_BOOST" = "true" ]; then
         CMD="$CMD --enable-builder"
     fi

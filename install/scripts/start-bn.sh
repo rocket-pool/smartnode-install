@@ -172,13 +172,16 @@ if [ "$CC_CLIENT" = "nimbus" ]; then
         --data-dir=/ethclient/nimbus \
         --tcp-port=$BN_P2P_PORT \
         --udp-port=$BN_P2P_PORT \
-        --suggested-gas-limit=$BN_SUGGESTED_BLOCK_GAS_LIMIT \
         --web3-url=$EC_ENGINE_ENDPOINT \
         --rest \
         --rest-address=0.0.0.0 \
         --rest-port=${BN_API_PORT:-5052} \
         --jwt-secret=/secrets/jwtsecret \
         $BN_ADDITIONAL_FLAGS"
+
+    if [ ! -z "$BN_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
+        CMD="$CMD --suggested-gas-limit=$BN_SUGGESTED_BLOCK_GAS_LIMIT"
+    fi
 
     if [ ! -z "$MEV_BOOST_URL" ]; then
         CMD="$CMD --payload-builder --payload-builder-url=$MEV_BOOST_URL"
@@ -282,7 +285,6 @@ if [ "$CC_CLIENT" = "teku" ]; then
         --network=$TEKU_NETWORK \
         --data-path=/ethclient/teku \
         --p2p-port=$BN_P2P_PORT \
-        --validators-builder-registration-default-gas-limit=$BN_SUGGESTED_BLOCK_GAS_LIMIT \
         --ee-endpoint=$EC_ENGINE_ENDPOINT \
         --rest-api-enabled \
         --rest-api-interface=0.0.0.0 \
@@ -296,6 +298,10 @@ if [ "$CC_CLIENT" = "teku" ]; then
         --validators-graffiti-client-append-format=DISABLED \
         $BN_ADDITIONAL_FLAGS"
 
+    if [ ! -z "$BN_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
+            CMD="$CMD --validators-builder-registration-default-gas-limit=$BN_SUGGESTED_BLOCK_GAS_LIMIT"
+    fi
+    
     if [ "$TEKU_ARCHIVE_MODE" = "true" ]; then
         CMD="$CMD --data-storage-mode=archive"
     fi

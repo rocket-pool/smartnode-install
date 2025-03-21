@@ -92,7 +92,7 @@ if [ "$CLIENT" = "geth" ]; then
             --pprof \
             $EC_ADDITIONAL_FLAGS"
 
-        if [ "$EC_SUGGESTED_BLOCK_GAS_LIMIT" -gt "0"]; then
+        if [ ! -z "$EC_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
             CMD="$CMD --miner.gaslimit $EC_SUGGESTED_BLOCK_GAS_LIMIT"
         fi
         
@@ -183,7 +183,7 @@ if [ "$CLIENT" = "nethermind" ]; then
         --Pruning.FullPruningMemoryBudgetMb=$RP_NETHERMIND_FULL_PRUNE_MEMORY_BUDGET \
         $EC_ADDITIONAL_FLAGS"
 
-    if [ "$EC_SUGGESTED_BLOCK_GAS_LIMIT" -gt "0"]; then
+    if [ ! -z "$EC_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
             CMD="$CMD --Blocks.TargetBlockGasLimit $EC_SUGGESTED_BLOCK_GAS_LIMIT"
     fi
     
@@ -274,7 +274,7 @@ if [ "$CLIENT" = "besu" ]; then
             --Xbonsai-full-flat-db-enabled=true \
             $EC_ADDITIONAL_FLAGS"
 
-        if [ "$EC_SUGGESTED_BLOCK_GAS_LIMIT" -gt "0"]; then
+        if [ ! -z "$EC_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
             CMD="$CMD --target-gas-limit=$EC_SUGGESTED_BLOCK_GAS_LIMIT"
         fi
         
@@ -337,7 +337,7 @@ if [ "$CLIENT" = "reth" ]; then
         --authrpc.jwtsecret /secrets/jwtsecret \
         $EC_ADDITIONAL_FLAGS"
 
-    if [ "$EC_SUGGESTED_BLOCK_GAS_LIMIT" -gt "0"]; then
+    if [ ! -z "$EC_SUGGESTED_BLOCK_GAS_LIMIT" ]; then
             CMD="$CMD --builder.gaslimit $EC_SUGGESTED_BLOCK_GAS_LIMIT"
     fi
     
