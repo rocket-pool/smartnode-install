@@ -12,8 +12,8 @@ fi
 # Set up the network-based flag
 if [ "$NETWORK" = "mainnet" ]; then
     MEV_NETWORK="mainnet"
-elif [ "$NETWORK" = "holesky" ]; then
-    MEV_NETWORK="holesky"
+elif [ "$NETWORK" = "testnet" ]; then
+    MEV_NETWORK="hoodi"
 elif [ "$NETWORK" = "devnet" ]; then
     MEV_NETWORK="hoodi"
 else

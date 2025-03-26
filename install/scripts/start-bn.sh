@@ -31,12 +31,12 @@ elif [ "$NETWORK" = "devnet" ]; then
     NIMBUS_NETWORK="hoodi"
     PRYSM_NETWORK="--hoodi"
     TEKU_NETWORK="hoodi"
-elif [ "$NETWORK" = "holesky" ]; then
-    LH_NETWORK="holesky"
-    LODESTAR_NETWORK="holesky"
-    NIMBUS_NETWORK="holesky"
-    PRYSM_NETWORK="--holesky"
-    TEKU_NETWORK="holesky"
+elif [ "$NETWORK" = "testnet" ]; then
+    LH_NETWORK="hoodi"
+    LODESTAR_NETWORK="hoodi"
+    NIMBUS_NETWORK="hoodi"
+    PRYSM_NETWORK="--hoodi"
+    TEKU_NETWORK="hoodi"
 else
     echo "Unknown network [$NETWORK]"
     exit 1
@@ -210,12 +210,12 @@ fi
 # Prysm startup
 if [ "$CC_CLIENT" = "prysm" ]; then
 
-    # Grab the Holesky genesis state if needed
-    if [ "$NETWORK" = "holesky" ]; then
-        echo "Prysm is configured to use Holesky, genesis state required."
-        if [ ! -f "/ethclient/holesky-genesis.ssz" ]; then
+    # Grab the Testnet genesis state if needed
+    if [ "$NETWORK" = "testnet" ]; then
+        echo "Prysm is configured to use Hoodi, genesis state required."
+        if [ ! -f "/ethclient/hoodi-genesis.ssz" ]; then
             echo "Downloading from Github..."
-            wget https://github.com/eth-clients/holesky/blob/main/metadata/genesis.ssz -O /ethclient/holesky-genesis.ssz
+            wget https://github.com/eth-clients/hoodi/blob/main/metadata/genesis.ssz -O /ethclient/hoodi-genesis.ssz
             echo "Download complete."
         else
             echo "Genesis state already downloaded, continuing."
@@ -264,8 +264,8 @@ if [ "$CC_CLIENT" = "prysm" ]; then
         CMD="$CMD --disable-monitoring"
     fi
 
-    if [ "$NETWORK" = "holesky" ]; then
-        CMD="$CMD --genesis-state /ethclient/holesky-genesis.ssz"
+    if [ "$NETWORK" = "testnet" ]; then
+        CMD="$CMD --genesis-state /ethclient/hoodi-genesis.ssz"
     elif [ "$NETWORK" = "devnet" ]; then
         CMD="$CMD --genesis-state /ethclient/hoodi-genesis.ssz"
     fi
