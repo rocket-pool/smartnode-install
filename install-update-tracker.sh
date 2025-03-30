@@ -123,7 +123,7 @@ case "$INSTALLER" in
     apt)
 
         # The total number of steps in the installation process
-        TOTAL_STEPS="3"
+        TOTAL_STEPS="4"
         
         # Install dependencies 
         progress 1 "Installing dependencies..."
@@ -143,8 +143,18 @@ case "$INSTALLER" in
         { sudo mv "$PACKAGE_FILES_PATH/apt/apt-metrics.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move apt update collector."; } >&2
         { sudo mv "$PACKAGE_FILES_PATH/rp-version-check.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move Rocket Pool update collector."; } >&2
         { sudo mv "$PACKAGE_FILES_PATH/apt/apt-prometheus-metrics" "/etc/apt/apt.conf.d/60prometheus-metrics" || fail "Could not move apt trigger."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/apt/rp-check.sh" "$UPDATE_SCRIPT_PATH" || fail "Could not move Rocket Pool update tracker script."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/apt/rp-update-tracker.service" "/etc/systemd/system" || fail "Could not move update tracker service."; } >&2
+        { sudo mv "$PACKAGE_FILES_PATH/apt/rp-update-tracker.timer" "/etc/systemd/system" || fail "Could not move update tracker timer."; } >&2
         { sudo chmod +x "$UPDATE_SCRIPT_PATH/apt-metrics.sh" || fail "Could not set permissions on apt update collector."; } >&2
         { sudo chmod +x "$UPDATE_SCRIPT_PATH/rp-version-check.sh" || fail "Could not set permissions on Rocket Pool update collector."; } >&2
+        { sudo chmod +x "$UPDATE_SCRIPT_PATH/rp-check.sh" || fail "Could not set permissions on Rocket Pool update tracker script."; } >&2
+
+        # Install the update checking service
+        progress 4 "Installing Rocket Pool update tracker service..."
+        { sudo systemctl daemon-reload || fail "Couldn't update systemctl daemons."; } >&2
+        { sudo systemctl enable rp-update-tracker || fail "Couldn't enable update tracker service."; } >&2
+        { sudo systemctl start rp-update-tracker || fail "Couldn't start update tracker service."; } >&2
 
     ;;
 
