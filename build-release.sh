@@ -81,24 +81,6 @@ build_daemon() {
 }
 
 
-# Builds the Docker prune provisioner image and pushes it to Docker Hub
-build_docker_prune_provision() {
-    cd smartnode || fail "Directory ${PWD}/smartnode does not exist or you don't have permissions to access it."
-
-    echo "Building Docker Prune Provisioner image..."
-    docker buildx build --platform=linux/amd64 -t rocketpool/eth1-prune-provision:$VERSION-amd64 -f docker/rocketpool-prune-provision --load . || fail "Error building amd64 Docker Prune Provision  image."
-    docker buildx build --platform=linux/arm64 -t rocketpool/eth1-prune-provision:$VERSION-arm64 -f docker/rocketpool-prune-provision --load . || fail "Error building arm64 Docker Prune Provision  image."
-    echo "done!"
-
-    echo -n "Pushing to Docker Hub... "
-    docker push rocketpool/eth1-prune-provision:$VERSION-amd64 || fail "Error pushing amd64 Docker Prune Provision image to Docker Hub."
-    docker push rocketpool/eth1-prune-provision:$VERSION-arm64 || fail "Error pushing arm Docker Prune Provision image to Docker Hub."
-    echo "done!"
-
-    cd ..
-}
-
-
 # Builds the Docker Manifests and pushes them to Docker Hub
 build_docker_manifest() {
     echo -n "Building Docker manifest... "
@@ -124,18 +106,6 @@ build_latest_docker_manifest() {
     echo "done!"
 }
 
-
-# Builds the Docker Manifest for the prune provisioner and pushes it to Docker Hub
-build_docker_prune_provision_manifest() {
-    echo -n "Building Docker Prune Provision manifest... "
-    rm -f ~/.docker/manifests/docker.io_rocketpool_eth1-prune-provision-$VERSION
-    docker manifest create rocketpool/eth1-prune-provision:$VERSION --amend rocketpool/eth1-prune-provision:$VERSION-amd64 --amend rocketpool/eth1-prune-provision:$VERSION-arm64
-    echo "done!"
-
-    echo -n "Pushing to Docker Hub... "
-    docker manifest push --purge rocketpool/eth1-prune-provision:$VERSION
-    echo "done!"
-}
 
 # Builds the Docker prune starter image and pushes it to Docker Hub
 build_docker_prune_starter() {
@@ -193,7 +163,7 @@ usage() {
 # =================
 
 # Parse arguments
-while getopts "acpdnlrftsv:" FLAG; do
+while getopts "acpdnltsv:" FLAG; do
     case "$FLAG" in
         a) CLI=true PACKAGES=true DAEMON=true MANIFEST=true LATEST_MANIFEST=true ;;
         c) CLI=true ;;
@@ -201,10 +171,8 @@ while getopts "acpdnlrftsv:" FLAG; do
         d) DAEMON=true ;;
         n) MANIFEST=true ;;
         l) LATEST_MANIFEST=true ;;
-        r) PRUNE=true ;;
         t) STARTER=true ;;
         s) PRUNE_STARTER_MANIFEST=true ;;
-        f) PRUNE_MANIFEST=true ;;
         v) VERSION="$OPTARG" ;;
         *) usage ;;
     esac
@@ -232,12 +200,6 @@ if [ "$MANIFEST" = true ]; then
 fi
 if [ "$LATEST_MANIFEST" = true ]; then
     build_latest_docker_manifest
-fi
-if [ "$PRUNE" = true ]; then
-    build_docker_prune_provision
-fi
-if [ "$PRUNE_MANIFEST" = true ]; then
-    build_docker_prune_provision_manifest
 fi
 if [ "$STARTER" = true ]; then
     build_docker_prune_starter
