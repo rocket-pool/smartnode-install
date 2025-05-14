@@ -35,27 +35,6 @@ build_cli() {
 }
 
 
-# Builds the .tar.xz file packages with the RP configuration files
-build_install_packages() {
-    cd smartnode-install || fail "Directory ${PWD}/smartnode-install does not exist or you don't have permissions to access it."
-    rm -f rp-smartnode-install.tar.xz
-
-    echo -n "Building Smartnode installer packages... "
-    tar cfJ rp-smartnode-install.tar.xz install || fail "Error building installer package."
-    mv rp-smartnode-install.tar.xz ../$VERSION
-    cp install.sh ../$VERSION
-    cp install-update-tracker.sh ../$VERSION
-    echo "done!"
-
-    echo -n "Building update tracker package... "
-    tar cfJ rp-update-tracker.tar.xz rp-update-tracker || fail "Error building update tracker package."
-    mv rp-update-tracker.tar.xz ../$VERSION
-    echo "done!"
-
-    cd ..
-}
-
-
 # Builds the daemon binaries and Docker Smartnode images, and pushes them to Docker Hub
 # NOTE: You must install qemu first; e.g. sudo apt-get install -y qemu qemu-user-static
 build_daemon() {
@@ -163,11 +142,10 @@ usage() {
 # =================
 
 # Parse arguments
-while getopts "acpdnltsv:" FLAG; do
+while getopts "acdnltsv:" FLAG; do
     case "$FLAG" in
-        a) CLI=true PACKAGES=true DAEMON=true MANIFEST=true LATEST_MANIFEST=true ;;
+        a) CLI=true DAEMON=true MANIFEST=true LATEST_MANIFEST=true ;;
         c) CLI=true ;;
-        p) PACKAGES=true ;;
         d) DAEMON=true ;;
         n) MANIFEST=true ;;
         l) LATEST_MANIFEST=true ;;
@@ -188,9 +166,6 @@ mkdir -p ./$VERSION
 # Build the artifacts
 if [ "$CLI" = true ]; then
     build_cli
-fi
-if [ "$PACKAGES" = true ]; then
-    build_install_packages
 fi
 if [ "$DAEMON" = true ]; then
     build_daemon
